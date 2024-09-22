@@ -5,6 +5,12 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategoHost", "StrategoHost\StrategoHost.csproj", "{D1A0C7B9-B234-462E-A267-7AC0B03F2EE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategoCore", "StrategoCore\StrategoCore.csproj", "{B53FB53B-D4B0-4C4D-81B2-A62827C9DBF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategoDataAccess", "StrategoDataAccess\StrategoDataAccess.csproj", "{94EA01E7-C94F-487F-9587-E9493557A298}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategoServices", "StrategoServices\StrategoServices.csproj", "{3BF080E3-0965-4B8E-AEFC-A160455E1CCE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{D1A0C7B9-B234-462E-A267-7AC0B03F2EE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1A0C7B9-B234-462E-A267-7AC0B03F2EE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1A0C7B9-B234-462E-A267-7AC0B03F2EE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B53FB53B-D4B0-4C4D-81B2-A62827C9DBF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B53FB53B-D4B0-4C4D-81B2-A62827C9DBF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B53FB53B-D4B0-4C4D-81B2-A62827C9DBF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B53FB53B-D4B0-4C4D-81B2-A62827C9DBF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94EA01E7-C94F-487F-9587-E9493557A298}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94EA01E7-C94F-487F-9587-E9493557A298}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94EA01E7-C94F-487F-9587-E9493557A298}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94EA01E7-C94F-487F-9587-E9493557A298}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BF080E3-0965-4B8E-AEFC-A160455E1CCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BF080E3-0965-4B8E-AEFC-A160455E1CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BF080E3-0965-4B8E-AEFC-A160455E1CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BF080E3-0965-4B8E-AEFC-A160455E1CCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
