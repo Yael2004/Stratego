@@ -6,7 +6,69 @@
         xmlns:local="clr-namespace:StrategoApp"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <Viewbox Stretch="Fill">
+        <Grid Height="440" Width="800">
+            <Grid.Background>
+                <ImageBrush ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/Background.png"
+                            Stretch="UniformToFill"/>
+            </Grid.Background>
+            <Canvas>
+                <Label Content="Stratego" 
+                       FontSize="70" 
+                       FontWeight="Bold"
+                       Foreground="#AC0000"
+                       FontFamily="pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta"
+                       Canvas.Left="275" Canvas.Top="46" 
+                       HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <TextBox Background="Black"
+                         FontSize="25" 
+                         FontWeight="Bold"
+                         Foreground="#AC0000"
+                         FontFamily="pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta"
+                         Canvas.Left="260" Canvas.Top="169" 
+                         Width="280" Height="33" 
+                         HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <PasswordBox Background="Black"
+                             FontSize="25" 
+                             FontWeight="Bold"
+                             Foreground="#AC0000"
+                             FontFamily="pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta"
+                             Canvas.Left="260" Canvas.Top="220" 
+                             Width="280" Height="33" 
+                             HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <Button Content="Iniciar sesión" 
+                        FontSize="20" 
+                        FontWeight="Bold"
+                        Background="black"
+                        Foreground="#A7A1A1"
+                        BorderBrush="#650000"
+                        BorderThickness="3"
+                        FontFamily="pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta"
+                        Canvas.Left="320" Canvas.Top="298" 
+                        Width="160" Height="40" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Top"/>
+                <Button Content="Registrarse"
+                        FontSize="20" 
+                        FontWeight="Bold"
+                        Background="black"
+                        Foreground="#A7A1A1"
+                        BorderBrush="#650000"
+                        BorderThickness="3"
+                        FontFamily="pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta"
+                        Canvas.Left="330" Canvas.Top="348" 
+                        Width="140" Height="40" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Top"/>
+                <Label x:Name="Label_LogInMessage"
+                       FontSize="15" 
+                       FontWeight="Bold"
+                       Foreground="#AC0000"
+                       FontFamily="pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta"
+                       Canvas.Left="334" Canvas.Top="258" 
+                       HorizontalAlignment="Left" 
+                       VerticalAlignment="Center"/>
+            </Canvas>
+        </Grid>
+    </Viewbox>
 </Window>
