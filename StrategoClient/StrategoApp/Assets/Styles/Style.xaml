@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="IntenseRed" Color="#AC0000"/>
+    <SolidColorBrush x:Key="GrayFontColor" Color="#A7A1A1"/>
+    <SolidColorBrush x:Key="DarkRed" Color="#650000"/>
+
+    <FontFamily x:Key="AugustaFont">pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta</FontFamily>
+
+    <ImageBrush x:Key="InitialBackground" 
+                ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/Background.png" 
+                Stretch="UniformToFill"/>
+
+    <Style x:Key="InputBoxStyle" TargetType="Control">
+        <Setter Property="FontSize" Value="25"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource IntenseRed}"/>
+        <Setter Property="Background" Value="Black"/>
+        <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
+    </Style>
+
+    <Style x:Key="ButtonStyle" TargetType="Button">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Background" Value="Black"/>
+        <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource DarkRed}"/>
+        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
+    </Style>
+</ResourceDictionary>
