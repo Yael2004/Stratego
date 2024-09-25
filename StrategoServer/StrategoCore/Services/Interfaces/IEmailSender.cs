@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StrategoHost
+namespace StrategoCore.Services.Interfaces
 {
-    internal class Program
+    internal interface IEmailSender
     {
-        static void Main(string[] args)
-        {
-
-        }
+        void SendEmail(string destinationAddress);
     }
 }

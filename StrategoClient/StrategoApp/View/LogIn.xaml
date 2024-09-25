@@ -17,17 +17,17 @@
                        FontFamily="{StaticResource AugustaFont}"
                        Canvas.Left="275" Canvas.Top="46" 
                        HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                
+
                 <TextBox Style="{StaticResource InputBoxStyle}"
                          Canvas.Left="260" Canvas.Top="169" 
                          Width="280" Height="33" 
                          HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                
+
                 <PasswordBox Style="{StaticResource InputBoxStyle}"
                              Canvas.Left="260" Canvas.Top="220" 
                              Width="280" Height="33" 
                              HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                
+
                 <Button Content="{x:Static res:Resources.Login_Button}" 
                         Style="{StaticResource ButtonStyle}"
                         Canvas.Left="320" Canvas.Top="298" 
@@ -40,16 +40,16 @@
                         Width="140" Height="40" 
                         HorizontalAlignment="Center" 
                         VerticalAlignment="Top"/>
-                
-                <Label x:Name="Label_LogInMessage"
-                       FontSize="15" 
-                       FontWeight="Bold"
-                       Foreground="{StaticResource IntenseRed}"
-                       FontFamily="{StaticResource AugustaFont}"
-                       Canvas.Left="334" Canvas.Top="258" 
-                       HorizontalAlignment="Left" 
-                       VerticalAlignment="Center"/>
             </Canvas>
+            
+            <Label x:Name="Label_LogInMessage"
+                   FontSize="15" 
+                   FontWeight="Bold"
+                   Foreground="{StaticResource IntenseRed}"
+                   FontFamily="{StaticResource AugustaFont}"
+                   Canvas.Left="312" Canvas.Top="258" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Top" Margin="0,256,0,0"/>
         </Grid>
     </Viewbox>
 </UserControl>
