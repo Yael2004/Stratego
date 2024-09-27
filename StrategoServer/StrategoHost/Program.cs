@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StrategoHost
+namespace StrategoDataAccess
 {
-    internal class Program
+    class Program
     {
         static void Main(string[] args)
         {
 
         }
     }
+
 }

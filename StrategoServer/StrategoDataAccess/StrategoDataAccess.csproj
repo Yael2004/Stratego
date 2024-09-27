@@ -74,7 +74,7 @@
     <Compile Include="Ban.cs">
       <DependentUpon>StrategoModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Games.cs">
       <DependentUpon>StrategoModel.tt</DependentUpon>
     </Compile>
@@ -117,7 +117,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
     <EntityDeploy Include="StrategoModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
