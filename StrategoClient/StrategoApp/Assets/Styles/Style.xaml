@@ -4,6 +4,7 @@
     <SolidColorBrush x:Key="IntenseRed" Color="#AC0000"/>
     <SolidColorBrush x:Key="GrayFontColor" Color="#A7A1A1"/>
     <SolidColorBrush x:Key="DarkRed" Color="#650000"/>
+    <SolidColorBrush x:Key="SemiTransparent" Color="#80000000"/>
 
     <FontFamily x:Key="AugustaFont">pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta</FontFamily>
 
@@ -28,4 +29,23 @@
         <Setter Property="BorderThickness" Value="3"/>
         <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
     </Style>
+
+    <ControlTemplate x:Key="ModalTemplate" TargetType="ContentControl">
+        <Grid x:Name="ModalOverlay" 
+              Background="{StaticResource SemiTransparent}" 
+              Visibility="{TemplateBinding Visibility}"> 
+            <Grid Background="White"
+                  Height="200" Width="400">
+                <TextBlock Text="{TemplateBinding Content}"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           FontSize="16" 
+                           Margin="0,44,0,100"/>
+                <Button Content="{TemplateBinding Tag}" 
+                        Width="100" Height="30" 
+                        Margin="150,130,150,40"/>
+            </Grid>
+        </Grid>
+    </ControlTemplate>
+    
 </ResourceDictionary>

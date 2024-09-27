@@ -8,7 +8,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Viewbox Stretch="Fill">
-        <Grid Height="440" Width="800" Background="{StaticResource InitialBackground}">
+        <Grid Height="440" Width="800" 
+              Background="{StaticResource InitialBackground}">
             <Canvas>
                 <Label Content="{x:Static res:Resources.Stratego_Label}" 
                        FontSize="70" 
@@ -41,7 +42,7 @@
                         HorizontalAlignment="Center" 
                         VerticalAlignment="Top"/>
             </Canvas>
-            
+
             <Label x:Name="Label_LogInMessage"
                    FontSize="15" 
                    FontWeight="Bold"
@@ -50,6 +51,12 @@
                    Canvas.Left="312" Canvas.Top="258" 
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Top" Margin="0,256,0,0"/>
+
+            <ContentControl x:Name="ModalControl"
+                            Content="{x:Static res:Resources.DatabaseConnectionErrorMessage_Label}"
+                            Template="{StaticResource ModalTemplate}"
+                            Tag="{x:Static res:Resources.Accept_Button}"
+                            Visibility="Visible"/>
         </Grid>
     </Viewbox>
 </UserControl>
