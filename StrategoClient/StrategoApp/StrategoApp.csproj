@@ -61,6 +61,9 @@
     <Compile Include="View\Lobby.xaml.cs">
       <DependentUpon>Lobby.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ScoreTable.xaml.cs">
+      <DependentUpon>ScoreTable.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SignUp.xaml.cs">
       <DependentUpon>SignUp.xaml</DependentUpon>
     </Compile>
@@ -85,6 +88,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Lobby.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ScoreTable.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
