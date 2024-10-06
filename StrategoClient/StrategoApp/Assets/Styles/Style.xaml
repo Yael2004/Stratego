@@ -12,7 +12,11 @@
                 ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/Background.png" 
                 Stretch="UniformToFill"/>
 
-    <Style x:Key="InputBoxStyle" TargetType="Control">
+    <ImageBrush x:Key="LobbyBackground"
+                ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/LobbyBackground.png"
+                Stretch="UniformToFill"/>
+
+        <Style x:Key="InputBoxStyle" TargetType="Control">
         <Setter Property="FontSize" Value="25"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Foreground" Value="{StaticResource IntenseRed}"/>
@@ -47,5 +51,41 @@
             </Grid>
         </Grid>
     </ControlTemplate>
-    
+
+    <Style x:Key="RepeatButtonStyle" TargetType="RepeatButton">
+        <Setter Property="Background" Value="{StaticResource DarkRed}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Width" Value="15"/>
+        <Setter Property="Height" Value="15"/>
+        <Setter Property="BorderBrush" Value="{StaticResource DarkRed}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+    </Style>
+
+    <Style x:Key="ScrollBarStyle" TargetType="ScrollBar">
+        <Setter Property="Width" Value="15"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollBar">
+                    <Grid Background="{StaticResource DarkRed}">
+                        <RepeatButton Name="PART_LineUpButton"
+                                  Style="{StaticResource RepeatButtonStyle}"
+                                  Content="▲"
+                                  VerticalAlignment="Top"/>
+
+                        <Track Name="PART_Track" VerticalAlignment="Stretch">
+                            <Track.Thumb>
+                                <Thumb Background="{StaticResource DarkRed}" BorderThickness="0"/>
+                            </Track.Thumb>
+                        </Track>
+
+                        <RepeatButton Name="PART_LineDownButton"
+                                  Style="{StaticResource RepeatButtonStyle}"
+                                  Content="▼"
+                                  VerticalAlignment="Bottom"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
