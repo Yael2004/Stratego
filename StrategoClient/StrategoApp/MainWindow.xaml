@@ -5,7 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StrategoApp"
         xmlns:view="clr-namespace:StrategoApp.View"
+        xmlns:viewModel="clr-namespace:StrategoApp.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <view:ScoreTable/>
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModel:LogInViewModel}">
+            <view:LogIn/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <viewModel:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <ContentControl Content="{Binding CurrentViewModel}" />
+    </Grid>
 </Window>
