@@ -76,6 +76,9 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AccountManager.cs" />
+    <Compile Include="Services\ChatManager.cs" />
+    <Compile Include="Services\CoreException.cs" />
     <Compile Include="Services\EmailSender.cs" />
     <Compile Include="Services\Interfaces\IEmailSender.cs" />
   </ItemGroup>
@@ -84,9 +87,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StrategoServices\StrategoServices.csproj">
-      <Project>{3bf080e3-0965-4b8e-aefc-a160455e1cce}</Project>
-      <Name>StrategoServices</Name>
+    <ProjectReference Include="..\StrategoDataAccess\StrategoDataAccess.csproj">
+      <Project>{94EA01E7-C94F-487F-9587-E9493557A298}</Project>
+      <Name>StrategoDataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -71,6 +71,7 @@
     <Compile Include="Account.cs">
       <DependentUpon>StrategoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="AccountRepository.cs" />
     <Compile Include="Ban.cs">
       <DependentUpon>StrategoModel.tt</DependentUpon>
     </Compile>

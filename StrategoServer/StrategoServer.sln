@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategoDataAccess", "Strat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategoServices", "StrategoServices\StrategoServices.csproj", "{3BF080E3-0965-4B8E-AEFC-A160455E1CCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategoServerTests", "StrategoServerTests\StrategoServerTests.csproj", "{B1353B74-BB09-4DF7-9D56-8AABEAB53643}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrategoServerTests", "StrategoServerTests\StrategoServerTests.csproj", "{B1353B74-BB09-4DF7-9D56-8AABEAB53643}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

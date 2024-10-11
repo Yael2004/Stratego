@@ -68,6 +68,7 @@
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
@@ -90,15 +91,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StrategoCore\StrategoCore.csproj">
-      <Project>{B53FB53B-D4B0-4C4D-81B2-A62827C9DBF6}</Project>
-      <Name>StrategoCore</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\StrategoDataAccess\StrategoDataAccess.csproj">
-      <Project>{94ea01e7-c94f-487f-9587-e9493557a298}</Project>
-      <Name>StrategoDataAccess</Name>
+    <ProjectReference Include="..\StrategoServices\StrategoServices.csproj">
+      <Project>{3bf080e3-0965-4b8e-aefc-a160455e1cce}</Project>
+      <Name>StrategoServices</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
