@@ -18,7 +18,7 @@ namespace StrategoApp.View
     /// <summary>
     /// Lógica de interacción para Page1.xaml
     /// </summary>
-    public partial class Lobby : Page
+    public partial class Lobby : UserControl
     {
         public Lobby()
         {

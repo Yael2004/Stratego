@@ -78,12 +78,12 @@ namespace StrategoApp.ViewModel
 
         private bool CanExecuteLogInCommand(object obj)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         private void ExecuteLogInCommand(object obj)
         {
-            throw new NotImplementedException();
+            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
         }
     }
 }
