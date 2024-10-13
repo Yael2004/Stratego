@@ -62,12 +62,12 @@ namespace StrategoServices
 
         private void HandleClientConnected(int userId, string username)
         {
-            Console.WriteLine($"Client {username} (ID: {userId}) has connected to chat.");
+            Console.WriteLine($"Client {username} (ID: {userId}) has connected to the chat.");
         }
 
         private void HandleClientDisconnected(int userId, string username)
         {
-            Console.WriteLine($"Cliente {username} (ID: {userId}) has connected to chat.");
+            Console.WriteLine($"Cliente {username} (ID: {userId}) has disconnected from the chat.");
         }
 
         private void BroadcastMessage(int senderId, string message)
