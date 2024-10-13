@@ -34,7 +34,7 @@
                             VerticalAlignment="Center">
                     
                     <TextBlock Text="{Binding Username}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource IntenseRed}"/>
-                    <TextBlock Text="{Binding userId}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource IntenseRed}"/>
+                    <TextBlock Text="{Binding UserId}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource IntenseRed}"/>
                 </StackPanel>
             </StackPanel>
 
@@ -46,11 +46,16 @@
                                FontSize="16"
                                Foreground="{StaticResource IntenseRed}"/>
 
-                    <ListBox Name="ChatMessages" 
-                             Background="#80000000"
-                             BorderBrush="Black" BorderThickness="1"
-                             Margin="10" 
-                             Height="250" Width="300" />
+                    <ListBox ItemsSource="{Binding Messages}" 
+                             Height="250" Width="300" 
+                             Background="#80000000" Foreground="White">
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
                 </StackPanel>
             </Border>
@@ -89,15 +94,17 @@
                 Margin="10">
 
                 <TextBox Width="200" 
+                        Text="{Binding MessageToSend, UpdateSourceTrigger=PropertyChanged}"
                         Background="#80000000"
                         BorderBrush="Black" BorderThickness="1"
                         Foreground="{StaticResource IntenseRed}"
-                         Margin="10, 0, 0, 0"/>
+                        Margin="10, 0, 0, 0"/>
 
                 <Button Content="Enviar"
                         Style="{StaticResource ButtonStyle}"
                         Width="80" 
-                        Margin="5,0,0,0"/>
+                        Margin="5,0,0,0"
+                        Command="{Binding SendMessageCommand}"/>
             </StackPanel>
 
             <Button Grid.Column="1" Grid.Row="2"
