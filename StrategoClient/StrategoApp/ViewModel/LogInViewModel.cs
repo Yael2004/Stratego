@@ -76,7 +76,7 @@ namespace StrategoApp.ViewModel
 
         private void ExecuteSignUpCommand()
         {
-            throw new NotImplementedException();
+            _mainWindowViewModel.ChangeViewModel(new SignUpViewModel(_mainWindowViewModel));
         }
 
         private bool CanExecuteLogInCommand(object obj)

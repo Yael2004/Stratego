@@ -13,8 +13,13 @@
         <DataTemplate DataType="{x:Type viewModel:LogInViewModel}">
             <view:LogIn/>
         </DataTemplate>
+        
         <DataTemplate DataType="{x:Type viewModel:LobbyViewModel}">
             <view:Lobby/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModel:SignUpViewModel}">
+            <view:SignUp/>
         </DataTemplate>
     </Window.Resources>
 

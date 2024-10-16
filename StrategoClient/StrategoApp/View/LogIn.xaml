@@ -10,7 +10,8 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Viewbox Stretch="Fill">
         <Grid Height="440" Width="800" 
-              Background="{StaticResource InitialBackground}">
+              Background="{StaticResource InitialBackground}"
+              Cursor="{StaticResource NormalCursor}">
             <Canvas>
                 <Label Content="{x:Static res:Resources.Stratego_Label}" 
                        FontSize="70" 
@@ -35,21 +36,23 @@
                         Canvas.Left="320" Canvas.Top="298" 
                         Width="160" Height="40" 
                         HorizontalAlignment="Center" VerticalAlignment="Top"
-                        Command="{Binding LogInCommand}"/>
+                        Command="{Binding LogInCommand}" Click="Button_Click_2"/>
 
                 <Button Content="{x:Static res:Resources.SignUp_Button}"
                         Style="{StaticResource ButtonStyle}"
                         Canvas.Left="330" Canvas.Top="348" 
                         Width="140" Height="40" 
                         HorizontalAlignment="Center" 
-                        VerticalAlignment="Top"/>
+                        VerticalAlignment="Top"
+                        Command="{Binding SignUpCommand}"/>
                 
-                <Button Content="Iniciar como invitado" 
+                <Button Content="{x:Static res:Resources.LoginAsInvited_Button}" 
                     Style="{StaticResource ButtonStyle}"
                     Canvas.Left="588" Canvas.Top="390" 
                     Width="202" Height="40" 
-                    HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click"
-                    Command="{Binding LogInAsInvitedCommand}"/>
+                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Command="{Binding LogInAsInvitedCommand}"
+                    />
             </Canvas>
 
             <Label x:Name="Label_LogInMessage"

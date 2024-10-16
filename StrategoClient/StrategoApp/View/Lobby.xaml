@@ -26,7 +26,7 @@
                         VerticalAlignment="Top" 
                         Margin="10">
                 
-                <Image Source="userProfile.png" 
+                <Image Source="{Binding ProfilePicture}" 
                        Width="60" Height="60" 
                        Margin="10"/>
                 
@@ -41,10 +41,12 @@
             <Border Grid.Column="0" Grid.Row="1" 
                     Margin="10,10,174,10">
                 <StackPanel Margin="0,0,-1,0">
-                    <TextBlock Text="Chat" 
+                    <TextBlock Text="Chat"
                                Margin="10" 
                                FontSize="16"
-                               Foreground="{StaticResource IntenseRed}"/>
+                               FontWeight="Bold"
+                               Foreground="{StaticResource IntenseRed}"
+                               Background="{StaticResource SemiTransparent}"/>
 
                     <ListBox ItemsSource="{Binding Messages}" 
                              Height="250" Width="300" 
@@ -62,7 +64,7 @@
 
             <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="1" Margin="10" Padding="10">
                 <StackPanel>
-                    <ScrollViewer VerticalScrollBarVisibility="Visible" Height="250">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="250">
                         <ScrollViewer.Style>
                             <Style TargetType="ScrollViewer">
                                 <Style.Resources>
