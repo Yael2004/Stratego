@@ -57,11 +57,13 @@ namespace StrategoApp.ViewModel
 
         public ICommand LogInCommand { get; }
         public ICommand SignUpCommand { get; }
+        public ICommand LogInAsInvitedCommand { get; }
 
         public LogInViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
             LogInCommand = new ViewModelCommand(ExecuteLogInCommand, CanExecuteLogInCommand);
+            LogInAsInvitedCommand = new ViewModelCommand(ExcuteLogInAsInvitedCommand);
             SignUpCommand = new ViewModelCommand(p => ExecuteSignUpCommand());
         }
 
@@ -69,6 +71,7 @@ namespace StrategoApp.ViewModel
         {
             LogInCommand = new ViewModelCommand(ExecuteLogInCommand, CanExecuteLogInCommand);
             SignUpCommand = new ViewModelCommand(p => ExecuteSignUpCommand());
+            LogInAsInvitedCommand = new ViewModelCommand(ExcuteLogInAsInvitedCommand);
         }
 
         private void ExecuteSignUpCommand()
@@ -82,6 +85,11 @@ namespace StrategoApp.ViewModel
         }
 
         private void ExecuteLogInCommand(object obj)
+        {
+            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+        }
+
+        private void ExcuteLogInAsInvitedCommand(object obj)
         {
             _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
         }

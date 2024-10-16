@@ -43,6 +43,13 @@
                         Width="140" Height="40" 
                         HorizontalAlignment="Center" 
                         VerticalAlignment="Top"/>
+                
+                <Button Content="Iniciar como invitado" 
+                    Style="{StaticResource ButtonStyle}"
+                    Canvas.Left="588" Canvas.Top="390" 
+                    Width="202" Height="40" 
+                    HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click"
+                    Command="{Binding LogInAsInvitedCommand}"/>
             </Canvas>
 
             <Label x:Name="Label_LogInMessage"
