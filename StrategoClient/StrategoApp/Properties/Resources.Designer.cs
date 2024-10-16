@@ -421,6 +421,15 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Login as invited.
+        /// </summary>
+        public static string LoginAsInvited_Button {
+            get {
+                return ResourceManager.GetString("LoginAsInvited_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a The player has been reported, thanks for your contribution.
         /// </summary>
         public static string MessageReport_Label {
