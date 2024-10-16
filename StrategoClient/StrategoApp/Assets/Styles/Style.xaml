@@ -8,6 +8,11 @@
 
     <FontFamily x:Key="AugustaFont">pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta</FontFamily>
 
+    <Cursor x:Key="NormalCursor" 
+            >pack://application:,,,/StrategoApp;component/Assets/Cursors/normal_cursor.cur
+    </Cursor>
+
+
     <ImageBrush x:Key="InitialBackground" 
                 ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/Background.png" 
                 Stretch="UniformToFill"/>
@@ -32,6 +37,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource DarkRed}"/>
         <Setter Property="BorderThickness" Value="3"/>
         <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
+        <Setter Property="Cursor" Value="Hand"/>
     </Style>
 
     <ControlTemplate x:Key="ModalTemplate" TargetType="ContentControl">
