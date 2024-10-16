@@ -1,10 +1,13 @@
-﻿using StrategoServices;
+﻿using Autofac.Integration.Wcf;
+using Autofac;
+using StrategoServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using StrategoCore.Services;
 
 namespace StrategoDataAccess
 {
@@ -12,12 +15,32 @@ namespace StrategoDataAccess
     {
         static void Main(string[] args)
         {
-            using (ServiceHost host = new ServiceHost(typeof(ChatService)))
+            var builder = new ContainerBuilder();
+
+            builder.RegisterType<StrategoEntities>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<AccountRepository>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<AccountManager>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<LogInService>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<ChatService>().AsSelf().InstancePerLifetimeScope();
+
+            var container = builder.Build();
+
+            using (var scope = container.BeginLifetimeScope())
             {
-                host.Open();
-                Console.WriteLine("Stratego server is running...");
-                Console.ReadLine();
+                var loginService = scope.Resolve<LogInService>();
+                var chatService = scope.Resolve<ChatService>();
+
+                using (var loginHost = new ServiceHost(loginService))
+                using (var chatHost = new ServiceHost(chatService))
+                {
+                    loginHost.Open();
+                    chatHost.Open();
+
+                    Console.WriteLine("Stratego server is running with both services...");
+                    Console.ReadLine();
+                }
             }
         }
+
     }
 }

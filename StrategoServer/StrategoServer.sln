@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategoServices", "Strateg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrategoServerTests", "StrategoServerTests\StrategoServerTests.csproj", "{B1353B74-BB09-4DF7-9D56-8AABEAB53643}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategoUtilities", "Utilities\StrategoUtilities.csproj", "{3C11439F-AD7B-4EB5-AAB7-1401295C417C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{B1353B74-BB09-4DF7-9D56-8AABEAB53643}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1353B74-BB09-4DF7-9D56-8AABEAB53643}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1353B74-BB09-4DF7-9D56-8AABEAB53643}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C11439F-AD7B-4EB5-AAB7-1401295C417C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C11439F-AD7B-4EB5-AAB7-1401295C417C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C11439F-AD7B-4EB5-AAB7-1401295C417C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C11439F-AD7B-4EB5-AAB7-1401295C417C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

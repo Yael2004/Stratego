@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utilities;
 
 namespace StrategoCore.Services
 {
@@ -16,16 +17,11 @@ namespace StrategoCore.Services
             _accountRepository = accountRepository;
         }
 
-        public void CreateAccount(string email, string hashedPassword)
+        public async Task<Result<string>> CreateAccountAsync(string email, string password)
         {
-            try
-            {
-                _accountRepository.CreateAccountAsync(email, hashedPassword);
-            }
-            catch (Exception ex)
-            {
-                throw new CoreException("Error al crear la cuenta en la capa de lógica de negocio", ex);
-            }
+            var result = await _accountRepository.CreateAccountAsync(email, password);
+            return result;
         }
+
     }
 }

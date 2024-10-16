@@ -8,10 +8,19 @@ using System.Threading.Tasks;
 namespace StrategoServices.Data
 {
     [DataContract]
-    public class DatabaseConnectionFault
+    public class OperationResult
     {
         [DataMember]
+        public bool IsSuccess { get; set; }
+
+        [DataMember]
         public string Message { get; set; }
+
+        public OperationResult(bool isSuccess, string message)
+        {
+            IsSuccess = isSuccess;
+            Message = message;
+        }
     }
 
 }

@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utilities;
 
 namespace StrategoDataAccess
 {
@@ -17,11 +18,11 @@ namespace StrategoDataAccess
             _context = context;
         }
 
-        public async Task CreateAccountAsync(string email, string hashedPassword)
+        public async Task<Result<string>> CreateAccountAsync(string email, string hashedPassword)
         {
             if (await AlreadyExistentAccountAsync(email))
             {
-                throw new InvalidOperationException("Account already exists");
+                return Result<string>.Failure("Account already exists");
             }
 
             var newAccount = new Account
@@ -34,14 +35,15 @@ namespace StrategoDataAccess
             {
                 _context.Account.Add(newAccount);
                 await _context.SaveChangesAsync();
+                return Result<string>.Success("Account created successfully");
             }
             catch (SqlException sqlEx)
             {
-                throw new Exception("Data base error", sqlEx);
+                return Result<string>.Failure($"Database error: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                throw new Exception("An error has ocurred", ex);
+                return Result<string>.Failure($"Unexpected error: {ex.Message}");
             }
         }
 
