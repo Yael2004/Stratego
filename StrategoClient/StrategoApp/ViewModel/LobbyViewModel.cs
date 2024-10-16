@@ -1,4 +1,6 @@
-﻿using StrategoApp.Service;
+﻿using log4net;
+using StrategoApp.Helpers;
+using StrategoApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +15,8 @@ namespace StrategoApp.ViewModel
 {
     internal class LobbyViewModel : ViewModelBase, Service.IChatServiceCallback
     {
+        private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
+
         private bool _isViewEnabled;
         private string _messageToSend;
         private string _errorMessage;
