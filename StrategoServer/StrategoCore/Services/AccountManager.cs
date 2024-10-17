@@ -23,5 +23,11 @@ namespace StrategoCore.Services
             return result;
         }
 
+        public async Task<Result<string>> LogInAccountAsync(string email, string password)
+        {
+            var result = await _accountRepository.ValidateCredentialsAsync(email, password);
+            return result;
+        }
+
     }
 }

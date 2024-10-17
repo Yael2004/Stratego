@@ -20,9 +20,20 @@ namespace StrategoServices
             _accountManager = accountManager;
         }
 
-        public Task LogIn(string email, string password)
+        public async Task LogIn(string email, string password)
         {
-            throw new NotImplementedException();
+            var callback = OperationContext.Current.GetCallbackChannel<ILogInServiceCallback>();
+
+            var result = await _accountManager.LogInAccountAsync(email, password);
+
+            if (result.IsSuccess)
+            {
+                callback.SignUpResult(new OperationResult(true, "Login succesful"));
+            }
+            else
+            {
+                callback.SignUpResult(new OperationResult(false, result.Error));
+            }
         }
 
         public async Task SignUp(string email, string password)
