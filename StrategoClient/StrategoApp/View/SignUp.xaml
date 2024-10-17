@@ -54,14 +54,16 @@
                         Style="{StaticResource ButtonStyle}"
                         Canvas.Left="217" Canvas.Top="311" 
                         Width="160" Height="40" 
-                        HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Command="{Binding SignUpCommand}"/>
 
                 <Button Content="{x:Static res:Resources.Cancel_Button}"
                         Style="{StaticResource ButtonStyle}"
                         Canvas.Left="434" Canvas.Top="311" 
                         Width="140" Height="40" 
                         HorizontalAlignment="Left" 
-                        VerticalAlignment="Center"/>
+                        VerticalAlignment="Center"
+                        Command="{Binding CancelCommand}"/>
 
                 <Label x:Name="Label_LogInMessage"
                        FontSize="15" 

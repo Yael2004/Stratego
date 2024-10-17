@@ -1,19 +1,26 @@
-﻿using System;
+﻿using StrategoApp.LogInService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace StrategoApp.ViewModel
 {
-    public class SignUpViewModel : ViewModelBase
+    public class SignUpViewModel : ViewModelBase, LogInService.ILogInServiceCallback
     {
         private string _username;
         private string _password;
         private string _email;
 
         private MainWindowViewModel _mainWindowViewModel;
+        private LogInServiceClient _logInServiceClient;
+
+        public ICommand SignUpCommand { get; }
+        public ICommand CancelCommand { get; }
 
         public string Username
         {
@@ -48,24 +55,52 @@ namespace StrategoApp.ViewModel
         public SignUpViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
+
+            InstanceContext context = new InstanceContext(this);
+            _logInServiceClient = new LogInServiceClient(context, "NetTcpBinding_ILogInService");
+
+            SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand, CanExecuteSignUpCommand);
+            CancelCommand = new ViewModelCommand(ExecuteCancelCommand);
         }
 
-        ICommand SignUpCommand { get; }
-        ICommand CancelCommand { get; }
-
-        private bool CanExecuteSignUpCommand()
+        private bool CanExecuteSignUpCommand(object obj)
         {
             return true;
         }
 
-        private void ExecuteSignUpCommand()
+        private async void ExecuteSignUpCommand(object obj)
         {
-
+            try
+            {
+                await _logInServiceClient.SignUpAsync(Email, Password);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error de conexión: {ex.Message}");
+            }
         }
 
-        private void ExecuteCancelCommand()
+        private void ExecuteCancelCommand(object obj)
         {
             _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+        }
+
+        public void SignUpResult(OperationResult result)
+        {
+            if (result.IsSuccess)
+            {
+                MessageBox.Show(result.Message);
+                _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+            }
+            else
+            {
+                Console.WriteLine($"Error al crear la cuenta: {result.Message}");
+            }
+        }
+
+        public void LogInResult(OperationResult result)
+        {
+            throw new NotImplementedException();
         }
     }
 }
