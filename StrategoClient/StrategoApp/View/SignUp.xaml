@@ -31,24 +31,30 @@
                        Width="280" Height="34"
                        Canvas.Left="260" Canvas.Top="246"/>
 
-                <TextBox Name="UsernameTextBox" Style="{StaticResource InputBoxStyle}" Text="{x:Static res:Resources.UserName_Label}"
+                <TextBox Name="UsernameTextBox" 
+                         Style="{StaticResource InputBoxStyle}" 
+                         Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                          Canvas.Left="260" Canvas.Top="162" 
                          Width="280" Height="33" 
                          HorizontalAlignment="Center" VerticalAlignment="Top"
                          GotFocus="UsernameTextBox_GotFocus" LostFocus="UsernameTextBox_LostFocus"/>
 
-                <TextBox Name="MailTextBox" Style="{StaticResource InputBoxStyle}" Text="{x:Static res:Resources.UserMail_Label}"
+                <TextBox Name="MailTextBox"
+                         Style="{StaticResource InputBoxStyle}" 
+                         Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
                          Canvas.Left="260" Canvas.Top="204" 
                          Width="280" Height="32" 
                          HorizontalAlignment="Center" VerticalAlignment="Center"
                          GotFocus="MailTextBox_GotFocus" LostFocus="MailTextBox_LostFocus"/>
 
-                <PasswordBox Name="PasswordTextBox" Style="{StaticResource InputBoxStyle}"
+                <PasswordBox Name="PasswordTextBox" 
+                             Style="{StaticResource InputBoxStyle}"
                              Canvas.Left="260" Canvas.Top="246" 
                              Width="280" Height="34" 
                              HorizontalAlignment="Center" VerticalAlignment="Top"
                              GotFocus="PasswordTextBox_GotFocus"
-                             LostFocus="PasswordTextBox_LostFocus"/>
+                             LostFocus="PasswordTextBox_LostFocus"
+                             PasswordChanged="PasswordTextBox_PasswordChanged"/>
 
                 <Button Content="{x:Static res:Resources.SignUp_Button}" 
                         Style="{StaticResource ButtonStyle}"

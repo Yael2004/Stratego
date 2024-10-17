@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -36,6 +37,16 @@ namespace StrategoDataAccess
                 _context.Account.Add(newAccount);
                 await _context.SaveChangesAsync();
                 return Result<string>.Success("Account created successfully");
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                var errorMessages = dbEx.EntityValidationErrors
+                    .SelectMany(x => x.ValidationErrors)
+                    .Select(x => x.ErrorMessage);
+
+                var fullErrorMessage = string.Join("; ", errorMessages);
+                var exceptionMessage = string.Concat(dbEx.Message, " The validation errors are: ", fullErrorMessage);
+                return Result<string>.Failure($"Entity validation error: {exceptionMessage}");
             }
             catch (SqlException sqlEx)
             {

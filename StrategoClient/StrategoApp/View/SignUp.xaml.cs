@@ -1,4 +1,5 @@
 ﻿using StrategoApp.Properties;
+using StrategoApp.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,5 +72,12 @@ namespace StrategoApp.View
             }
         }
 
+        private void PasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is SignUpViewModel viewModel)
+            {
+                viewModel.Password = ((PasswordBox)sender).Password;
+            }
+        }
     }
 }
