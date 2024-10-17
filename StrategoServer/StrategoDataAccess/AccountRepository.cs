@@ -40,13 +40,7 @@ namespace StrategoDataAccess
             }
             catch (DbEntityValidationException dbEx)
             {
-                var errorMessages = dbEx.EntityValidationErrors
-                    .SelectMany(x => x.ValidationErrors)
-                    .Select(x => x.ErrorMessage);
-
-                var fullErrorMessage = string.Join("; ", errorMessages);
-                var exceptionMessage = string.Concat(dbEx.Message, " The validation errors are: ", fullErrorMessage);
-                return Result<string>.Failure($"Entity validation error: {exceptionMessage}");
+                return Result<string>.Failure($"Entity validation error: {dbEx.Message}");
             }
             catch (SqlException sqlEx)
             {
@@ -58,10 +52,25 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<bool> ValidateCredentialsAsync(string email, string hashedPassword)
+        public async Task<Result<string>> ValidateCredentialsAsync(string email, string hashedPassword)
         {
-            var account = await _context.Account.FirstOrDefaultAsync(a => a.mail == email && a.password == hashedPassword);
-            return account != null;
+            try
+            {
+                var account = await _context.Account.FirstOrDefaultAsync(a => a.mail == email && a.password == hashedPassword);
+                return account != null ? Result<string>.Success("Credentials are valid") : Result<string>.Failure("Invalid credentials");
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                return Result<string>.Failure($"Entity validation error: {dbEx.Message}");
+            }
+            catch (SqlException sqlEx)
+            {
+                return Result<string>.Failure($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Result<string>.Failure($"Unexpected error: {ex.Message}");
+            }
         }
 
         public async Task<Account> GetAccountByEmailAsync(string email)
