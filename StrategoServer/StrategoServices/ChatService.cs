@@ -52,9 +52,9 @@ namespace StrategoServices
             }
         }
 
-        public void SendMessage(int userId, string message)
+        public void SendMessage(int userId, string username, string message)
         {
-            if (!_chatManager.SendMessage(userId, message))
+            if (!_chatManager.SendMessage(userId, username, message))
             {
                 throw new InvalidOperationException("User is not connected.");
             }
@@ -70,13 +70,13 @@ namespace StrategoServices
             Console.WriteLine($"Cliente {username} (ID: {userId}) has disconnected from the chat.");
         }
 
-        private void BroadcastMessage(int senderId, string message)
+        private void BroadcastMessage(int senderId, string username, string message)
         {
             foreach (var client in _clients.Values)
             {
                 try
                 {
-                    client.ReceiveMessage($"{senderId}: ", message); 
+                    client.ReceiveMessage($"{username}: ", message); 
                 }
                 catch (Exception ex)
                 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace StrategoApp.Helpers
@@ -16,7 +17,7 @@ namespace StrategoApp.Helpers
             }
 
             string emailPattern = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
-            return System.Text.RegularExpressions.Regex.IsMatch(email, emailPattern);
+            return Regex.IsMatch(email, emailPattern);
         }
 
         public static bool IsValidPassword(string password)
@@ -27,7 +28,7 @@ namespace StrategoApp.Helpers
             }
 
             string passwordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,32}$";
-            return System.Text.RegularExpressions.Regex.IsMatch(password, passwordPattern);
+            return Regex.IsMatch(password, passwordPattern);
         }
 
         public static bool IsValidUsername(string username)
@@ -38,7 +39,7 @@ namespace StrategoApp.Helpers
             }
 
             string usernamePattern = @"^[a-zA-Z0-9]{4,16}$";
-            return System.Text.RegularExpressions.Regex.IsMatch(username, usernamePattern);
+            return Regex.IsMatch(username, usernamePattern);
         }
     }
 }

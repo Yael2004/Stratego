@@ -11,7 +11,7 @@ namespace StrategoCore.Services
         private readonly HashSet<int> _connectedClients = new HashSet<int>();
         public event Action<int, string> OnClientConnected;
         public event Action<int, string> OnClientDisconnected;
-        public event Action<int, string> OnMessageBroadcast;
+        public event Action<int, string, string> OnMessageBroadcast;
 
         public bool Connect(int userId, string username)
         {
@@ -37,20 +37,20 @@ namespace StrategoCore.Services
             return false;
         }
 
-        public bool SendMessage(int userId, string message)
+        public bool SendMessage(int userId, string username, string message)
         {
             if (_connectedClients.Contains(userId))
             {
-                BroadcastMessage(userId, message);
+                BroadcastMessage(userId, username, message);
                 return true;
             }
 
             return false;
         }
 
-        private void BroadcastMessage(int senderId, string message)
+        private void BroadcastMessage(int senderId, string username, string message)
         {
-            OnMessageBroadcast?.Invoke(senderId, message);
+            OnMessageBroadcast?.Invoke(senderId, username, message);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace StrategoServices.Interfaces
         void Connect(int userId, string username);
 
         [OperationContract(IsOneWay = true)]
-        void SendMessage(int userId, string message);
+        void SendMessage(int userId, string username, string message);
 
         [OperationContract(IsOneWay = true)]
         void Disconnect(int userId);

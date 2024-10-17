@@ -1,7 +1,9 @@
-﻿using StrategoApp.LogInService;
+﻿using StrategoApp.Helpers;
+using StrategoApp.LogInService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,6 +67,11 @@ namespace StrategoApp.ViewModel
 
         private bool CanExecuteSignUpCommand(object obj)
         {
+            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Email))
+            {
+                return false;
+            }
+
             return true;
         }
 

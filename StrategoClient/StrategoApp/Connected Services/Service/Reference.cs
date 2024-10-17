@@ -22,10 +22,10 @@ namespace StrategoApp.Service {
         System.Threading.Tasks.Task ConnectAsync(int userId, string username);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChatService/SendMessage")]
-        void SendMessage(int userId, string message);
+        void SendMessage(int userId, string username, string message);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChatService/SendMessage")]
-        System.Threading.Tasks.Task SendMessageAsync(int userId, string message);
+        System.Threading.Tasks.Task SendMessageAsync(int userId, string username, string message);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IChatService/Disconnect")]
         void Disconnect(int userId);
@@ -77,12 +77,12 @@ namespace StrategoApp.Service {
             return base.Channel.ConnectAsync(userId, username);
         }
         
-        public void SendMessage(int userId, string message) {
-            base.Channel.SendMessage(userId, message);
+        public void SendMessage(int userId, string username, string message) {
+            base.Channel.SendMessage(userId, username, message);
         }
         
-        public System.Threading.Tasks.Task SendMessageAsync(int userId, string message) {
-            return base.Channel.SendMessageAsync(userId, message);
+        public System.Threading.Tasks.Task SendMessageAsync(int userId, string username, string message) {
+            return base.Channel.SendMessageAsync(userId, username, message);
         }
         
         public void Disconnect(int userId) {

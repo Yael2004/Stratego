@@ -31,6 +31,9 @@ namespace StrategoApp.ViewModel
 
         public LobbyViewModel(MainWindowViewModel mainWindowViewModel)
         {
+            Random random = new Random();
+            _userId = random.Next(1, 1000);
+            _username = "User " + _userId;
             Connection();
             _mainWindowViewModel = mainWindowViewModel;
             SendMessageCommand = new ViewModelCommand(ClientSendMessage, CanSendMessage);
@@ -138,7 +141,7 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                _chatClient.SendMessage(_userId, MessageToSend);
+                _chatClient.SendMessage(_userId, _username, MessageToSend);
                 MessageToSend = string.Empty;
             }
             catch (Exception ex)
