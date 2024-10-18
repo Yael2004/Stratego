@@ -13,9 +13,9 @@ namespace StrategoServices.Interfaces
     public interface ILogInService
     {
         [OperationContract]
-        Task SignUp(string email, string password);
+        void SignUp(string email, string password, string playername);
 
         [OperationContract]
-        Task LogIn(string email, string password);
+        void LogIn(string email, string password);
     }
 }

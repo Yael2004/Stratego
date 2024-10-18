@@ -20,11 +20,11 @@ namespace StrategoServices
             _accountManager = accountManager;
         }
 
-        public async Task LogIn(string email, string password)
+        public void LogIn(string email, string password)
         {
             var callback = OperationContext.Current.GetCallbackChannel<ILogInServiceCallback>();
 
-            var result = await _accountManager.LogInAccountAsync(email, password);
+            var result = _accountManager.LogInAccount(email, password);
 
             if (result.IsSuccess)
             {
@@ -36,11 +36,11 @@ namespace StrategoServices
             }
         }
 
-        public async Task SignUp(string email, string password)
+        public void SignUp(string email, string password, string playername)
         {
             var callback = OperationContext.Current.GetCallbackChannel<ILogInServiceCallback>();
 
-            var result = await _accountManager.CreateAccountAsync(email, password);
+            var result = _accountManager.CreateAccount(email, password, playername);
 
             if (result.IsSuccess)
             {

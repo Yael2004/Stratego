@@ -19,44 +19,62 @@ namespace StrategoDataAccess
             _context = context;
         }
 
-        public async Task<Result<string>> CreateAccountAsync(string email, string hashedPassword)
+        public Result<string> CreateAccount(string email, string hashedPassword, string playerName)
         {
-            if (await AlreadyExistentAccountAsync(email))
+            if (AlreadyExistentAccount(email))
             {
                 return Result<string>.Failure("Account already exists");
             }
 
-            var newAccount = new Account
+            using (var transaction = _context.Database.BeginTransaction())
             {
-                mail = email,
-                password = hashedPassword
-            };
+                try
+                {
+                    var newAccount = new Account
+                    {
+                        mail = email,
+                        password = hashedPassword
+                    };
 
-            try
-            {
-                _context.Account.Add(newAccount);
-                await _context.SaveChangesAsync();
-                return Result<string>.Success("Account created successfully");
-            }
-            catch (DbEntityValidationException dbEx)
-            {
-                return Result<string>.Failure($"Entity validation error: {dbEx.Message}");
-            }
-            catch (SqlException sqlEx)
-            {
-                return Result<string>.Failure($"Database error: {sqlEx.Message}");
-            }
-            catch (Exception ex)
-            {
-                return Result<string>.Failure($"Unexpected error: {ex.Message}");
+                    _context.Account.Add(newAccount);
+                    _context.SaveChanges(); 
+
+                    var newPlayer = new Player
+                    {
+                        Name = playerName,
+                        AccountId = newAccount.IdAccount
+                    };
+
+                    _context.Player.Add(newPlayer);
+                    _context.SaveChanges(); 
+
+                    transaction.Commit();
+
+                    return Result<string>.Success("Account and player created successfully");
+                }
+                catch (DbEntityValidationException dbEx)
+                {
+                    transaction.Rollback();
+                    return Result<string>.Failure($"Entity validation error: {dbEx.Message}");
+                }
+                catch (SqlException sqlEx)
+                {
+                    transaction.Rollback();
+                    return Result<string>.Failure($"Database error: {sqlEx.Message}");
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return Result<string>.Failure($"Unexpected error: {ex.Message}");
+                }
             }
         }
 
-        public async Task<Result<string>> ValidateCredentialsAsync(string email, string hashedPassword)
+        public Result<string> ValidateCredentials(string email, string hashedPassword)
         {
             try
             {
-                var account = await _context.Account.FirstOrDefaultAsync(a => a.mail == email && a.password == hashedPassword);
+                var account = _context.Account.FirstOrDefault(a => a.mail == email && a.password == hashedPassword);
                 return account != null ? Result<string>.Success("Credentials are valid") : Result<string>.Failure("Invalid credentials");
             }
             catch (DbEntityValidationException dbEx)
@@ -73,14 +91,14 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<Account> GetAccountByEmailAsync(string email)
+        public Account GetAccountByEmail(string email)
         {
-            return await _context.Account.FirstOrDefaultAsync(a => a.mail == email);
+            return _context.Account.FirstOrDefault(a => a.mail == email);
         }
 
-        public async Task<bool> AlreadyExistentAccountAsync(string email)
+        public bool AlreadyExistentAccount(string email)
         {
-            return await _context.Account.AnyAsync(a => a.mail == email);
+            return _context.Account.Any(a => a.mail == email);
         }
     }
 }
