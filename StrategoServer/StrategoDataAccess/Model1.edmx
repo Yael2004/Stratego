@@ -100,7 +100,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Games__AccountId__5FB337D6">
+        <Association Name="FK__Games__AccountId__47DBAE45">
           <End Role="Account" Type="Self.Account" Multiplicity="1" />
           <End Role="Games" Type="Self.Games" Multiplicity="0..1" />
           <ReferentialConstraint>
@@ -112,7 +112,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Player__AccountI__47DBAE45">
+        <Association Name="FK__Player__AccountI__48CFD27E">
           <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
           <End Role="Player" Type="Self.Player" Multiplicity="*" />
           <ReferentialConstraint>
@@ -124,7 +124,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Player__PictureI__48CFD27E">
+        <Association Name="FK__Player__PictureI__49C3F6B7">
           <End Role="Pictures" Type="Self.Pictures" Multiplicity="0..1" />
           <End Role="Player" Type="Self.Player" Multiplicity="*" />
           <ReferentialConstraint>
@@ -136,7 +136,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Report__IdReport__49C3F6B7">
+        <Association Name="FK__Report__IdReport__4AB81AF0">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="Report" Type="Self.Report" Multiplicity="*" />
           <ReferentialConstraint>
@@ -148,7 +148,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Report__IdReport__4AB81AF0">
+        <Association Name="FK__Report__IdReport__4BAC3F29">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="Report" Type="Self.Report" Multiplicity="*" />
           <ReferentialConstraint>
@@ -160,37 +160,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
-        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="StrategoModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ban" EntityType="Self.Ban" Schema="dbo" store:Type="Tables" />
@@ -211,23 +180,23 @@
             <End Role="Player" EntitySet="Player" />
             <End Role="Friend" EntitySet="Friend" />
           </AssociationSet>
-          <AssociationSet Name="FK__Games__AccountId__5FB337D6" Association="Self.FK__Games__AccountId__5FB337D6">
+          <AssociationSet Name="FK__Games__AccountId__47DBAE45" Association="Self.FK__Games__AccountId__47DBAE45">
             <End Role="Account" EntitySet="Account" />
             <End Role="Games" EntitySet="Games" />
           </AssociationSet>
-          <AssociationSet Name="FK__Player__AccountI__47DBAE45" Association="Self.FK__Player__AccountI__47DBAE45">
+          <AssociationSet Name="FK__Player__AccountI__48CFD27E" Association="Self.FK__Player__AccountI__48CFD27E">
             <End Role="Account" EntitySet="Account" />
             <End Role="Player" EntitySet="Player" />
           </AssociationSet>
-          <AssociationSet Name="FK__Player__PictureI__48CFD27E" Association="Self.FK__Player__PictureI__48CFD27E">
+          <AssociationSet Name="FK__Player__PictureI__49C3F6B7" Association="Self.FK__Player__PictureI__49C3F6B7">
             <End Role="Pictures" EntitySet="Pictures" />
             <End Role="Player" EntitySet="Player" />
           </AssociationSet>
-          <AssociationSet Name="FK__Report__IdReport__49C3F6B7" Association="Self.FK__Report__IdReport__49C3F6B7">
+          <AssociationSet Name="FK__Report__IdReport__4AB81AF0" Association="Self.FK__Report__IdReport__4AB81AF0">
             <End Role="Player" EntitySet="Player" />
             <End Role="Report" EntitySet="Report" />
           </AssociationSet>
-          <AssociationSet Name="FK__Report__IdReport__4AB81AF0" Association="Self.FK__Report__IdReport__4AB81AF0">
+          <AssociationSet Name="FK__Report__IdReport__4BAC3F29" Association="Self.FK__Report__IdReport__4BAC3F29">
             <End Role="Player" EntitySet="Player" />
             <End Role="Report" EntitySet="Report" />
           </AssociationSet>
@@ -244,8 +213,8 @@
           <Property Name="mail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="password" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="IdAccount" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Games" Relationship="Self.FK__Games__AccountId__5FB337D6" FromRole="Account" ToRole="Games" />
-          <NavigationProperty Name="Player" Relationship="Self.FK__Player__AccountI__47DBAE45" FromRole="Account" ToRole="Player" />
+          <NavigationProperty Name="Games" Relationship="Self.FK__Games__AccountId__47DBAE45" FromRole="Account" ToRole="Games" />
+          <NavigationProperty Name="Player" Relationship="Self.FK__Player__AccountI__48CFD27E" FromRole="Account" ToRole="Player" />
         </EntityType>
         <EntityType Name="Ban">
           <Key>
@@ -264,7 +233,7 @@
           <Property Name="WonGames" Type="Int32" Nullable="false" />
           <Property Name="DeafeatGames" Type="Int32" Nullable="false" />
           <Property Name="AccountId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Account" Relationship="Self.FK__Games__AccountId__5FB337D6" FromRole="Games" ToRole="Account" />
+          <NavigationProperty Name="Account" Relationship="Self.FK__Games__AccountId__47DBAE45" FromRole="Games" ToRole="Account" />
         </EntityType>
         <EntityType Name="Pictures">
           <Key>
@@ -272,7 +241,7 @@
           </Key>
           <Property Name="path" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="IdPicture" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Player" Relationship="Self.FK__Player__PictureI__48CFD27E" FromRole="Pictures" ToRole="Player" />
+          <NavigationProperty Name="Player" Relationship="Self.FK__Player__PictureI__49C3F6B7" FromRole="Pictures" ToRole="Player" />
         </EntityType>
         <EntityType Name="Player">
           <Key>
@@ -282,11 +251,11 @@
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PictureId" Type="Int32" />
           <Property Name="AccountId" Type="Int32" />
-          <NavigationProperty Name="Account" Relationship="Self.FK__Player__AccountI__47DBAE45" FromRole="Player" ToRole="Account" />
+          <NavigationProperty Name="Account" Relationship="Self.FK__Player__AccountI__48CFD27E" FromRole="Player" ToRole="Account" />
           <NavigationProperty Name="Ban" Relationship="Self.FK__Ban__PlayerId__44FF419A" FromRole="Player" ToRole="Ban" />
-          <NavigationProperty Name="Pictures" Relationship="Self.FK__Player__PictureI__48CFD27E" FromRole="Player" ToRole="Pictures" />
-          <NavigationProperty Name="Report" Relationship="Self.FK__Report__IdReport__49C3F6B7" FromRole="Player" ToRole="Report" />
-          <NavigationProperty Name="Report1" Relationship="Self.FK__Report__IdReport__4AB81AF0" FromRole="Player" ToRole="Report" />
+          <NavigationProperty Name="Pictures" Relationship="Self.FK__Player__PictureI__49C3F6B7" FromRole="Player" ToRole="Pictures" />
+          <NavigationProperty Name="Report" Relationship="Self.FK__Report__IdReport__4AB81AF0" FromRole="Player" ToRole="Report" />
+          <NavigationProperty Name="Report1" Relationship="Self.FK__Report__IdReport__4BAC3F29" FromRole="Player" ToRole="Report" />
           <NavigationProperty Name="Player1" Relationship="Self.Friend" FromRole="Player" ToRole="Player1" />
           <NavigationProperty Name="Player2" Relationship="Self.Friend" FromRole="Player1" ToRole="Player" />
         </EntityType>
@@ -299,10 +268,10 @@
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IdReporter" Type="Int32" Nullable="false" />
           <Property Name="IdReported" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Player" Relationship="Self.FK__Report__IdReport__49C3F6B7" FromRole="Report" ToRole="Player" />
-          <NavigationProperty Name="Player1" Relationship="Self.FK__Report__IdReport__4AB81AF0" FromRole="Report" ToRole="Player" />
+          <NavigationProperty Name="Player" Relationship="Self.FK__Report__IdReport__4AB81AF0" FromRole="Report" ToRole="Player" />
+          <NavigationProperty Name="Player1" Relationship="Self.FK__Report__IdReport__4BAC3F29" FromRole="Report" ToRole="Player" />
         </EntityType>
-        <Association Name="FK__Games__AccountId__5FB337D6">
+        <Association Name="FK__Games__AccountId__47DBAE45">
           <End Role="Account" Type="Self.Account" Multiplicity="1" />
           <End Role="Games" Type="Self.Games" Multiplicity="0..1" />
           <ReferentialConstraint>
@@ -314,7 +283,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Player__AccountI__47DBAE45">
+        <Association Name="FK__Player__AccountI__48CFD27E">
           <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
           <End Role="Player" Type="Self.Player" Multiplicity="*" />
           <ReferentialConstraint>
@@ -338,7 +307,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Player__PictureI__48CFD27E">
+        <Association Name="FK__Player__PictureI__49C3F6B7">
           <End Role="Pictures" Type="Self.Pictures" Multiplicity="0..1" />
           <End Role="Player" Type="Self.Player" Multiplicity="*" />
           <ReferentialConstraint>
@@ -350,7 +319,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Report__IdReport__49C3F6B7">
+        <Association Name="FK__Report__IdReport__4AB81AF0">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="Report" Type="Self.Report" Multiplicity="*" />
           <ReferentialConstraint>
@@ -362,7 +331,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Report__IdReport__4AB81AF0">
+        <Association Name="FK__Report__IdReport__4BAC3F29">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="Report" Type="Self.Report" Multiplicity="*" />
           <ReferentialConstraint>
@@ -385,11 +354,11 @@
           <EntitySet Name="Pictures" EntityType="Self.Pictures" />
           <EntitySet Name="Player" EntityType="Self.Player" />
           <EntitySet Name="Report" EntityType="Self.Report" />
-          <AssociationSet Name="FK__Games__AccountId__5FB337D6" Association="Self.FK__Games__AccountId__5FB337D6">
+          <AssociationSet Name="FK__Games__AccountId__47DBAE45" Association="Self.FK__Games__AccountId__47DBAE45">
             <End Role="Account" EntitySet="Account" />
             <End Role="Games" EntitySet="Games" />
           </AssociationSet>
-          <AssociationSet Name="FK__Player__AccountI__47DBAE45" Association="Self.FK__Player__AccountI__47DBAE45">
+          <AssociationSet Name="FK__Player__AccountI__48CFD27E" Association="Self.FK__Player__AccountI__48CFD27E">
             <End Role="Account" EntitySet="Account" />
             <End Role="Player" EntitySet="Player" />
           </AssociationSet>
@@ -397,15 +366,15 @@
             <End Role="Player" EntitySet="Player" />
             <End Role="Ban" EntitySet="Ban" />
           </AssociationSet>
-          <AssociationSet Name="FK__Player__PictureI__48CFD27E" Association="Self.FK__Player__PictureI__48CFD27E">
+          <AssociationSet Name="FK__Player__PictureI__49C3F6B7" Association="Self.FK__Player__PictureI__49C3F6B7">
             <End Role="Pictures" EntitySet="Pictures" />
             <End Role="Player" EntitySet="Player" />
           </AssociationSet>
-          <AssociationSet Name="FK__Report__IdReport__49C3F6B7" Association="Self.FK__Report__IdReport__49C3F6B7">
+          <AssociationSet Name="FK__Report__IdReport__4AB81AF0" Association="Self.FK__Report__IdReport__4AB81AF0">
             <End Role="Player" EntitySet="Player" />
             <End Role="Report" EntitySet="Report" />
           </AssociationSet>
-          <AssociationSet Name="FK__Report__IdReport__4AB81AF0" Association="Self.FK__Report__IdReport__4AB81AF0">
+          <AssociationSet Name="FK__Report__IdReport__4BAC3F29" Association="Self.FK__Report__IdReport__4BAC3F29">
             <End Role="Player" EntitySet="Player" />
             <End Role="Report" EntitySet="Report" />
           </AssociationSet>
@@ -413,36 +382,6 @@
             <End Role="Player" EntitySet="Player" />
             <End Role="Player1" EntitySet="Player" />
           </AssociationSet>
-          <FunctionImport Name="sp_alterdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_creatediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_dropdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagramdefinition">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagrams">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_renamediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="new_diagramname" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sp_upgraddiagrams" />
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -515,13 +454,6 @@
               <ScalarProperty Name="Id" ColumnName="PlayerId" />
             </EndProperty>
           </AssociationSetMapping>
-          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="StrategoModel.Store.sp_alterdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="StrategoModel.Store.sp_creatediagram" />
-          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="StrategoModel.Store.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="StrategoModel.Store.sp_helpdiagramdefinition" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="StrategoModel.Store.sp_helpdiagrams" />
-          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="StrategoModel.Store.sp_renamediagram" />
-          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="StrategoModel.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

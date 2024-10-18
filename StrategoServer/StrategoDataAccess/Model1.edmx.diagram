@@ -4,19 +4,19 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1d9afce6e44d4df6b10ee8ee9e156471" Name="Diagram1" ZoomLevel="97">
+      <Diagram DiagramId="ff3ee6068fb146f18e512f6cf68606f2" Name="Diagram1">
         <EntityTypeShape EntityType="StrategoModel.Account" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="StrategoModel.Ban" Width="1.5" PointX="8.25" PointY="2.5" IsExpanded="true" />
         <EntityTypeShape EntityType="StrategoModel.Games" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="StrategoModel.Pictures" Width="1.5" PointX="3.75" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="StrategoModel.Player" Width="1.5" PointX="6" PointY="3.5" IsExpanded="true" />
         <EntityTypeShape EntityType="StrategoModel.Report" Width="1.5" PointX="8.25" PointY="5.25" IsExpanded="true" />
-        <AssociationConnector Association="StrategoModel.FK__Games__AccountId__5FB337D6" ManuallyRouted="false" />
-        <AssociationConnector Association="StrategoModel.FK__Player__AccountI__47DBAE45" ManuallyRouted="false" />
+        <AssociationConnector Association="StrategoModel.FK__Games__AccountId__47DBAE45" ManuallyRouted="false" />
+        <AssociationConnector Association="StrategoModel.FK__Player__AccountI__48CFD27E" ManuallyRouted="false" />
         <AssociationConnector Association="StrategoModel.FK__Ban__PlayerId__44FF419A" ManuallyRouted="false" />
-        <AssociationConnector Association="StrategoModel.FK__Player__PictureI__48CFD27E" ManuallyRouted="false" />
-        <AssociationConnector Association="StrategoModel.FK__Report__IdReport__49C3F6B7" ManuallyRouted="false" />
+        <AssociationConnector Association="StrategoModel.FK__Player__PictureI__49C3F6B7" ManuallyRouted="false" />
         <AssociationConnector Association="StrategoModel.FK__Report__IdReport__4AB81AF0" ManuallyRouted="false" />
+        <AssociationConnector Association="StrategoModel.FK__Report__IdReport__4BAC3F29" ManuallyRouted="false" />
         <AssociationConnector Association="StrategoModel.Friend" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

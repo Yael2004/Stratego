@@ -28,11 +28,11 @@ namespace StrategoServices
 
             if (result.IsSuccess)
             {
-                callback.SignUpResult(new OperationResult(true, "Login succesful"));
+                callback.LogInResult(new OperationResult(true, "Login succesful"));
             }
             else
             {
-                callback.SignUpResult(new OperationResult(false, result.Error));
+                callback.LogInResult(new OperationResult(false, result.Error));
             }
         }
 
