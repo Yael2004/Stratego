@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\Validations.cs" />
+    <Compile Include="Helpers\StringToVisibilityConverter.cs" />
     <Compile Include="ViewModel\LobbyViewModel.cs" />
     <Compile Include="ViewModel\LogInViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />

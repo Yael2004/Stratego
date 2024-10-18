@@ -27,51 +27,6 @@ namespace StrategoApp.View
             InitializeComponent();
         }
 
-        private void MailTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            if (MailTextBox.Text == Properties.Resources.UserMail_Label)
-            {
-                MailTextBox.Text = string.Empty;
-            }
-        }
-
-        private void MailTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(MailTextBox.Text)) 
-            {
-                MailTextBox.Text = Properties.Resources.UserMail_Label;
-            }
-        }
-
-        private void UsernameTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            if (UsernameTextBox.Text == Properties.Resources.UserName_Label)
-            {
-                UsernameTextBox.Text = string.Empty;
-            }
-        }
-
-        private void UsernameTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(UsernameTextBox.Text))
-            {
-                UsernameTextBox.Text = Properties.Resources.UserName_Label;
-            }
-        }
-
-        private void PasswordTextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            WatermarkTextBoxPassword.Visibility = Visibility.Collapsed;
-        }
-
-        private void PasswordTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(PasswordTextBox.Password))
-            {
-                WatermarkTextBoxPassword.Visibility = Visibility.Visible;
-            }
-        }
-
         private void PasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext is SignUpViewModel viewModel)

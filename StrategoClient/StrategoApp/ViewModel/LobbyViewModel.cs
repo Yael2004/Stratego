@@ -22,11 +22,12 @@ namespace StrategoApp.ViewModel
         private string _errorMessage;
         private int _userId;
         private string _username;
+
         private ChatServiceClient _chatClient;
         private MainWindowViewModel _mainWindowViewModel;
         private ObservableCollection<string> _messages;
-        private ICommand _sendMessagesCommand;
 
+        private readonly ICommand _sendMessagesCommand;
         public ICommand SendMessageCommand { get; }
 
         public LobbyViewModel(MainWindowViewModel mainWindowViewModel)
@@ -34,7 +35,9 @@ namespace StrategoApp.ViewModel
             Random random = new Random();
             _userId = random.Next(1, 1000);
             _username = "User " + _userId;
+
             Connection();
+
             _mainWindowViewModel = mainWindowViewModel;
             SendMessageCommand = new ViewModelCommand(ClientSendMessage, CanSendMessage);
             _messages = new ObservableCollection<string>();
@@ -46,7 +49,6 @@ namespace StrategoApp.ViewModel
                 _messages = new ObservableCollection<string>();
                 _sendMessagesCommand = new ViewModelCommand(ClientSendMessage, CanSendMessage);
                 SendMessageCommand = _sendMessagesCommand;
-
             }
         }
 
@@ -55,15 +57,8 @@ namespace StrategoApp.ViewModel
             InstanceContext context = new InstanceContext(this);
             _chatClient = new ChatServiceClient(context);
 
-            try
-            {
-                _chatClient.Connect(_userId, _username);
-                MessageBox.Show($"{_username} conectado al chat.");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al conectar: {ex.Message}");
-            }
+            _chatClient.Connect(_userId, _username);
+            MessageBox.Show($"{_username} conectado al chat.");
         }
 
         ~LobbyViewModel()
@@ -75,16 +70,8 @@ namespace StrategoApp.ViewModel
         {
             if (_chatClient != null)
             {
-                try
-                {
-                    _chatClient.Disconnect(_userId);
-                    _chatClient.Close();
-                    MessageBox.Show("Desconectado del chat.");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al desconectar: {ex.Message}");
-                }
+                _chatClient.Disconnect(_userId);
+                _chatClient.Close();
             }
         }
 
@@ -139,15 +126,8 @@ namespace StrategoApp.ViewModel
 
         private void ClientSendMessage(object obj)
         {
-            try
-            {
-                _chatClient.SendMessage(_userId, _username, MessageToSend);
-                MessageToSend = string.Empty;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al enviar mensaje: {ex.Message}");
-            }
+            _chatClient.SendMessage(_userId, _username, MessageToSend);
+            MessageToSend = string.Empty;
         }
 
         public void ReceiveMessage(string username, string message)

@@ -5,12 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StrategoApp.View"
              xmlns:res="clr-namespace:StrategoApp.Properties"
-             xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewModel:SignUpViewModel}"
+             xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" 
+             xmlns:helpers="clr-namespace:StrategoApp.Helpers"
+             d:DataContext="{d:DesignInstance Type=viewModel:SignUpViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <helpers:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    </UserControl.Resources>
+
     <Viewbox Stretch="Fill">
         <Grid Height="440" Width="800" Background="{StaticResource InitialBackground}">
             <Canvas>
+
                 <Label Content="{x:Static res:Resources.Stratego_Label}" 
                        FontSize="70" 
                        FontWeight="Bold"
@@ -19,66 +27,60 @@
                        Canvas.Left="275" Canvas.Top="46" 
                        HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
-                <TextBox Name="WatermarkTextBoxPassword"
-                       Style="{StaticResource InputBoxStyle}"
-                       Text="{x:Static res:Resources.UserPassword_Label}"
-                       Panel.ZIndex="1"
-                       Foreground="{StaticResource IntenseRed}"
-                       IsHitTestVisible="False"
-                       Background="Transparent"
-                       VerticalAlignment="Top"
-                       HorizontalAlignment="Center"
-                       Width="280" Height="34"
-                       Canvas.Left="260" Canvas.Top="246"/>
-
                 <TextBox Name="UsernameTextBox" 
                          Style="{StaticResource InputBoxStyle}" 
                          Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                          Canvas.Left="260" Canvas.Top="162" 
                          Width="280" Height="33" 
-                         HorizontalAlignment="Center" VerticalAlignment="Top"
-                         GotFocus="UsernameTextBox_GotFocus" LostFocus="UsernameTextBox_LostFocus"/>
+                         HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <Label Content="{Binding UsernameError}" 
+                       FontFamily="{StaticResource AugustaFont}"
+                       Foreground="Red" 
+                       FontSize="12" 
+                       Canvas.Left="260" Canvas.Top="198" 
+                       Visibility="{Binding UsernameError, Converter={StaticResource StringToVisibilityConverter}}"/>
 
                 <TextBox Name="MailTextBox"
                          Style="{StaticResource InputBoxStyle}" 
                          Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
-                         Canvas.Left="260" Canvas.Top="204" 
+                         Canvas.Left="260" Canvas.Top="220" 
                          Width="280" Height="32" 
-                         HorizontalAlignment="Center" VerticalAlignment="Center"
-                         GotFocus="MailTextBox_GotFocus" LostFocus="MailTextBox_LostFocus"/>
+                         HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <Label Content="{Binding EmailError}" 
+                       FontFamily="{StaticResource AugustaFont}"
+                       Foreground="Red" 
+                       FontSize="12" 
+                       Canvas.Left="260" Canvas.Top="252" 
+                       Visibility="{Binding EmailError, Converter={StaticResource StringToVisibilityConverter}}"/>
 
                 <PasswordBox Name="PasswordTextBox" 
                              Style="{StaticResource InputBoxStyle}"
-                             Canvas.Left="260" Canvas.Top="246" 
+                             Canvas.Left="260" Canvas.Top="273" 
                              Width="280" Height="34" 
                              HorizontalAlignment="Center" VerticalAlignment="Top"
-                             GotFocus="PasswordTextBox_GotFocus"
-                             LostFocus="PasswordTextBox_LostFocus"
                              PasswordChanged="PasswordTextBox_PasswordChanged"/>
+                <Label Content="{Binding PasswordError}"
+                       FontFamily="{StaticResource AugustaFont}"
+                       Foreground="Red" 
+                       FontSize="12" 
+                       Canvas.Left="260" Canvas.Top="307" 
+                       Visibility="{Binding PasswordError, Converter={StaticResource StringToVisibilityConverter}}"/>
 
                 <Button Content="{x:Static res:Resources.SignUp_Button}" 
                         Style="{StaticResource ButtonStyle}"
-                        Canvas.Left="217" Canvas.Top="311" 
+                        Canvas.Left="218" Canvas.Top="345" 
                         Width="160" Height="40" 
-                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        HorizontalAlignment="Left" VerticalAlignment="Top"
                         Command="{Binding SignUpCommand}"/>
 
                 <Button Content="{x:Static res:Resources.Cancel_Button}"
                         Style="{StaticResource ButtonStyle}"
-                        Canvas.Left="434" Canvas.Top="311" 
+                        Canvas.Left="435" Canvas.Top="345" 
                         Width="140" Height="40" 
                         HorizontalAlignment="Left" 
-                        VerticalAlignment="Center"
+                        VerticalAlignment="Top"
                         Command="{Binding CancelCommand}"/>
 
-                <Label x:Name="Label_LogInMessage"
-                       FontSize="15" 
-                       FontWeight="Bold"
-                       Foreground="{StaticResource IntenseRed}"
-                       FontFamily="{StaticResource AugustaFont}"
-                       Canvas.Left="334" Canvas.Top="258" 
-                       HorizontalAlignment="Left" 
-                       VerticalAlignment="Center"/>
             </Canvas>
         </Grid>
     </Viewbox>

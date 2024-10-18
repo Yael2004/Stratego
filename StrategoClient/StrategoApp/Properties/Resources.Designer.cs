@@ -279,6 +279,15 @@ namespace StrategoApp.Properties {
         /// <summary>
         ///   Busca una cadena traducida similar a Friends.
         /// </summary>
+        public static string Friends_Button {
+            get {
+                return ResourceManager.GetString("Friends_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Friends.
+        /// </summary>
         public static string Friends_Title {
             get {
                 return ResourceManager.GetString("Friends_Title", resourceCulture);
@@ -687,6 +696,15 @@ namespace StrategoApp.Properties {
         public static string SearchPlayer_Title {
             get {
                 return ResourceManager.GetString("SearchPlayer_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Send.
+        /// </summary>
+        public static string Send_Button {
+            get {
+                return ResourceManager.GetString("Send_Button", resourceCulture);
             }
         }
         

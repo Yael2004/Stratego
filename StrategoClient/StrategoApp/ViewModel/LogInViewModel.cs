@@ -1,8 +1,12 @@
-﻿using System;
+﻿using StrategoApp.Helpers;
+using StrategoApp.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace StrategoApp.ViewModel
@@ -13,6 +17,8 @@ namespace StrategoApp.ViewModel
         private string _password;
         private bool _isViewEnabled;
         private string _errorMessage;
+        public string LogInErrorMessage { get; set; }
+
         private MainWindowViewModel _mainWindowViewModel;
 
         public string Username
@@ -53,6 +59,12 @@ namespace StrategoApp.ViewModel
                 _errorMessage = value;
                 OnPropertyChanged();
             }
+        }
+
+        public void SetLogInErrorMessage(string resourceKey)
+        {
+            LogInErrorMessage = StrategoApp.Properties.Resources.ResourceManager.GetString(resourceKey);
+            OnPropertyChanged(nameof(LogInErrorMessage));
         }
 
         public ICommand LogInCommand { get; }

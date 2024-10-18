@@ -1,4 +1,5 @@
-﻿using StrategoApp.Helpers;
+﻿using log4net;
+using StrategoApp.Helpers;
 using StrategoApp.LogInService;
 using System;
 using System.Collections.Generic;
@@ -14,12 +15,18 @@ namespace StrategoApp.ViewModel
 {
     public class SignUpViewModel : ViewModelBase, LogInService.ILogInServiceCallback
     {
+        private static readonly ILog Log = Log<SignUpViewModel>.GetLogger();
+
         private string _username;
         private string _password;
         private string _email;
 
         private MainWindowViewModel _mainWindowViewModel;
         private LogInServiceClient _logInServiceClient;
+
+        private string _usernameError;
+        private string _emailError;
+        private string _passwordError;
 
         public ICommand SignUpCommand { get; }
         public ICommand CancelCommand { get; }
@@ -54,6 +61,36 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public string UsernameError
+        {
+            get { return _usernameError; }
+            set
+            {
+                _usernameError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string EmailError
+        {
+            get { return _emailError; }
+            set
+            {
+                _emailError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string PasswordError
+        {
+            get { return _passwordError; }
+            set
+            {
+                _passwordError = value;
+                OnPropertyChanged();
+            }
+        }
+
         public SignUpViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
@@ -77,13 +114,17 @@ namespace StrategoApp.ViewModel
 
         private void ExecuteSignUpCommand(object obj)
         {
+            ValidateFields();
+
+            string hashedPassword = HashPassword(Password);
+
             try
             {
-                _logInServiceClient.SignUp(Email, Password, Username);
+                await _logInServiceClient.SignUpAsync(Email, hashedPassword);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error de conexión: {ex.Message}");
+                Log.Error(ex.Message);
             }
         }
 
@@ -108,6 +149,32 @@ namespace StrategoApp.ViewModel
         public void LogInResult(OperationResult result)
         {
             throw new NotImplementedException();
+        }
+
+        public void ValidateFields()
+        {
+            UsernameError = Validations.IsValidUsername(Username) ? string.Empty : Properties.Resources.InvalidUsername_Label;
+            EmailError = Validations.IsValidEmail(Email) ? string.Empty : Properties.Resources.InvalidMail_Label;
+            PasswordError = Validations.IsValidPassword(Password) ? string.Empty : Properties.Resources.InvalidPassword_Label;
+        }
+
+        private string HashPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+
+                byte[] hashBytes = sha256.ComputeHash(passwordBytes);
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                foreach (byte b in hashBytes)
+                {
+                    stringBuilder.Append(b.ToString("x2"));
+                }
+
+                return stringBuilder.ToString();
+            }
         }
     }
 }

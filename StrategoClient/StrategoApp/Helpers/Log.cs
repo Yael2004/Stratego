@@ -11,7 +11,7 @@ namespace StrategoApp.Helpers
 {
     public static class Log<T>
     {
-        private static ILog _logger = LogManager.GetLogger(typeof(T));
+        private static readonly ILog _logger = LogManager.GetLogger(typeof(T));
 
         static Log()
         {
