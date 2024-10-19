@@ -18,15 +18,15 @@ namespace StrategoCore.Services
             _accountRepository = accountRepository;
         }
 
-        public Result<string> CreateAccount(string email, string password, string playername)
+        public Task<Result<string>> CreateAccountAsync(string email, string password, string playername)
         {
-            var result = _accountRepository.CreateAccount(email, password, playername);
+            var result = _accountRepository.CreateAccountAsync(email, password, playername);
             return result;
         }
 
-        public Result<string> LogInAccount(string email, string password)
+        public Task<Result<int>> LogInAccountAsync(string email, string password)
         {
-            var result = _accountRepository.ValidateCredentials(email, password);
+            var result = _accountRepository.ValidateCredentialsAsync(email, password);
             return result;
         }
 

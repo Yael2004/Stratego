@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="ChatService.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="Data\DTO\PlayerDTO.cs" />
     <Compile Include="Data\OperationResult.cs" />
     <Compile Include="Interfaces\ILogInService.cs" />
     <Compile Include="Interfaces\IChatService.cs" />

@@ -19,9 +19,9 @@ namespace StrategoDataAccess
             _context = context;
         }
 
-        public Result<string> CreateAccount(string email, string hashedPassword, string playerName)
+        public async Task<Result<string>> CreateAccountAsync(string email, string hashedPassword, string playerName)
         {
-            if (AlreadyExistentAccount(email))
+            if (await AlreadyExistentAccountAsync(email))
             {
                 return Result<string>.Failure("Account already exists");
             }
@@ -37,7 +37,7 @@ namespace StrategoDataAccess
                     };
 
                     _context.Account.Add(newAccount);
-                    _context.SaveChanges(); 
+                    await _context.SaveChangesAsync();
 
                     var newPlayer = new Player
                     {
@@ -46,7 +46,7 @@ namespace StrategoDataAccess
                     };
 
                     _context.Player.Add(newPlayer);
-                    _context.SaveChanges(); 
+                    await _context.SaveChangesAsync();
 
                     transaction.Commit();
 
@@ -70,35 +70,37 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<string> ValidateCredentials(string email, string hashedPassword)
+        public async Task<Result<int>> ValidateCredentialsAsync(string email, string hashedPassword)
         {
             try
             {
-                var account = _context.Account.FirstOrDefault(a => a.mail == email && a.password == hashedPassword);
-                return account != null ? Result<string>.Success("Credentials are valid") : Result<string>.Failure("Invalid credentials");
+                var account = await _context.Account.FirstOrDefaultAsync(a => a.mail == email && a.password == hashedPassword);
+
+                if (account == null)
+                {
+                    return Result<int>.Failure("Invalid credentials");
+                }
+
+                return Result<int>.Success(account.IdAccount);
             }
             catch (DbEntityValidationException dbEx)
             {
-                return Result<string>.Failure($"Entity validation error: {dbEx.Message}");
+                return Result<int>.Failure($"Entity validation error: {dbEx.Message}");
             }
             catch (SqlException sqlEx)
             {
-                return Result<string>.Failure($"Database error: {sqlEx.Message}");
+                return Result<int>.Failure($"Database error: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                return Result<string>.Failure($"Unexpected error: {ex.Message}");
+                return Result<int>.Failure($"Unexpected error: {ex.Message}");
             }
         }
 
-        public Account GetAccountByEmail(string email)
+        public async Task<bool> AlreadyExistentAccountAsync(string email)
         {
-            return _context.Account.FirstOrDefault(a => a.mail == email);
+            return await _context.Account.AnyAsync(a => a.mail == email);
         }
 
-        public bool AlreadyExistentAccount(string email)
-        {
-            return _context.Account.Any(a => a.mail == email);
-        }
     }
 }
