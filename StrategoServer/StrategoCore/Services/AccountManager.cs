@@ -11,6 +11,7 @@ namespace StrategoCore.Services
     public class AccountManager
     {
         private readonly AccountRepository _accountRepository;
+        private readonly PlayerRepository _playerRepository;
 
         public AccountManager(AccountRepository accountRepository)
         {
@@ -26,6 +27,12 @@ namespace StrategoCore.Services
         public Result<string> LogInAccount(string email, string password)
         {
             var result = _accountRepository.ValidateCredentials(email, password);
+            return result;
+        }
+
+        public async Task<Result<Player>> GetLogInAccountAsync(int accountId)
+        {
+            var result = await _playerRepository.GetPlayerByAccountIdAsync(accountId);
             return result;
         }
 

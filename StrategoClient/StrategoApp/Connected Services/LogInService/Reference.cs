@@ -79,10 +79,10 @@ namespace StrategoApp.LogInService {
     public interface ILogInService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILogInService/SignUp", ReplyAction="http://tempuri.org/ILogInService/SignUpResponse")]
-        void SignUp(string email, string password);
+        void SignUp(string email, string password, string playername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILogInService/SignUp", ReplyAction="http://tempuri.org/ILogInService/SignUpResponse")]
-        System.Threading.Tasks.Task SignUpAsync(string email, string password);
+        System.Threading.Tasks.Task SignUpAsync(string email, string password, string playername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILogInService/LogIn", ReplyAction="http://tempuri.org/ILogInService/LogInResponse")]
         void LogIn(string email, string password);
@@ -129,12 +129,12 @@ namespace StrategoApp.LogInService {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void SignUp(string email, string password) {
-            base.Channel.SignUp(email, password);
+        public void SignUp(string email, string password, string playername) {
+            base.Channel.SignUp(email, password, playername);
         }
         
-        public System.Threading.Tasks.Task SignUpAsync(string email, string password) {
-            return base.Channel.SignUpAsync(email, password);
+        public System.Threading.Tasks.Task SignUpAsync(string email, string password, string playername) {
+            return base.Channel.SignUpAsync(email, password, playername);
         }
         
         public void LogIn(string email, string password) {

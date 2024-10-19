@@ -75,11 +75,11 @@ namespace StrategoApp.ViewModel
             return true;
         }
 
-        private async void ExecuteSignUpCommand(object obj)
+        private void ExecuteSignUpCommand(object obj)
         {
             try
             {
-                await _logInServiceClient.SignUpAsync(Email, Password);
+                _logInServiceClient.SignUp(Email, Password, Username);
             }
             catch (Exception ex)
             {
