@@ -1,5 +1,4 @@
-﻿using StrategoServices.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -8,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace StrategoServices.Services.Interfaces
 {
-    [ServiceContract(CallbackContract = typeof(ILogInServiceCallback))]
-    public interface ILogInService
+    [ServiceContract(CallbackContract = typeof(ISignUpServiceCallback))]
+    public interface ISignUpService
     {
         [OperationContract]
-        Task LogIn(string email, string password);
+        Task SignUp(string email, string password, string playername);
     }
 }

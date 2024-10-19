@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace StrategoServices.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class LogInService : ILogInService
+    public class LogInService : ILogInService, ISignUpService
     {
         private readonly AccountManager _accountManager;
 
@@ -53,10 +53,9 @@ namespace StrategoServices.Services
             }
         }
 
-
         public async Task SignUp(string email, string password, string playername)
         {
-            var callback = OperationContext.Current.GetCallbackChannel<ILogInServiceCallback>();
+            var callback = OperationContext.Current.GetCallbackChannel<ISignUpServiceCallback>();
 
             var result = await _accountManager.CreateAccountAsync(email, password, playername);
 
