@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StrategoServices
+namespace StrategoServices.Logic.Interfaces
 {
-    public class Class1
+    internal interface IEmailSender
     {
+        void SendEmail(string destinationAddress);
     }
 }

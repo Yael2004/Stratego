@@ -105,10 +105,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StrategoCore\StrategoCore.csproj">
-      <Project>{B53FB53B-D4B0-4C4D-81B2-A62827C9DBF6}</Project>
-      <Name>StrategoCore</Name>
-    </ProjectReference>
     <ProjectReference Include="..\StrategoDataAccess\StrategoDataAccess.csproj">
       <Project>{94ea01e7-c94f-487f-9587-e9493557a298}</Project>
       <Name>StrategoDataAccess</Name>

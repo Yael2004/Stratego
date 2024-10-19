@@ -42,6 +42,7 @@ namespace StrategoDataAccess
                     var newPlayer = new Player
                     {
                         Name = playerName,
+                        PictureId = 1,
                         AccountId = newAccount.IdAccount
                     };
 

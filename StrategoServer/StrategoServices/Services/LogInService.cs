@@ -1,6 +1,7 @@
-﻿using StrategoCore.Services;
-using StrategoServices.Data;
-using StrategoServices.Interfaces;
+﻿using StrategoServices.Data;
+using StrategoServices.Data.DTO;
+using StrategoServices.Logic;
+using StrategoServices.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StrategoServices
+namespace StrategoServices.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class LogInService : ILogInService
@@ -28,13 +29,30 @@ namespace StrategoServices
 
             if (result.IsSuccess)
             {
-                callback.LogInResult(new OperationResult(true, "Login succesful"));
+                var resultPlayer = await _accountManager.GetLogInAccountAsync(result.Value);
+
+                if (resultPlayer.IsSuccess)
+                {
+                    callback.AccountInfo(new PlayerDTO
+                    {
+                        Id = resultPlayer.Value.Id,
+                        Name = resultPlayer.Value.Name,
+                        AccountId = resultPlayer.Value.AccountId ?? 0
+                    });
+
+                    callback.LogInResult(new OperationResult(true, "Login successful"));
+                }
+                else
+                {
+                    callback.LogInResult(new OperationResult(false, resultPlayer.Error));
+                }
             }
             else
             {
                 callback.LogInResult(new OperationResult(false, result.Error));
             }
         }
+
 
         public async Task SignUp(string email, string password, string playername)
         {

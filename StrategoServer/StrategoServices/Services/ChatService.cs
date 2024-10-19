@@ -1,6 +1,4 @@
-﻿using StrategoServices.Interfaces.StrategoServices;
-using StrategoServices.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +6,10 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using StrategoCore.Services;
+using StrategoServices.Services.Interfaces;
+using StrategoServices.Logic;
 
-namespace StrategoServices
+namespace StrategoServices.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class ChatService : IChatService

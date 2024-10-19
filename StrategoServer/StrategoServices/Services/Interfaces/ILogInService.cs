@@ -1,5 +1,4 @@
 ﻿using StrategoServices.Data;
-using StrategoServices.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +6,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StrategoServices.Interfaces
+namespace StrategoServices.Services.Interfaces
 {
     [ServiceContract(CallbackContract = typeof(ILogInServiceCallback))]
     public interface ILogInService

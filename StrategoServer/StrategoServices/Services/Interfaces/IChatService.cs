@@ -1,12 +1,11 @@
-﻿using StrategoServices.Interfaces.StrategoServices;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StrategoServices.Interfaces
+namespace StrategoServices.Services.Interfaces
 {
     [ServiceContract(CallbackContract = typeof(IChatServiceCallback))]
     public interface IChatService

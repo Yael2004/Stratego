@@ -1,6 +1,6 @@
 ﻿using System.ServiceModel;
 
-namespace StrategoServices.Interfaces.StrategoServices
+namespace StrategoServices.Services.Interfaces
 {
     [ServiceContract]
     public interface IChatServiceCallback
