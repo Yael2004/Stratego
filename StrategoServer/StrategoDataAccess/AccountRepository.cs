@@ -21,7 +21,14 @@ namespace StrategoDataAccess
 
         public async Task<Result<string>> CreateAccountAsync(string email, string hashedPassword, string playerName)
         {
-            if (await AlreadyExistentAccountAsync(email))
+            var existenceCheckResult = await AlreadyExistentAccountAsync(email);
+
+            if (!existenceCheckResult.IsSuccess)
+            {
+                return Result<string>.Failure(existenceCheckResult.Error);
+            }
+
+            if (existenceCheckResult.Value) 
             {
                 return Result<string>.Failure("Account already exists");
             }
@@ -37,17 +44,17 @@ namespace StrategoDataAccess
                     };
 
                     _context.Account.Add(newAccount);
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();  
 
                     var newPlayer = new Player
                     {
                         Name = playerName,
-                        PictureId = 1,
-                        AccountId = newAccount.IdAccount
+                        PictureId = 1, 
+                        AccountId = newAccount.IdAccount  
                     };
 
                     _context.Player.Add(newPlayer);
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();  
 
                     transaction.Commit();
 
@@ -55,17 +62,14 @@ namespace StrategoDataAccess
                 }
                 catch (DbEntityValidationException dbEx)
                 {
-                    transaction.Rollback();
                     return Result<string>.Failure($"Entity validation error: {dbEx.Message}");
                 }
                 catch (SqlException sqlEx)
                 {
-                    transaction.Rollback();
                     return Result<string>.Failure($"Database error: {sqlEx.Message}");
                 }
                 catch (Exception ex)
                 {
-                    transaction.Rollback();
                     return Result<string>.Failure($"Unexpected error: {ex.Message}");
                 }
             }
@@ -98,9 +102,21 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<bool> AlreadyExistentAccountAsync(string email)
+        public async Task<Result<bool>> AlreadyExistentAccountAsync(string email)
         {
-            return await _context.Account.AnyAsync(a => a.mail == email);
+            try
+            {
+                bool exists = await _context.Account.AnyAsync(a => a.mail == email);
+                return Result<bool>.Success(exists);
+            }
+            catch (SqlException sqlEx)
+            {
+                return Result<bool>.Failure($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Result<bool>.Failure($"Unexpected error: {ex.Message}");
+            }
         }
 
     }
