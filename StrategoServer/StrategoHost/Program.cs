@@ -6,15 +6,19 @@ using StrategoServices.Logic;
 using StrategoServices.Services;
 using System;
 using System.ServiceModel;
+using log4net;
+using StrategoHost.Helpers;
 
 namespace StrategoHost
 {
     class Program
     {
+        private static readonly ILog log = Log<Program>.GetLogger();
         static void Main(string[] args)
         {
             try
             {
+                log.Fatal("Starting Stratego server...");
                 var builder = new ContainerBuilder();
 
                 builder.RegisterType<StrategoEntities>().AsSelf().InstancePerLifetimeScope();

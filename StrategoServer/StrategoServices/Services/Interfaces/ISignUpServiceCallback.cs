@@ -12,6 +12,6 @@ namespace StrategoServices.Services.Interfaces
     public interface ISignUpServiceCallback
     {
         [OperationContract(IsOneWay = true)]
-        void SignUpResult(OperationResult result);
+        Task SignUpResult(OperationResult result);
     }
 }

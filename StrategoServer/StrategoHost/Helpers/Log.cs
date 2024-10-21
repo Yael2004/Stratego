@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StrategoServices.Helpers
+namespace StrategoHost.Helpers
 {
     public static class Log<T>
     {

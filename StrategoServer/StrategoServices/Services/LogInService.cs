@@ -33,23 +33,23 @@ namespace StrategoServices.Services
 
                 if (resultPlayer.IsSuccess)
                 {
-                    callback.AccountInfo(new PlayerDTO
+                    await callback.AccountInfo(new PlayerDTO
                     {
                         Id = resultPlayer.Value.Id,
                         Name = resultPlayer.Value.Name,
                         AccountId = resultPlayer.Value.AccountId ?? 0
                     });
 
-                    callback.LogInResult(new OperationResult(true, "Login successful"));
+                    await callback.LogInResult(new OperationResult(true, "Login successful"));
                 }
                 else
                 {
-                    callback.LogInResult(new OperationResult(false, resultPlayer.Error));
+                    await callback.LogInResult(new OperationResult(false, resultPlayer.Error));
                 }
             }
             else
             {
-                callback.LogInResult(new OperationResult(false, result.Error));
+                await callback.LogInResult(new OperationResult(false, result.Error));
             }
         }
 
@@ -61,11 +61,11 @@ namespace StrategoServices.Services
 
             if (result.IsSuccess)
             {
-                callback.SignUpResult(new OperationResult(true, "Account created successfully"));
+                await callback.SignUpResult(new OperationResult(true, "Account created successfully"));
             }
             else
             {
-                callback.SignUpResult(new OperationResult(false, result.Error));
+                await callback.SignUpResult(new OperationResult(false, result.Error));
             }
         }
     }
