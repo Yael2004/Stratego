@@ -370,4 +370,13 @@
   <data name="WrongPassword_Label" xml:space="preserve">
     <value>Wrong Password</value>
   </data>
+  <data name="LoginAsInvited_Button" xml:space="preserve">
+    <value>Login as invited</value>
+  </data>
+  <data name="Friends_Button" xml:space="preserve">
+    <value>Friends</value>
+  </data>
+  <data name="Send_Button" xml:space="preserve">
+    <value>Send</value>
+  </data>
 </root>

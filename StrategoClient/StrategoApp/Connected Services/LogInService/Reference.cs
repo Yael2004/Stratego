@@ -74,15 +74,86 @@ namespace StrategoApp.LogInService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PlayerDTO", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
+    [System.SerializableAttribute()]
+    public partial class PlayerDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int AccountIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int AccountId {
+            get {
+                return this.AccountIdField;
+            }
+            set {
+                if ((this.AccountIdField.Equals(value) != true)) {
+                    this.AccountIdField = value;
+                    this.RaisePropertyChanged("AccountId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="LogInService.ILogInService", CallbackContract=typeof(StrategoApp.LogInService.ILogInServiceCallback))]
     public interface ILogInService {
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILogInService/SignUp", ReplyAction="http://tempuri.org/ILogInService/SignUpResponse")]
-        void SignUp(string email, string password, string playername);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILogInService/SignUp", ReplyAction="http://tempuri.org/ILogInService/SignUpResponse")]
-        System.Threading.Tasks.Task SignUpAsync(string email, string password, string playername);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILogInService/LogIn", ReplyAction="http://tempuri.org/ILogInService/LogInResponse")]
         void LogIn(string email, string password);
@@ -94,11 +165,11 @@ namespace StrategoApp.LogInService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface ILogInServiceCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILogInService/SignUpResult")]
-        void SignUpResult(StrategoApp.LogInService.OperationResult result);
-        
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILogInService/LogInResult")]
         void LogInResult(StrategoApp.LogInService.OperationResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ILogInService/AccountInfo")]
+        void AccountInfo(StrategoApp.LogInService.PlayerDTO player);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -129,20 +200,67 @@ namespace StrategoApp.LogInService {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void SignUp(string email, string password, string playername) {
-            base.Channel.SignUp(email, password, playername);
-        }
-        
-        public System.Threading.Tasks.Task SignUpAsync(string email, string password, string playername) {
-            return base.Channel.SignUpAsync(email, password, playername);
-        }
-        
         public void LogIn(string email, string password) {
             base.Channel.LogIn(email, password);
         }
         
         public System.Threading.Tasks.Task LogInAsync(string email, string password) {
             return base.Channel.LogInAsync(email, password);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="LogInService.ISignUpService", CallbackContract=typeof(StrategoApp.LogInService.ISignUpServiceCallback))]
+    public interface ISignUpService {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISignUpService/SignUp", ReplyAction="http://tempuri.org/ISignUpService/SignUpResponse")]
+        void SignUp(string email, string password, string playername);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ISignUpService/SignUp", ReplyAction="http://tempuri.org/ISignUpService/SignUpResponse")]
+        System.Threading.Tasks.Task SignUpAsync(string email, string password, string playername);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface ISignUpServiceCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ISignUpService/SignUpResult")]
+        void SignUpResult(StrategoApp.LogInService.OperationResult result);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface ISignUpServiceChannel : StrategoApp.LogInService.ISignUpService, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class SignUpServiceClient : System.ServiceModel.DuplexClientBase<StrategoApp.LogInService.ISignUpService>, StrategoApp.LogInService.ISignUpService {
+        
+        public SignUpServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
+        }
+        
+        public SignUpServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
+        }
+        
+        public SignUpServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public SignUpServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public SignUpServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
+        }
+        
+        public void SignUp(string email, string password, string playername) {
+            base.Channel.SignUp(email, password, playername);
+        }
+        
+        public System.Threading.Tasks.Task SignUpAsync(string email, string password, string playername) {
+            return base.Channel.SignUpAsync(email, password, playername);
         }
     }
 }

@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace StrategoApp.ViewModel
 {
-    public class SignUpViewModel : ViewModelBase, LogInService.ILogInServiceCallback
+    public class SignUpViewModel : ViewModelBase, LogInService.ISignUpServiceCallback
     {
         private static readonly ILog Log = Log<SignUpViewModel>.GetLogger();
 
@@ -22,7 +22,7 @@ namespace StrategoApp.ViewModel
         private string _email;
 
         private MainWindowViewModel _mainWindowViewModel;
-        private LogInServiceClient _logInServiceClient;
+        private SignUpServiceClient _signUpServiceClient;
 
         private string _usernameError;
         private string _emailError;
@@ -96,7 +96,7 @@ namespace StrategoApp.ViewModel
             _mainWindowViewModel = mainWindowViewModel;
 
             InstanceContext context = new InstanceContext(this);
-            _logInServiceClient = new LogInServiceClient(context, "NetTcpBinding_ILogInService");
+            _signUpServiceClient = new SignUpServiceClient(context, "NetTcpBinding_ISignUpService");
 
             SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand, CanExecuteSignUpCommand);
             CancelCommand = new ViewModelCommand(ExecuteCancelCommand);
@@ -112,7 +112,7 @@ namespace StrategoApp.ViewModel
             return true;
         }
 
-        private void ExecuteSignUpCommand(object obj)
+        private async void ExecuteSignUpCommand(object obj)
         {
             ValidateFields();
 
@@ -120,7 +120,7 @@ namespace StrategoApp.ViewModel
 
             try
             {
-                await _logInServiceClient.SignUpAsync(Email, hashedPassword);
+                await _signUpServiceClient.SignUpAsync(Email, hashedPassword, Username);
             }
             catch (Exception ex)
             {
@@ -144,11 +144,6 @@ namespace StrategoApp.ViewModel
             {
                 Console.WriteLine($"Error al crear la cuenta: {result.Message}");
             }
-        }
-
-        public void LogInResult(OperationResult result)
-        {
-            throw new NotImplementedException();
         }
 
         public void ValidateFields()

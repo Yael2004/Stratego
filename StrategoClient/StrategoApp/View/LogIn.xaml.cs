@@ -26,20 +26,12 @@ namespace StrategoApp.View
             InitializeComponent();
             this.Cursor = new Cursor(Application.GetResourceStream(new Uri("pack://application:,,,/StrategoApp;component/Assets/Cursors/normal_cursor.cur")).Stream);
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-
+            if (DataContext is LogInViewModel viewModel)
+            {
+                viewModel.Password = ((PasswordBox)sender).Password;
+            }
         }
     }
 }

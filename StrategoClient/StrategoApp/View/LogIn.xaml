@@ -6,8 +6,16 @@
              xmlns:local="clr-namespace:StrategoApp.View"
              xmlns:res="clr-namespace:StrategoApp.Properties"
              xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewModel:LogInViewModel}"
+             xmlns:helpers="clr-namespace:StrategoApp.Helpers"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <helpers:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <helpers:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+
     <Viewbox Stretch="Fill">
         <Grid Height="440" Width="800" 
               Background="{StaticResource InitialBackground}"
@@ -22,21 +30,34 @@
                        HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
                 <TextBox Style="{StaticResource InputBoxStyle}"
+                         Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                          Canvas.Left="260" Canvas.Top="169" 
                          Width="280" Height="33" 
                          HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-                <PasswordBox Style="{StaticResource InputBoxStyle}"
-                             Canvas.Left="260" Canvas.Top="220" 
-                             Width="280" Height="33" 
-                             HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <PasswordBox x:Name="PasswordBox"
+                        Style="{StaticResource InputBoxStyle}"
+                        Canvas.Left="260" Canvas.Top="220"
+                        Width="280" Height="33"
+                        HorizontalAlignment="Center" VerticalAlignment="Top"
+                        PasswordChanged="PasswordBox_PasswordChanged"
+                        Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+
+                <TextBox x:Name="PasswordTextBox"
+                        Style="{StaticResource InputBoxStyle}"
+                        Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                        Canvas.Left="260" Canvas.Top="220"
+                        Width="280" Height="33"
+                        HorizontalAlignment="Center" VerticalAlignment="Top"
+                        Visibility="{Binding IsPasswordVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
 
                 <Button Content="{x:Static res:Resources.Login_Button}" 
                         Style="{StaticResource ButtonStyle}"
                         Canvas.Left="320" Canvas.Top="298" 
                         Width="160" Height="40" 
                         HorizontalAlignment="Center" VerticalAlignment="Top"
-                        Command="{Binding LogInCommand}" Click="Button_Click_2"/>
+                        Command="{Binding LogInCommand}"/>
 
                 <Button Content="{x:Static res:Resources.SignUp_Button}"
                         Style="{StaticResource ButtonStyle}"
@@ -47,23 +68,28 @@
                         Command="{Binding SignUpCommand}"/>
                 
                 <Button Content="{x:Static res:Resources.LoginAsInvited_Button}" 
-                    Style="{StaticResource ButtonStyle}"
-                    Canvas.Left="588" Canvas.Top="390" 
-                    Width="202" Height="40" 
-                    HorizontalAlignment="Left" VerticalAlignment="Top"
-                    Command="{Binding LogInAsInvitedCommand}"
-                    />
+                        Style="{StaticResource ButtonStyle}"
+                        Canvas.Left="588" Canvas.Top="390" 
+                        Width="202" Height="40" 
+                        HorizontalAlignment="Left" VerticalAlignment="Top"
+                        Command="{Binding LogInAsInvitedCommand}"/>
+
+                <Button Content="{Binding TogglePasswordButtonText}"
+                        Command="{Binding TogglePasswordVisibilityCommand}"
+                        Canvas.Left="560" Canvas.Top="220"
+                        Width="30" Height="33"
+                        HorizontalAlignment="Left" VerticalAlignment="Top"/>
             </Canvas>
 
-            <Label x:Name="Label_LogInMessage"
+            <Label Content="{Binding LogInErrorMessage}"
                    FontSize="15" 
                    FontWeight="Bold"
                    Foreground="{StaticResource IntenseRed}"
                    FontFamily="{StaticResource AugustaFont}"
-                   Content="{Binding LogInErrorMessage}"
                    Canvas.Left="312" Canvas.Top="258" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Top" Margin="0,256,0,0"/>
+                   HorizontalAlignment="Center" VerticalAlignment="Top" 
+                   Margin="0,256,0,0"
+                   Visibility="{Binding LogInErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
 
             <ContentControl x:Name="ModalControl"
                             Content="{x:Static res:Resources.DatabaseConnectionErrorMessage_Label}"

@@ -72,6 +72,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\Validations.cs" />
     <Compile Include="Helpers\StringToVisibilityConverter.cs" />
@@ -170,6 +171,9 @@
     <None Include="Connected Services\LogInService\item2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\LogInService\item3.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\LogInService\LogInService.wsdl" />
     <None Include="Connected Services\Service\ChatService.wsdl" />
     <None Include="Connected Services\Service\item.xsd">
@@ -207,9 +211,6 @@
     <WCFMetadataStorage Include="Connected Services\Service\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\LogInService\item.disco" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\Cursors\normal_cursor.cur" />
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +227,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\LogInService\item.disco" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\LogInService\configuration91.svcinfo" />

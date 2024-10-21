@@ -1,4 +1,5 @@
 ﻿using StrategoApp.Helpers;
+using StrategoApp.LogInService;
 using StrategoApp.Properties;
 using System;
 using System.Collections.Generic;
@@ -7,17 +8,21 @@ using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace StrategoApp.ViewModel
 {
-    public class LogInViewModel : ViewModelBase
+    public class LogInViewModel : ViewModelBase, LogInService.ILogInServiceCallback
     {
         private string _username;
         private string _password;
-        private bool _isViewEnabled;
         private string _errorMessage;
+        private bool _isPasswordVisible;
+        private string _togglePasswordVisibilityIcon;
         public string LogInErrorMessage { get; set; }
+
+        private readonly LogInServiceClient _logInServiceClient;
 
         private MainWindowViewModel _mainWindowViewModel;
 
@@ -41,12 +46,23 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public bool IsViewEnabled
+        public bool IsPasswordVisible
         {
-            get { return _isViewEnabled; }
+            get { return _isPasswordVisible; }
             set
             {
-                _isViewEnabled = value;
+                _isPasswordVisible = value;
+                OnPropertyChanged();
+                _togglePasswordVisibilityIcon = _isPasswordVisible ? "HidePasswordIcon" : "ShowPasswordIcon";
+            }
+        }
+
+        public string TogglePasswordVisibilityIcon
+        {
+            get { return _togglePasswordVisibilityIcon; }
+            set
+            {
+                _togglePasswordVisibilityIcon = value;
                 OnPropertyChanged();
             }
         }
@@ -70,20 +86,30 @@ namespace StrategoApp.ViewModel
         public ICommand LogInCommand { get; }
         public ICommand SignUpCommand { get; }
         public ICommand LogInAsInvitedCommand { get; }
+        public ICommand TogglePasswordVisibilityCommand { get; }
 
         public LogInViewModel(MainWindowViewModel mainWindowViewModel)
         {
+            _logInServiceClient = new LogInServiceClient(new System.ServiceModel.InstanceContext(this));
             _mainWindowViewModel = mainWindowViewModel;
             LogInCommand = new ViewModelCommand(ExecuteLogInCommand, CanExecuteLogInCommand);
             LogInAsInvitedCommand = new ViewModelCommand(ExcuteLogInAsInvitedCommand);
             SignUpCommand = new ViewModelCommand(p => ExecuteSignUpCommand());
+            TogglePasswordVisibilityCommand = new ViewModelCommand(p => ExecuteTogglePasswordVisibilityCommand());
         }
 
         public LogInViewModel()
         {
+            _logInServiceClient = new LogInServiceClient(new System.ServiceModel.InstanceContext(this));
             LogInCommand = new ViewModelCommand(ExecuteLogInCommand, CanExecuteLogInCommand);
             SignUpCommand = new ViewModelCommand(p => ExecuteSignUpCommand());
             LogInAsInvitedCommand = new ViewModelCommand(ExcuteLogInAsInvitedCommand);
+            TogglePasswordVisibilityCommand = new ViewModelCommand(p => ExecuteTogglePasswordVisibilityCommand());
+        }
+
+        private void ExecuteTogglePasswordVisibilityCommand()
+        {
+            IsPasswordVisible = !IsPasswordVisible;
         }
 
         private void ExecuteSignUpCommand()
@@ -93,17 +119,46 @@ namespace StrategoApp.ViewModel
 
         private bool CanExecuteLogInCommand(object obj)
         {
+            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
+            {
+                return false;
+            }
+                
             return true;
         }
 
-        private void ExecuteLogInCommand(object obj)
+        private async void ExecuteLogInCommand(object obj)
         {
-            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+            try
+            {
+                await _logInServiceClient.LogInAsync(Username, Password);
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Error al conectar con el servidor: {ex.Message}";
+            }
         }
 
         private void ExcuteLogInAsInvitedCommand(object obj)
         {
             _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+        }
+
+        public void LogInResult(OperationResult result)
+        {
+            if (result.IsSuccess)
+            {
+                _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+            }
+            else
+            {
+                SetLogInErrorMessage("LogInFailed");
+            }
+        }
+
+        public void AccountInfo(PlayerDTO player)
+        {
+            throw new NotImplementedException();
         }
     }
 }
