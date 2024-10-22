@@ -16,6 +16,8 @@ namespace StrategoServices.Data.DTO
         [DataMember]
         public string Name { get; set; }
         [DataMember]
+        public int PictureId { get; set; }
+        [DataMember]
         public int AccountId { get; set; }
     }
 }

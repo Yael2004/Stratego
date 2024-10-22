@@ -85,15 +85,15 @@
     <Compile Include="Data\OperationResult.cs" />
     <Compile Include="Services\Interfaces\ILogInService.cs" />
     <Compile Include="Services\Interfaces\IChatService.cs" />
-    <Compile Include="Services\Interfaces\IChatServiceCallback.cs" />
-    <Compile Include="Services\Interfaces\ILoginServiceCallback.cs" />
+    <Compile Include="Services\Interfaces\Callbacks\IChatServiceCallback.cs" />
+    <Compile Include="Services\Interfaces\Callbacks\ILoginServiceCallback.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Logic\AccountManager.cs" />
     <Compile Include="Logic\ChatManager.cs" />
     <Compile Include="Logic\EmailSender.cs" />
     <Compile Include="Logic\Interfaces\IEmailSender.cs" />
     <Compile Include="Services\Interfaces\ISignUpService.cs" />
-    <Compile Include="Services\Interfaces\ISignUpServiceCallback.cs" />
+    <Compile Include="Services\Interfaces\Callbacks\ISignUpServiceCallback.cs" />
     <Compile Include="Services\LogInService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

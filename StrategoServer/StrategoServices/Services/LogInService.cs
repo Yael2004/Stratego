@@ -37,6 +37,7 @@ namespace StrategoServices.Services
                     {
                         Id = resultPlayer.Value.Id,
                         Name = resultPlayer.Value.Name,
+                        PictureId = resultPlayer.Value.PictureId ?? 1,
                         AccountId = resultPlayer.Value.AccountId ?? 0
                     });
 
