@@ -1,5 +1,6 @@
 ﻿using StrategoApp.Helpers;
 using StrategoApp.LogInService;
+using StrategoApp.Model;
 using StrategoApp.Properties;
 using System;
 using System.Collections.Generic;
@@ -141,7 +142,14 @@ namespace StrategoApp.ViewModel
 
         private void ExcuteLogInAsInvitedCommand(object obj)
         {
-            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+            try
+            {
+                _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Error al conectar con el servidor: {ex.Message}";
+            }
         }
 
         public void LogInResult(OperationResult result)
@@ -158,7 +166,7 @@ namespace StrategoApp.ViewModel
 
         public void AccountInfo(PlayerDTO player)
         {
-            throw new NotImplementedException();
+            PlayerSingleton.Instance.LogIn(player);
         }
     }
 }

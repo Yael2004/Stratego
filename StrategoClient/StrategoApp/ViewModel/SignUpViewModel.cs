@@ -20,6 +20,8 @@ namespace StrategoApp.ViewModel
         private string _username;
         private string _password;
         private string _email;
+        private bool _isPasswordVisible;
+        private string _togglePasswordVisibilityIcon;
 
         private MainWindowViewModel _mainWindowViewModel;
         private SignUpServiceClient _signUpServiceClient;
@@ -30,6 +32,7 @@ namespace StrategoApp.ViewModel
 
         public ICommand SignUpCommand { get; }
         public ICommand CancelCommand { get; }
+        public ICommand TogglePasswordVisibilityCommand { get; }
 
         public string Username
         {
@@ -91,6 +94,27 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public bool IsPasswordVisible
+        {
+            get { return _isPasswordVisible; }
+            set
+            {
+                _isPasswordVisible = value;
+                OnPropertyChanged();
+                _togglePasswordVisibilityIcon = _isPasswordVisible ? "HidePasswordIcon" : "ShowPasswordIcon";
+            }
+        }
+
+        public string TogglePasswordVisibilityIcon
+        {
+            get { return _togglePasswordVisibilityIcon; }
+            set
+            {
+                _togglePasswordVisibilityIcon = value;
+                OnPropertyChanged();
+            }
+        }
+
         public SignUpViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
@@ -100,6 +124,12 @@ namespace StrategoApp.ViewModel
 
             SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand, CanExecuteSignUpCommand);
             CancelCommand = new ViewModelCommand(ExecuteCancelCommand);
+            TogglePasswordVisibilityCommand = new ViewModelCommand(p => ExecuteTogglePasswordVisibilityCommand());
+        }
+
+        private void ExecuteTogglePasswordVisibilityCommand()
+        {
+            IsPasswordVisible = !IsPasswordVisible;
         }
 
         private bool CanExecuteSignUpCommand(object obj)

@@ -13,6 +13,8 @@
 
     <UserControl.Resources>
         <helpers:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <helpers:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
 
     <Viewbox Stretch="Fill">
@@ -44,7 +46,7 @@
                          Style="{StaticResource InputBoxStyle}" 
                          Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
                          Canvas.Left="260" Canvas.Top="220" 
-                         Width="280" Height="32" 
+                         Width="280" Height="33" 
                          HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 <Label Content="{Binding EmailError}" 
                        FontFamily="{StaticResource AugustaFont}"
@@ -53,12 +55,22 @@
                        Canvas.Left="260" Canvas.Top="252" 
                        Visibility="{Binding EmailError, Converter={StaticResource StringToVisibilityConverter}}"/>
 
-                <PasswordBox Name="PasswordTextBox" 
+                <PasswordBox Name="PasswordBox" 
                              Style="{StaticResource InputBoxStyle}"
                              Canvas.Left="260" Canvas.Top="273" 
-                             Width="280" Height="34" 
+                             Width="280" Height="33" 
                              HorizontalAlignment="Center" VerticalAlignment="Top"
-                             PasswordChanged="PasswordTextBox_PasswordChanged"/>
+                             PasswordChanged="PasswordTextBox_PasswordChanged"
+                             Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+
+                <TextBox x:Name="PasswordTextBox"
+                            Style="{StaticResource InputBoxStyle}"
+                            Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                            Canvas.Left="260" Canvas.Top="273"
+                            Width="280" Height="33"
+                            HorizontalAlignment="Center" VerticalAlignment="Top"
+                            Visibility="{Binding IsPasswordVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
                 <Label Content="{Binding PasswordError}"
                        FontFamily="{StaticResource AugustaFont}"
                        Foreground="Red" 
@@ -80,6 +92,35 @@
                         HorizontalAlignment="Left" 
                         VerticalAlignment="Top"
                         Command="{Binding CancelCommand}"/>
+
+                <CheckBox Command="{Binding TogglePasswordVisibilityCommand}"
+                          Canvas.Left="545" Canvas.Top="273"
+                          Width="50" Height="33"
+                          HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <CheckBox.Template>
+                        <ControlTemplate TargetType="CheckBox">
+                            <ContentPresenter />
+                        </ControlTemplate>
+                    </CheckBox.Template>
+
+                    <CheckBox.Content>
+                        <Image Width="30" Height="33">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}" Value="True">
+                                            <Setter Property="Source" Value="/Assets/Images/Icons/EyeOpen_Icon.png"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}" Value="False">
+                                            <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                    </CheckBox.Content>
+                </CheckBox>
 
             </Canvas>
         </Grid>

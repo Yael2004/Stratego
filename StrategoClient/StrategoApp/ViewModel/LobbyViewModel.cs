@@ -1,5 +1,6 @@
 ﻿using log4net;
 using StrategoApp.Helpers;
+using StrategoApp.Model;
 using StrategoApp.Service;
 using System;
 using System.Collections.Generic;
@@ -32,9 +33,17 @@ namespace StrategoApp.ViewModel
 
         public LobbyViewModel(MainWindowViewModel mainWindowViewModel)
         {
-            Random random = new Random();
-            _userId = random.Next(1, 1000);
-            _username = "User " + _userId;
+            if (PlayerSingleton.Instance.IsLoggedIn())
+            {
+                var player = PlayerSingleton.Instance.Player;
+                _username = player.Name;
+                _userId = player.Id;
+            }
+            else
+            {
+                _username = "Invitado";
+                _userId = -1;
+            }
 
             Connection();
 

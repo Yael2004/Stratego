@@ -76,6 +76,7 @@
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\Validations.cs" />
     <Compile Include="Helpers\StringToVisibilityConverter.cs" />
+    <Compile Include="Model\PlayerSingleton.cs" />
     <Compile Include="ViewModel\LobbyViewModel.cs" />
     <Compile Include="ViewModel\LogInViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
@@ -203,9 +204,7 @@
   <ItemGroup>
     <Resource Include="Assets\Images\LobbyBackground.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\LogInService\" />
     <WCFMetadataStorage Include="Connected Services\Service\" />
@@ -242,6 +241,10 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Icons\EyeClosed_Icon.png" />
+    <Resource Include="Assets\Images\Icons\EyeOpen_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

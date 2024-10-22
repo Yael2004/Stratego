@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StrategoApp.View"
              xmlns:res="clr-namespace:StrategoApp.Properties"
-             xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewModel:LogInViewModel}"
-             xmlns:helpers="clr-namespace:StrategoApp.Helpers"
+             xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" 
+             xmlns:helpers="clr-namespace:StrategoApp.Helpers" d:DataContext="{d:DesignInstance Type=viewModel:LogInViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -66,7 +66,7 @@
                         HorizontalAlignment="Center" 
                         VerticalAlignment="Top"
                         Command="{Binding SignUpCommand}"/>
-                
+
                 <Button Content="{x:Static res:Resources.LoginAsInvited_Button}" 
                         Style="{StaticResource ButtonStyle}"
                         Canvas.Left="588" Canvas.Top="390" 
@@ -74,14 +74,39 @@
                         HorizontalAlignment="Left" VerticalAlignment="Top"
                         Command="{Binding LogInAsInvitedCommand}"/>
 
-                <Button Content="{Binding TogglePasswordButtonText}"
-                        Command="{Binding TogglePasswordVisibilityCommand}"
-                        Canvas.Left="560" Canvas.Top="220"
-                        Width="30" Height="33"
-                        HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            </Canvas>
+                <CheckBox Command="{Binding TogglePasswordVisibilityCommand}"
+                          Canvas.Left="545" Canvas.Top="220"
+                          Width="50" Height="33"
+                          HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <CheckBox.Template>
+                        <ControlTemplate TargetType="CheckBox">
+                            <ContentPresenter />
+                        </ControlTemplate>
+                    </CheckBox.Template>
 
-            <Label Content="{Binding LogInErrorMessage}"
+                    <CheckBox.Content>
+                        <Image Width="30" Height="33">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}" Value="True">
+                                            <Setter Property="Source" Value="/Assets/Images/Icons/EyeOpen_Icon.png"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}" Value="False">
+                                            <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                    </CheckBox.Content>
+                </CheckBox>
+
+
+
+
+                <Label Content="{Binding LogInErrorMessage}"
                    FontSize="15" 
                    FontWeight="Bold"
                    Foreground="{StaticResource IntenseRed}"
@@ -91,11 +116,12 @@
                    Margin="0,256,0,0"
                    Visibility="{Binding LogInErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
 
-            <ContentControl x:Name="ModalControl"
+                <ContentControl x:Name="ModalControl"
                             Content="{x:Static res:Resources.DatabaseConnectionErrorMessage_Label}"
                             Template="{StaticResource ModalTemplate}"
                             Tag="{x:Static res:Resources.Accept_Button}"
                             Visibility="Hidden"/>
+            </Canvas>
         </Grid>
     </Viewbox>
 </UserControl>
