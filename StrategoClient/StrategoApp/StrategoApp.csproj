@@ -89,8 +89,8 @@
     <Compile Include="View\Lobby.xaml.cs">
       <DependentUpon>Lobby.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ScorePlayerProfile.xaml.cs">
-      <DependentUpon>ScorePlayerProfile.xaml</DependentUpon>
+    <Compile Include="View\PlayerProfile.xaml.cs">
+      <DependentUpon>PlayerProfile.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ScoreTable.xaml.cs">
       <DependentUpon>ScoreTable.xaml</DependentUpon>
@@ -122,7 +122,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ScorePlayerProfile.xaml">
+    <Page Include="View\PlayerProfile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

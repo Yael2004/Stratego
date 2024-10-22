@@ -379,4 +379,7 @@
   <data name="Send_Button" xml:space="preserve">
     <value>Send</value>
   </data>
+  <data name="Chat_Label" xml:space="preserve">
+    <value>Chat</value>
+  </data>
 </root>

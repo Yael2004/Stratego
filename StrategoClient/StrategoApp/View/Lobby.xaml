@@ -33,15 +33,22 @@
                 <StackPanel Orientation="Vertical" 
                             VerticalAlignment="Center">
                     
-                    <TextBlock Text="{Binding Username}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource IntenseRed}"/>
-                    <TextBlock Text="{Binding UserId}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource IntenseRed}"/>
+                    <TextBlock Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
+                               FontSize="20" 
+                               FontWeight="Bold" 
+                               Foreground="{StaticResource IntenseRed}"/>
+                    
+                    <TextBlock Text="{Binding UserId, UpdateSourceTrigger=PropertyChanged}" 
+                               FontSize="14" 
+                               FontWeight="Bold" 
+                               Foreground="{StaticResource IntenseRed}"/>
                 </StackPanel>
             </StackPanel>
 
             <Border Grid.Column="0" Grid.Row="1" 
                     Margin="10,10,174,10">
                 <StackPanel Margin="0,0,-1,0">
-                    <TextBlock Text="Chat"
+                    <TextBlock Text="{x:Static res:Resources.Chat_Label}"
                                Margin="10" 
                                FontSize="16"
                                FontWeight="Bold"

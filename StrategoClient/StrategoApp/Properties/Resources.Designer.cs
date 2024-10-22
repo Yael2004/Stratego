@@ -169,6 +169,15 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Chat.
+        /// </summary>
+        public static string Chat_Label {
+            get {
+                return ResourceManager.GetString("Chat_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Check profile.
         /// </summary>
         public static string CheckProfile_Button {

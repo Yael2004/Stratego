@@ -98,6 +98,26 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public string Username
+        {
+            get { return _username; }
+            set
+            {
+                _username = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string UserId
+        {
+            get { return _userId.ToString(); }
+            set
+            {
+                _userId = int.Parse(value);
+                OnPropertyChanged();
+            }
+        }
+
         public string MessageToSend
         {
             get { return _messageToSend; }

@@ -18,9 +18,9 @@ namespace StrategoApp.View
     /// <summary>
     /// Lógica de interacción para ScorePlayerProfile.xaml
     /// </summary>
-    public partial class ScorePlayerProfile : UserControl
+    public partial class PlayerProfile : UserControl
     {
-        public ScorePlayerProfile()
+        public PlayerProfile()
         {
             InitializeComponent();
         }
