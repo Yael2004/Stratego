@@ -11,6 +11,6 @@ namespace StrategoServices.Services.Interfaces
     public interface ISignUpService
     {
         [OperationContract]
-        Task SignUp(string email, string password, string playername);
+        Task SignUpAsync(string email, string password, string playername);
     }
 }

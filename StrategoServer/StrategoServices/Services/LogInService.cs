@@ -21,7 +21,7 @@ namespace StrategoServices.Services
             _accountManager = accountManager;
         }
 
-        public async Task LogIn(string email, string password)
+        public async Task LogInAsync(string email, string password)
         {
             var callback = OperationContext.Current.GetCallbackChannel<ILogInServiceCallback>();
 
@@ -33,27 +33,27 @@ namespace StrategoServices.Services
 
                 if (resultPlayer.IsSuccess)
                 {
-                    await callback.AccountInfo(new PlayerDTO
+                    callback.AccountInfo(new PlayerDTO
                     {
                         Id = resultPlayer.Value.Id,
                         Name = resultPlayer.Value.Name,
                         AccountId = resultPlayer.Value.AccountId ?? 0
                     });
 
-                    await callback.LogInResult(new OperationResult(true, "Login successful"));
+                    callback.LogInResult(new OperationResult(true, "Login successful"));
                 }
                 else
                 {
-                    await callback.LogInResult(new OperationResult(false, resultPlayer.Error));
+                    callback.LogInResult(new OperationResult(false, resultPlayer.Error));
                 }
             }
             else
             {
-                await callback.LogInResult(new OperationResult(false, result.Error));
+                callback.LogInResult(new OperationResult(false, result.Error));
             }
         }
 
-        public async Task SignUp(string email, string password, string playername)
+        public async Task SignUpAsync(string email, string password, string playername)
         {
             var callback = OperationContext.Current.GetCallbackChannel<ISignUpServiceCallback>();
 
@@ -61,11 +61,11 @@ namespace StrategoServices.Services
 
             if (result.IsSuccess)
             {
-                await callback.SignUpResult(new OperationResult(true, "Account created successfully"));
+                callback.SignUpResult(new OperationResult(true, "Account created successfully"));
             }
             else
             {
-                await callback.SignUpResult(new OperationResult(false, result.Error));
+                callback.SignUpResult(new OperationResult(false, result.Error));
             }
         }
     }

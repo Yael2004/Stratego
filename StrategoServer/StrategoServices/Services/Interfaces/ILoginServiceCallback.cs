@@ -13,9 +13,9 @@ namespace StrategoServices.Services.Interfaces
     public interface ILogInServiceCallback
     {
         [OperationContract(IsOneWay = true)]
-        Task LogInResult(OperationResult result);
+        void LogInResult(OperationResult result);
 
         [OperationContract(IsOneWay = true)]
-        Task AccountInfo(PlayerDTO player);
+        void AccountInfo(PlayerDTO player);
     }
 }
