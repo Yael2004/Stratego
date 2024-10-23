@@ -28,7 +28,7 @@ namespace StrategoDataAccess
                 return Result<string>.Failure(existenceCheckResult.Error);
             }
 
-            if (existenceCheckResult.Value) 
+            if (existenceCheckResult.Value)
             {
                 return Result<string>.Failure("Account already exists");
             }
@@ -44,17 +44,21 @@ namespace StrategoDataAccess
                     };
 
                     _context.Account.Add(newAccount);
-                    await _context.SaveChangesAsync();  
+                    await _context.SaveChangesAsync();
+
+                    const int defaultPictureId = 1;
+                    const int defaultLabelId = 1;
 
                     var newPlayer = new Player
                     {
                         Name = playerName,
-                        PictureId = 1, 
-                        AccountId = newAccount.IdAccount  
+                        PictureId = defaultPictureId,  
+                        IdLabel = defaultLabelId,      
+                        AccountId = newAccount.IdAccount
                     };
 
                     _context.Player.Add(newPlayer);
-                    await _context.SaveChangesAsync();  
+                    await _context.SaveChangesAsync();
 
                     transaction.Commit();
 

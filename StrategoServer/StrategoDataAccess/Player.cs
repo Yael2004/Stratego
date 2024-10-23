@@ -18,10 +18,10 @@ namespace StrategoDataAccess
         public Player()
         {
             this.Ban = new HashSet<Ban>();
+            this.Friend = new HashSet<Friend>();
+            this.Friend1 = new HashSet<Friend>();
             this.Report = new HashSet<Report>();
             this.Report1 = new HashSet<Report>();
-            this.Player1 = new HashSet<Player>();
-            this.Player2 = new HashSet<Player>();
         }
     
         public int Id { get; set; }
@@ -33,15 +33,15 @@ namespace StrategoDataAccess
         public virtual Account Account { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ban> Ban { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Friend> Friend { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Friend> Friend1 { get; set; }
+        public virtual Label Label { get; set; }
         public virtual Pictures Pictures { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Report> Report { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Report> Report1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Player> Player1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Player> Player2 { get; set; }
-        public virtual Label Label { get; set; }
     }
 }

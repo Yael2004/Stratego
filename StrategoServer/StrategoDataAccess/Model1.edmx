@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="StrategoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="StrategoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Account">
           <Key>
             <PropertyRef Name="IdAccount" />
@@ -269,7 +269,8 @@
             <End Role="Player" EntitySet="Player" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="StrategoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -293,6 +294,17 @@
           <Property Name="EndDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Player" Relationship="Self.FK__Ban__PlayerId__44FF419A" FromRole="Ban" ToRole="Player" />
         </EntityType>
+        <EntityType Name="Friend">
+          <Key>
+            <PropertyRef Name="PlayerId" />
+            <PropertyRef Name="FriendId" />
+          </Key>
+          <Property Name="PlayerId" Type="Int32" Nullable="false" />
+          <Property Name="FriendId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Player" Relationship="Self.FK__Friend__FriendId__45F365D3" FromRole="Friend" ToRole="Player" />
+          <NavigationProperty Name="Player1" Relationship="Self.FK__Friend__PlayerId__46E78A0C" FromRole="Friend" ToRole="Player" />
+        </EntityType>
         <EntityType Name="Games">
           <Key>
             <PropertyRef Name="AccountId" />
@@ -301,6 +313,14 @@
           <Property Name="DeafeatGames" Type="Int32" Nullable="false" />
           <Property Name="AccountId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Account" Relationship="Self.FK__Games__AccountId__47DBAE45" FromRole="Games" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="Label">
+          <Key>
+            <PropertyRef Name="IdLabel" />
+          </Key>
+          <Property Name="IdLabel" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Path" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Player" Relationship="Self.FK_Player_Label" FromRole="Label" ToRole="Player" />
         </EntityType>
         <EntityType Name="Pictures">
           <Key>
@@ -318,15 +338,15 @@
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PictureId" Type="Int32" />
           <Property Name="AccountId" Type="Int32" />
+          <Property Name="IdLabel" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Account" Relationship="Self.FK__Player__AccountI__48CFD27E" FromRole="Player" ToRole="Account" />
           <NavigationProperty Name="Ban" Relationship="Self.FK__Ban__PlayerId__44FF419A" FromRole="Player" ToRole="Ban" />
+          <NavigationProperty Name="Friend" Relationship="Self.FK__Friend__FriendId__45F365D3" FromRole="Player" ToRole="Friend" />
+          <NavigationProperty Name="Friend1" Relationship="Self.FK__Friend__PlayerId__46E78A0C" FromRole="Player" ToRole="Friend" />
+          <NavigationProperty Name="Label" Relationship="Self.FK_Player_Label" FromRole="Player" ToRole="Label" />
           <NavigationProperty Name="Pictures" Relationship="Self.FK__Player__PictureI__49C3F6B7" FromRole="Player" ToRole="Pictures" />
           <NavigationProperty Name="Report" Relationship="Self.FK__Report__IdReport__4AB81AF0" FromRole="Player" ToRole="Report" />
           <NavigationProperty Name="Report1" Relationship="Self.FK__Report__IdReport__4BAC3F29" FromRole="Player" ToRole="Report" />
-          <NavigationProperty Name="Player1" Relationship="Self.Friend" FromRole="Player" ToRole="Player1" />
-          <NavigationProperty Name="Player2" Relationship="Self.Friend" FromRole="Player1" ToRole="Player" />
-          <Property Name="IdLabel" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Label" Relationship="StrategoModel.FK_Player_Label" FromRole="Player" ToRole="Label" />
         </EntityType>
         <EntityType Name="Report">
           <Key>
@@ -339,6 +359,16 @@
           <Property Name="IdReported" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Player" Relationship="Self.FK__Report__IdReport__4AB81AF0" FromRole="Report" ToRole="Player" />
           <NavigationProperty Name="Player1" Relationship="Self.FK__Report__IdReport__4BAC3F29" FromRole="Report" ToRole="Player" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <Association Name="FK__Games__AccountId__47DBAE45">
           <End Role="Account" Type="Self.Account" Multiplicity="1" />
@@ -373,6 +403,42 @@
             </Principal>
             <Dependent Role="Ban">
               <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Friend__FriendId__45F365D3">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Friend" Type="Self.Friend" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Friend">
+              <PropertyRef Name="FriendId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Friend__PlayerId__46E78A0C">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Friend" Type="Self.Friend" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Friend">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Player_Label">
+          <End Role="Label" Type="Self.Label" Multiplicity="1" />
+          <End Role="Player" Type="Self.Player" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Label">
+              <PropertyRef Name="IdLabel" />
+            </Principal>
+            <Dependent Role="Player">
+              <PropertyRef Name="IdLabel" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -412,17 +478,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Friend">
-          <End Role="Player" Type="Self.Player" Multiplicity="*" />
-          <End Role="Player1" Type="Self.Player" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="StrategoEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Account" EntityType="Self.Account" />
           <EntitySet Name="Ban" EntityType="Self.Ban" />
+          <EntitySet Name="Friend" EntityType="Self.Friend" />
           <EntitySet Name="Games" EntityType="Self.Games" />
+          <EntitySet Name="Label" EntityType="Self.Label" />
           <EntitySet Name="Pictures" EntityType="Self.Pictures" />
           <EntitySet Name="Player" EntityType="Self.Player" />
           <EntitySet Name="Report" EntityType="Self.Report" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <AssociationSet Name="FK__Games__AccountId__47DBAE45" Association="Self.FK__Games__AccountId__47DBAE45">
             <End Role="Account" EntitySet="Account" />
             <End Role="Games" EntitySet="Games" />
@@ -435,6 +500,18 @@
             <End Role="Player" EntitySet="Player" />
             <End Role="Ban" EntitySet="Ban" />
           </AssociationSet>
+          <AssociationSet Name="FK__Friend__FriendId__45F365D3" Association="Self.FK__Friend__FriendId__45F365D3">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Friend" EntitySet="Friend" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Friend__PlayerId__46E78A0C" Association="Self.FK__Friend__PlayerId__46E78A0C">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Friend" EntitySet="Friend" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Player_Label" Association="Self.FK_Player_Label">
+            <End Role="Label" EntitySet="Label" />
+            <End Role="Player" EntitySet="Player" />
+          </AssociationSet>
           <AssociationSet Name="FK__Player__PictureI__49C3F6B7" Association="Self.FK__Player__PictureI__49C3F6B7">
             <End Role="Pictures" EntitySet="Pictures" />
             <End Role="Player" EntitySet="Player" />
@@ -446,16 +523,6 @@
           <AssociationSet Name="FK__Report__IdReport__4BAC3F29" Association="Self.FK__Report__IdReport__4BAC3F29">
             <End Role="Player" EntitySet="Player" />
             <End Role="Report" EntitySet="Report" />
-          </AssociationSet>
-          <AssociationSet Name="Friend" Association="Self.Friend">
-            <End Role="Player" EntitySet="Player" />
-            <End Role="Player1" EntitySet="Player" />
-          </AssociationSet>
-          <EntitySet Name="Label" EntityType="StrategoModel.Label" />
-          <EntitySet Name="sysdiagrams" EntityType="StrategoModel.sysdiagrams" />
-          <AssociationSet Name="FK_Player_Label" Association="StrategoModel.FK_Player_Label">
-            <End Role="Label" EntitySet="Label" />
-            <End Role="Player" EntitySet="Player" />
           </AssociationSet>
           <FunctionImport Name="sp_alterdiagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />
@@ -488,36 +555,6 @@
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
         </EntityContainer>
-        <EntityType Name="Label">
-          <Key>
-            <PropertyRef Name="IdLabel" />
-          </Key>
-          <Property Name="IdLabel" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Path" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Player" Relationship="StrategoModel.FK_Player_Label" FromRole="Label" ToRole="Player" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <Association Name="FK_Player_Label">
-          <End Type="StrategoModel.Label" Role="Label" Multiplicity="1" />
-          <End Type="StrategoModel.Player" Role="Player" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Label">
-              <PropertyRef Name="IdLabel" />
-            </Principal>
-            <Dependent Role="Player">
-              <PropertyRef Name="IdLabel" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
           <Property Type="Binary" Name="definition" Nullable="true" />
@@ -554,12 +591,29 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Friend">
+            <EntityTypeMapping TypeName="StrategoModel.Friend">
+              <MappingFragment StoreEntitySet="Friend">
+                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+                <ScalarProperty Name="FriendId" ColumnName="FriendId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Games">
             <EntityTypeMapping TypeName="StrategoModel.Games">
               <MappingFragment StoreEntitySet="Games">
                 <ScalarProperty Name="WonGames" ColumnName="WonGames" />
                 <ScalarProperty Name="DeafeatGames" ColumnName="DeafeatGames" />
                 <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Label">
+            <EntityTypeMapping TypeName="StrategoModel.Label">
+              <MappingFragment StoreEntitySet="Label">
+                <ScalarProperty Name="IdLabel" ColumnName="IdLabel" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -574,11 +628,11 @@
           <EntitySetMapping Name="Player">
             <EntityTypeMapping TypeName="StrategoModel.Player">
               <MappingFragment StoreEntitySet="Player">
-                <ScalarProperty Name="IdLabel" ColumnName="IdLabel" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="PictureId" ColumnName="PictureId" />
                 <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="IdLabel" ColumnName="IdLabel" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -593,30 +647,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="Friend" TypeName="StrategoModel.Friend" StoreEntitySet="Friend">
-            <EndProperty Name="Player">
-              <ScalarProperty Name="Id" ColumnName="FriendId" />
-            </EndProperty>
-            <EndProperty Name="Player1">
-              <ScalarProperty Name="Id" ColumnName="PlayerId" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <EntitySetMapping Name="Label">
-            <EntityTypeMapping TypeName="StrategoModel.Label">
-              <MappingFragment StoreEntitySet="Label">
-                <ScalarProperty Name="Path" ColumnName="Path" />
-                <ScalarProperty Name="IdLabel" ColumnName="IdLabel" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="StrategoModel.sysdiagrams">
               <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="definition" ColumnName="definition" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
                 <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

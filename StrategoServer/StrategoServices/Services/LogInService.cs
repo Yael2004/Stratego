@@ -25,34 +25,27 @@ namespace StrategoServices.Services
         {
             var callback = OperationContext.Current.GetCallbackChannel<ILogInServiceCallback>();
 
-            var result = await _accountManager.LogInAccountAsync(email, password);
+            var loginResult = await _accountManager.LogInAccountAsync(email, password);
 
-            if (result.IsSuccess)
+            if (!loginResult.IsSuccess)
             {
-                var resultPlayer = await _accountManager.GetLogInAccountAsync(result.Value);
-
-                if (resultPlayer.IsSuccess)
-                {
-                    callback.AccountInfo(new PlayerDTO
-                    {
-                        Id = resultPlayer.Value.Id,
-                        Name = resultPlayer.Value.Name,
-                        PictureId = resultPlayer.Value.PictureId ?? 1,
-                        AccountId = resultPlayer.Value.AccountId ?? 0
-                    });
-
-                    callback.LogInResult(new OperationResult(true, "Login successful"));
-                }
-                else
-                {
-                    callback.LogInResult(new OperationResult(false, resultPlayer.Error));
-                }
+                callback.LogInResult(new OperationResult(false, loginResult.Error));
+                return;
             }
-            else
+
+            var playerResult = await _accountManager.GetLogInAccountAsync(loginResult.Value);
+
+            if (!playerResult.IsSuccess)
             {
-                callback.LogInResult(new OperationResult(false, result.Error));
+                callback.LogInResult(new OperationResult(false, playerResult.Error));
+                return;
             }
+
+            callback.AccountInfo(playerResult.Value);
+
+            callback.LogInResult(new OperationResult(true, "Login successful"));
         }
+
 
         public async Task SignUpAsync(string email, string password, string playername)
         {
@@ -69,5 +62,6 @@ namespace StrategoServices.Services
                 callback.SignUpResult(new OperationResult(false, result.Error));
             }
         }
+
     }
 }

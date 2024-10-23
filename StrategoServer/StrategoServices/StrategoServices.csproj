@@ -92,10 +92,12 @@
     <Compile Include="Logic\ChatManager.cs" />
     <Compile Include="Logic\EmailSender.cs" />
     <Compile Include="Logic\Interfaces\IEmailSender.cs" />
+    <Compile Include="Services\Interfaces\IProfileService.cs" />
     <Compile Include="Services\Interfaces\ISignUpService.cs" />
     <Compile Include="Services\Interfaces\Callbacks\ISignUpServiceCallback.cs" />
     <Compile Include="Services\LogInService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ProfileService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StrategoDataAccess\StrategoDataAccess.csproj">

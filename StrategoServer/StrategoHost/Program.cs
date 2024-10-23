@@ -25,9 +25,9 @@ namespace StrategoHost
 
                 builder.RegisterType<AccountRepository>().AsSelf().InstancePerLifetimeScope();
                 builder.RegisterType<PlayerRepository>().AsSelf().InstancePerLifetimeScope();  
-
+                builder.RegisterType<PictureRepository>().AsSelf().InstancePerLifetimeScope();
+                builder.RegisterType<LabelRepository>().AsSelf().InstancePerLifetimeScope();
                 builder.RegisterType<AccountManager>().AsSelf().InstancePerLifetimeScope();
-
                 builder.RegisterType<LogInService>().AsSelf().InstancePerLifetimeScope();
                 builder.RegisterType<ChatService>().AsSelf().InstancePerLifetimeScope();
 
