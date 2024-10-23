@@ -9,8 +9,8 @@
         <EntityTypeShape EntityType="StrategoModel.Ban" Width="1.5" PointX="8.25" PointY="2.5" IsExpanded="true" />
         <EntityTypeShape EntityType="StrategoModel.Games" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="StrategoModel.Pictures" Width="1.5" PointX="3.75" PointY="1.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="StrategoModel.Player" Width="1.5" PointX="6" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="StrategoModel.Report" Width="1.5" PointX="8.25" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="StrategoModel.Player" Width="1.5" PointX="5.75" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="StrategoModel.Report" Width="1.5" PointX="8.625" PointY="5.375" IsExpanded="true" />
         <AssociationConnector Association="StrategoModel.FK__Games__AccountId__47DBAE45" ManuallyRouted="false" />
         <AssociationConnector Association="StrategoModel.FK__Player__AccountI__48CFD27E" ManuallyRouted="false" />
         <AssociationConnector Association="StrategoModel.FK__Ban__PlayerId__44FF419A" ManuallyRouted="false" />
@@ -18,6 +18,9 @@
         <AssociationConnector Association="StrategoModel.FK__Report__IdReport__4AB81AF0" ManuallyRouted="false" />
         <AssociationConnector Association="StrategoModel.FK__Report__IdReport__4BAC3F29" ManuallyRouted="false" />
         <AssociationConnector Association="StrategoModel.Friend" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="StrategoModel.Label" Width="1.5" PointX="0.75" PointY="0.875" />
+        <EntityTypeShape EntityType="StrategoModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="6.75" />
+        <AssociationConnector Association="StrategoModel.FK_Player_Label" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
