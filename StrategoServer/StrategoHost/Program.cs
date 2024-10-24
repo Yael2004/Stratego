@@ -21,7 +21,6 @@ namespace StrategoHost
                 var builder = new ContainerBuilder();
 
                 builder.RegisterType<StrategoEntities>().AsSelf().InstancePerLifetimeScope();
-
                 builder.RegisterType<AccountRepository>().AsSelf().InstancePerLifetimeScope();
                 builder.RegisterType<PlayerRepository>().AsSelf().InstancePerLifetimeScope();
                 builder.RegisterType<PictureRepository>().AsSelf().InstancePerLifetimeScope();
@@ -47,8 +46,10 @@ namespace StrategoHost
                     using (var chatHost = new ServiceHost(chatService))
                     using (var profileHost = new ServiceHost(profileService))
                     {
+                       
                         loginHost.Open();
                         chatHost.Open();
+                        profileHost.Open();
 
                         Console.WriteLine("Stratego server is running...");
                         Console.ReadLine();
