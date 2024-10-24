@@ -5,6 +5,7 @@
     <SolidColorBrush x:Key="GrayFontColor" Color="#A7A1A1"/>
     <SolidColorBrush x:Key="DarkRed" Color="#650000"/>
     <SolidColorBrush x:Key="SemiTransparent" Color="#80000000"/>
+    <SolidColorBrush x:Key="DarkViolet" Color="#8A2BE2"/>
 
     <FontFamily x:Key="AugustaFont">pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta</FontFamily>
 
@@ -21,7 +22,11 @@
                 ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/LobbyBackground.png"
                 Stretch="UniformToFill"/>
 
-        <Style x:Key="InputBoxStyle" TargetType="Control">
+    <ImageBrush x:Key="ProfileSectionBackground"
+                ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/ProfileSectionBackground.png"
+                Stretch="UniformToFill"/>
+
+    <Style x:Key="InputBoxStyle" TargetType="Control">
         <Setter Property="FontSize" Value="25"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Foreground" Value="{StaticResource IntenseRed}"/>

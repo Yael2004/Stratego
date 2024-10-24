@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace StrategoApp.ViewModel
 {
@@ -23,14 +25,16 @@ namespace StrategoApp.ViewModel
         private string _errorMessage;
         private int _userId;
         private string _username;
+        private ImageSource _profilePicture;
 
         private ChatServiceClient _chatClient;
         private MainWindowViewModel _mainWindowViewModel;
         private ObservableCollection<string> _messages;
 
         private readonly ICommand _sendMessagesCommand;
+        public ICommand ShowProfileCommand { get;  }
         public ICommand SendMessageCommand { get; }
-
+        
         public LobbyViewModel(MainWindowViewModel mainWindowViewModel)
         {
             if (PlayerSingleton.Instance.IsLoggedIn())
@@ -49,6 +53,7 @@ namespace StrategoApp.ViewModel
 
             _mainWindowViewModel = mainWindowViewModel;
             SendMessageCommand = new ViewModelCommand(ClientSendMessage, CanSendMessage);
+            ShowProfileCommand = new ViewModelCommand(ClientShowProfile, CanShowProfile);
             _messages = new ObservableCollection<string>();
         }
 
@@ -57,6 +62,7 @@ namespace StrategoApp.ViewModel
             {
                 _messages = new ObservableCollection<string>();
                 _sendMessagesCommand = new ViewModelCommand(ClientSendMessage, CanSendMessage);
+                ShowProfileCommand = new ViewModelCommand(ClientShowProfile, CanShowProfile);
                 SendMessageCommand = _sendMessagesCommand;
             }
         }
@@ -118,6 +124,16 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public ImageSource ProfilePicture
+        {
+            get { return _profilePicture; }
+            set
+            {
+                _profilePicture = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string MessageToSend
         {
             get { return _messageToSend; }
@@ -157,6 +173,23 @@ namespace StrategoApp.ViewModel
         {
             _chatClient.SendMessage(_userId, _username, MessageToSend);
             MessageToSend = string.Empty;
+        }
+
+        private bool CanShowProfile(object obj)
+        {
+            return true;
+        }
+
+        private void ClientShowProfile(object obj) 
+        {
+            try
+            {
+                _mainWindowViewModel.ChangeViewModel(new PlayerProfileViewModel(_mainWindowViewModel));
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error al mostrar el perfil del jugador", ex);
+            }
         }
 
         public void ReceiveMessage(string username, string message)

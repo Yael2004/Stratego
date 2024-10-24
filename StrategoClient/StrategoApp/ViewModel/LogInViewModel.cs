@@ -93,6 +93,7 @@ namespace StrategoApp.ViewModel
         {
             _logInServiceClient = new LogInServiceClient(new System.ServiceModel.InstanceContext(this));
             _mainWindowViewModel = mainWindowViewModel;
+
             LogInCommand = new ViewModelCommand(ExecuteLogInCommand, CanExecuteLogInCommand);
             LogInAsInvitedCommand = new ViewModelCommand(ExcuteLogInAsInvitedCommand);
             SignUpCommand = new ViewModelCommand(p => ExecuteSignUpCommand());

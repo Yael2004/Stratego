@@ -25,11 +25,17 @@
                         Orientation="Horizontal" 
                         VerticalAlignment="Top" 
                         Margin="10">
-                
-                <Image Source="{Binding ProfilePicture}" 
-                       Width="60" Height="60" 
-                       Margin="10"/>
-                
+
+                <Button Command="{Binding ShowProfileCommand}" 
+                        Background="Transparent" 
+                        BorderThickness="0">
+                    
+                        <Image Source="{Binding ProfilePicture}" 
+                           Width="60" Height="60" 
+                           Margin="10"/>
+                </Button>
+
+
                 <StackPanel Orientation="Vertical" 
                             VerticalAlignment="Center">
                     
