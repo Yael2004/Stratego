@@ -73,9 +73,12 @@
   <ItemGroup>
     <Compile Include="RepositoryTest\AccountRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryTest\AuxTestClasses.cs" />
+    <Compile Include="RepositoryTest\GamesRepositoryTests.cs" />
     <Compile Include="RepositoryTest\LabelRepositoryTests.cs" />
     <Compile Include="RepositoryTest\PictureRepositoryTests.cs" />
     <Compile Include="RepositoryTest\PlayerRepositoryTests.cs" />
+    <Compile Include="ResultTest\ResultTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

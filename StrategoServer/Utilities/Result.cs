@@ -16,18 +16,18 @@ namespace Utilities
         {
             Value = value;
             IsSuccess = isSuccess;
-            Error = error;
+            Error = isSuccess ? string.Empty : error;
         }
 
         public Result(bool isSuccess, string error)
         {
             IsSuccess = isSuccess;
-            Error = error;
+            Error = isSuccess ? string.Empty : error;
         }
 
         public static Result<T> Success(T value)
         {
-            return new Result<T>(value, true, null);
+            return new Result<T>(value, true, string.Empty);
         }
 
         public static Result<T> Failure(string error)

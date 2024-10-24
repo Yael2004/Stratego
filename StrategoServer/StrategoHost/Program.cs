@@ -62,6 +62,7 @@ namespace StrategoHost
                 Console.WriteLine(e.StackTrace);
                 Console.ReadLine();
             }
+            
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace Test.RepositoryTest
 {
@@ -43,7 +44,6 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetPlayerByIdAsync_ShouldReturnPlayerWhenFound()
         {
-            // Arrange
             var repository = new PlayerRepository(_mockContext.Object);
             var playerId = 1;
             var player = new Player { Id = playerId, Name = "John Doe" };
@@ -51,10 +51,8 @@ namespace Test.RepositoryTest
             var mockPlayerSet = CreateMockDbSet(new List<Player> { player });
             _mockContext.Setup(c => c.Player).Returns(mockPlayerSet.Object);
 
-            // Act
             var result = await repository.GetPlayerByIdAsync(playerId);
 
-            // Assert
             Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(player, result.Value);
         }
@@ -62,17 +60,14 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetPlayerByIdAsync_ShouldReturnFailureWhenNotFound()
         {
-            // Arrange
             var repository = new PlayerRepository(_mockContext.Object);
             var playerId = 1;
 
-            var mockPlayerSet = CreateMockDbSet(new List<Player>()); // Lista vacía, no se encuentra ningún jugador
+            var mockPlayerSet = CreateMockDbSet(new List<Player>()); 
             _mockContext.Setup(c => c.Player).Returns(mockPlayerSet.Object);
 
-            // Act
             var result = await repository.GetPlayerByIdAsync(playerId);
 
-            // Assert
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Player not found", result.Error);
         }
@@ -80,20 +75,16 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetPlayerByIdAsync_ShouldReturnFailureOnSqlException()
         {
-            // Arrange
             var repository = new PlayerRepository(_mockContext.Object);
             var playerId = 1;
 
-            // Simular una excepción de base de datos
             var mockPlayerSet = new Mock<DbSet<Player>>();
             mockPlayerSet.As<IQueryable<Player>>().Setup(m => m.Provider).Throws(new InvalidOperationException("Database error"));
 
             _mockContext.Setup(c => c.Player).Returns(mockPlayerSet.Object);
 
-            // Act
             var result = await repository.GetPlayerByIdAsync(playerId);
 
-            // Assert
             Assert.IsFalse(result.IsSuccess);
             Assert.IsTrue(result.Error.Contains("Database error"));
         }
@@ -101,7 +92,6 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetAllPlayersAsync_ShouldReturnAllPlayers()
         {
-            // Arrange
             var repository = new PlayerRepository(_mockContext.Object);
             var players = new List<Player>
             {
@@ -112,10 +102,8 @@ namespace Test.RepositoryTest
             var mockPlayerSet = CreateMockDbSet(players);
             _mockContext.Setup(c => c.Player).Returns(mockPlayerSet.Object);
 
-            // Act
             var result = await repository.GetAllPlayersAsync();
 
-            // Assert
             Assert.AreEqual(2, result.Count());
             Assert.AreEqual("John Doe", result.First().Name);
         }
@@ -123,7 +111,6 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task UpdatePlayerAsync_ShouldUpdatePlayerNameWhenPlayerExists()
         {
-            // Arrange
             var repository = new PlayerRepository(_mockContext.Object);
             var playerId = 1;
             var player = new Player { Id = playerId, Name = "Old Name" };
@@ -131,10 +118,8 @@ namespace Test.RepositoryTest
             var mockPlayerSet = CreateMockDbSet(new List<Player> { player });
             _mockContext.Setup(c => c.Player).Returns(mockPlayerSet.Object);
 
-            // Act
             var result = await repository.UpdatePlayerAsync(playerId, "New Name");
 
-            // Assert
             Assert.IsTrue(result);
             Assert.AreEqual("New Name", player.Name);
         }
@@ -142,24 +127,20 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task UpdatePlayerAsync_ShouldReturnFalseWhenPlayerNotFound()
         {
-            // Arrange
             var repository = new PlayerRepository(_mockContext.Object);
             var playerId = 1;
 
-            var mockPlayerSet = CreateMockDbSet(new List<Player>()); // Lista vacía, no se encuentra ningún jugador
+            var mockPlayerSet = CreateMockDbSet(new List<Player>()); 
             _mockContext.Setup(c => c.Player).Returns(mockPlayerSet.Object);
 
-            // Act
             var result = await repository.UpdatePlayerAsync(playerId, "New Name");
 
-            // Assert
             Assert.IsFalse(result);
         }
 
         [TestMethod]
         public async Task GetPlayerByAccountIdAsync_ShouldReturnPlayerWhenFound()
         {
-            // Arrange
             var repository = new PlayerRepository(_mockContext.Object);
             var accountId = 1;
             var player = new Player { AccountId = accountId, Name = "John Doe" };
@@ -167,12 +148,70 @@ namespace Test.RepositoryTest
             var mockPlayerSet = CreateMockDbSet(new List<Player> { player });
             _mockContext.Setup(c => c.Player).Returns(mockPlayerSet.Object);
 
-            // Act
             var result = await repository.GetPlayerByAccountIdAsync(accountId);
 
-            // Assert
             Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(player, result.Value);
+        }
+
+        [TestMethod]
+        public async Task GetPlayerByAccountIdAsync_ShouldReturnFailureWhenPlayerNotFound()
+        {
+            var accountId = 123;
+            var mockPlayerSet = CreateMockDbSet(new List<Player>()); 
+            _mockContext.Setup(c => c.Player).Returns(mockPlayerSet.Object);
+
+            var repository = new PlayerRepository(_mockContext.Object);
+
+            var result = await repository.GetPlayerByAccountIdAsync(accountId);
+
+            Assert.IsFalse(result.IsSuccess); 
+            Assert.AreEqual("Player not found for the given account ID", result.Error);
+            Assert.IsNull(result.Value);  
+        }
+
+        [TestMethod]
+        public async Task GetPlayerByAccountIdAsync_ShouldReturnFailureOnGeneralException()
+        {
+            var accountId = 123;
+
+            var mockPlayerSet = new Mock<DbSet<Player>>();
+
+            mockPlayerSet.As<IQueryable<Player>>().Setup(m => m.Provider)
+                .Throws(new Exception("General exception"));
+
+            _mockContext.Setup(c => c.Player).Returns(mockPlayerSet.Object);
+
+            var repository = new PlayerRepository(_mockContext.Object);
+
+            var result = await repository.GetPlayerByAccountIdAsync(accountId);
+
+            Assert.IsFalse(result.IsSuccess);  
+            Assert.IsTrue(result.Error.Contains("Unexpected error: General exception"));  
+            Assert.IsNull(result.Value);  
+        }
+
+        [TestMethod]
+        public async Task UpdatePlayerAsync_ShouldUpdatePlayerNameWithoutTransactionMock()
+        {
+            var playerId = 123;
+            var newName = "UpdatedName";
+
+            var player = new Player { Id = playerId, Name = "OldName" }; 
+            var players = new List<Player> { player };  
+
+            var mockPlayerSet = CreateMockDbSet(players);  
+            _mockContext.Setup(c => c.Player).Returns(mockPlayerSet.Object);
+
+            _mockContext.Setup(c => c.SaveChangesAsync()).ReturnsAsync(1);
+
+            var repository = new PlayerRepository(_mockContext.Object);
+
+            var result = await repository.UpdatePlayerAsync(playerId, newName);
+
+            Assert.IsTrue(result); 
+            Assert.AreEqual(newName, player.Name);  
+            _mockContext.Verify(m => m.SaveChangesAsync(), Times.Once);  
         }
 
 
