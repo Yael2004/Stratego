@@ -43,6 +43,14 @@
         <Setter Property="BorderThickness" Value="3"/>
         <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
         <Setter Property="Cursor" Value="Hand"/>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="Black"/>
+                <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource DarkRed}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <ControlTemplate x:Key="ModalTemplate" TargetType="ContentControl">

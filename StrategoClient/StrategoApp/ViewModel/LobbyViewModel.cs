@@ -25,7 +25,8 @@ namespace StrategoApp.ViewModel
         private string _errorMessage;
         private int _userId;
         private string _username;
-        private ImageSource _profilePicture;
+        private string _profilePicture;
+        private bool _isConnected = false;
 
         private ChatServiceClient _chatClient;
         private MainWindowViewModel _mainWindowViewModel;
@@ -42,11 +43,13 @@ namespace StrategoApp.ViewModel
                 var player = PlayerSingleton.Instance.Player;
                 _username = player.Name;
                 _userId = player.Id;
+                _profilePicture = player.PicturePath;
             }
             else
             {
                 _username = "Invitado";
                 _userId = -1;
+                _profilePicture = "pack://application:,,,/Assets/Images/ProfilePictures/Picture1.png";
             }
 
             Connection();
@@ -67,13 +70,30 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public void Connection()
+        internal void Connection()
         {
-            InstanceContext context = new InstanceContext(this);
-            _chatClient = new ChatServiceClient(context);
+            if (!_isConnected)
+            {
+                try
+                {
+                    InstanceContext context = new InstanceContext(this);
+                    _chatClient = new ChatServiceClient(context);
 
-            _chatClient.Connect(_userId, _username);
-            MessageBox.Show($"{_username} conectado al chat.");
+                    _chatClient.ConnectAsync(_userId, _username);
+                    _isConnected = true;
+                    MessageBox.Show($"{_username} conectado al chat.");
+                }
+                catch (FaultException ex)
+                {
+                    Log.Error("Error al conectar al servicio de chat", ex);
+                    MessageBox.Show("No se pudo conectar al servicio de chat.");
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Error inesperado al conectar al chat", ex);
+                    MessageBox.Show("Ha ocurrido un error inesperado.");
+                }
+            }
         }
 
         ~LobbyViewModel()
@@ -124,7 +144,7 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public ImageSource ProfilePicture
+        public string ProfilePicture
         {
             get { return _profilePicture; }
             set
@@ -185,6 +205,7 @@ namespace StrategoApp.ViewModel
             try
             {
                 _mainWindowViewModel.ChangeViewModel(new PlayerProfileViewModel(_mainWindowViewModel));
+                Disconnection();
             }
             catch (Exception ex)
             {

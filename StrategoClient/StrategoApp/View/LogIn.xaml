@@ -103,18 +103,14 @@
                     </CheckBox.Content>
                 </CheckBox>
 
-
-
-
-                <Label Content="{Binding LogInErrorMessage}"
+                <Label Content="{Binding ErrorMessage}"
                    FontSize="15" 
                    FontWeight="Bold"
                    Foreground="{StaticResource IntenseRed}"
                    FontFamily="{StaticResource AugustaFont}"
-                   Canvas.Left="312" Canvas.Top="258" 
-                   HorizontalAlignment="Center" VerticalAlignment="Top" 
-                   Margin="0,256,0,0"
-                   Visibility="{Binding LogInErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                   Canvas.Left="395" Canvas.Top="258" 
+                   HorizontalAlignment="Left" VerticalAlignment="Top"
+                   Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
 
                 <ContentControl x:Name="ModalControl"
                             Content="{x:Static res:Resources.DatabaseConnectionErrorMessage_Label}"

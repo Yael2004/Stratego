@@ -78,12 +78,6 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public void SetLogInErrorMessage(string resourceKey)
-        {
-            LogInErrorMessage = StrategoApp.Properties.Resources.ResourceManager.GetString(resourceKey);
-            OnPropertyChanged(nameof(LogInErrorMessage));
-        }
-
         public ICommand LogInCommand { get; }
         public ICommand SignUpCommand { get; }
         public ICommand LogInAsInvitedCommand { get; }
@@ -103,6 +97,7 @@ namespace StrategoApp.ViewModel
         public LogInViewModel()
         {
             _logInServiceClient = new LogInServiceClient(new System.ServiceModel.InstanceContext(this));
+
             LogInCommand = new ViewModelCommand(ExecuteLogInCommand, CanExecuteLogInCommand);
             SignUpCommand = new ViewModelCommand(p => ExecuteSignUpCommand());
             LogInAsInvitedCommand = new ViewModelCommand(ExcuteLogInAsInvitedCommand);
@@ -137,7 +132,7 @@ namespace StrategoApp.ViewModel
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Error al conectar con el servidor: {ex.Message}";
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -161,7 +156,7 @@ namespace StrategoApp.ViewModel
             }
             else
             {
-                SetLogInErrorMessage("LogInFailed");
+                ErrorMessage = Properties.Resources.NonexistentAccount_Label;
             }
         }
 

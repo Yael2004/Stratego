@@ -87,8 +87,10 @@
                     Visibility="Hidden"
                     Margin="644,35,32,345"
                     Style="{StaticResource ButtonStyle}"/>
+            
             <Button Height="40" Width="40" 
-                    Margin="20,20,740,380">
+                    Margin="20,20,740,380"
+                    Command="{Binding BackToLobby}">
 
             </Button>
         </Grid>

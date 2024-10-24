@@ -87,10 +87,19 @@ namespace StrategoApp.LogInService {
         private int AccountIdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategoApp.LogInService.PlayerDTO[] FriendsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int IdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string LabelPathField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string NameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string PicturePathField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -116,6 +125,19 @@ namespace StrategoApp.LogInService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategoApp.LogInService.PlayerDTO[] Friends {
+            get {
+                return this.FriendsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FriendsField, value) != true)) {
+                    this.FriendsField = value;
+                    this.RaisePropertyChanged("Friends");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public int Id {
             get {
                 return this.IdField;
@@ -129,6 +151,19 @@ namespace StrategoApp.LogInService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public string LabelPath {
+            get {
+                return this.LabelPathField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LabelPathField, value) != true)) {
+                    this.LabelPathField = value;
+                    this.RaisePropertyChanged("LabelPath");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string Name {
             get {
                 return this.NameField;
@@ -137,6 +172,19 @@ namespace StrategoApp.LogInService {
                 if ((object.ReferenceEquals(this.NameField, value) != true)) {
                     this.NameField = value;
                     this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string PicturePath {
+            get {
+                return this.PicturePathField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PicturePathField, value) != true)) {
+                    this.PicturePathField = value;
+                    this.RaisePropertyChanged("PicturePath");
                 }
             }
         }
