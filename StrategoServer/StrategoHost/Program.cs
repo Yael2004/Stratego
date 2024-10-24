@@ -18,18 +18,20 @@ namespace StrategoHost
         {
             try
             {
-                log.Fatal("Starting Stratego server...");
                 var builder = new ContainerBuilder();
 
                 builder.RegisterType<StrategoEntities>().AsSelf().InstancePerLifetimeScope();
 
                 builder.RegisterType<AccountRepository>().AsSelf().InstancePerLifetimeScope();
-                builder.RegisterType<PlayerRepository>().AsSelf().InstancePerLifetimeScope();  
+                builder.RegisterType<PlayerRepository>().AsSelf().InstancePerLifetimeScope();
                 builder.RegisterType<PictureRepository>().AsSelf().InstancePerLifetimeScope();
+                builder.RegisterType<GamesRepository>().AsSelf().InstancePerLifetimeScope();
                 builder.RegisterType<LabelRepository>().AsSelf().InstancePerLifetimeScope();
+                builder.RegisterType<ProfilesManager>().AsSelf().InstancePerLifetimeScope();
                 builder.RegisterType<AccountManager>().AsSelf().InstancePerLifetimeScope();
                 builder.RegisterType<LogInService>().AsSelf().InstancePerLifetimeScope();
                 builder.RegisterType<ChatService>().AsSelf().InstancePerLifetimeScope();
+                builder.RegisterType<ProfileService>().AsSelf().InstancePerLifetimeScope();
 
                 var container = builder.Build();
 
@@ -39,22 +41,25 @@ namespace StrategoHost
                 {
                     var loginService = scope.Resolve<LogInService>();
                     var chatService = scope.Resolve<ChatService>();
+                    var profileService = scope.Resolve<ProfileService>();
 
                     using (var loginHost = new ServiceHost(loginService))
                     using (var chatHost = new ServiceHost(chatService))
+                    using (var profileHost = new ServiceHost(profileService))
                     {
                         loginHost.Open();
                         chatHost.Open();
 
                         Console.WriteLine("Stratego server is running...");
-                        Console.ReadLine();  
+                        Console.ReadLine();
                     }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error: {e.Message}");
-                Console.ReadLine();  
+                //Console.WriteLine($"Error: {e.Message}");
+                Console.WriteLine(e.StackTrace);
+                Console.ReadLine();
             }
         }
     }

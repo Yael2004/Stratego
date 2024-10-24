@@ -80,6 +80,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\DTO\PlayerInfoResponse.cs" />
+    <Compile Include="Data\DTO\PlayerInfoShownDTO.cs" />
+    <Compile Include="Data\DTO\PlayerStatisticsDTO.cs" />
+    <Compile Include="Data\DTO\PlayerStatisticsResponse.cs" />
+    <Compile Include="Logic\ProfilesManager.cs" />
     <Compile Include="Services\ChatService.cs" />
     <Compile Include="Data\DTO\PlayerDTO.cs" />
     <Compile Include="Data\OperationResult.cs" />
