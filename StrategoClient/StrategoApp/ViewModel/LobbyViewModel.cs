@@ -79,8 +79,9 @@ namespace StrategoApp.ViewModel
                     InstanceContext context = new InstanceContext(this);
                     _chatClient = new ChatServiceClient(context);
 
-                    _chatClient.ConnectAsync(_userId, _username);
+                    _userId = _chatClient.ConnectAsync(_userId, _username).Result;
                     _isConnected = true;
+
                     MessageBox.Show($"{_username} conectado al chat.");
                 }
                 catch (FaultException ex)
@@ -211,23 +212,6 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        private void ReconnectChatClient()
-        {
-            try
-            {
-                InstanceContext context = new InstanceContext(this);
-                _chatClient = new ChatServiceClient(context);
-
-                _chatClient.ConnectAsync(_userId, _username);
-                _isConnected = true;
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-                MessageBox.Show("No se pudo reconectar al servicio de chat.");
-            }
-        }
-
         public bool CanSendMessage(object obj)
         {
             return !string.IsNullOrWhiteSpace(MessageToSend);
@@ -237,7 +221,7 @@ namespace StrategoApp.ViewModel
         {
             if (_chatClient == null || _chatClient.State == CommunicationState.Closed || _chatClient.State == CommunicationState.Faulted)
             {
-                ReconnectChatClient();
+                Connection();
             }
 
             _chatClient.SendMessage(_userId, _username, MessageToSend);
@@ -254,7 +238,6 @@ namespace StrategoApp.ViewModel
             try
             {
                 _mainWindowViewModel.ChangeViewModel(new PlayerProfileViewModel(_mainWindowViewModel));
-                Disconnection();
             }
             catch (Exception ex)
             {
@@ -273,7 +256,6 @@ namespace StrategoApp.ViewModel
             if (!result.IsSuccess)
             {
                 ErrorMessage = "Error al enviar el mensaje";
-                ReconnectChatClient();
             }
         }
     }
