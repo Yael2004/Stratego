@@ -50,7 +50,7 @@ namespace StrategoApp.ViewModel
 
         private LobbyViewModel(MainWindowViewModel mainWindowViewModel)
         {
-            AssignUserIdToInvited();
+            AssignValuesToUser();
 
             Connection();
 
@@ -194,7 +194,7 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public void AssignUserIdToInvited()
+        public void AssignValuesToUser()
         {
             if (PlayerSingleton.Instance.IsLoggedIn())
             {
@@ -205,20 +205,8 @@ namespace StrategoApp.ViewModel
             }
             else
             {
-
-                Random random = new Random();
-                int newId;
-
-                do
-                {
-                    newId = random.Next(1000, 10000);
-
-                } while (_generatedIds.Contains(newId));
-
-                _generatedIds.Add(newId);
-                _userId = newId;
-
-                _username = "Invitado " + _userId;
+                _userId = 0;
+                _username = "Invited";
                 _profilePicture = "pack://application:,,,/Assets/Images/ProfilePictures/Picture1.png";
             }
         }

@@ -22,6 +22,7 @@ namespace StrategoApp.ViewModel
         private string _errorMessage;
         private bool _isPasswordVisible;
         private string _togglePasswordVisibilityIcon;
+
         public string LogInErrorMessage { get; set; }
 
         private readonly LogInServiceClient _logInServiceClient;

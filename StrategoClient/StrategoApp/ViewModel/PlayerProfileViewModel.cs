@@ -13,7 +13,7 @@ namespace StrategoApp.ViewModel
     public class PlayerProfileViewModel : ViewModelBase
     {
         private string _username;
-        private string _playerId;
+        private int _playerId;
         private string _profilePicture;
 
         private readonly MainWindowViewModel _mainWindowViewModel;
@@ -32,13 +32,13 @@ namespace StrategoApp.ViewModel
             {
                 var player = PlayerSingleton.Instance.Player;
                 Username = player.Name;
-                PlayerId = player.Id.ToString();
+                PlayerId = player.Id;
                 ProfilePicture = player.PicturePath;
             }
             else
             {
-                Username = "Invitado";
-                PlayerId = "-1";
+                Username = "Invited";
+                PlayerId = 0;
                 ProfilePicture = "pack://application:,,,/Assets/Images/ProfilePictures/Picture1.png";
             }
 
@@ -66,7 +66,7 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public string PlayerId
+        public int PlayerId
         {
             get { return _playerId; }
             set
