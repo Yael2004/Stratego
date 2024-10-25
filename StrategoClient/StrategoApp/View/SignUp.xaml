@@ -29,6 +29,13 @@
                        Canvas.Left="275" Canvas.Top="46" 
                        HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
+                <Label Content="{x:Static res:Resources.UserName_Label}" Canvas.Left="142" Canvas.Top="162" 
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource IntenseRed}"
+                       FontFamily="{StaticResource AugustaFont}"
+                       HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
                 <TextBox Name="UsernameTextBox" 
                          Style="{StaticResource InputBoxStyle}" 
                          Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
@@ -42,6 +49,11 @@
                        Canvas.Left="260" Canvas.Top="198" 
                        Visibility="{Binding UsernameError, Converter={StaticResource StringToVisibilityConverter}}"/>
 
+                <Label Content="{x:Static res:Resources.UserMail_Label}" Canvas.Left="142" Canvas.Top="219" 
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource IntenseRed}"
+                       FontFamily="{StaticResource AugustaFont}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 <TextBox Name="MailTextBox"
                          Style="{StaticResource InputBoxStyle}" 
                          Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
@@ -55,6 +67,12 @@
                        Canvas.Left="260" Canvas.Top="252" 
                        Visibility="{Binding EmailError, Converter={StaticResource StringToVisibilityConverter}}"/>
 
+                <Label Content="{x:Static res:Resources.UserPassword_Label}" Canvas.Left="142" Canvas.Top="272" 
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource IntenseRed}"
+                       FontFamily="{StaticResource AugustaFont}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                
                 <PasswordBox Name="PasswordBox" 
                              Style="{StaticResource InputBoxStyle}"
                              Canvas.Left="260" Canvas.Top="273" 
@@ -121,7 +139,6 @@
                         </Image>
                     </CheckBox.Content>
                 </CheckBox>
-
             </Canvas>
         </Grid>
     </Viewbox>

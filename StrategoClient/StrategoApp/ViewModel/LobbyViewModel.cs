@@ -16,7 +16,7 @@ using System.Windows.Media.Animation;
 
 namespace StrategoApp.ViewModel
 {
-    internal class LobbyViewModel : ViewModelBase, Service.IChatServiceCallback
+    public class LobbyViewModel : ViewModelBase, Service.IChatServiceCallback
     {
         private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
 
@@ -70,7 +70,7 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        internal void Connection()
+        public void Connection()
         {
             if (!_isConnected)
             {
@@ -184,12 +184,22 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        private bool CanSendMessage(object obj)
+        public bool IsConnected
+        {
+            get { return _isConnected; }
+            set
+            {
+                _isConnected = value;
+                OnPropertyChanged(); 
+            }
+        }
+
+        public bool CanSendMessage(object obj)
         {
             return !string.IsNullOrWhiteSpace(MessageToSend);
         }
 
-        private void ClientSendMessage(object obj)
+        public void ClientSendMessage(object obj)
         {
             _chatClient.SendMessage(_userId, _username, MessageToSend);
             MessageToSend = string.Empty;
@@ -200,7 +210,7 @@ namespace StrategoApp.ViewModel
             return true;
         }
 
-        private void ClientShowProfile(object obj) 
+        public void ClientShowProfile(object obj) 
         {
             try
             {

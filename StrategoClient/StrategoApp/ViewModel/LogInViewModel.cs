@@ -25,7 +25,7 @@ namespace StrategoApp.ViewModel
 
         private readonly LogInServiceClient _logInServiceClient;
 
-        private MainWindowViewModel _mainWindowViewModel;
+        private readonly MainWindowViewModel _mainWindowViewModel;
 
         public string Username
         {

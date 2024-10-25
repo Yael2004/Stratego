@@ -11,63 +11,86 @@
     <Viewbox Stretch="Fill">
         <Grid Height="440" Width="800" 
               Background="{StaticResource ProfileSectionBackground}">
+
             <Label Content="{x:Static res:Resources.GamesLost_Label}"
+                   Style="{StaticResource PlayerSectionLabelStyle}"
+                   Margin="0,327,552,64"/>
+
+            <Label Content="{x:Static res:Resources.GamesPlayed_Label}"
                    FontWeight="Bold"
                    HorizontalContentAlignment="Center"
                    FontFamily="{StaticResource AugustaFont}" 
                    FontSize="30"
-                   Foreground="{StaticResource DarkViolet}" Margin="0,327,552,64"/>
-            
-            <Label Content="{x:Static res:Resources.GamesPlayed_Label}"
-                   HorizontalContentAlignment="Center"
-                   FontFamily="{StaticResource AugustaFont}" 
-                   FontSize="30"
-                   Foreground="{StaticResource DarkViolet}" Margin="256,327,256,64"/>
-            
+                   Foreground="{StaticResource Beige}" 
+                   Margin="256,327,256,64"
+                   Style="{StaticResource PlayerSectionLabelStyle}"/>
+
+
             <Label Content="{x:Static res:Resources.GamesWon_Label}"
+                   FontWeight="Bold"
                    HorizontalContentAlignment="Center"
                    FontFamily="{StaticResource AugustaFont}" 
                    FontSize="30"
-                   Foreground="{StaticResource DarkViolet}" Margin="562,327,0,64"/>
+                   Foreground="{StaticResource Beige}" 
+                   Margin="562,327,0,64"
+                   Style="{StaticResource PlayerSectionLabelStyle}"/>
             
             <Label Content="{Binding GamesLostNumber}"
+                   FontWeight="Bold"
                    HorizontalContentAlignment="Center"
                    FontFamily="{StaticResource AugustaFont}" 
                    FontSize="30"
-                   Foreground="{StaticResource DarkViolet}" Margin="0,367,552,24"/>
+                   Foreground="{StaticResource Beige}" 
+                   Margin="0,367,552,24"
+                   Style="{StaticResource PlayerSectionLabelStyle}"/>
             
             <Label Content="{Binding GamesPlayedNumber}"
+                   FontWeight="Bold"
                    HorizontalContentAlignment="Center"
                    FontFamily="{StaticResource AugustaFont}" 
                    FontSize="30"
-                   Foreground="{StaticResource DarkViolet}" Margin="256,367,256,24"/>
+                   Foreground="{StaticResource Beige}" 
+                   Margin="256,367,256,24"
+                   Style="{StaticResource PlayerSectionLabelStyle}"/>
             
             <Label Content="{Binding GamesWonNumber}"
+                   FontWeight="Bold"
                    HorizontalContentAlignment="Center"
                    FontFamily="{StaticResource AugustaFont}" 
                    FontSize="30"
-                   Foreground="{StaticResource DarkViolet}" Margin="562,367,0,24"/>
+                   Foreground="{StaticResource Beige}" 
+                   Margin="562,367,0,24"
+                   Style="{StaticResource PlayerSectionLabelStyle}"/>
             
             <Label Content="{Binding Username}"
+                   FontWeight="Bold"
                    HorizontalContentAlignment="Right"
                    FontFamily="{StaticResource AugustaFont}" 
                    FontSize="30"
-                   Foreground="{StaticResource DarkViolet}" Margin="10,210,432,180"/>
+                   Foreground="{StaticResource Beige}" 
+                   Margin="10,210,432,180"
+                   Style="{StaticResource PlayerSectionLabelStyle}"/>
             
             <Label Content="id:"
+                   FontWeight="Bold"
                    HorizontalContentAlignment="Left"
                    FontFamily="{StaticResource AugustaFont}" 
                    FontSize="30"
-                   Foreground="{StaticResource DarkViolet}" Margin="432,210,325,180"/>
+                   Foreground="{StaticResource Beige}" 
+                   Margin="432,210,325,180"
+                   Style="{StaticResource PlayerSectionLabelStyle}"/>
             
             <Label Content="{Binding PlayerId}"
+                   FontWeight="Bold"
                    HorizontalContentAlignment="Left"
                    FontFamily="{StaticResource AugustaFont}" 
                    FontSize="30"
-                   Foreground="{StaticResource DarkViolet}" Margin="465,210,67,180"/>
+                   Foreground="{StaticResource Beige}" 
+                   Margin="465,210,67,180"
+                   Style="{StaticResource PlayerSectionLabelStyle}"/>
             
             <ComboBox Text="{Binding PlayerLabel}"
-                       Background="{StaticResource DarkViolet}"
+                       Background="{StaticResource Beige}"
                        FontSize="30" 
                        FontWeight="Bold" 
                        Foreground="Black"

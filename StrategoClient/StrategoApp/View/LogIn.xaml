@@ -29,11 +29,25 @@
                        Canvas.Left="275" Canvas.Top="46" 
                        HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
+                <Label Content="{x:Static res:Resources.UserName_Label}" Canvas.Left="142" Canvas.Top="162" 
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource IntenseRed}"
+                       FontFamily="{StaticResource AugustaFont}"
+                       HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
                 <TextBox Style="{StaticResource InputBoxStyle}"
                          Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                          Canvas.Left="260" Canvas.Top="169" 
                          Width="280" Height="33" 
                          HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+                <Label Content="{x:Static res:Resources.UserPassword_Label}" Canvas.Left="142" Canvas.Top="219" 
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource IntenseRed}"
+                       FontFamily="{StaticResource AugustaFont}"
+                       HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
                 <PasswordBox x:Name="PasswordBox"
                         Style="{StaticResource InputBoxStyle}"
@@ -108,8 +122,8 @@
                    FontWeight="Bold"
                    Foreground="{StaticResource IntenseRed}"
                    FontFamily="{StaticResource AugustaFont}"
-                   Canvas.Left="395" Canvas.Top="258" 
-                   HorizontalAlignment="Left" VerticalAlignment="Top"
+                   Canvas.Left="260" Canvas.Top="258" 
+                   HorizontalAlignment="Left" VerticalAlignment="Center"
                    Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
 
                 <ContentControl x:Name="ModalControl"

@@ -6,6 +6,7 @@
     <SolidColorBrush x:Key="DarkRed" Color="#650000"/>
     <SolidColorBrush x:Key="SemiTransparent" Color="#80000000"/>
     <SolidColorBrush x:Key="DarkViolet" Color="#8A2BE2"/>
+    <SolidColorBrush x:Key="Beige" Color="#FEFDC9"/>
 
     <FontFamily x:Key="AugustaFont">pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta</FontFamily>
 
@@ -104,6 +105,22 @@
                                   VerticalAlignment="Bottom"/>
                     </Grid>
                 </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PlayerSectionLabelStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="30"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="Beige"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="Black"
+                                BlurRadius="5"
+                                ShadowDepth="0"/>
             </Setter.Value>
         </Setter>
     </Style>

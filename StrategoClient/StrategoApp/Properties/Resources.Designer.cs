@@ -385,7 +385,7 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Invalid name (8-50 characters).
+        ///   Busca una cadena traducida similar a Invalid name (4-16 characters).
         /// </summary>
         public static string InvalidUsername_Label {
             get {

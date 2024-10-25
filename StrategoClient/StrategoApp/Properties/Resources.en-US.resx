@@ -220,7 +220,7 @@
     <value>Invalid password (8-32 characters, 1 number)</value>
   </data>
   <data name="InvalidUsername_Label" xml:space="preserve">
-    <value>Invalid name (8-50 characters)</value>
+    <value>Invalid name (4-16 characters)</value>
   </data>
   <data name="InviteToLobby_Button" xml:space="preserve">
     <value>Invite</value>
