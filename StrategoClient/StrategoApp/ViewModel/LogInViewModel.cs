@@ -5,6 +5,7 @@ using StrategoApp.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
@@ -126,9 +127,10 @@ namespace StrategoApp.ViewModel
 
         private async void ExecuteLogInCommand(object obj)
         {
+            string hashedPassword = HashPassword(Password);
             try
             {
-                await _logInServiceClient.LogInAsync(Username, Password);
+                await _logInServiceClient.LogInAsync(Username, hashedPassword);
             }
             catch (Exception ex)
             {
@@ -166,6 +168,25 @@ namespace StrategoApp.ViewModel
         public void AccountInfo(PlayerDTO player)
         {
             PlayerSingleton.Instance.LogIn(player);
+        }
+
+        private string HashPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+
+                byte[] hashBytes = sha256.ComputeHash(passwordBytes);
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                foreach (byte b in hashBytes)
+                {
+                    stringBuilder.Append(b.ToString("x2"));
+                }
+
+                return stringBuilder.ToString();
+            }
         }
     }
 }
