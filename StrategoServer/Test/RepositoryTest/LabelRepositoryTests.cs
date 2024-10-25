@@ -16,15 +16,26 @@ namespace Test.RepositoryTest
     {
         private Mock<StrategoEntities> _mockContext;
         private Mock<DbSet<Label>> _mockLabelSet;
+        private Lazy<StrategoEntities> _lazyMockContext;
 
         [TestInitialize]
         public void Initialize()
         {
             _mockContext = new Mock<StrategoEntities>();
-            _mockLabelSet = new Mock<DbSet<Label>>();
+
+            var labels = new List<Label>
+            {
+                new Label { IdLabel = 1, Path = "Label1" },
+                new Label { IdLabel = 2, Path = "Label2" }
+            };
+
+            _mockLabelSet = CreateMockDbSet(labels);
 
             _mockContext.Setup(c => c.Label).Returns(_mockLabelSet.Object);
+
+            _lazyMockContext = new Lazy<StrategoEntities>(() => _mockContext.Object);
         }
+
 
         private Mock<DbSet<T>> CreateMockDbSet<T>(List<T> sourceList) where T : class
         {
@@ -43,7 +54,7 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetLabelByIdAsync_ShouldReturnLabelWhenFound()
         {
-            var repository = new LabelRepository(_mockContext.Object);
+            var repository = new LabelRepository(_lazyMockContext);
             var labelId = 1;
             var label = new Label { IdLabel = labelId, Path = "label1.jpg" };
 
@@ -59,7 +70,7 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetLabelByIdAsync_ShouldReturnFailureWhenNotFound()
         {
-            var repository = new LabelRepository(_mockContext.Object);
+            var repository = new LabelRepository(_lazyMockContext);
             var labelId = 1;
 
             var mockLabelSet = CreateMockDbSet(new List<Label>()); 
@@ -74,7 +85,7 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetLabelByIdAsync_ShouldReturnFailureOnSqlException()
         {
-            var repository = new LabelRepository(_mockContext.Object);
+            var repository = new LabelRepository(_lazyMockContext);
             var labelId = 1;
 
             var mockLabelSet = new Mock<DbSet<Label>>();

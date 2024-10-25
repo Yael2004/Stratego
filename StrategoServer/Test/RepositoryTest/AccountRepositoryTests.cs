@@ -22,16 +22,20 @@ namespace Test
         private Mock<StrategoEntities> _mockContext;
         private Mock<DbSet<Account>> _mockAccountSet;
         private Mock<DbSet<Player>> _mockPlayerSet;
+        private Lazy<StrategoEntities> _lazyMockContext;
 
         [TestInitialize]
         public void Initialize()
         {
             _mockContext = new Mock<StrategoEntities>();
+
             _mockAccountSet = new Mock<DbSet<Account>>();
             _mockPlayerSet = new Mock<DbSet<Player>>();
 
             _mockContext.Setup(c => c.Account).Returns(_mockAccountSet.Object);
             _mockContext.Setup(c => c.Player).Returns(_mockPlayerSet.Object);
+
+            _lazyMockContext = new Lazy<StrategoEntities>(() => _mockContext.Object);
         }
 
         private Mock<DbSet<T>> CreateMockDbSet<T>(List<T> sourceList) where T : class
@@ -54,7 +58,7 @@ namespace Test
         [TestMethod]
         public async Task CreateAccountAsync_ShouldReturnFailureIfAccountExists()
         {
-            var repository = new AccountRepository(_mockContext.Object);
+            var repository = new AccountRepository(_lazyMockContext);
             string testEmail = "test@example.com";
             string testHashedPassword = "hashedPassword123";
             string testPlayerName = "TestPlayer";
@@ -80,7 +84,7 @@ namespace Test
         [TestMethod]
         public async Task CreateAccountAsync_ShouldReturnSuccessWhenAccountIsCreated()
         {
-            var repository = new AccountRepository(_mockContext.Object);
+            var repository = new AccountRepository(_lazyMockContext);
             string testEmail = "test@example.com";
             string testHashedPassword = "hashedPassword123";
             string testPlayerName = "TestPlayer";
@@ -109,7 +113,7 @@ namespace Test
         [TestMethod]
         public async Task CreateAccountAsync_ShouldReturnFailureOnEntityValidationError()
         {
-            var repository = new AccountRepository(_mockContext.Object);
+            var repository = new AccountRepository(_lazyMockContext);
 
             var existingAccounts = new List<Account>();
             var mockAccountSet = CreateMockDbSet(existingAccounts);
@@ -138,7 +142,7 @@ namespace Test
 
             _mockContext.Setup(c => c.Account).Returns(mockAccountSet.Object);
 
-            var accountRepo = new AccountRepository(_mockContext.Object);
+            var accountRepo = new AccountRepository(_lazyMockContext);
 
             var result = await accountRepo.ValidateCredentialsAsync(validEmail, validPassword);
 
@@ -158,7 +162,7 @@ namespace Test
             var mockAccountSet = CreateMockDbSet(emptyAccounts);
             _mockContext.Setup(c => c.Account).Returns(mockAccountSet.Object);
 
-            var accountRepo = new AccountRepository(_mockContext.Object);
+            var accountRepo = new AccountRepository(_lazyMockContext);
 
             var result = await accountRepo.ValidateCredentialsAsync(invalidEmail, invalidPassword);
 
@@ -170,7 +174,7 @@ namespace Test
         [TestMethod]
         public async Task AlreadyExistentAccountAsync_ShouldReturnTrueWhenAccountExists()
         {
-            var repository = new AccountRepository(_mockContext.Object);
+            var repository = new AccountRepository(_lazyMockContext);
             string testEmail = "test@example.com";
 
             var existingAccounts = new List<Account>

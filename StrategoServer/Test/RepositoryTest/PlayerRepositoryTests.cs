@@ -16,16 +16,29 @@ namespace Test.RepositoryTest
     public class PlayerRepositoryTests
     {
         private Mock<StrategoEntities> _mockContext;
+        private Lazy<StrategoEntities> _lazyMockContext;
         private Mock<DbSet<Player>> _mockPlayerSet;
 
         [TestInitialize]
         public void Initialize()
         {
             _mockContext = new Mock<StrategoEntities>();
-            _mockPlayerSet = new Mock<DbSet<Player>>();
 
+            var players = new List<Player>
+            {
+                new Player { Id = 1, Name = "Player1", AccountId = 100 },
+                new Player { Id = 2, Name = "Player2", AccountId = 101 }
+            };
+
+            _mockPlayerSet = CreateMockDbSet(players);
+
+            // Configurar el contexto para devolver el DbSet simulado
             _mockContext.Setup(c => c.Player).Returns(_mockPlayerSet.Object);
+
+            // Envolver el contexto en Lazy<StrategoEntities>
+            _lazyMockContext = new Lazy<StrategoEntities>(() => _mockContext.Object);
         }
+
 
         private Mock<DbSet<T>> CreateMockDbSet<T>(List<T> sourceList) where T : class
         {
@@ -44,7 +57,7 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetPlayerByIdAsync_ShouldReturnPlayerWhenFound()
         {
-            var repository = new PlayerRepository(_mockContext.Object);
+            var repository = new PlayerRepository(_lazyMockContext);
             var playerId = 1;
             var player = new Player { Id = playerId, Name = "John Doe" };
 
@@ -60,7 +73,7 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetPlayerByIdAsync_ShouldReturnFailureWhenNotFound()
         {
-            var repository = new PlayerRepository(_mockContext.Object);
+            var repository = new PlayerRepository(_lazyMockContext);
             var playerId = 1;
 
             var mockPlayerSet = CreateMockDbSet(new List<Player>()); 
@@ -75,7 +88,7 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetPlayerByIdAsync_ShouldReturnFailureOnSqlException()
         {
-            var repository = new PlayerRepository(_mockContext.Object);
+            var repository = new PlayerRepository(_lazyMockContext);
             var playerId = 1;
 
             var mockPlayerSet = new Mock<DbSet<Player>>();
@@ -92,7 +105,7 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetAllPlayersAsync_ShouldReturnAllPlayers()
         {
-            var repository = new PlayerRepository(_mockContext.Object);
+            var repository = new PlayerRepository(_lazyMockContext);
             var players = new List<Player>
             {
                 new Player { Id = 1, Name = "John Doe" },
@@ -111,7 +124,7 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task UpdatePlayerAsync_ShouldUpdatePlayerNameWhenPlayerExists()
         {
-            var repository = new PlayerRepository(_mockContext.Object);
+            var repository = new PlayerRepository(_lazyMockContext);
             var playerId = 1;
             var player = new Player { Id = playerId, Name = "Old Name" };
 
@@ -127,7 +140,7 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task UpdatePlayerAsync_ShouldReturnFalseWhenPlayerNotFound()
         {
-            var repository = new PlayerRepository(_mockContext.Object);
+            var repository = new PlayerRepository(_lazyMockContext);
             var playerId = 1;
 
             var mockPlayerSet = CreateMockDbSet(new List<Player>()); 
@@ -141,7 +154,7 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetPlayerByAccountIdAsync_ShouldReturnPlayerWhenFound()
         {
-            var repository = new PlayerRepository(_mockContext.Object);
+            var repository = new PlayerRepository(_lazyMockContext);
             var accountId = 1;
             var player = new Player { AccountId = accountId, Name = "John Doe" };
 
@@ -161,7 +174,7 @@ namespace Test.RepositoryTest
             var mockPlayerSet = CreateMockDbSet(new List<Player>()); 
             _mockContext.Setup(c => c.Player).Returns(mockPlayerSet.Object);
 
-            var repository = new PlayerRepository(_mockContext.Object);
+            var repository = new PlayerRepository(_lazyMockContext);
 
             var result = await repository.GetPlayerByAccountIdAsync(accountId);
 
@@ -182,7 +195,7 @@ namespace Test.RepositoryTest
 
             _mockContext.Setup(c => c.Player).Returns(mockPlayerSet.Object);
 
-            var repository = new PlayerRepository(_mockContext.Object);
+            var repository = new PlayerRepository(_lazyMockContext);
 
             var result = await repository.GetPlayerByAccountIdAsync(accountId);
 
@@ -205,7 +218,7 @@ namespace Test.RepositoryTest
 
             _mockContext.Setup(c => c.SaveChangesAsync()).ReturnsAsync(1);
 
-            var repository = new PlayerRepository(_mockContext.Object);
+            var repository = new PlayerRepository(_lazyMockContext);
 
             var result = await repository.UpdatePlayerAsync(playerId, newName);
 

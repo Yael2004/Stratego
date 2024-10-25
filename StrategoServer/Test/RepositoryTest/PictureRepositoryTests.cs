@@ -18,14 +18,24 @@ namespace Test.RepositoryTest
     {
         private Mock<StrategoEntities> _mockContext;
         private Mock<DbSet<Pictures>> _mockPictureSet;
+        private Lazy<StrategoEntities> _lazyMockContext;
 
         [TestInitialize]
         public void Initialize()
         {
             _mockContext = new Mock<StrategoEntities>();
-            _mockPictureSet = new Mock<DbSet<Pictures>>();
+
+            var pictures = new List<Pictures>
+            {
+                new Pictures { IdPicture = 1, path = "Picture1.jpg" },
+                new Pictures { IdPicture = 2, path = "Picture2.jpg" }
+            };
+
+            _mockPictureSet = CreateMockDbSet(pictures);
 
             _mockContext.Setup(c => c.Pictures).Returns(_mockPictureSet.Object);
+
+            _lazyMockContext = new Lazy<StrategoEntities>(() => _mockContext.Object);
         }
 
         private Mock<DbSet<T>> CreateMockDbSet<T>(List<T> sourceList) where T : class
@@ -45,7 +55,7 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetPictureByIdAsync_ShouldReturnPictureWhenFound()
         {
-            var repository = new PictureRepository(_mockContext.Object);
+            var repository = new PictureRepository(_lazyMockContext);
             var pictureId = 1;
             var picture = new Pictures { IdPicture = pictureId, path = "picture1.jpg" };
 
@@ -61,7 +71,7 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetPictureByIdAsync_ShouldReturnFailureWhenNotFound()
         {
-            var repository = new PictureRepository(_mockContext.Object);
+            var repository = new PictureRepository(_lazyMockContext);
             var pictureId = 1;
 
             var mockPictureSet = CreateMockDbSet(new List<Pictures>());
@@ -76,7 +86,7 @@ namespace Test.RepositoryTest
         [TestMethod]
         public async Task GetPictureByIdAsync_ShouldReturnFailureOnSqlException()
         {
-            var repository = new PictureRepository(_mockContext.Object);
+            var repository = new PictureRepository(_lazyMockContext);
             var pictureId = 1;
 
             var existingPictures = new List<Pictures>
