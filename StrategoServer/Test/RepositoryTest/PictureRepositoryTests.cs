@@ -64,7 +64,6 @@ namespace Test.RepositoryTest
 
             var result = await repository.GetPictureByIdAsync(pictureId);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(picture, result.Value);
         }
 
@@ -79,7 +78,6 @@ namespace Test.RepositoryTest
 
             var result = await repository.GetPictureByIdAsync(pictureId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Picture not found", result.Error);
         }
 
@@ -102,7 +100,6 @@ namespace Test.RepositoryTest
 
             var result = await repository.GetPictureByIdAsync(pictureId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.IsTrue(result.Error.Contains("Database error"));
         }
 

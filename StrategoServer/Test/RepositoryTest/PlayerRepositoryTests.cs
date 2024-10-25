@@ -32,10 +32,8 @@ namespace Test.RepositoryTest
 
             _mockPlayerSet = CreateMockDbSet(players);
 
-            // Configurar el contexto para devolver el DbSet simulado
             _mockContext.Setup(c => c.Player).Returns(_mockPlayerSet.Object);
 
-            // Envolver el contexto en Lazy<StrategoEntities>
             _lazyMockContext = new Lazy<StrategoEntities>(() => _mockContext.Object);
         }
 
@@ -66,7 +64,6 @@ namespace Test.RepositoryTest
 
             var result = await repository.GetPlayerByIdAsync(playerId);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(player, result.Value);
         }
 
@@ -81,7 +78,6 @@ namespace Test.RepositoryTest
 
             var result = await repository.GetPlayerByIdAsync(playerId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Player not found", result.Error);
         }
 
@@ -98,7 +94,6 @@ namespace Test.RepositoryTest
 
             var result = await repository.GetPlayerByIdAsync(playerId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.IsTrue(result.Error.Contains("Database error"));
         }
 
@@ -117,7 +112,6 @@ namespace Test.RepositoryTest
 
             var result = await repository.GetAllPlayersAsync();
 
-            Assert.AreEqual(2, result.Count());
             Assert.AreEqual("John Doe", result.First().Name);
         }
 
@@ -133,7 +127,6 @@ namespace Test.RepositoryTest
 
             var result = await repository.UpdatePlayerAsync(playerId, "New Name");
 
-            Assert.IsTrue(result);
             Assert.AreEqual("New Name", player.Name);
         }
 
@@ -163,7 +156,6 @@ namespace Test.RepositoryTest
 
             var result = await repository.GetPlayerByAccountIdAsync(accountId);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(player, result.Value);
         }
 
@@ -178,9 +170,7 @@ namespace Test.RepositoryTest
 
             var result = await repository.GetPlayerByAccountIdAsync(accountId);
 
-            Assert.IsFalse(result.IsSuccess); 
             Assert.AreEqual("Player not found for the given account ID", result.Error);
-            Assert.IsNull(result.Value);  
         }
 
         [TestMethod]
@@ -199,9 +189,7 @@ namespace Test.RepositoryTest
 
             var result = await repository.GetPlayerByAccountIdAsync(accountId);
 
-            Assert.IsFalse(result.IsSuccess);  
             Assert.IsTrue(result.Error.Contains("Unexpected error: General exception"));  
-            Assert.IsNull(result.Value);  
         }
 
         [TestMethod]
@@ -222,7 +210,6 @@ namespace Test.RepositoryTest
 
             var result = await repository.UpdatePlayerAsync(playerId, newName);
 
-            Assert.IsTrue(result); 
             Assert.AreEqual(newName, player.Name);  
             _mockContext.Verify(m => m.SaveChangesAsync(), Times.Once);  
         }

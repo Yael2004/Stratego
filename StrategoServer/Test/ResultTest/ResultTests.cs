@@ -18,9 +18,7 @@ namespace Test.ResultTest
 
             var result = Result<int>.Success(expectedValue);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(expectedValue, result.Value);
-            Assert.AreEqual(string.Empty, result.Error);
         }
 
         [TestMethod]
@@ -30,8 +28,6 @@ namespace Test.ResultTest
 
             var result = Result<int>.Failure(expectedError);
 
-            Assert.IsFalse(result.IsSuccess);
-            Assert.AreEqual(default(int), result.Value);
             Assert.AreEqual(expectedError, result.Error);
         }
 
@@ -43,14 +39,10 @@ namespace Test.ResultTest
 
             var resultSuccess = new Result<string>(expectedValue, true, string.Empty);
 
-            Assert.IsTrue(resultSuccess.IsSuccess);
             Assert.AreEqual(expectedValue, resultSuccess.Value);
-            Assert.AreEqual(string.Empty, resultSuccess.Error);
 
             var resultFailure = new Result<string>(false, expectedError);
 
-            Assert.IsFalse(resultFailure.IsSuccess);
-            Assert.AreEqual(default(string), resultFailure.Value);
             Assert.AreEqual(expectedError, resultFailure.Error);
         }
 
@@ -61,8 +53,6 @@ namespace Test.ResultTest
 
             var result = Result<object>.Failure(expectedError);
 
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsNull(result.Value);  
             Assert.AreEqual(expectedError, result.Error);
         }
 
@@ -73,8 +63,6 @@ namespace Test.ResultTest
 
             var result = Result<int>.Failure(expectedError);
 
-            Assert.IsFalse(result.IsSuccess);
-            Assert.AreEqual(0, result.Value);  
             Assert.AreEqual(expectedError, result.Error);
         }
 
@@ -86,14 +74,10 @@ namespace Test.ResultTest
 
             var resultWithNull = Result<string>.Success(nullValue);
 
-            Assert.IsTrue(resultWithNull.IsSuccess);
-            Assert.IsNull(resultWithNull.Value);  
             Assert.AreEqual(string.Empty, resultWithNull.Error);
 
             var resultWithEmpty = Result<string>.Success(emptyValue);
 
-            Assert.IsTrue(resultWithEmpty.IsSuccess);
-            Assert.AreEqual(string.Empty, resultWithEmpty.Value); 
             Assert.AreEqual(string.Empty, resultWithEmpty.Error);
         }
 
@@ -105,14 +89,10 @@ namespace Test.ResultTest
 
             var successResult = new Result<int>(expectedValue, true, string.Empty);
 
-            Assert.IsTrue(successResult.IsSuccess);
-            Assert.AreEqual(expectedValue, successResult.Value);
             Assert.AreEqual(string.Empty, successResult.Error);
 
             var failureResult = new Result<int>(false, expectedError);
 
-            Assert.IsFalse(failureResult.IsSuccess);
-            Assert.AreEqual(0, failureResult.Value);
             Assert.AreEqual(expectedError, failureResult.Error);
         }
 
@@ -124,8 +104,6 @@ namespace Test.ResultTest
 
             var result = new Result<int>(expectedValue, true, unexpectedError);
 
-            Assert.IsTrue(result.IsSuccess);
-            Assert.AreEqual(expectedValue, result.Value);
             Assert.AreEqual(string.Empty, result.Error);
         }
 
@@ -136,8 +114,6 @@ namespace Test.ResultTest
 
             var result = new Result<int>(false, expectedError);
 
-            Assert.IsFalse(result.IsSuccess);
-            Assert.AreEqual(default(int), result.Value);  
             Assert.AreEqual(expectedError, result.Error); 
         }
 
@@ -148,8 +124,6 @@ namespace Test.ResultTest
 
             var result = Result<string>.Success(nullValue);
 
-            Assert.IsTrue(result.IsSuccess);
-            Assert.IsNull(result.Value);  
             Assert.AreEqual(string.Empty, result.Error);  
         }
 

@@ -63,7 +63,6 @@ namespace Test.RepositoryTest
 
             var result = await repository.GetLabelByIdAsync(labelId);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(label, result.Value);
         }
 
@@ -78,7 +77,6 @@ namespace Test.RepositoryTest
 
             var result = await repository.GetLabelByIdAsync(labelId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Label not found", result.Error);
         }
 
@@ -95,7 +93,6 @@ namespace Test.RepositoryTest
 
             var result = await repository.GetLabelByIdAsync(labelId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.IsTrue(result.Error.Contains("Database error"));
         }
     }

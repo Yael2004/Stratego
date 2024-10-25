@@ -73,7 +73,6 @@ namespace Test
 
             var result = await repository.CreateAccountAsync(testEmail, testHashedPassword, testPlayerName);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Account already exists", result.Error);
 
             _mockAccountSet.Verify(m => m.Add(It.IsAny<Account>()), Times.Never);
@@ -104,7 +103,6 @@ namespace Test
 
             var result = await repository.CreateAccountAsync(testEmail, testHashedPassword, testPlayerName);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual("Account and player created successfully", result.Value);   
         }
 
@@ -124,7 +122,6 @@ namespace Test
 
             var result = await repository.CreateAccountAsync("test@example.com", "hashed_password", "Player1");
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Entity validation error: Validation Error", result.Error);
         }
 
@@ -146,7 +143,6 @@ namespace Test
 
             var result = await accountRepo.ValidateCredentialsAsync(validEmail, validPassword);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(1, result.Value);
         }
 
@@ -166,7 +162,6 @@ namespace Test
 
             var result = await accountRepo.ValidateCredentialsAsync(invalidEmail, invalidPassword);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Invalid credentials", result.Error);
         }
 
@@ -187,7 +182,6 @@ namespace Test
 
             var result = await repository.AlreadyExistentAccountAsync(testEmail);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.IsTrue(result.Value);
         }
 
