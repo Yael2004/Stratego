@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:2021/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
-  <xs:import schemaLocation="http://localhost:2021/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" />
+  <xs:import schemaLocation="http://localhost:2021/LogInService?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
+  <xs:import schemaLocation="http://localhost:2021/LogInService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" />
   <xs:element name="LogIn">
     <xs:complexType>
       <xs:sequence>

@@ -30,8 +30,27 @@ namespace StrategoApp.View
         {
             if (DataContext is LogInViewModel viewModel)
             {
-                viewModel.Password = ((PasswordBox)sender).Password;
+                if (!viewModel.IsPasswordVisible)
+                {
+                    viewModel.Password = ((PasswordBox)sender).Password;
+                }
             }
         }
+
+        private void SyncPassword(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is LogInViewModel viewModel)
+            {
+                if (viewModel.IsPasswordVisible)
+                {
+                    PasswordTextBox.Text = PasswordBox.Password;
+                }
+                else
+                {
+                    PasswordBox.Password = PasswordTextBox.Text;
+                }
+            }
+        }
+
     }
 }

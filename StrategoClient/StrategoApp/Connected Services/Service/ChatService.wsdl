@@ -31,8 +31,9 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://localhost:2020/?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://localhost:2020/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:2020/ChatService?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:2020/ChatService?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:2020/ChatService?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IChatService_Connect_InputMessage">
@@ -50,6 +51,9 @@
   <wsdl:message name="IChatService_ReceiveMessage_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceiveMessage" />
   </wsdl:message>
+  <wsdl:message name="IChatService_ChatResponse_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ChatResponse" />
+  </wsdl:message>
   <wsdl:portType name="IChatService">
     <wsdl:operation name="Connect">
       <wsdl:input wsaw:Action="http://tempuri.org/IChatService/Connect" message="tns:IChatService_Connect_InputMessage" />
@@ -63,6 +67,9 @@
     </wsdl:operation>
     <wsdl:operation name="ReceiveMessage">
       <wsdl:output wsaw:Action="http://tempuri.org/IChatService/ReceiveMessage" message="tns:IChatService_ReceiveMessage_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChatResponse">
+      <wsdl:output wsaw:Action="http://tempuri.org/IChatService/ChatResponse" message="tns:IChatService_ChatResponse_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IChatService" type="tns:IChatService">
@@ -95,12 +102,18 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="ChatResponse">
+      <soap12:operation soapAction="http://tempuri.org/IChatService/ChatResponse" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="ChatService">
     <wsdl:port name="NetTcpBinding_IChatService" binding="tns:NetTcpBinding_IChatService">
-      <soap12:address location="net.tcp://localhost:1010/ChatService" />
+      <soap12:address location="net.tcp://localhost:1010/ChatService/ChatService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:1010/ChatService</wsa10:Address>
+        <wsa10:Address>net.tcp://localhost:1010/ChatService/ChatService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Upn>LAPTOP-4SRV2TJ2\yaela</Upn>
         </Identity>

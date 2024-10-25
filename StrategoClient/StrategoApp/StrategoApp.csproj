@@ -164,24 +164,27 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="Assets\Fonts\Augusta.ttf" />
-    <None Include="Connected Services\LogInService\item.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\LogInService\item1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\LogInService\item2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\LogInService\item3.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Connected Services\LogInService\LogInService.wsdl" />
-    <None Include="Connected Services\Service\ChatService.wsdl" />
-    <None Include="Connected Services\Service\item.xsd">
+    <None Include="Connected Services\LogInService\LogInService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\Service\item1.xsd">
+    <None Include="Connected Services\LogInService\LogInService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LogInService\LogInService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\LogInService\LogInService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\Service\ChatService.wsdl" />
+    <None Include="Connected Services\Service\ChatService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\Service\ChatService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\Service\ChatService2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="log4net.config">
@@ -213,36 +216,6 @@
     <Resource Include="Assets\Cursors\normal_cursor.cur" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\Service\item.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\Service\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\Service\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\Service\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\LogInService\item.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\LogInService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\LogInService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\LogInService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\Images\Icons\EyeClosed_Icon.png" />
     <Resource Include="Assets\Images\Icons\EyeOpen_Icon.png" />
   </ItemGroup>
@@ -262,6 +235,36 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\ProfilePicturesFrame2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\LogInService\LogInService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\LogInService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\LogInService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\LogInService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\Service\ChatService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\Service\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\Service\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\Service\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

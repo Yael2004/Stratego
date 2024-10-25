@@ -28,6 +28,9 @@ namespace StrategoApp.ViewModel
         private string _profilePicture;
         private bool _isConnected = false;
 
+        private static LobbyViewModel _instance;
+        private static HashSet<int> _generatedIds = new HashSet<int>();
+
         private ChatServiceClient _chatClient;
         private MainWindowViewModel _mainWindowViewModel;
         private ObservableCollection<string> _messages;
@@ -35,22 +38,19 @@ namespace StrategoApp.ViewModel
         private readonly ICommand _sendMessagesCommand;
         public ICommand ShowProfileCommand { get;  }
         public ICommand SendMessageCommand { get; }
-        
-        public LobbyViewModel(MainWindowViewModel mainWindowViewModel)
+
+        public static LobbyViewModel Instance(MainWindowViewModel mainWindowViewModel)
         {
-            if (PlayerSingleton.Instance.IsLoggedIn())
+            if (_instance == null)
             {
-                var player = PlayerSingleton.Instance.Player;
-                _username = player.Name;
-                _userId = player.Id;
-                _profilePicture = player.PicturePath;
+                _instance = new LobbyViewModel(mainWindowViewModel);
             }
-            else
-            {
-                _username = "Invitado";
-                _userId = -1;
-                _profilePicture = "pack://application:,,,/Assets/Images/ProfilePictures/Picture1.png";
-            }
+            return _instance;
+        }
+
+        private LobbyViewModel(MainWindowViewModel mainWindowViewModel)
+        {
+            AssignUserIdToInvited();
 
             Connection();
 
@@ -194,6 +194,52 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public void AssignUserIdToInvited()
+        {
+            if (PlayerSingleton.Instance.IsLoggedIn())
+            {
+                var player = PlayerSingleton.Instance.Player;
+                _username = player.Name;
+                _userId = player.Id;
+                _profilePicture = player.PicturePath;
+            }
+            else
+            {
+
+                Random random = new Random();
+                int newId;
+
+                do
+                {
+                    newId = random.Next(1000, 10000);
+
+                } while (_generatedIds.Contains(newId));
+
+                _generatedIds.Add(newId);
+                _userId = newId;
+
+                _username = "Invitado " + _userId;
+                _profilePicture = "pack://application:,,,/Assets/Images/ProfilePictures/Picture1.png";
+            }
+        }
+
+        private void ReconnectChatClient()
+        {
+            try
+            {
+                InstanceContext context = new InstanceContext(this);
+                _chatClient = new ChatServiceClient(context);
+
+                _chatClient.ConnectAsync(_userId, _username);
+                _isConnected = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                MessageBox.Show("No se pudo reconectar al servicio de chat.");
+            }
+        }
+
         public bool CanSendMessage(object obj)
         {
             return !string.IsNullOrWhiteSpace(MessageToSend);
@@ -201,6 +247,11 @@ namespace StrategoApp.ViewModel
 
         public void ClientSendMessage(object obj)
         {
+            if (_chatClient == null || _chatClient.State == CommunicationState.Closed || _chatClient.State == CommunicationState.Faulted)
+            {
+                ReconnectChatClient();
+            }
+
             _chatClient.SendMessage(_userId, _username, MessageToSend);
             MessageToSend = string.Empty;
         }
@@ -225,8 +276,17 @@ namespace StrategoApp.ViewModel
 
         public void ReceiveMessage(string username, string message)
         {
-            Messages.Add($"{username}: {message}");
+            Messages.Add($"{username} {message}");
             OnPropertyChanged(nameof(Messages));
+        }
+
+        public void ChatResponse(OperationResult result)
+        {
+            if (!result.IsSuccess)
+            {
+                ErrorMessage = "Error al enviar el mensaje";
+                ReconnectChatClient();
+            }
         }
     }
 }

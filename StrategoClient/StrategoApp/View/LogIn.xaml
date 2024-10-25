@@ -50,12 +50,13 @@
                        HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
                 <PasswordBox x:Name="PasswordBox"
-                        Style="{StaticResource InputBoxStyle}"
-                        Canvas.Left="260" Canvas.Top="220"
-                        Width="280" Height="33"
-                        HorizontalAlignment="Center" VerticalAlignment="Top"
-                        PasswordChanged="PasswordBox_PasswordChanged"
-                        Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+                            Style="{StaticResource InputBoxStyle}"
+                            Canvas.Left="260" Canvas.Top="220"
+                            Width="280" Height="33"
+                            HorizontalAlignment="Center" VerticalAlignment="Top"
+                            PasswordChanged="PasswordBox_PasswordChanged"
+                            Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                            Loaded="SyncPassword" />
 
                 <TextBox x:Name="PasswordTextBox"
                         Style="{StaticResource InputBoxStyle}"
@@ -63,8 +64,8 @@
                         Canvas.Left="260" Canvas.Top="220"
                         Width="280" Height="33"
                         HorizontalAlignment="Center" VerticalAlignment="Top"
-                        Visibility="{Binding IsPasswordVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-
+                        Visibility="{Binding IsPasswordVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Loaded="SyncPassword" />
 
                 <Button Content="{x:Static res:Resources.Login_Button}" 
                         Style="{StaticResource ButtonStyle}"

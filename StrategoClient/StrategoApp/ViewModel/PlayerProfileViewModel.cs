@@ -14,7 +14,7 @@ namespace StrategoApp.ViewModel
     {
         private string _username;
         private string _playerId;
-        private string _imagePath;
+        private string _profilePicture;
 
         private readonly MainWindowViewModel _mainWindowViewModel;
         public bool IsOwnProfile { get; set; }
@@ -33,13 +33,13 @@ namespace StrategoApp.ViewModel
                 var player = PlayerSingleton.Instance.Player;
                 Username = player.Name;
                 PlayerId = player.Id.ToString();
-                ImagePath = player.PicturePath;
+                ProfilePicture = player.PicturePath;
             }
             else
             {
                 Username = "Invitado";
                 PlayerId = "-1";
-                ImagePath = "pack://application:,,,/Assets/Images/ProfilePictures/Picture1.png";
+                ProfilePicture = "pack://application:,,,/Assets/Images/ProfilePictures/Picture1.png";
             }
 
             _mainWindowViewModel = mainWindowViewModel;
@@ -76,12 +76,12 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public string ImagePath
+        public string ProfilePicture
         {
-            get { return _imagePath; }
+            get { return _profilePicture; }
             set
             {
-                _imagePath = value;
+                _profilePicture = value;
                 OnPropertyChanged();
             }
         }
@@ -90,7 +90,7 @@ namespace StrategoApp.ViewModel
         {
             try
             { 
-                _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel)); 
+                _mainWindowViewModel.ChangeViewModel(LobbyViewModel.Instance(_mainWindowViewModel)); 
             }
             catch (Exception e) 
             { 

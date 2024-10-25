@@ -74,7 +74,7 @@ namespace StrategoApp.ViewModel
             set
             {
                 _errorMessage = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(ErrorMessage));
             }
         }
 
@@ -140,7 +140,7 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+                _mainWindowViewModel.ChangeViewModel(LobbyViewModel.Instance(_mainWindowViewModel));
             }
             catch (Exception ex)
             {
@@ -150,14 +150,17 @@ namespace StrategoApp.ViewModel
 
         public void LogInResult(OperationResult result)
         {
-            if (result.IsSuccess)
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
-            }
-            else
-            {
-                ErrorMessage = Properties.Resources.NonexistentAccount_Label;
-            }
+                if (result.IsSuccess)
+                {
+                    _mainWindowViewModel.ChangeViewModel(LobbyViewModel.Instance(_mainWindowViewModel));
+                }
+                else
+                {
+                    ErrorMessage = Properties.Resources.NonexistentAccount_Label;
+                }
+            });
         }
 
         public void AccountInfo(PlayerDTO player)

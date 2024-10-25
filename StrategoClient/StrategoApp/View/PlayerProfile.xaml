@@ -101,7 +101,7 @@
             
             <Ellipse Width="150" Height="150" Margin="325,55,325,235">
                 <Ellipse.Fill>
-                    <ImageBrush ImageSource="{Binding PlayerProfileImage}" 
+                    <ImageBrush ImageSource="{Binding ProfilePicture}" 
                                 Stretch="UniformToFill"/>
                 </Ellipse.Fill>
             </Ellipse>
