@@ -69,8 +69,11 @@ namespace ServerTest
         {
             await _client.LogInAsync("pikachu999@gmail.com", "407d8a1148a12157d5c1509f328461f6488a405bd4d361363b22be741fe1b1ee");
 
+            Assert.IsNotNull(_callback.LastPlayerInfo, "No se recibió información del jugador.");
+
             Assert.AreEqual("Pikachu999", _callback.LastPlayerInfo.Name);
         }
+
 
         [TestCleanup]
         public void Cleanup()
