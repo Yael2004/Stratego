@@ -209,10 +209,6 @@
     <Resource Include="Assets\Images\LobbyBackground.png" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\LogInService\" />
-    <WCFMetadataStorage Include="Connected Services\Service\" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\Cursors\normal_cursor.cur" />
   </ItemGroup>
   <ItemGroup>
@@ -235,6 +231,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\ProfilePicturesFrame2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\LogInService\" />
+    <WCFMetadataStorage Include="Connected Services\Service\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\LogInService\LogInService.disco" />
