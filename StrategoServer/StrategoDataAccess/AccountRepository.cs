@@ -12,9 +12,9 @@ namespace StrategoDataAccess
 {
     public class AccountRepository
     {
-        private readonly StrategoEntities _context;
+        private readonly Lazy<StrategoEntities> _context;
 
-        public AccountRepository(StrategoEntities context)
+        public AccountRepository(Lazy<StrategoEntities> context)
         {
             _context = context;
         }
@@ -33,7 +33,7 @@ namespace StrategoDataAccess
                 return Result<string>.Failure("Account already exists");
             }
 
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = _context.Value.Database.BeginTransaction())
             {
                 try
                 {
@@ -43,8 +43,8 @@ namespace StrategoDataAccess
                         password = hashedPassword
                     };
 
-                    _context.Account.Add(newAccount);
-                    await _context.SaveChangesAsync();
+                    _context.Value.Account.Add(newAccount);
+                    await _context.Value.SaveChangesAsync();
 
                     const int defaultPictureId = 1;
                     const int defaultLabelId = 1;
@@ -57,8 +57,8 @@ namespace StrategoDataAccess
                         AccountId = newAccount.IdAccount
                     };
 
-                    _context.Player.Add(newPlayer);
-                    await _context.SaveChangesAsync();
+                    _context.Value.Player.Add(newPlayer);
+                    await _context.Value.SaveChangesAsync();
 
                     transaction.Commit();
 
@@ -83,7 +83,7 @@ namespace StrategoDataAccess
         {
             try
             {
-                var account = await _context.Account.FirstOrDefaultAsync(a => a.mail == email && a.password == hashedPassword);
+                var account = await _context.Value.Account.FirstOrDefaultAsync(a => a.mail == email && a.password == hashedPassword);
 
                 if (account == null)
                 {
@@ -110,7 +110,7 @@ namespace StrategoDataAccess
         {
             try
             {
-                bool exists = await _context.Account.AnyAsync(a => a.mail == email);
+                bool exists = await _context.Value.Account.AnyAsync(a => a.mail == email);
                 return Result<bool>.Success(exists);
             }
             catch (SqlException sqlEx)

@@ -11,9 +11,9 @@ namespace StrategoDataAccess
 {
     public class GamesRepository
     {
-        private readonly StrategoEntities _context;
+        private readonly Lazy<StrategoEntities> _context;
 
-        public GamesRepository(StrategoEntities context)
+        public GamesRepository(Lazy<StrategoEntities> context)
         {
             _context = context;
         }
@@ -22,7 +22,7 @@ namespace StrategoDataAccess
         {
             try
             {
-                var games = await _context.Games
+                var games = await _context.Value.Games
                     .Where(g => g.AccountId == accountId)
                     .FirstOrDefaultAsync();
 

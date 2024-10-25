@@ -11,9 +11,9 @@ namespace StrategoDataAccess
 {
     public class LabelRepository
     {
-        private readonly StrategoEntities _context;
+        private readonly Lazy<StrategoEntities> _context;
 
-        public LabelRepository(StrategoEntities context)
+        public LabelRepository(Lazy<StrategoEntities> context)
         {
             _context = context;
         }
@@ -22,7 +22,7 @@ namespace StrategoDataAccess
         {
             try
             {
-                var label = await _context.Label.FirstOrDefaultAsync(l => l.IdLabel == labelId);
+                var label = await _context.Value.Label.FirstOrDefaultAsync(l => l.IdLabel == labelId);
 
                 if (label == null)
                 {

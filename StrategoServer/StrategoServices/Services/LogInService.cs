@@ -14,9 +14,9 @@ namespace StrategoServices.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class LogInService : ILogInService, ISignUpService
     {
-        private readonly AccountManager _accountManager;
+        private readonly Lazy<AccountManager> _accountManager;
 
-        public LogInService(AccountManager accountManager)
+        public LogInService(Lazy<AccountManager> accountManager)
         {
             _accountManager = accountManager;
         }
@@ -25,7 +25,7 @@ namespace StrategoServices.Services
         {
             var callback = OperationContext.Current.GetCallbackChannel<ILogInServiceCallback>();
 
-            var loginResult = await _accountManager.LogInAccountAsync(email, password);
+            var loginResult = await _accountManager.Value.LogInAccountAsync(email, password);
 
             if (!loginResult.IsSuccess)
             {
@@ -33,7 +33,7 @@ namespace StrategoServices.Services
                 return;
             }
 
-            var playerResult = await _accountManager.GetLogInAccountAsync(loginResult.Value);
+            var playerResult = await _accountManager.Value.GetLogInAccountAsync(loginResult.Value);
 
             if (!playerResult.IsSuccess)
             {
@@ -51,7 +51,7 @@ namespace StrategoServices.Services
         {
             var callback = OperationContext.Current.GetCallbackChannel<ISignUpServiceCallback>();
 
-            var result = await _accountManager.CreateAccountAsync(email, password, playername);
+            var result = await _accountManager.Value.CreateAccountAsync(email, password, playername);
 
             if (result.IsSuccess)
             {

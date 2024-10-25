@@ -13,9 +13,9 @@ namespace StrategoServices.Services
 {
     public class ProfileService : Interfaces.IProfileService
     {
-        private readonly ProfilesManager _profilesManager;
+        private readonly Lazy<ProfilesManager> _profilesManager;
 
-        public ProfileService(ProfilesManager profilesManager)
+        public ProfileService(Lazy<ProfilesManager> profilesManager)
         {
             _profilesManager = profilesManager;
         }
@@ -29,7 +29,7 @@ namespace StrategoServices.Services
         {
             try
             {
-                var result = await _profilesManager.GetPlayerGameStatisticsAsync(playerAccountId);
+                var result = await _profilesManager.Value.GetPlayerGameStatisticsAsync(playerAccountId);
                 var response = new PlayerStatisticsResponse();
 
                 if (!result.IsSuccess)

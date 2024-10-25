@@ -13,9 +13,9 @@ namespace StrategoDataAccess
 {
     public class PlayerRepository
     {
-        private readonly StrategoEntities _context;
+        private readonly Lazy<StrategoEntities> _context;
 
-        public PlayerRepository(StrategoEntities context)
+        public PlayerRepository(Lazy<StrategoEntities> context)
         {
             _context = context;
         }
@@ -24,7 +24,7 @@ namespace StrategoDataAccess
         {
             try
             {
-                var player = await _context.Player.FirstOrDefaultAsync(p => p.Id == playerId);
+                var player = await _context.Value.Player.FirstOrDefaultAsync(p => p.Id == playerId);
 
                 if (player == null)
                 {
@@ -45,16 +45,16 @@ namespace StrategoDataAccess
 
         public async Task<IEnumerable<Player>> GetAllPlayersAsync()
         {
-            return await _context.Player.ToListAsync();
+            return await _context.Value.Player.ToListAsync();
         }
 
         public async Task<bool> UpdatePlayerAsync(int playerId, string newName)
         {
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = _context.Value.Database.BeginTransaction())
             {
                 try
                 {
-                    var player = await _context.Player.FirstOrDefaultAsync(p => p.Id == playerId);
+                    var player = await _context.Value.Player.FirstOrDefaultAsync(p => p.Id == playerId);
 
                     if (player == null)
                     {
@@ -63,7 +63,7 @@ namespace StrategoDataAccess
 
                     player.Name = newName;
 
-                    await _context.SaveChangesAsync();
+                    await _context.Value.SaveChangesAsync();
 
                     transaction.Commit();
 
@@ -100,7 +100,7 @@ namespace StrategoDataAccess
         {
             try
             {
-                var player = await _context.Player.FirstOrDefaultAsync(p => p.AccountId == accountId);
+                var player = await _context.Value.Player.FirstOrDefaultAsync(p => p.AccountId == accountId);
 
                 if (player == null)
                 {

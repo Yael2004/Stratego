@@ -11,12 +11,13 @@ namespace StrategoServices.Logic
 {
     public class AccountManager
     {
-        private readonly AccountRepository _accountRepository;
-        private readonly PlayerRepository _playerRepository;
-        private readonly PictureRepository _picturesRepository;
-        private readonly LabelRepository _labelRepository;
+        private readonly Lazy<AccountRepository> _accountRepository;
+        private readonly Lazy<PlayerRepository> _playerRepository;
+        private readonly Lazy<PictureRepository> _picturesRepository;
+        private readonly Lazy<LabelRepository> _labelRepository;
 
-        public AccountManager(AccountRepository accountRepository, PlayerRepository playerRepository, PictureRepository pictureRepository, LabelRepository labelRepository)
+        public AccountManager(Lazy<AccountRepository> accountRepository, Lazy<PlayerRepository> playerRepository, 
+            Lazy<PictureRepository> pictureRepository, Lazy<LabelRepository> labelRepository)
         {
             _accountRepository = accountRepository;
             _playerRepository = playerRepository;
@@ -26,19 +27,19 @@ namespace StrategoServices.Logic
 
         public Task<Result<string>> CreateAccountAsync(string email, string password, string playername)
         {
-            var result = _accountRepository.CreateAccountAsync(email, password, playername);
+            var result = _accountRepository.Value.CreateAccountAsync(email, password, playername);
             return result;
         }
 
         public Task<Result<int>> LogInAccountAsync(string email, string password)
         {
-            var result = _accountRepository.ValidateCredentialsAsync(email, password);
+            var result = _accountRepository.Value.ValidateCredentialsAsync(email, password);
             return result;
         }
 
         public async Task<Result<PlayerDTO>> GetLogInAccountAsync(int accountId)
         {
-            var result = await _playerRepository.GetPlayerByAccountIdAsync(accountId);
+            var result = await _playerRepository.Value.GetPlayerByAccountIdAsync(accountId);
 
             if (!result.IsSuccess)
             {
@@ -47,8 +48,8 @@ namespace StrategoServices.Logic
 
             var player = result.Value;
 
-            var pictureTask = _picturesRepository.GetPictureByIdAsync((int)player.PictureId);
-            var labelTask = _labelRepository.GetLabelByIdAsync(player.IdLabel);
+            var pictureTask = _picturesRepository.Value.GetPictureByIdAsync((int)player.PictureId);
+            var labelTask = _labelRepository.Value.GetLabelByIdAsync(player.IdLabel);
 
             await Task.WhenAll(pictureTask, labelTask);
 

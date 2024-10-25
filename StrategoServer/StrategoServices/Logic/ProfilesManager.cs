@@ -12,16 +12,16 @@ namespace StrategoServices.Logic
 {
     public class ProfilesManager
     {
-        private readonly GamesRepository _gamesRepository;
+        private readonly Lazy<GamesRepository> _gamesRepository;
 
-        public ProfilesManager(GamesRepository profilesRepository)
+        public ProfilesManager(Lazy<GamesRepository> gamesRepository)
         {
-            _gamesRepository = profilesRepository;
+            _gamesRepository = gamesRepository;
         }
 
         public async Task<Result<PlayerStatisticsDTO>> GetPlayerGameStatisticsAsync(int accountId)
         {
-            var result = await _gamesRepository.GetGameStatisticsByAccountIdAsync(accountId);
+            var result = await _gamesRepository.Value.GetGameStatisticsByAccountIdAsync(accountId);
 
             if (!result.IsSuccess)
             {

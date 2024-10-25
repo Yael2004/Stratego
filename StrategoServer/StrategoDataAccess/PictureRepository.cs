@@ -11,9 +11,9 @@ namespace StrategoDataAccess
 {
     public class PictureRepository
     {
-        private readonly StrategoEntities _context;
+        private readonly Lazy<StrategoEntities> _context;
 
-        public PictureRepository(StrategoEntities context)
+        public PictureRepository(Lazy<StrategoEntities> context)
         {
             _context = context;
         }
@@ -22,7 +22,7 @@ namespace StrategoDataAccess
         {
             try
             {
-                var picture = await _context.Pictures.FirstOrDefaultAsync(p => p.IdPicture == pictureId);
+                var picture = await _context.Value.Pictures.FirstOrDefaultAsync(p => p.IdPicture == pictureId);
 
                 if (picture == null)
                 {
