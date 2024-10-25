@@ -30,28 +30,75 @@ namespace StrategoHost
                 {
                     var loginService = scope.Resolve<ILogInService>();
                     var chatService = scope.Resolve<IChatService>();
-                    //var profileService = scope.Resolve<IProfileService>();
+                    var profileService = scope.Resolve<IProfileService>();
 
-                    using (var loginHost = new ServiceHost(loginService))
-                    using (var chatHost = new ServiceHost(chatService))
-                    //using (var profileHost = new ServiceHost(profileService))
+                    var loginHost = new ServiceHost(loginService);
+                    var chatHost = new ServiceHost(chatService);
+                    var profileHost = new ServiceHost(profileService);
+
+                    bool loginServiceOpened = false;
+                    bool chatServiceOpened = false;
+                    bool profileServiceOpened = false;
+
+                    try
                     {
                         loginHost.Open();
+                        loginServiceOpened = true;
+                        log.Info("Login service is running...");
+                        Console.WriteLine("Login service is running...");
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error("Failed to start Login service: " + ex.Message);
+                        Console.WriteLine($"Failed to start Login service: {ex.Message}");
+                    }
+
+                    try
+                    {
                         chatHost.Open();
-                        //profileHost.Open();
+                        chatServiceOpened = true;
+                        log.Info("Chat service is running...");
+                        Console.WriteLine("Chat service is running...");
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error("Failed to start Chat service: " + ex.Message);
+                        Console.WriteLine($"Failed to start Chat service: {ex.Message}");
+                    }
 
-                        log.Info("Stratego services are running...");
+                    try
+                    {
+                        profileHost.Open();
+                        profileServiceOpened = true;
+                        log.Info("Profile service is running...");
+                        Console.WriteLine("Profile service is running...");
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error("Failed to start Profile service: " + ex.Message);
+                        Console.WriteLine($"Failed to start Profile service: {ex.Message}");
+                    }
 
-                        Console.WriteLine("Stratego services are running...");
-                        Console.ReadLine();
+                    Console.ReadLine();
+
+                    if (loginServiceOpened)
+                    {
+                        loginHost.Close();
+                        log.Info("Login service closed.");
+                    }
+
+                    if (chatServiceOpened)
+                    {
+                        chatHost.Close();
+                        log.Info("Chat service closed.");
+                    }
+
+                    if (profileServiceOpened)
+                    {
+                        profileHost.Close();
+                        log.Info("Profile service closed.");
                     }
                 }
-            }
-            catch (CommunicationException ce)
-            {
-                log.Error("Communication error: " + ce.Message);
-                Console.WriteLine($"Communication error: {ce.Message}");
-                Console.ReadLine();
             }
             catch (Exception ex)
             {

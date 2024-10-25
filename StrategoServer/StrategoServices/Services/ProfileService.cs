@@ -5,12 +5,14 @@ using StrategoServices.Logic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Profile;
 
 namespace StrategoServices.Services
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class ProfileService : Interfaces.IProfileService
     {
         private readonly Lazy<ProfilesManager> _profilesManager;
