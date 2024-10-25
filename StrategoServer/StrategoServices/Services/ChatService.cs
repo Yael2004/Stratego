@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
 using StrategoServices.Services.Interfaces;
 using StrategoServices.Logic;
+using StrategoServices.Data;
 
 namespace StrategoServices.Services
 {
@@ -15,7 +11,8 @@ namespace StrategoServices.Services
     public class ChatService : IChatService
     {
         private readonly ChatManager _chatManager;
-        private readonly Dictionary<int, IChatServiceCallback> _clients = new Dictionary<int, IChatServiceCallback>();
+        private readonly ConcurrentDictionary<int, IChatServiceCallback> _clients = new ConcurrentDictionary<int, IChatServiceCallback>();
+        private int _nextGuestId = -1;
 
         public ChatService()
         {
@@ -26,36 +23,58 @@ namespace StrategoServices.Services
             _chatManager.OnMessageBroadcast += BroadcastMessage;
         }
 
-        public void Connect(int userId, string username)
+        public int Connect(int userId, string username)
         {
             var callback = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
 
-            _clients[userId] = callback;
-
-            if (!_chatManager.Connect(userId, username))
+            if (userId == 0)
             {
-                throw new InvalidOperationException("User is already connected.");
+                lock (this)
+                {
+                    userId = _nextGuestId--;
+                }
             }
-        }
 
-        public void Disconnect(int userId)
-        {
             if (_clients.ContainsKey(userId))
             {
-                _clients.Remove(userId);  
-                _chatManager.Disconnect(userId, "");  
+                callback.ChatResponse(new OperationResult(false, "User is already connected."));
             }
             else
             {
-                throw new InvalidOperationException("User is not connected.");
+                _clients[userId] = callback;
+
+                if (!_chatManager.Connect(userId, username))
+                {
+                    callback.ChatResponse(new OperationResult(false, "Failed to connect user."));
+                }
+            }
+
+            return userId;
+        }
+
+
+
+        public void Disconnect(int userId)
+        {
+            var callback = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
+
+            if (_clients.TryRemove(userId, out _))
+            {
+                _chatManager.Disconnect(userId, "");
+            }
+            else
+            {
+                callback.ChatResponse(new OperationResult(false, "User is not connected."));
             }
         }
 
         public void SendMessage(int userId, string username, string message)
         {
+            var callback = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
+
             if (!_chatManager.SendMessage(userId, username, message))
             {
-                throw new InvalidOperationException("User is not connected.");
+                callback.ChatResponse(new OperationResult(false, "User is not connected."));
             }
         }
 
@@ -66,7 +85,7 @@ namespace StrategoServices.Services
 
         private void HandleClientDisconnected(int userId, string username)
         {
-            Console.WriteLine($"Cliente {username} (ID: {userId}) has disconnected from the chat.");
+            Console.WriteLine($"Client {username} (ID: {userId}) has disconnected from the chat.");
         }
 
         private void BroadcastMessage(int senderId, string username, string message)
@@ -75,7 +94,7 @@ namespace StrategoServices.Services
             {
                 try
                 {
-                    client.ReceiveMessage($"{username}: ", message); 
+                    client.ReceiveMessage($"{username}: ", message);
                 }
                 catch (Exception ex)
                 {
@@ -83,6 +102,5 @@ namespace StrategoServices.Services
                 }
             }
         }
-
     }
 }

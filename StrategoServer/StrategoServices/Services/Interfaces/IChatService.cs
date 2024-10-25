@@ -11,7 +11,7 @@ namespace StrategoServices.Services.Interfaces
     public interface IChatService
     {
         [OperationContract]
-        void Connect(int userId, string username);
+        int Connect(int userId, string username);
 
         [OperationContract(IsOneWay = true)]
         void SendMessage(int userId, string username, string message);

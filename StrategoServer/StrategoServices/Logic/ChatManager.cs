@@ -9,20 +9,21 @@ namespace StrategoServices.Logic
     public class ChatManager
     {
         private readonly HashSet<int> _connectedClients = new HashSet<int>();
+
         public event Action<int, string> OnClientConnected;
         public event Action<int, string> OnClientDisconnected;
         public event Action<int, string, string> OnMessageBroadcast;
 
         public bool Connect(int userId, string username)
         {
-            if (!_connectedClients.Contains(userId))
+            if (_connectedClients.Contains(userId))
             {
-                _connectedClients.Add(userId);
-                OnClientConnected?.Invoke(userId, username);
-                return true;
+                return false;
             }
 
-            return false;
+            _connectedClients.Add(userId);
+            OnClientConnected?.Invoke(userId, username);
+            return true;
         }
 
         public bool Disconnect(int userId, string username)
@@ -45,7 +46,7 @@ namespace StrategoServices.Logic
                 return true;
             }
 
-            return false;
+            return false; 
         }
 
         private void BroadcastMessage(int senderId, string username, string message)

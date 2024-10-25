@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using StrategoServices.Data;
+using System.ServiceModel;
 
 namespace StrategoServices.Services.Interfaces
 {
@@ -7,5 +8,8 @@ namespace StrategoServices.Services.Interfaces
     {
         [OperationContract(IsOneWay = true)]
         void ReceiveMessage(string username, string message);
+
+        [OperationContract(IsOneWay = true)]
+        void ChatResponse(OperationResult result);
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace StrategoServices.Services
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class LogInService : ILogInService, ISignUpService
     {
         private readonly Lazy<AccountManager> _accountManager;
@@ -29,7 +29,7 @@ namespace StrategoServices.Services
 
             if (!loginResult.IsSuccess)
             {
-                callback.LogInResult(new OperationResult(false, loginResult.Error));
+                await Task.Run(() => callback.LogInResult(new OperationResult(false, loginResult.Error)));
                 return;
             }
 
@@ -37,13 +37,13 @@ namespace StrategoServices.Services
 
             if (!playerResult.IsSuccess)
             {
-                callback.LogInResult(new OperationResult(false, playerResult.Error));
+                await Task.Run(() => callback.LogInResult(new OperationResult(false, playerResult.Error)));
                 return;
             }
 
-            callback.AccountInfo(playerResult.Value);
+            await Task.Run(() => callback.AccountInfo(playerResult.Value));
 
-            callback.LogInResult(new OperationResult(true, "Login successful"));
+            await Task.Run(() => callback.LogInResult(new OperationResult(true, "Login successful")));
         }
 
 
@@ -55,11 +55,11 @@ namespace StrategoServices.Services
 
             if (result.IsSuccess)
             {
-                callback.SignUpResult(new OperationResult(true, "Account created successfully"));
+                await Task.Run(() => callback.SignUpResult(new OperationResult(true, "Account created successfully")));
             }
             else
             {
-                callback.SignUpResult(new OperationResult(false, result.Error));
+                await Task.Run(() => callback.SignUpResult(new OperationResult(false, result.Error)));
             }
         }
 
