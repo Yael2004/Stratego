@@ -144,17 +144,18 @@ namespace StrategoApp.ViewModel
 
         private async void ExecuteSignUpCommand(object obj)
         {
-            ValidateFields();
-
-            string hashedPassword = HashPassword(Password);
-
-            try
+            if (ValidateFields())
             {
-                await _signUpServiceClient.SignUpAsync(Email, hashedPassword, Username);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
+                string hashedPassword = HashPassword(Password);
+
+                try
+                {
+                    await _signUpServiceClient.SignUpAsync(Email, hashedPassword, Username);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex.Message);
+                }
             }
         }
 
@@ -176,11 +177,48 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public void ValidateFields()
+        public bool ValidateFields()
         {
-            UsernameError = Validations.IsValidUsername(Username) ? string.Empty : Properties.Resources.InvalidUsername_Label;
-            EmailError = Validations.IsValidEmail(Email) ? string.Empty : Properties.Resources.InvalidMail_Label;
-            PasswordError = Validations.IsValidPassword(Password) ? string.Empty : Properties.Resources.InvalidPassword_Label;
+            bool isValid = true;
+
+            isValid &= IsValidUsername();
+            isValid &= IsValidEmail();
+            isValid &= IsValidPassword();
+
+            return isValid;
+        }
+
+        private bool IsValidUsername()
+        {
+            if (!Validations.IsValidUsername(Username))
+            {
+                UsernameError = Properties.Resources.InvalidUsername_Label;
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsValidEmail()
+        {
+            if (!Validations.IsValidEmail(Email))
+            {
+                EmailError = Properties.Resources.InvalidMail_Label;
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsValidPassword()
+        {
+            if (!Validations.IsValidPassword(Password))
+            {
+                PasswordError = Properties.Resources.InvalidPassword_Label;
+                return false;
+            }
+
+            return true;
         }
 
         private string HashPassword(string password)
