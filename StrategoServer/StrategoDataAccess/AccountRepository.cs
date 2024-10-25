@@ -60,20 +60,33 @@ namespace StrategoDataAccess
                     _context.Value.Player.Add(newPlayer);
                     await _context.Value.SaveChangesAsync();
 
+                    var playerStatistics = new Games
+                    {
+                        WonGames = 0,
+                        DeafeatGames = 0,
+                        AccountId = newAccount.IdAccount
+                    };
+
+                    _context.Value.Games.Add(playerStatistics);
+                    await _context.Value.SaveChangesAsync();
+
                     transaction.Commit();
 
                     return Result<string>.Success("Account and player created successfully");
                 }
                 catch (DbEntityValidationException dbEx)
                 {
+                    transaction.Rollback();
                     return Result<string>.Failure($"Entity validation error: {dbEx.Message}");
                 }
                 catch (SqlException sqlEx)
                 {
+                    transaction.Rollback();
                     return Result<string>.Failure($"Database error: {sqlEx.Message}");
                 }
                 catch (Exception ex)
                 {
+                    transaction.Rollback();
                     return Result<string>.Failure($"Unexpected error: {ex.Message}");
                 }
             }

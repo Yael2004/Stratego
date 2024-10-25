@@ -90,7 +90,6 @@ namespace Test
 
             var existingAccounts = new List<Account>();
             var mockAccountSet = CreateMockDbSet(existingAccounts);
-
             mockAccountSet.Setup(m => m.Add(It.IsAny<Account>())).Callback<Account>(account => existingAccounts.Add(account));
             _mockContext.Setup(c => c.Account).Returns(mockAccountSet.Object);
 
@@ -99,14 +98,17 @@ namespace Test
             mockPlayerSet.Setup(m => m.Add(It.IsAny<Player>())).Callback<Player>(player => players.Add(player));
             _mockContext.Setup(c => c.Player).Returns(mockPlayerSet.Object);
 
+            var games = new List<Games>();
+            var mockGamesSet = CreateMockDbSet(games);
+            mockGamesSet.Setup(m => m.Add(It.IsAny<Games>())).Callback<Games>(game => games.Add(game));
+            _mockContext.Setup(c => c.Games).Returns(mockGamesSet.Object);
+
             _mockContext.Setup(c => c.SaveChangesAsync()).ReturnsAsync(1);
 
             var result = await repository.CreateAccountAsync(testEmail, testHashedPassword, testPlayerName);
 
-            Assert.AreEqual("Account and player created successfully", result.Value);   
+            Assert.AreEqual("Account and player created successfully", result.Value);
         }
-
-
 
         [TestMethod]
         public async Task CreateAccountAsync_ShouldReturnFailureOnEntityValidationError()
