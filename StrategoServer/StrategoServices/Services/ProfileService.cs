@@ -12,7 +12,7 @@ using System.Web.Profile;
 
 namespace StrategoServices.Services
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class ProfileService : Interfaces.IProfileService
     {
         private readonly Lazy<ProfilesManager> _profilesManager;
