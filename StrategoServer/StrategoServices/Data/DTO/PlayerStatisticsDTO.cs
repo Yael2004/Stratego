@@ -23,7 +23,11 @@ namespace StrategoServices.Data.DTO
         public int LostGames { get; set; }
 
         [DataMember]
-        public int TotalGames => WonGames + LostGames;
+        public int TotalGames
+        {
+            get => WonGames + LostGames;
+            private set {}
+        }
     }
 
 }

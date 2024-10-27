@@ -98,6 +98,7 @@
     <Compile Include="Services\ChatService.cs" />
     <Compile Include="Data\DTO\PlayerDTO.cs" />
     <Compile Include="Data\OperationResult.cs" />
+    <Compile Include="Services\Interfaces\Callbacks\IProfileServiceCallback.cs" />
     <Compile Include="Services\Interfaces\ILogInService.cs" />
     <Compile Include="Services\Interfaces\IChatService.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IChatServiceCallback.cs" />

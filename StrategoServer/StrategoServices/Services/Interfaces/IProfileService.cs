@@ -7,20 +7,21 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using Utilities;
+using StrategoServices.Services.Interfaces.Callbacks;
 
 namespace StrategoServices.Services.Interfaces
 {
-    [ServiceContract]
+    [ServiceContract(CallbackContract = typeof(IProfileServiceCallback))]
     public interface IProfileService
     {
         [OperationContract]
-        Task<PlayerInfoResponse> GetPlayerInfoAsync(int playerId);
+        Task GetPlayerInfoAsync(int playerId);
 
         [OperationContract]
         Task<OperationResult> UpdatePlayerProfileAsync(PlayerInfoShownDTO profile);
 
         [OperationContract]
-        Task<PlayerStatisticsResponse> GetPlayerStatisticsAsync(int playerId);
+        Task GetPlayerStatisticsAsync(int playerId);
     }
 
 

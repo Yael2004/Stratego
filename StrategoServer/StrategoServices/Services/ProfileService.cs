@@ -22,52 +22,49 @@ namespace StrategoServices.Services
             _profilesManager = profilesManager;
         }
 
-        public Task<PlayerInfoResponse> GetPlayerInfoAsync(int playerId)
+        public Task GetPlayerInfoAsync(int playerId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<PlayerStatisticsResponse> GetPlayerStatisticsAsync(int playerAccountId)
+        public async Task GetPlayerStatisticsAsync(int playerAccountId)
         {
+            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IProfileServiceCallback>();
+            var response = new PlayerStatisticsResponse();
+
             try
             {
                 var result = await _profilesManager.Value.GetPlayerGameStatisticsAsync(playerAccountId);
-                var response = new PlayerStatisticsResponse();
 
                 if (!result.IsSuccess)
                 {
                     response.Result = new OperationResult(false, result.Error);
                     response.Statistics = new PlayerStatisticsDTO();
-                    return response;
                 }
-
-                response.Statistics = new PlayerStatisticsDTO
+                else
                 {
-                    WonGames = result.Value.WonGames,
-                    LostGames = result.Value.LostGames
-                };
-
-                response.Result = new OperationResult(true, "Player statistics retrieved successfully");
-
-                return response;
+                    response.Statistics = new PlayerStatisticsDTO
+                    {
+                        WonGames = result.Value.WonGames,
+                        LostGames = result.Value.LostGames
+                    };
+                    response.Result = new OperationResult(true, "Player statistics retrieved successfully");
+                }
             }
             catch (TimeoutException)
             {
-                return new PlayerStatisticsResponse
-                {
-                    Result = new OperationResult(false, "Server error"),
-                    Statistics = new PlayerStatisticsDTO()
-                };
+                response.Result = new OperationResult(false, "Server error");
+                response.Statistics = new PlayerStatisticsDTO();
             }
             catch (Exception)
             {
-                return new PlayerStatisticsResponse
-                {
-                    Result = new OperationResult(false, "Unexpected error"),
-                    Statistics = new PlayerStatisticsDTO()
-                };
+                response.Result = new OperationResult(false, "Unexpected error");
+                response.Statistics = new PlayerStatisticsDTO();
             }
+
+            await Task.Run(() => callback.PlayerStatistics(response));
         }
+
 
         public Task<OperationResult> UpdatePlayerProfileAsync(PlayerInfoShownDTO profile)
         {
