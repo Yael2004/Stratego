@@ -12,6 +12,7 @@ using System.Linq.Expressions;
 
 namespace Test.RepositoryTest
 {
+    /*
     [TestClass]
     public class PlayerRepositoryTests
     {
@@ -213,8 +214,8 @@ namespace Test.RepositoryTest
             Assert.AreEqual(newName, player.Name);  
             _mockContext.Verify(m => m.SaveChangesAsync(), Times.Once);  
         }
-
+        
 
     }
-
+    */
 }

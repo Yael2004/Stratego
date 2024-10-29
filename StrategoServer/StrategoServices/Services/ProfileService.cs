@@ -65,10 +65,45 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.PlayerStatistics(response));
         }
 
-
-        public Task<OperationResult> UpdatePlayerProfileAsync(PlayerInfoShownDTO profile)
+        public async Task UpdatePlayerProfileAsync(PlayerInfoShownDTO newProfile)
         {
-            throw new NotImplementedException();
+            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IProfileServiceCallback>();
+            var response = new PlayerInfoResponse();
+
+            try
+            {
+                var updateResult = await _profilesManager.Value.UpdatePlayerProfileAsync(newProfile);
+
+                if (!updateResult.IsSuccess)
+                {
+                    response.Result = new OperationResult(false, updateResult.Error);
+                    response.Profile = new PlayerInfoShownDTO();
+                }
+                else
+                {
+                    response.Result = new OperationResult(updateResult.IsSuccess, updateResult.IsSuccess ? "Profile updated successfully" : updateResult.Error);
+                    response.Profile = new PlayerInfoShownDTO
+                    {
+                        Id = newProfile.Id,
+                        Name = newProfile.Name,
+                        PicturePath = newProfile.PicturePath,
+                        LabelPath = newProfile.LabelPath
+                    };
+                }
+            }
+            catch (TimeoutException)
+            {
+                response.Result = new OperationResult(false, "Server error");
+                response.Profile = new PlayerInfoShownDTO();
+            }
+            catch (Exception ex)
+            {
+                response.Result = new OperationResult(false, $"Unexpected error: {ex.Message}");
+                response.Profile = new PlayerInfoShownDTO();
+            }
+
+            callback.ReceiveUpdatePlayerProfile(response);
         }
+
     }
 }

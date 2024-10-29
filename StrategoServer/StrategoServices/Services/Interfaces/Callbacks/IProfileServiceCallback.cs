@@ -16,5 +16,8 @@ namespace StrategoServices.Services.Interfaces.Callbacks
 
         [OperationContract(IsOneWay = true)]
         void PlayerStatistics(PlayerStatisticsResponse playerStatistics);
+
+        [OperationContract(IsOneWay = true)]
+        void ReceiveUpdatePlayerProfile(PlayerInfoResponse result);
     }
 }

@@ -18,11 +18,10 @@ namespace StrategoServices.Services.Interfaces
         Task GetPlayerInfoAsync(int playerId);
 
         [OperationContract]
-        Task<OperationResult> UpdatePlayerProfileAsync(PlayerInfoShownDTO profile);
+        Task UpdatePlayerProfileAsync(PlayerInfoShownDTO newProfile);
 
         [OperationContract]
         Task GetPlayerStatisticsAsync(int playerId);
     }
-
 
 }

@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Utilities;
 
 namespace StrategoDataAccess
@@ -48,53 +49,65 @@ namespace StrategoDataAccess
             return await _context.Value.Player.ToListAsync();
         }
 
-        public async Task<bool> UpdatePlayerAsync(int playerId, string newName)
+        public async Task<Result<Player>> UpdatePlayerAsync(Player updatedPlayer, string labelPath, string picturePath)
         {
             using (var transaction = _context.Value.Database.BeginTransaction())
             {
                 try
                 {
-                    var player = await _context.Value.Player.FirstOrDefaultAsync(p => p.Id == playerId);
-
-                    if (player == null)
+                    var pictureIdResult = await GetPictureIdAsync(picturePath);
+                    if (!pictureIdResult.IsSuccess)
                     {
-                        return false;  
+                        return Result<Player>.Failure(pictureIdResult.Error);
                     }
 
-                    player.Name = newName;
+                    var labelIdResult = await GetLabelIdAsync(labelPath);
+                    if (!labelIdResult.IsSuccess)
+                    {
+                        return Result<Player>.Failure(labelIdResult.Error);
+                    }
+
+                    var playerInDb = await _context.Value.Player
+                        .FirstOrDefaultAsync(p => p.Id == updatedPlayer.Id);
+
+                    if (playerInDb == null)
+                    {
+                        return Result<Player>.Failure("Player not found.");
+                    }
+
+                    playerInDb.Name = updatedPlayer.Name;
+                    playerInDb.PictureId = pictureIdResult.Value;
+                    playerInDb.IdLabel = labelIdResult.Value;
 
                     await _context.Value.SaveChangesAsync();
 
                     transaction.Commit();
 
-                    return true;
+                    return Result<Player>.Success(playerInDb);
                 }
                 catch (DbEntityValidationException dbEx)
                 {
-                    transaction.Rollback();  
-                    Console.WriteLine($"Error de validación de entidad: {dbEx.Message}");
-                    return false;
+                    transaction.Rollback();
+                    return Result<Player>.Failure($"Entity validation error: {dbEx.Message}");
                 }
                 catch (DbUpdateException dbEx)
                 {
-                    transaction.Rollback();  
-                    Console.WriteLine($"Error al actualizar la base de datos: {dbEx.Message}");
-                    return false;
+                    transaction.Rollback();
+                    return Result<Player>.Failure($"Database update error: {dbEx.Message}");
                 }
                 catch (SqlException sqlEx)
                 {
-                    transaction.Rollback();  
-                    Console.WriteLine($"Error en la base de datos SQL: {sqlEx.Message}");
-                    return false;
+                    transaction.Rollback();
+                    return Result<Player>.Failure($"Database error: {sqlEx.Message}");
                 }
                 catch (Exception ex)
                 {
-                    transaction.Rollback();  
-                    Console.WriteLine($"Error inesperado: {ex.Message}");
-                    return false;
+                    transaction.Rollback();
+                    return Result<Player>.Failure($"Unexpected error: {ex.Message}");
                 }
             }
         }
+
 
         public async Task<Result<Player>> GetPlayerByAccountIdAsync(int accountId)
         {
@@ -116,6 +129,46 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 return Result<Player>.Failure($"Unexpected error: {ex.Message}");
+            }
+        }
+
+        public async Task<Result<int>> GetLabelIdAsync(string labelPath)
+        {
+            try
+            {
+                var label = await _context.Value.Label
+                    .FirstOrDefaultAsync(l => l.Path == labelPath);
+
+                if (label == null)
+                {
+                    return Result<int>.Failure("Label path not found.");
+                }
+
+                return Result<int>.Success(label.IdLabel);
+            }
+            catch (Exception ex)
+            {
+                return Result<int>.Failure($"Unexpected error: {ex.Message}");
+            }
+        }
+
+        public async Task<Result<int>> GetPictureIdAsync(string picturePath)
+        {
+            try
+            {
+                var picture = await _context.Value.Pictures
+                    .FirstOrDefaultAsync(p => p.path == picturePath);
+
+                if (picture == null)
+                {
+                    return Result<int>.Failure("Picture path not found.");
+                }
+
+                return Result<int>.Success(picture.IdPicture);
+            }
+            catch (Exception ex)
+            {
+                return Result<int>.Failure($"Unexpected error: {ex.Message}");
             }
         }
 
