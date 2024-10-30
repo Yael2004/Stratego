@@ -105,5 +105,36 @@ namespace StrategoServices.Services
             callback.ReceiveUpdatePlayerProfile(response);
         }
 
+        public async Task GetPlayerFriendsListAsync(int playerId)
+        {
+            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IProfileServiceCallback>();
+            var response = new PlayerFriendsResponse();
+
+            try
+            {
+                var getFriendsResult = await _profilesManager.Value.GetFriendsListAsync(playerId);
+
+                if (!getFriendsResult.IsSuccess)
+                {
+                    response.Result = new OperationResult(false, getFriendsResult.Error);
+                }
+                else
+                {
+                    response.Result = new OperationResult(getFriendsResult.IsSuccess, getFriendsResult.Error);
+                    response.Friends = getFriendsResult.Value;
+                }
+            }
+            catch (TimeoutException)
+            {
+                response.Result = new OperationResult(false, "Server error");
+            }
+            catch (Exception ex)
+            {
+                response.Result = new OperationResult(false, $"Unexpected error: {ex.Message}");
+            }
+
+            callback.PlayerFriendsList(response);
+        }
+
     }
 }

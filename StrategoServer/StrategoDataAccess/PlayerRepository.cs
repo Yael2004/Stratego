@@ -44,9 +44,34 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<IEnumerable<Player>> GetAllPlayersAsync()
+        public async Task<Result<IEnumerable<Player>>> GetPlayerFriendsListAsync(int playerId)
         {
-            return await _context.Value.Player.ToListAsync();
+            try
+            {
+                var result = await _context.Value.Friend
+                    .Where(f => f.PlayerId == playerId && f.Status == "accepted")
+                    .Join(
+                        _context.Value.Player,
+                        friend => friend.FriendId,
+                        player => player.Id,
+                        (friend, player) => player
+                    )
+                    .ToListAsync();
+
+                if (result.Count == 0)
+                {
+                   return Result<IEnumerable<Player>>.Failure("No friends found for the given player ID");
+                }
+                return Result<IEnumerable<Player>>.Success(result);
+            } 
+            catch (SqlException sqlEx)
+            {
+                return Result<IEnumerable<Player>>.Failure($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Result<IEnumerable<Player>>.Failure($"Unexpected error: {ex.Message}");
+            }
         }
 
         public async Task<Result<Player>> UpdatePlayerAsync(Player updatedPlayer, string labelPath, string picturePath)
@@ -169,6 +194,46 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 return Result<int>.Failure($"Unexpected error: {ex.Message}");
+            }
+        }
+
+        public async Task<Result<string>> GetPicturePathByIdAsync(int pictureId)
+        {
+            try
+            {
+                var picture = await _context.Value.Pictures
+                    .FirstOrDefaultAsync(p => p.IdPicture == pictureId);
+
+                if (picture == null)
+                {
+                    return Result<string>.Failure("Picture not found.");
+                }
+
+                return Result<string>.Success(picture.path);
+            }
+            catch (Exception ex)
+            {
+                return Result<string>.Failure($"Unexpected error: {ex.Message}");
+            }
+        }
+
+        public async Task<Result<string>> GetLabelPathByIdAsync(int labelId)
+        {
+            try
+            {
+                var label = await _context.Value.Label
+                    .FirstOrDefaultAsync(l => l.IdLabel == labelId);
+
+                if (label == null)
+                {
+                    return Result<string>.Failure("Label not found.");
+                }
+
+                return Result<string>.Success(label.Path);
+            }
+            catch (Exception ex)
+            {
+                return Result<string>.Failure($"Unexpected error: {ex.Message}");
             }
         }
 

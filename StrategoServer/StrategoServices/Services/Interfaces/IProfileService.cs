@@ -22,6 +22,9 @@ namespace StrategoServices.Services.Interfaces
 
         [OperationContract]
         Task GetPlayerStatisticsAsync(int playerId);
+
+        [OperationContract]
+        Task GetPlayerFriendsListAsync(int playerId);
     }
 
 }

@@ -89,6 +89,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\DTO\PlayerFriendsResponse.cs" />
     <Compile Include="Data\DTO\PlayerInfoResponse.cs" />
     <Compile Include="Data\DTO\PlayerInfoShownDTO.cs" />
     <Compile Include="Data\DTO\PlayerStatisticsDTO.cs" />

@@ -84,5 +84,64 @@ namespace StrategoServices.Logic
             };
         }
 
+        public async Task<Result<List<PlayerInfoShownDTO>>> GetFriendsListAsync(int playerId)
+        {
+            var friendsResult = await GetFriendsFromRepositoryAsync(playerId);
+
+            if (!friendsResult.IsSuccess)
+            {
+                return Result<List<PlayerInfoShownDTO>>.Failure(friendsResult.Error);
+            }
+
+            var friendsDtoList = new List<PlayerInfoShownDTO>();
+            foreach (var friend in friendsResult.Value)
+            {
+                var friendDtoResult = await MapPlayerToPlayerInfoShownDTOAsync(friend);
+                if (!friendDtoResult.IsSuccess)
+                {
+                    return Result<List<PlayerInfoShownDTO>>.Failure(friendDtoResult.Error);
+                }
+                friendsDtoList.Add(friendDtoResult.Value);
+            }
+
+            return Result<List<PlayerInfoShownDTO>>.Success(friendsDtoList);
+        }
+
+        private async Task<Result<IEnumerable<Player>>> GetFriendsFromRepositoryAsync(int playerId)
+        {
+            return await _playerRepository.Value.GetPlayerFriendsListAsync(playerId);
+        }
+
+        private async Task<Result<PlayerInfoShownDTO>> MapPlayerToPlayerInfoShownDTOAsync(Player player)
+        {
+            try
+            {
+                var picturePathResult = await _playerRepository.Value.GetPicturePathByIdAsync(player.PictureId ?? 1);
+                if (!picturePathResult.IsSuccess)
+                {
+                    return Result<PlayerInfoShownDTO>.Failure("Failed to retrieve picture path.");
+                }
+
+                var labelPathResult = await _playerRepository.Value.GetLabelPathByIdAsync(player.IdLabel);
+                if (!labelPathResult.IsSuccess)
+                {
+                    return Result<PlayerInfoShownDTO>.Failure("Failed to retrieve label path.");
+                }
+
+                var playerInfoDto = new PlayerInfoShownDTO
+                {
+                    Name = player.Name,
+                    PicturePath = picturePathResult.Value,
+                    LabelPath = labelPathResult.Value
+                };
+
+                return Result<PlayerInfoShownDTO>.Success(playerInfoDto);
+            }
+            catch (Exception ex)
+            {
+                return Result<PlayerInfoShownDTO>.Failure($"Unexpected error: {ex.Message}");
+            }
+        }
+
     }
 }
