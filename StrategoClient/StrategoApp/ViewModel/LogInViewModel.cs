@@ -21,6 +21,7 @@ namespace StrategoApp.ViewModel
         private string _password;
         private string _errorMessage;
         private bool _isPasswordVisible;
+        private bool _isDatabaseError;
         private string _togglePasswordVisibilityIcon;
 
         public string LogInErrorMessage { get; set; }
@@ -77,6 +78,16 @@ namespace StrategoApp.ViewModel
             {
                 _errorMessage = value;
                 OnPropertyChanged(nameof(ErrorMessage));
+            }
+        }
+
+        public bool IsDatabaseError
+        {
+            get { return _isDatabaseError; }
+            set
+            {
+                _isDatabaseError = value;
+                OnPropertyChanged();
             }
         }
 
@@ -138,6 +149,20 @@ namespace StrategoApp.ViewModel
                 MessageBox.Show(ex.Message);
             }
         }
+
+        //public async Task ExecuteSignUpCommand()
+        //{
+        //    try
+        //    {
+        //        await _signUpServiceClient.SignUpAsync(Email, Password, Username);
+        //        IsDatabaseError = false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.Error(ex.Message);
+        //        IsDatabaseError = true;
+        //    }
+        //}
 
         private void ExcuteLogInAsInvitedCommand(object obj)
         {

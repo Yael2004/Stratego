@@ -448,6 +448,15 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Logout.
+        /// </summary>
+        public static string Logout_Button {
+            get {
+                return ResourceManager.GetString("Logout_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a The player has been reported, thanks for your contribution.
         /// </summary>
         public static string MessageReport_Label {
@@ -705,6 +714,15 @@ namespace StrategoApp.Properties {
         public static string SearchPlayer_Title {
             get {
                 return ResourceManager.GetString("SearchPlayer_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Select Profile Picture.
+        /// </summary>
+        public static string SelectProfilePicture_Title {
+            get {
+                return ResourceManager.GetString("SelectProfilePicture_Title", resourceCulture);
             }
         }
         

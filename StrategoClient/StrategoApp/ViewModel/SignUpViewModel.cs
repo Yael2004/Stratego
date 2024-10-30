@@ -196,6 +196,7 @@ namespace StrategoApp.ViewModel
                 return false;
             }
 
+            UsernameError = string.Empty;
             return true;
         }
 
@@ -207,6 +208,7 @@ namespace StrategoApp.ViewModel
                 return false;
             }
 
+            EmailError = string.Empty;
             return true;
         }
 
@@ -218,6 +220,7 @@ namespace StrategoApp.ViewModel
                 return false;
             }
 
+            PasswordError = string.Empty;
             return true;
         }
 

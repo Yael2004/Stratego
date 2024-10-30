@@ -131,7 +131,7 @@
                             Content="{x:Static res:Resources.DatabaseConnectionErrorMessage_Label}"
                             Template="{StaticResource ModalTemplate}"
                             Tag="{x:Static res:Resources.Accept_Button}"
-                            Visibility="Hidden"/>
+                            Visibility="Hidden" Canvas.Left="200" Canvas.Top="120"/>
             </Canvas>
         </Grid>
     </Viewbox>

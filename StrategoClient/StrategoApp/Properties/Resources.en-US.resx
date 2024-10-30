@@ -382,4 +382,10 @@
   <data name="Chat_Label" xml:space="preserve">
     <value>Chat</value>
   </data>
+  <data name="SelectProfilePicture_Title" xml:space="preserve">
+    <value>Select Profile Picture</value>
+  </data>
+  <data name="Logout_Button" xml:space="preserve">
+    <value>Logout</value>
+  </data>
 </root>

@@ -67,6 +67,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Connected Services\ProfileService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\Service\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -81,6 +86,7 @@
     <Compile Include="ViewModel\LogInViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\PlayerProfileViewModel.cs" />
+    <Compile Include="ViewModel\RoomViewModel.cs" />
     <Compile Include="ViewModel\SignUpViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\ViewModelCommand.cs" />
@@ -92,6 +98,9 @@
     </Compile>
     <Compile Include="View\PlayerProfile.xaml.cs">
       <DependentUpon>PlayerProfile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Room.xaml.cs">
+      <DependentUpon>Room.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ScoreTable.xaml.cs">
       <DependentUpon>ScoreTable.xaml</DependentUpon>
@@ -124,6 +133,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\PlayerProfile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Room.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -176,6 +189,28 @@
     </None>
     <None Include="Connected Services\LogInService\LogInService3.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ProfileService\ProfileService.wsdl" />
+    <None Include="Connected Services\ProfileService\ProfileService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ProfileService\ProfileService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ProfileService\ProfileService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ProfileService\ProfileService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ProfileService\StrategoApp.ProfileService.OperationResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\ProfileService\StrategoApp.ProfileService.PlayerInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\ProfileService\StrategoApp.ProfileService.PlayerStatisticsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\Service\ChatService.wsdl" />
     <None Include="Connected Services\Service\ChatService.xsd">
@@ -234,6 +269,7 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\LogInService\" />
+    <WCFMetadataStorage Include="Connected Services\ProfileService\" />
     <WCFMetadataStorage Include="Connected Services\Service\" />
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +301,36 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ProfileService\ProfileService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ProfileService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ProfileService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ProfileService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Icons\ArrowBack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Icons\ArrowBackOnOProfileSection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\LobbyBackground2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\RoomBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\RoomBackground2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

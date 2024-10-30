@@ -9,183 +9,214 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+
     <Viewbox Stretch="Fill">
-        <Grid Background="{StaticResource LobbyBackground}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="2*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <Grid>
+            <Grid Background="{StaticResource LobbyBackground}" />
+            <Rectangle Fill="#80000000" />
+            <Rectangle Fill="#80000000" Visibility="{Binding IsJoinRoomDialogVisible, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="1" IsHitTestVisible="True"/>
 
-            <StackPanel Grid.Column="0" Grid.Row="0" 
-                        Orientation="Horizontal" 
-                        VerticalAlignment="Top" 
-                        Margin="10">
+            <Grid IsEnabled="{Binding IsJoinRoomDialogVisible, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=False}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                <Button Command="{Binding ShowProfileCommand}" 
-                        Background="Transparent" 
-                        BorderThickness="0">
+                <StackPanel Grid.Column="0" Grid.Row="0" 
+                            Orientation="Horizontal" 
+                            VerticalAlignment="Top" 
+                            Margin="10">
+                    
+                    <Button Command="{Binding ShowProfileCommand}" 
+                            Background="Transparent" 
+                            BorderThickness="0">
 
-                    <Grid Width="60" Height="60" Margin="10">
-                        <Image Source="{Binding ProfilePicture}" 
-                               Stretch="UniformToFill"
-                               Width="50" Height="50" 
-                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Grid Width="60" Height="60" Margin="10">
+                            <Image Source="{Binding ProfilePicture}" 
+                                   Stretch="UniformToFill" 
+                                   Width="50" Height="50" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-                        <Image Source="pack://application:,,,/Assets/Images/ProfilePicturesFrame2.png" 
-                               Stretch="Fill" Margin="-13,-20,-12,-14"/>
-                    </Grid>
-                </Button>
+                            <Image Source="pack://application:,,,/Assets/Images/ProfilePicturesFrame2.png" 
+                                   Stretch="Fill" 
+                                   Margin="-13,-20,-12,-14"/>
+                        </Grid>
+                    </Button>
+                    
+                    <StackPanel Orientation="Vertical" 
+                                VerticalAlignment="Center">
+                        
+                        <TextBlock Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
+                                   FontSize="20" 
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource IntenseRed}"/>
 
-
-
-
-                <StackPanel Orientation="Vertical" 
-                            VerticalAlignment="Center">
-
-                    <TextBlock Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
-                               FontSize="20" 
-                               FontWeight="Bold" 
-                               Foreground="{StaticResource IntenseRed}"/>
-
-                    <TextBlock Text="{Binding UserId, UpdateSourceTrigger=PropertyChanged}" 
-                               FontSize="14" 
-                               FontWeight="Bold" 
-                               Foreground="{StaticResource IntenseRed}"/>
+                        <TextBlock Text="{Binding UserId, UpdateSourceTrigger=PropertyChanged}" 
+                                   FontSize="14" 
+                                   FontWeight="Bold" 
+                                   Foreground="{StaticResource IntenseRed}"/>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
 
-            <Border Grid.Column="0" Grid.Row="1" 
-                    Margin="10,10,174,10">
-                <StackPanel Margin="0,0,-1,0">
-                    <TextBlock Text="{x:Static res:Resources.Chat_Label}"
-                               Margin="10" 
-                               FontSize="16"
-                               FontWeight="Bold"
-                               Foreground="{StaticResource IntenseRed}"
-                               Background="{StaticResource SemiTransparent}"/>
-
-                    <ListBox ItemsSource="{Binding Messages}" 
-                             Height="250" Width="300" 
-                             Background="#80000000" Foreground="White">
-
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-
-                </StackPanel>
-            </Border>
-
-            <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="1" Margin="10" Padding="10">
-                <StackPanel>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="250">
-                        <ScrollViewer.Style>
-                            <Style TargetType="ScrollViewer">
-                                <Style.Resources>
-                                    <Style TargetType="ScrollBar" BasedOn="{StaticResource ScrollBarStyle}"/>
-                                </Style.Resources>
-                            </Style>
-                        </ScrollViewer.Style>
-                        <ItemsControl>
-                            <ItemsControl.ItemTemplate>
+                <Border Grid.Column="0" Grid.Row="1" Margin="10,10,174,10">
+                    <StackPanel Margin="0,0,-1,0">
+                        <TextBlock Text="{x:Static res:Resources.Chat_Label}" 
+                                   Margin="10" 
+                                   FontSize="16" 
+                                   FontWeight="Bold" 
+                                   Foreground="{StaticResource IntenseRed}" 
+                                   Background="{StaticResource SemiTransparent}" Width="298"/>
+                        
+                        <ListBox ItemsSource="{Binding Messages}" 
+                                 Height="250" Width="300" 
+                                 Background="#80000000" 
+                                 Foreground="White">
+                            
+                            <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" Margin="10">
-                                        <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" Width="100" Foreground="Red"/>
-                                        <TextBlock Text="{Binding Status}" Foreground="Gray" />
-                                    </StackPanel>
+                                    <TextBlock Text="{Binding}" />
                                 </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Border>
 
-                    <Button Content="{x:Static res:Resources.Friends_Button}" 
-                        Style="{StaticResource ButtonStyle}"
-                        Width="120" 
-                        HorizontalAlignment="Center" 
-                        Margin="10"/>
-                </StackPanel>
-            </Border>
-
-            <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" 
-                Margin="10">
-
-                <TextBox Width="200" 
-                        Text="{Binding MessageToSend, UpdateSourceTrigger=PropertyChanged}"
-                        Background="#80000000"
-                        BorderBrush="Black" BorderThickness="1"
-                        Foreground="{StaticResource IntenseRed}"
-                        Margin="10, 0, 0, 0"/>
-
-                <Button Content="{x:Static res:Resources.Send_Button}"
-                        Style="{StaticResource ButtonStyle}"
-                        Width="80" 
-                        Margin="5,0,0,0"
-                        Command="{Binding SendMessageCommand}"/>
-            </StackPanel>
-
-            <Button Grid.Column="1" Grid.Row="2"
-                Style="{StaticResource ButtonStyle}"
-                Content="{x:Static res:Resources.Join_Button}" 
-                Width="150" 
-                HorizontalAlignment="Center" 
-                Margin="10"/>
-
-            <Grid x:Name="JoinRoomDialog" Visibility="Hidden" Background="#CC000000" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="211,23,0,0" Grid.Row="1">
-                <Border Background="{StaticResource SemiTransparent}" Padding="34" BorderThickness="2" BorderBrush="Black">
+                <Border Grid.Column="1" Grid.Row="1" 
+                        BorderBrush="Black" 
+                        BorderThickness="1" 
+                        Margin="10" 
+                        Padding="10">
+                    
                     <StackPanel>
-                        <TextBlock Text="{x:Static res:Resources.LobbyCode_Title}"
-                                   FontFamily="{StaticResource AugustaFont}"
-                                   Foreground="{StaticResource IntenseRed}"
-                                   FontSize="18" FontWeight="Bold" 
-                                   HorizontalAlignment="Center"/>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="250">
+                            <ItemsControl>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Margin="10">
+                                            <TextBlock Text="{Binding Name}" 
+                                                       FontSize="16" 
+                                                       FontWeight="Bold" 
+                                                       Width="100" 
+                                                       Foreground="Red"/>
+                                            
+                                            <TextBlock Text="{Binding Status}" 
+                                                       Foreground="Gray" />
+                                            
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                        
+                        <Button Content="{x:Static res:Resources.Friends_Button}" 
+                                Style="{StaticResource ButtonStyle}" 
+                                Width="120" 
+                                HorizontalAlignment="Center" 
+                                Margin="10"/>
+                    </StackPanel>
+                </Border>
 
-                        <TextBlock Text="{x:Static res:Resources.Code_Label}"
-                                   FontFamily="{StaticResource AugustaFont}"
-                                   Foreground="{StaticResource DarkRed}"
-                                   TextAlignment="Center"
+                <StackPanel Grid.Column="0" Grid.Row="2" 
+                            Orientation="Horizontal" 
+                            Margin="10">
+                    
+                    <TextBox Width="200" 
+                             Text="{Binding MessageToSend, UpdateSourceTrigger=PropertyChanged}" 
+                             Background="#80000000" 
+                             BorderBrush="Black" 
+                             BorderThickness="1" 
+                             Foreground="{StaticResource IntenseRed}" 
+                             Margin="10, 0, 0, 0"/>
+                    
+                    <Button Content="{x:Static res:Resources.Send_Button}" 
+                            Style="{StaticResource ButtonStyle}" 
+                            Width="80" 
+                            Margin="5,0,0,0" 
+                            Command="{Binding SendMessageCommand}"/>
+                    
+                </StackPanel>
+
+                <Button Grid.Column="1" Grid.Row="2" 
+                        Style="{StaticResource ButtonStyle}" 
+                        Content="{x:Static res:Resources.Join_Button}" 
+                        Width="150" 
+                        HorizontalAlignment="Center" 
+                        Margin="10" 
+                        Command="{Binding JoinToRoomCommand}"/>
+            </Grid>
+            
+            <Grid x:Name="JoinRoomDialog" 
+                  Visibility="{Binding IsJoinRoomDialogVisible, Converter={StaticResource BoolToVisibilityConverter}}" 
+                  Background="#CC000000" 
+                  HorizontalAlignment="Center" 
+                  VerticalAlignment="Center" 
+                  Panel.ZIndex="2" 
+                  Width="400" Height="300">
+                
+                <Border Background="{StaticResource SemiTransparent}" 
+                        Padding="34" 
+                        BorderThickness="2" 
+                        BorderBrush="Black">
+                    
+                    <StackPanel>
+                        <TextBlock Text="{x:Static res:Resources.LobbyCode_Title}" 
+                                   FontFamily="{StaticResource AugustaFont}" 
+                                   Foreground="{StaticResource IntenseRed}" 
+                                   FontSize="18" 
+                                   FontWeight="Bold" 
+                                   HorizontalAlignment="Center"/>
+                        
+                        <TextBlock Text="{x:Static res:Resources.Code_Label}" 
+                                   FontFamily="{StaticResource AugustaFont}" 
+                                   Foreground="{StaticResource DarkRed}" 
+                                   TextAlignment="Center" 
                                    FontSize="16" 
                                    Margin="0,10,0,0"/>
 
-                        <TextBox Text="12345"
-                                 Style="{StaticResource InputBoxStyle}"
-                                 BorderBrush="{StaticResource DarkRed}" BorderThickness="1"
+                        <TextBox Text="{Binding JoinRoomCode, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource InputBoxStyle}" 
+                                 BorderBrush="{StaticResource DarkRed}" 
+                                 BorderThickness="1" 
                                  HorizontalAlignment="Center" 
                                  Width="200" 
                                  Margin="0,10,0,0"/>
-
+                        
                         <Label Content="{Binding ValidationMessage}"/>
 
                         <StackPanel Orientation="Horizontal" 
                                     HorizontalAlignment="Center" 
                                     Margin="0,10,0,0">
-
+                            
                             <Button Content="{x:Static res:Resources.Join_Button}" 
-                                    Style="{StaticResource ButtonStyle}"
+                                    Style="{StaticResource ButtonStyle}" 
                                     Width="100" 
                                     Margin="5"/>
-
-                            <Button Content="{x:Static res:Resources.Cancel_Button}"
-                                    Style="{StaticResource ButtonStyle}"
+                            
+                            <Button Content="{x:Static res:Resources.Cancel_Button}" 
+                                    Style="{StaticResource ButtonStyle}" 
                                     Width="100" 
-                                    Margin="5"/>
+                                    Margin="5"
+                                    Command="{Binding CancelJoinToRoomCommand}"/>
                         </StackPanel>
 
-                        <Button Content="{x:Static res:Resources.CreateLobby_Button}"
-                                Style="{StaticResource ButtonStyle}"
+                        <Button Content="{x:Static res:Resources.CreateLobby_Button}" 
+                                Style="{StaticResource ButtonStyle}" 
                                 HorizontalAlignment="Center" 
                                 Width="150" 
-                                Margin="0,10,0,0"/>
+                                Margin="0,10,0,0"
+                                Command="{Binding CreateRoomCommand}"/>
+                        
                     </StackPanel>
                 </Border>
             </Grid>
-
         </Grid>
     </Viewbox>
 </UserControl>

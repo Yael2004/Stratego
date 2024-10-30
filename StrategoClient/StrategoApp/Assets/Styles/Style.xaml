@@ -5,7 +5,7 @@
     <SolidColorBrush x:Key="GrayFontColor" Color="#A7A1A1"/>
     <SolidColorBrush x:Key="DarkRed" Color="#650000"/>
     <SolidColorBrush x:Key="SemiTransparent" Color="#80000000"/>
-    <SolidColorBrush x:Key="DarkViolet" Color="#8A2BE2"/>
+    <SolidColorBrush x:Key="DarkViolet" Color="#4A117D"/>
     <SolidColorBrush x:Key="Beige" Color="#FEFDC9"/>
 
     <FontFamily x:Key="AugustaFont">pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta</FontFamily>
@@ -20,12 +20,16 @@
                 Stretch="UniformToFill"/>
 
     <ImageBrush x:Key="LobbyBackground"
-                ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/LobbyBackground.png"
+                ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/LobbyBackground2.png"
                 Stretch="UniformToFill"/>
 
     <ImageBrush x:Key="ProfileSectionBackground"
                 ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/ProfileSectionBackground.png"
                 Stretch="UniformToFill"/>
+
+    <ImageBrush x:Key="RoomBackground" 
+            ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/RoomBackground2.png" 
+            Stretch="UniformToFill"/>
 
     <Style x:Key="InputBoxStyle" TargetType="Control">
         <Setter Property="FontSize" Value="25"/>
@@ -50,6 +54,44 @@
                 <Setter Property="Background" Value="Black"/>
                 <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
                 <Setter Property="BorderBrush" Value="{StaticResource DarkRed}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ButtonGoldenStyle" TargetType="Button">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Background" Value="Black"/>
+        <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Beige}"/>
+        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="Black"/>
+                <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource Beige}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ButtonVioletStyle" TargetType="Button">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Background" Value="Black"/>
+        <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource DarkViolet}"/>
+        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="Black"/>
+                <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource DarkViolet}"/>
             </Trigger>
         </Style.Triggers>
     </Style>

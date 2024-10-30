@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:2022/ProfileService?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" />
+  <xs:import schemaLocation="http://localhost:2022/ProfileService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
+  <xs:element name="GetPlayerInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPlayerInfoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="GetPlayerInfoResult" nillable="true" type="q1:PlayerInfoResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdatePlayerProfile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="profile" nillable="true" type="q2:PlayerInfoShownDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdatePlayerProfileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="UpdatePlayerProfileResult" nillable="true" type="q3:OperationResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPlayerStatistics">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPlayerStatisticsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="GetPlayerStatisticsResult" nillable="true" type="q4:PlayerStatisticsResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

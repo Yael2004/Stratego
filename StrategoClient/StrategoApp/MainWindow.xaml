@@ -25,7 +25,11 @@
         <DataTemplate DataType="{x:Type viewModel:PlayerProfileViewModel}">
             <view:PlayerProfile/>
         </DataTemplate>
-        
+
+        <DataTemplate DataType="{x:Type viewModel:RoomViewModel}">
+            <view:Room/>
+        </DataTemplate>
+
     </Window.Resources>
 
     <Window.DataContext>
