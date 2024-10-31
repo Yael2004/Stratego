@@ -168,7 +168,7 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                _mainWindowViewModel.ChangeViewModel(LobbyViewModel.Instance(_mainWindowViewModel));
+                _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
             }
             catch (Exception ex)
             {
@@ -182,7 +182,7 @@ namespace StrategoApp.ViewModel
             {
                 if (result.IsSuccess)
                 {
-                    _mainWindowViewModel.ChangeViewModel(LobbyViewModel.Instance(_mainWindowViewModel));
+                    _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
                 }
                 else
                 {

@@ -5,18 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StrategoApp.View"
              xmlns:res="clr-namespace:StrategoApp.Properties"
-             xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewModel:PlayerProfileViewModel}"
+             xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" xmlns:helpers="clr-namespace:StrategoApp.Helpers" d:DataContext="{d:DesignInstance Type=viewModel:PlayerProfileViewModel}"
     mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <helpers:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <helpers:ImageSelectionConverter x:Key="ImageSelectionConverter"/>
     </UserControl.Resources>
 
     <Viewbox Stretch="Fill">
         <Grid Height="440" Width="800" 
               Background="{StaticResource ProfileSectionBackground}">
-                <Rectangle Fill="#80000000"/>
+            <Rectangle Fill="#80000000"/>
 
             <Label Content="{x:Static res:Resources.GamesLost_Label}"
                    Style="{StaticResource PlayerSectionLabelStyle}"
@@ -39,7 +41,7 @@
                    Foreground="{StaticResource Beige}" 
                    Margin="562,327,0,64"
                    Style="{StaticResource PlayerSectionLabelStyle}"/>
-            
+
             <Label Content="{Binding GamesLostNumber}"
                    FontWeight="Bold"
                    HorizontalContentAlignment="Center"
@@ -48,7 +50,7 @@
                    Foreground="{StaticResource Beige}" 
                    Margin="0,367,552,24"
                    Style="{StaticResource PlayerSectionLabelStyle}"/>
-            
+
             <Label Content="{Binding GamesPlayedNumber}"
                    FontWeight="Bold"
                    HorizontalContentAlignment="Center"
@@ -57,7 +59,7 @@
                    Foreground="{StaticResource Beige}" 
                    Margin="256,367,256,24"
                    Style="{StaticResource PlayerSectionLabelStyle}"/>
-            
+
             <Label Content="{Binding GamesWonNumber}"
                    FontWeight="Bold"
                    HorizontalContentAlignment="Center"
@@ -66,7 +68,7 @@
                    Foreground="{StaticResource Beige}" 
                    Margin="562,367,0,24"
                    Style="{StaticResource PlayerSectionLabelStyle}"/>
-            
+
             <Label Content="{Binding Username}"
                    FontWeight="Bold"
                    HorizontalContentAlignment="Right"
@@ -75,7 +77,7 @@
                    Foreground="{StaticResource Beige}" 
                    Margin="10,210,432,180"
                    Style="{StaticResource PlayerSectionLabelStyle}"/>
-            
+
             <Label Content="id:"
                    FontWeight="Bold"
                    HorizontalContentAlignment="Left"
@@ -84,7 +86,7 @@
                    Foreground="{StaticResource Beige}" 
                    Margin="432,210,325,180"
                    Style="{StaticResource PlayerSectionLabelStyle}"/>
-            
+
             <Label Content="{Binding PlayerId}"
                    FontWeight="Bold"
                    HorizontalContentAlignment="Left"
@@ -93,7 +95,7 @@
                    Foreground="{StaticResource Beige}" 
                    Margin="465,210,67,180"
                    Style="{StaticResource PlayerSectionLabelStyle}"/>
-            
+
             <ComboBox Text="{Binding PlayerLabel}"
                        Background="{StaticResource Beige}"
                        FontSize="30" 
@@ -110,6 +112,19 @@
                         <ImageBrush ImageSource="{Binding ProfilePicture}" Stretch="UniformToFill"/>
                     </Ellipse.Fill>
                 </Ellipse>
+            </Button>
+
+            <Button Margin="377,224,400,195"
+                    BorderBrush="Transparent"
+                    Background="Transparent"
+                    Command="{Binding ToggleEditUsernameVisibilityCommand}">
+                <Image>
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Setter Property="Source" Value="/StrategoApp;component/Assets/Images/Icons/Edit_Icon.png"/>
+                        </Style>
+                    </Image.Style>
+                </Image>
             </Button>
 
             <Button Content="{x:Static res:Resources.Remove_Button}"
@@ -139,12 +154,11 @@
 
             </Button>
 
-            <Grid
-                Visibility="{Binding IsProfileSelectorVisible, Converter={StaticResource BoolToVisibilityConverter}}" 
-                Background="#CC000000" 
-                HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid Visibility="{Binding IsProfileSelectorVisible, Converter={StaticResource BoolToVisibilityConverter}}" 
+                  Background="#CC000000" 
+                  HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                <Border Background="White" 
+                <Border Background="Black" 
                         Padding="20" 
                         BorderThickness="2" 
                         BorderBrush="Gray" 
@@ -159,7 +173,7 @@
 
                         <TextBlock Grid.Row="0"
                                    Text="{x:Static res:Resources.SelectProfilePicture_Title}" 
-                                   Foreground="{StaticResource DarkRed}"
+                                   Foreground="{StaticResource Beige}"
                                    FontFamily="{StaticResource AugustaFont}"
                                    FontSize="18" FontWeight="Bold" 
                                    HorizontalAlignment="Center" 
@@ -176,6 +190,25 @@
                                 <DataTemplate>
                                     <Button Command="{Binding DataContext.SelectProfilePictureCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                                <Setter Property="BorderThickness" Value="2"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Value="True">
+                                                        <DataTrigger.Binding>
+                                                            <MultiBinding Converter="{StaticResource ImageSelectionConverter}">
+                                                                <Binding Path="."/>
+                                                                <Binding Path="DataContext.SelectedProfilePicture" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                                                            </MultiBinding>
+                                                        </DataTrigger.Binding>
+                                                        <Setter Property="BorderBrush" Value="{StaticResource Beige}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+
                                         <Ellipse Width="60" Height="60" Margin="10">
                                             <Ellipse.Fill>
                                                 <ImageBrush ImageSource="{Binding}" />
@@ -185,26 +218,89 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        
-                        
+
+
                         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-                            <Button Command="{Binding ConfirmProfileSelectionCommand}" 
-                                    Style="{StaticResource ButtonStyle}"
+                            <Button Command="{Binding SaveProfilePictureSelectionCommand}" 
+                                    Style="{StaticResource ButtonGoldenStyle}"
                                     Margin="5">
                                 <TextBlock Text="{x:Static res:Resources.Save_Button}" 
-                                            FontFamily="{StaticResource AugustaFont}"
-                                            FontSize="18" FontWeight="Bold"/>
+                                           FontFamily="{StaticResource AugustaFont}"
+                                           FontSize="18" FontWeight="Bold"/>
                             </Button>
 
                             <Button Command="{Binding CancelProfileSelectionCommand}" 
-                                    Style="{StaticResource ButtonStyle}"
+                                    Style="{StaticResource ButtonGoldenStyle}"
                                     Margin="5">
+                                
                                 <TextBlock Text="{x:Static res:Resources.Cancel_Button}" 
-                                            FontFamily="{StaticResource AugustaFont}"
-                                            FontSize="18" FontWeight="Bold"/>
+                                           FontFamily="{StaticResource AugustaFont}"
+                                           FontSize="18" FontWeight="Bold"/>
                             </Button>
                         </StackPanel>
                     </Grid>
+                </Border>
+            </Grid>
+
+            <Grid Visibility="{Binding IsEditUsernameVisible, Converter={StaticResource BoolToVisibilityConverter}}" 
+                  Background="#CC000000" 
+                  HorizontalAlignment="Center" 
+                  VerticalAlignment="Center" 
+                  Panel.ZIndex="2" 
+                  Width="400" Height="200">
+
+                <Border Background="{StaticResource SemiTransparent}" 
+                        Padding="34" 
+                        BorderThickness="2" 
+                        BorderBrush="Black">
+
+                    <StackPanel Margin="0,-26,0,-26">
+                        <TextBlock Text="{x:Static res:Resources.NameChange_Label}" 
+                                   FontFamily="{StaticResource AugustaFont}" 
+                                   Foreground="{StaticResource Beige}" 
+                                   FontSize="18" 
+                                   FontWeight="Bold" 
+                                   HorizontalAlignment="Center"/>
+
+                        <TextBox Text="{Binding UsernameEdited, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource InputBoxGoldenStyle}" 
+                                 BorderBrush="{StaticResource Beige}" 
+                                 BorderThickness="1" 
+                                 HorizontalAlignment="Center" 
+                                 Width="200" 
+                                 Margin="0,30,0,5"/>
+
+                        <Border Height="28" Width="292" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding UsernameError}"
+                                       FontFamily="{StaticResource AugustaFont}"
+                                       Foreground="Beige" 
+                                       FontSize="12" 
+                                       Visibility="{Binding UsernameError, Converter={StaticResource StringToVisibilityConverter}}"
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       MaxWidth="250"
+                                       Margin="0,0,0,0"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+
+
+                        <StackPanel Orientation="Horizontal" 
+                                    HorizontalAlignment="Center" 
+                                    Margin="0,20,0,0">
+
+                            <Button Content="{x:Static res:Resources.Accept_Button}" 
+                                    Style="{StaticResource ButtonGoldenStyle}" 
+                                    Width="100" 
+                                    Margin="5"
+                                    Command="{Binding AcceptEditUsernameCommand}"/>
+
+                            <Button Content="{x:Static res:Resources.Cancel_Button}" 
+                                Style="{StaticResource ButtonGoldenStyle}" 
+                                Width="100" 
+                                Margin="5"
+                                Command="{Binding CancelEditUsernameCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
                 </Border>
             </Grid>
         </Grid>

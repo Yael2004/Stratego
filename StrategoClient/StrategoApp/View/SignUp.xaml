@@ -54,12 +54,14 @@
                        FontWeight="Bold"
                        Foreground="{StaticResource IntenseRed}"
                        FontFamily="{StaticResource AugustaFont}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                
                 <TextBox Name="MailTextBox"
                          Style="{StaticResource InputBoxStyle}" 
                          Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
                          Canvas.Left="260" Canvas.Top="220" 
                          Width="280" Height="33" 
                          HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                
                 <Label Content="{Binding EmailError}" 
                        FontFamily="{StaticResource AugustaFont}"
                        Foreground="Red" 

@@ -15,14 +15,13 @@ namespace StrategoApp.ViewModel
         {
             ExecuteBackToLobbyCommand = new ViewModelCommand(ExecuteBackToLobby);
             _mainWindowViewModel = mainWindowViewModel;
-
         }
 
         private void ExecuteBackToLobby(Object obj)
         {
             try
             {
-                _mainWindowViewModel.ChangeViewModel(LobbyViewModel.Instance(_mainWindowViewModel));
+                _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
             }
             catch (Exception e)
             {

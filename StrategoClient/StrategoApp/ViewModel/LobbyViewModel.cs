@@ -46,16 +46,7 @@ namespace StrategoApp.ViewModel
         public ICommand CancelJoinToRoomCommand { get; }
         public ICommand CreateRoomCommand { get; }
 
-        public static LobbyViewModel Instance(MainWindowViewModel mainWindowViewModel)
-        {
-            if (_instance == null)
-            {
-                _instance = new LobbyViewModel(mainWindowViewModel);
-            }
-            return _instance;
-        }
-
-        private LobbyViewModel(MainWindowViewModel mainWindowViewModel)
+        public LobbyViewModel(MainWindowViewModel mainWindowViewModel)
         {
             AssignValuesToUser();
 
@@ -232,12 +223,6 @@ namespace StrategoApp.ViewModel
                 _username = player.Name;
                 _userId = player.Id;
                 _profilePicture = player.PicturePath;
-            }
-            else
-            {
-                _userId = 0;
-                _username = "Invited";
-                _profilePicture = "pack://application:,,,/Assets/Images/ProfilePictures/Picture1.png";
             }
         }
 

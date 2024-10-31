@@ -173,7 +173,7 @@ namespace StrategoApp.ViewModel
             }
             else
             {
-                Console.WriteLine($"Error al crear la cuenta: {result.Message}");
+                MessageBox.Show(result.Message);
             }
         }
 

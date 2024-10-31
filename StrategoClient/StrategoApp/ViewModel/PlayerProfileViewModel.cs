@@ -8,17 +8,30 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Collections.ObjectModel;
+using System.ServiceModel;
+using System.Configuration;
+using StrategoApp.Helpers;
+using StrategoApp.LogInService;
+using System.Windows;
+using System.Web.UI.WebControls;
 
 namespace StrategoApp.ViewModel
 {
-    public class PlayerProfileViewModel : ViewModelBase
+    public class PlayerProfileViewModel : ViewModelBase, ProfileService.IProfileServiceCallback
     {
         private string _username;
+        private string _usernameEdited;
         private int _playerId;
         private string _profilePicture;
+        private int _gamesWon;
+        private int _gamesLost;
+        private int _gamesPlayed;
         private string _selectedProfilePicture;
 
+        private string _usernameError;
+
         private bool _isProileSelectorVisible;
+        private bool _isEditUsernameVisible;
         public ObservableCollection<string> ProfilePictures { get; set; }
 
         private readonly MainWindowViewModel _mainWindowViewModel;
@@ -32,24 +45,17 @@ namespace StrategoApp.ViewModel
         public ICommand BackToLobbyCommand { get; }
         public ICommand SelectProfilePictureCommand { get; }
         public ICommand ToggleProfileSelectorVisibilityCommand { get; }
+        public ICommand ToggleEditUsernameVisibilityCommand { get; }
         public ICommand CancelProfileSelectionCommand { get; }
+        public ICommand CancelEditUsernameCommand { get; }
+        public ICommand AcceptEditUsernameCommand { get; }
+        public ICommand SaveProfilePictureSelectionCommand { get; }
         public ICommand LogoutCommand { get; }
 
         public PlayerProfileViewModel(MainWindowViewModel mainWindowViewModel)
         {
-            if (PlayerSingleton.Instance.IsLoggedIn())
-            {
-                var player = PlayerSingleton.Instance.Player;
-                Username = player.Name;
-                PlayerId = player.Id;
-                ProfilePicture = player.PicturePath;
-            }
-            else
-            {
-                Username = "Invited";
-                PlayerId = 0;
-                ProfilePicture = "pack://application:,,,/Assets/Images/ProfilePictures/Picture1.png";
-            }
+            PlayerInfoResponse playerInfoResponse = new PlayerInfoResponse();
+            PlayerStatisticsResponse playerStatisticsResponse = new PlayerStatisticsResponse();
 
             ProfilePictures = new ObservableCollection<string>
             {
@@ -64,11 +70,15 @@ namespace StrategoApp.ViewModel
             _mainWindowViewModel = mainWindowViewModel;
             BackToLobbyCommand = new ViewModelCommand(ExecuteBackToLobby);
             //EditProfilePictureCommand = new ViewModelCommand(EditProfilePicture, CanEditProfilePicture);
-            //EditUsernameCommand = new ViewModelCommand(EditUsername, CanEditUsername);
+            //EditUsernameCommand = new ViewModelCommand(EditUsername);
             //RemoveFriendCommand = new ViewModelCommand(RemoveFriend, CanRemoveFriend);
             SelectProfilePictureCommand = new ViewModelCommand(SelectProfilePicture);
             ToggleProfileSelectorVisibilityCommand = new ViewModelCommand(ToggleProfileSelectorVisibility);
+            ToggleEditUsernameVisibilityCommand = new ViewModelCommand(ToggleEditUsernameVisibility);
             CancelProfileSelectionCommand = new ViewModelCommand(CancelProfileSelection);
+            CancelEditUsernameCommand = new ViewModelCommand(CancelEditUsername);
+            AcceptEditUsernameCommand = new ViewModelCommand(AcceptEditUsername, CanAcceptEditUsername);
+            SaveProfilePictureSelectionCommand = new ViewModelCommand(ConfirmProfileSelection);
             LogoutCommand = new ViewModelCommand(Logout);
         }
 
@@ -78,6 +88,16 @@ namespace StrategoApp.ViewModel
             set
             {
                 _username = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string UsernameEdited
+        {
+            get { return _usernameEdited; }
+            set
+            {
+                _usernameEdited = value;
                 OnPropertyChanged();
             }
         }
@@ -112,6 +132,24 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public int GamesWon
+        {
+            get => _gamesWon;
+            set { _gamesWon = value; OnPropertyChanged(); }
+        }
+
+        public int GamesLost
+        {
+            get => _gamesLost;
+            set { _gamesLost = value; OnPropertyChanged(); }
+        }
+
+        public int GamesPlayed
+        {
+            get => _gamesPlayed;
+            set { _gamesPlayed = value; OnPropertyChanged(); }
+        }
+
         public bool IsProfileSelectorVisible
         {
             get { return _isProileSelectorVisible; }
@@ -122,11 +160,31 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public bool IsEditUsernameVisible
+        {
+            get { return _isEditUsernameVisible; }
+            set
+            {
+                _isEditUsernameVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string UsernameError
+        {
+            get { return _usernameError; }
+            set
+            {
+                _usernameError = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void ExecuteBackToLobby(Object obj)
         {
             try
             { 
-                _mainWindowViewModel.ChangeViewModel(LobbyViewModel.Instance(_mainWindowViewModel)); 
+                _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel)); 
             }
             catch (Exception e) 
             { 
@@ -136,22 +194,162 @@ namespace StrategoApp.ViewModel
 
         private void SelectProfilePicture(Object obj)
         {
-            SelectedProfilePicture = obj.ToString();
+            if (obj is string selectedPicture)
+            {
+                SelectedProfilePicture = selectedPicture;
+            }
         }
 
-        public void ToggleProfileSelectorVisibility(Object obj)
+        private void ToggleProfileSelectorVisibility(Object obj)
         {
             IsProfileSelectorVisible = !IsProfileSelectorVisible;
         }
 
-        public void CancelProfileSelection(Object obj)
+        private void ToggleEditUsernameVisibility(Object obj)
+        {
+            IsEditUsernameVisible = !IsEditUsernameVisible;
+        }
+
+        private void CancelProfileSelection(Object obj)
         {
             IsProfileSelectorVisible = false;
         }
 
-        public void Logout(Object obj)
+        private void CancelEditUsername(Object obj)
+        {
+            IsEditUsernameVisible = false;
+        }
+
+        private bool CanAcceptEditUsername(Object obj)
+        {
+            if (string.IsNullOrEmpty(UsernameEdited))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        private async void AcceptEditUsername(Object obj)
+        {
+            if (Validations.IsValidUsername(UsernameEdited))
+            {
+                UsernameError = string.Empty;
+
+                var updatedProfile = new ProfileService.PlayerInfoShownDTO
+                {
+                    Name = UsernameEdited,
+                    Id = PlayerId,
+                    PicturePath = ProfilePicture
+                };
+
+                try
+                {
+                    var client = new ProfileServiceClient(new InstanceContext(this));
+                    await client.UpdatePlayerProfileAsync(updatedProfile);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al intentar actualizar el perfil en el servidor: " + ex.Message);
+                }
+            }
+            else
+            {
+                UsernameError = Properties.Resources.InvalidUsername_Label;
+            }
+        }
+
+        private async void ConfirmProfileSelection(object obj)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(SelectedProfilePicture))
+                {
+                    var updatedProfile = new ProfileService.PlayerInfoShownDTO
+                    {
+                        Name = Username,
+                        Id = PlayerId,
+                        PicturePath = SelectedProfilePicture
+                    };
+
+                    var client = new ProfileServiceClient(new InstanceContext(this));
+
+                    await client.UpdatePlayerProfileAsync(updatedProfile);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar la imagen de perfil: " + ex.Message);
+            }
+        }
+
+        private void Logout(Object obj)
         {
             _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+        }
+
+        private void LoadPlayerInfo()
+        {
+            try
+            {
+                var client = new ProfileServiceClient(new InstanceContext(this));
+                client.GetPlayerInfoAsync(PlayerId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al cargar la información del jugador: " + ex.Message);
+            }
+        }
+
+        public void PlayerInfo(PlayerInfoResponse response)
+        {
+            if (response != null)
+            {
+                Username = response.Profile.Name;
+                PlayerId = response.Profile.Id;
+                ProfilePicture = response.Profile.PicturePath;
+            }
+        }
+
+        public void PlayerStatistics(PlayerStatisticsResponse response)
+        {
+            if (response != null) 
+            { 
+                GamesWon = response.Statistics.WonGames;
+                GamesLost = response.Statistics.LostGames;
+                GamesPlayed = response.Statistics.TotalGames;
+            }
+        }
+
+        public void ReceiveUpdatePlayerProfile(PlayerInfoResponse result)
+        {
+            if (result.Result.IsSuccess)
+            {
+                Username = result.Profile.Name;
+                ProfilePicture = result.Profile.PicturePath;
+
+                MessageBox.Show("Perfil actualizado exitosamente en el servidor.");
+                if (IsEditUsernameVisible)
+                {
+                    IsEditUsernameVisible = false;
+                }
+                else
+                {
+                    IsProfileSelectorVisible = false;
+                }
+            }
+            else
+            {
+                MessageBox.Show("No se pudo actualizar el perfil en el servidor.");
+                IsEditUsernameVisible = false;
+            }
+        }
+
+        public void PlayerFriendsList(PlayerFriendsResponse playerFriends)
+        {
+            throw new NotImplementedException();
         }
     }
 }

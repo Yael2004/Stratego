@@ -15,67 +15,6 @@ namespace StrategoApp.ProfileService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PlayerInfoResponse", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
-    [System.SerializableAttribute()]
-    public partial class PlayerInfoResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private StrategoApp.ProfileService.PlayerInfoShownDTO ProfileField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private StrategoApp.ProfileService.OperationResult ResultField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public StrategoApp.ProfileService.PlayerInfoShownDTO Profile {
-            get {
-                return this.ProfileField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ProfileField, value) != true)) {
-                    this.ProfileField = value;
-                    this.RaisePropertyChanged("Profile");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public StrategoApp.ProfileService.OperationResult Result {
-            get {
-                return this.ResultField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ResultField, value) != true)) {
-                    this.ResultField = value;
-                    this.RaisePropertyChanged("Result");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PlayerInfoShownDTO", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
     [System.SerializableAttribute()]
     public partial class PlayerInfoShownDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -153,6 +92,67 @@ namespace StrategoApp.ProfileService {
                 if ((object.ReferenceEquals(this.PicturePathField, value) != true)) {
                     this.PicturePathField = value;
                     this.RaisePropertyChanged("PicturePath");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PlayerInfoResponse", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
+    [System.SerializableAttribute()]
+    public partial class PlayerInfoResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategoApp.ProfileService.PlayerInfoShownDTO ProfileField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategoApp.ProfileService.OperationResult ResultField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategoApp.ProfileService.PlayerInfoShownDTO Profile {
+            get {
+                return this.ProfileField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ProfileField, value) != true)) {
+                    this.ProfileField = value;
+                    this.RaisePropertyChanged("Profile");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategoApp.ProfileService.OperationResult Result {
+            get {
+                return this.ResultField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ResultField, value) != true)) {
+                    this.ResultField = value;
+                    this.RaisePropertyChanged("Result");
                 }
             }
         }
@@ -366,27 +366,110 @@ namespace StrategoApp.ProfileService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PlayerFriendsResponse", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
+    [System.SerializableAttribute()]
+    public partial class PlayerFriendsResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategoApp.ProfileService.PlayerInfoShownDTO[] FriendsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategoApp.ProfileService.OperationResult ResultField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategoApp.ProfileService.PlayerInfoShownDTO[] Friends {
+            get {
+                return this.FriendsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FriendsField, value) != true)) {
+                    this.FriendsField = value;
+                    this.RaisePropertyChanged("Friends");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategoApp.ProfileService.OperationResult Result {
+            get {
+                return this.ResultField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ResultField, value) != true)) {
+                    this.ResultField = value;
+                    this.RaisePropertyChanged("Result");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ProfileService.IProfileService")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ProfileService.IProfileService", CallbackContract=typeof(StrategoApp.ProfileService.IProfileServiceCallback))]
     public interface IProfileService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/GetPlayerInfo", ReplyAction="http://tempuri.org/IProfileService/GetPlayerInfoResponse")]
-        StrategoApp.ProfileService.PlayerInfoResponse GetPlayerInfo(int playerId);
+        void GetPlayerInfo(int playerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/GetPlayerInfo", ReplyAction="http://tempuri.org/IProfileService/GetPlayerInfoResponse")]
-        System.Threading.Tasks.Task<StrategoApp.ProfileService.PlayerInfoResponse> GetPlayerInfoAsync(int playerId);
+        System.Threading.Tasks.Task GetPlayerInfoAsync(int playerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/UpdatePlayerProfile", ReplyAction="http://tempuri.org/IProfileService/UpdatePlayerProfileResponse")]
-        StrategoApp.ProfileService.OperationResult UpdatePlayerProfile(StrategoApp.ProfileService.PlayerInfoShownDTO profile);
+        void UpdatePlayerProfile(StrategoApp.ProfileService.PlayerInfoShownDTO newProfile);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/UpdatePlayerProfile", ReplyAction="http://tempuri.org/IProfileService/UpdatePlayerProfileResponse")]
-        System.Threading.Tasks.Task<StrategoApp.ProfileService.OperationResult> UpdatePlayerProfileAsync(StrategoApp.ProfileService.PlayerInfoShownDTO profile);
+        System.Threading.Tasks.Task UpdatePlayerProfileAsync(StrategoApp.ProfileService.PlayerInfoShownDTO newProfile);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/GetPlayerStatistics", ReplyAction="http://tempuri.org/IProfileService/GetPlayerStatisticsResponse")]
-        StrategoApp.ProfileService.PlayerStatisticsResponse GetPlayerStatistics(int playerId);
+        void GetPlayerStatistics(int playerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/GetPlayerStatistics", ReplyAction="http://tempuri.org/IProfileService/GetPlayerStatisticsResponse")]
-        System.Threading.Tasks.Task<StrategoApp.ProfileService.PlayerStatisticsResponse> GetPlayerStatisticsAsync(int playerId);
+        System.Threading.Tasks.Task GetPlayerStatisticsAsync(int playerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/GetPlayerFriendsList", ReplyAction="http://tempuri.org/IProfileService/GetPlayerFriendsListResponse")]
+        void GetPlayerFriendsList(int playerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/GetPlayerFriendsList", ReplyAction="http://tempuri.org/IProfileService/GetPlayerFriendsListResponse")]
+        System.Threading.Tasks.Task GetPlayerFriendsListAsync(int playerId);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IProfileServiceCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IProfileService/PlayerInfo")]
+        void PlayerInfo([System.ServiceModel.MessageParameterAttribute(Name="playerInfo")] StrategoApp.ProfileService.PlayerInfoResponse playerInfo1);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IProfileService/PlayerStatistics")]
+        void PlayerStatistics([System.ServiceModel.MessageParameterAttribute(Name="playerStatistics")] StrategoApp.ProfileService.PlayerStatisticsResponse playerStatistics1);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IProfileService/ReceiveUpdatePlayerProfile")]
+        void ReceiveUpdatePlayerProfile(StrategoApp.ProfileService.PlayerInfoResponse result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IProfileService/PlayerFriendsList")]
+        void PlayerFriendsList(StrategoApp.ProfileService.PlayerFriendsResponse playerFriends);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -395,49 +478,58 @@ namespace StrategoApp.ProfileService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class ProfileServiceClient : System.ServiceModel.ClientBase<StrategoApp.ProfileService.IProfileService>, StrategoApp.ProfileService.IProfileService {
+    public partial class ProfileServiceClient : System.ServiceModel.DuplexClientBase<StrategoApp.ProfileService.IProfileService>, StrategoApp.ProfileService.IProfileService {
         
-        public ProfileServiceClient() {
+        public ProfileServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
         }
         
-        public ProfileServiceClient(string endpointConfigurationName) : 
-                base(endpointConfigurationName) {
+        public ProfileServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
         }
         
-        public ProfileServiceClient(string endpointConfigurationName, string remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public ProfileServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public ProfileServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public ProfileServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public ProfileServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(binding, remoteAddress) {
+        public ProfileServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
         }
         
-        public StrategoApp.ProfileService.PlayerInfoResponse GetPlayerInfo(int playerId) {
-            return base.Channel.GetPlayerInfo(playerId);
+        public void GetPlayerInfo(int playerId) {
+            base.Channel.GetPlayerInfo(playerId);
         }
         
-        public System.Threading.Tasks.Task<StrategoApp.ProfileService.PlayerInfoResponse> GetPlayerInfoAsync(int playerId) {
+        public System.Threading.Tasks.Task GetPlayerInfoAsync(int playerId) {
             return base.Channel.GetPlayerInfoAsync(playerId);
         }
         
-        public StrategoApp.ProfileService.OperationResult UpdatePlayerProfile(StrategoApp.ProfileService.PlayerInfoShownDTO profile) {
-            return base.Channel.UpdatePlayerProfile(profile);
+        public void UpdatePlayerProfile(StrategoApp.ProfileService.PlayerInfoShownDTO newProfile) {
+            base.Channel.UpdatePlayerProfile(newProfile);
         }
         
-        public System.Threading.Tasks.Task<StrategoApp.ProfileService.OperationResult> UpdatePlayerProfileAsync(StrategoApp.ProfileService.PlayerInfoShownDTO profile) {
-            return base.Channel.UpdatePlayerProfileAsync(profile);
+        public System.Threading.Tasks.Task UpdatePlayerProfileAsync(StrategoApp.ProfileService.PlayerInfoShownDTO newProfile) {
+            return base.Channel.UpdatePlayerProfileAsync(newProfile);
         }
         
-        public StrategoApp.ProfileService.PlayerStatisticsResponse GetPlayerStatistics(int playerId) {
-            return base.Channel.GetPlayerStatistics(playerId);
+        public void GetPlayerStatistics(int playerId) {
+            base.Channel.GetPlayerStatistics(playerId);
         }
         
-        public System.Threading.Tasks.Task<StrategoApp.ProfileService.PlayerStatisticsResponse> GetPlayerStatisticsAsync(int playerId) {
+        public System.Threading.Tasks.Task GetPlayerStatisticsAsync(int playerId) {
             return base.Channel.GetPlayerStatisticsAsync(playerId);
+        }
+        
+        public void GetPlayerFriendsList(int playerId) {
+            base.Channel.GetPlayerFriendsList(playerId);
+        }
+        
+        public System.Threading.Tasks.Task GetPlayerFriendsListAsync(int playerId) {
+            return base.Channel.GetPlayerFriendsListAsync(playerId);
         }
     }
 }
