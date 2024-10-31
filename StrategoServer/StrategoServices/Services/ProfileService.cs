@@ -13,7 +13,7 @@ using System.Web.Profile;
 namespace StrategoServices.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class ProfileService : Interfaces.IProfileService
+    public class ProfileService : Interfaces.IProfileDataService, Interfaces.IPlayerFriendsListService, Interfaces.IProfileModifierService
     {
         private readonly Lazy<ProfilesManager> _profilesManager;
 
@@ -29,7 +29,7 @@ namespace StrategoServices.Services
 
         public async Task GetPlayerStatisticsAsync(int playerAccountId)
         {
-            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IProfileServiceCallback>();
+            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IProfileDataServiceCallback>();
             var response = new PlayerStatisticsResponse();
 
             try
@@ -67,7 +67,7 @@ namespace StrategoServices.Services
 
         public async Task UpdatePlayerProfileAsync(PlayerInfoShownDTO newProfile)
         {
-            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IProfileServiceCallback>();
+            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IProfileModifierServiceCallback>();
             var response = new PlayerInfoResponse();
 
             try
@@ -107,7 +107,7 @@ namespace StrategoServices.Services
 
         public async Task GetPlayerFriendsListAsync(int playerId)
         {
-            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IProfileServiceCallback>();
+            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IPlayerFriendsListServiceCallback>();
             var response = new PlayerFriendsResponse();
 
             try

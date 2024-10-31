@@ -99,7 +99,9 @@
     <Compile Include="Services\ChatService.cs" />
     <Compile Include="Data\DTO\PlayerDTO.cs" />
     <Compile Include="Data\OperationResult.cs" />
-    <Compile Include="Services\Interfaces\Callbacks\IProfileServiceCallback.cs" />
+    <Compile Include="Services\Interfaces\Callbacks\IPlayerFriendsListServiceCallback.cs" />
+    <Compile Include="Services\Interfaces\Callbacks\IProfileModifierServiceCallback.cs" />
+    <Compile Include="Services\Interfaces\Callbacks\IProfileDataServiceCallback.cs" />
     <Compile Include="Services\Interfaces\ILogInService.cs" />
     <Compile Include="Services\Interfaces\IChatService.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IChatServiceCallback.cs" />
@@ -109,7 +111,9 @@
     <Compile Include="Logic\ChatManager.cs" />
     <Compile Include="Logic\EmailSender.cs" />
     <Compile Include="Logic\Interfaces\IEmailSender.cs" />
-    <Compile Include="Services\Interfaces\IProfileService.cs" />
+    <Compile Include="Services\Interfaces\IPlayerFriendsListService.cs" />
+    <Compile Include="Services\Interfaces\IProfileModifierService.cs" />
+    <Compile Include="Services\Interfaces\IProfileDataService.cs" />
     <Compile Include="Services\Interfaces\ISignUpService.cs" />
     <Compile Include="Services\Interfaces\Callbacks\ISignUpServiceCallback.cs" />
     <Compile Include="Services\LogInService.cs" />

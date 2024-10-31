@@ -11,20 +11,14 @@ using StrategoServices.Services.Interfaces.Callbacks;
 
 namespace StrategoServices.Services.Interfaces
 {
-    [ServiceContract(CallbackContract = typeof(IProfileServiceCallback))]
-    public interface IProfileService
+    [ServiceContract(CallbackContract = typeof(IProfileDataServiceCallback))]
+    public interface IProfileDataService
     {
         [OperationContract]
         Task GetPlayerInfoAsync(int playerId);
 
         [OperationContract]
-        Task UpdatePlayerProfileAsync(PlayerInfoShownDTO newProfile);
-
-        [OperationContract]
         Task GetPlayerStatisticsAsync(int playerId);
-
-        [OperationContract]
-        Task GetPlayerFriendsListAsync(int playerId);
     }
 
 }

@@ -20,7 +20,7 @@ namespace StrategoServices
         {
             builder.RegisterType<ChatService>().As<IChatService>().InstancePerLifetimeScope();
             builder.RegisterType<LogInService>().As<ILogInService>().InstancePerLifetimeScope();
-            builder.RegisterType<ProfileService>().As<IProfileService>().InstancePerLifetimeScope();
+            builder.RegisterType<ProfileService>().As<IProfileDataService>().InstancePerLifetimeScope();
 
             builder.RegisterType<AccountManager>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<ProfilesManager>().AsSelf().InstancePerLifetimeScope();

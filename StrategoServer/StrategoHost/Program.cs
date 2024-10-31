@@ -30,7 +30,7 @@ namespace StrategoHost
                 {
                     var loginService = scope.Resolve<ILogInService>();
                     var chatService = scope.Resolve<IChatService>();
-                    var profileService = scope.Resolve<IProfileService>();
+                    var profileService = scope.Resolve<IProfileDataService>();
 
                     var loginHost = new ServiceHost(loginService);
                     var chatHost = new ServiceHost(chatService);
