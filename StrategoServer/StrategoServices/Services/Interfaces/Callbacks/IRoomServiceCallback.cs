@@ -19,6 +19,6 @@ namespace StrategoServices.Services.Interfaces.Callbacks
         void RoomResponseAsync(OperationResult response);
 
         [OperationContract(IsOneWay = true)]
-        void ReceiveMessageAsync(string playerId, string message);
+        void ReceiveMessageAsync(int playerId, string message);
     }
 }

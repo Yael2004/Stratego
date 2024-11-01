@@ -18,7 +18,7 @@ namespace StrategoServices.Services
     {
         private readonly ConcurrentDictionary<string, Room> _rooms = new ConcurrentDictionary<string, Room>();
 
-        public async Task CreateRoomAsync(string playerId)
+        public async Task CreateRoomAsync(int playerId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IRoomServiceCallback>();
             var response = new RoomCreatedResponse();
@@ -52,7 +52,7 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.RoomCreatedAsync(response));
         }
 
-        public async Task JoinRoomAsync(string playerId, string roomCode)
+        public async Task JoinRoomAsync(string roomCode, int playerId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IRoomServiceCallback>();
             OperationResult response;
@@ -87,7 +87,7 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.RoomResponseAsync(response));
         }
 
-        public void LeaveRoomAsync(string playerId)
+        public void LeaveRoomAsync(int playerId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IRoomServiceCallback>();
             OperationResult response;
@@ -102,16 +102,16 @@ namespace StrategoServices.Services
             {
                 if (room.Player1Id == playerId)
                 {
-                    room.Player1Id = null;
+                    room.Player1Id = 0;
                 }
                 else if (room.Player2Id == playerId)
                 {
-                    room.Player2Id = null;
+                    room.Player2Id = 0;
                 }
 
                 room.IsFull = false;
 
-                if (string.IsNullOrEmpty(room.Player1Id) && string.IsNullOrEmpty(room.Player2Id))
+                if (room.Player1Id == 0 && room.Player2Id == 0)
                 {
                     _rooms.TryRemove(room.Code, out _);
                 }
@@ -122,15 +122,15 @@ namespace StrategoServices.Services
             callback.RoomResponseAsync(response);
         }
 
-        public async Task SendMessageToRoomAsync(string playerId, string roomCode, string message)
+        public async Task SendMessageToRoomAsync(string roomCode, int playerId, string message)
         {
             var receiverCallback = OperationContext.Current.GetCallbackChannel<IRoomServiceCallback>();
 
             if (_rooms.TryGetValue(roomCode, out var room))
             {
-                string receiverId = room.Player1Id == playerId ? room.Player2Id : room.Player1Id;
+                int receiverId = room.Player1Id == playerId ? room.Player2Id : room.Player1Id;
 
-                if (receiverId != null)
+                if (receiverId != 0)
                 {
 
                     await Task.Run(() => receiverCallback.ReceiveMessageAsync(playerId, message));
@@ -147,16 +147,16 @@ namespace StrategoServices.Services
             return Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
         }
 
-        private void HandlePlayerDisconnection(string roomCode, string playerId)
+        private void HandlePlayerDisconnection(string roomCode, int playerId)
         {
             if (_rooms.TryGetValue(roomCode, out var room))
             {
                 if (room.Player1Id == playerId)
-                    room.Player1Id = null;
+                    room.Player1Id = 0;
                 else if (room.Player2Id == playerId)
-                    room.Player2Id = null;
+                    room.Player2Id = 0;
 
-                if (room.Player1Id == null && room.Player2Id == null)
+                if (room.Player1Id == 0 && room.Player2Id == 0)
                 {
                     _rooms.TryRemove(roomCode, out _);
                     Console.WriteLine($"Room {roomCode} has been removed due to disconnection.");
