@@ -108,9 +108,9 @@ namespace StrategoApp.Properties {
         /// <summary>
         ///   Busca una cadena traducida similar a Apprentice.
         /// </summary>
-        public static string Apprentice_Button {
+        public static string Apprentice_Label {
             get {
-                return ResourceManager.GetString("Apprentice_Button", resourceCulture);
+                return ResourceManager.GetString("Apprentice_Label", resourceCulture);
             }
         }
         
@@ -198,9 +198,9 @@ namespace StrategoApp.Properties {
         /// <summary>
         ///   Busca una cadena traducida similar a Competitive.
         /// </summary>
-        public static string Competitive_Button {
+        public static string Competitive_Label {
             get {
-                return ResourceManager.GetString("Competitive_Button", resourceCulture);
+                return ResourceManager.GetString("Competitive_Label", resourceCulture);
             }
         }
         
@@ -468,9 +468,9 @@ namespace StrategoApp.Properties {
         /// <summary>
         ///   Busca una cadena traducida similar a Misbehavior.
         /// </summary>
-        public static string Misbehavior_Button {
+        public static string Misbehavior_Label {
             get {
-                return ResourceManager.GetString("Misbehavior_Button", resourceCulture);
+                return ResourceManager.GetString("Misbehavior_Label", resourceCulture);
             }
         }
         
@@ -540,9 +540,9 @@ namespace StrategoApp.Properties {
         /// <summary>
         ///   Busca una cadena traducida similar a Novice player.
         /// </summary>
-        public static string NovicePlayer_Button {
+        public static string NovicePlayer_Label {
             get {
-                return ResourceManager.GetString("NovicePlayer_Button", resourceCulture);
+                return ResourceManager.GetString("NovicePlayer_Label", resourceCulture);
             }
         }
         
@@ -621,9 +621,9 @@ namespace StrategoApp.Properties {
         /// <summary>
         ///   Busca una cadena traducida similar a Pro player.
         /// </summary>
-        public static string ProPlayer_Button {
+        public static string ProPlayer_Label {
             get {
-                return ResourceManager.GetString("ProPlayer_Button", resourceCulture);
+                return ResourceManager.GetString("ProPlayer_Label", resourceCulture);
             }
         }
         

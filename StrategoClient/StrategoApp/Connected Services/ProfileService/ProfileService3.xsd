@@ -13,18 +13,6 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="UpdatePlayerProfile">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="newProfile" nillable="true" type="q1:PlayerInfoShownDTO" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="UpdatePlayerProfileResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
   <xs:element name="GetPlayerStatistics">
     <xs:complexType>
       <xs:sequence>
@@ -37,6 +25,39 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="PlayerInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="playerInfo" nillable="true" type="q1:PlayerInfoResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PlayerStatistics">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="playerStatistics" nillable="true" type="q2:PlayerStatisticsResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdatePlayerProfile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="newProfile" nillable="true" type="q3:PlayerInfoShownDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdatePlayerProfileResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveUpdatePlayerProfile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="result" nillable="true" type="q4:PlayerInfoResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="GetPlayerFriendsList">
     <xs:complexType>
       <xs:sequence>
@@ -47,27 +68,6 @@
   <xs:element name="GetPlayerFriendsListResponse">
     <xs:complexType>
       <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="PlayerInfo">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="playerInfo" nillable="true" type="q2:PlayerInfoResponse" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="PlayerStatistics">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="playerStatistics" nillable="true" type="q3:PlayerStatisticsResponse" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ReceiveUpdatePlayerProfile">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="result" nillable="true" type="q4:PlayerInfoResponse" />
-      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="PlayerFriendsList">

@@ -17,12 +17,13 @@ using System.Web.UI.WebControls;
 
 namespace StrategoApp.ViewModel
 {
-    public class PlayerProfileViewModel : ViewModelBase, ProfileService.IProfileServiceCallback
+    public class PlayerProfileViewModel : ViewModelBase, ProfileService.IProfileDataServiceCallback, ProfileService.IProfileModifierServiceCallback
     {
         private string _username;
         private string _usernameEdited;
         private int _playerId;
         private string _profilePicture;
+        private string _playerTag;
         private int _gamesWon;
         private int _gamesLost;
         private int _gamesPlayed;
@@ -33,6 +34,7 @@ namespace StrategoApp.ViewModel
         private bool _isProileSelectorVisible;
         private bool _isEditUsernameVisible;
         public ObservableCollection<string> ProfilePictures { get; set; }
+        public ObservableCollection<string> ProfileTags { get; set; }
 
         private readonly MainWindowViewModel _mainWindowViewModel;
         public bool IsOwnProfile { get; set; }
@@ -56,6 +58,14 @@ namespace StrategoApp.ViewModel
         {
             PlayerInfoResponse playerInfoResponse = new PlayerInfoResponse();
             PlayerStatisticsResponse playerStatisticsResponse = new PlayerStatisticsResponse();
+
+            ProfileTags = new ObservableCollection<string>
+            {
+                Properties.Resources.NovicePlayer_Label,
+                Properties.Resources.ProPlayer_Label,
+                Properties.Resources.Apprentice_Label,
+                Properties.Resources.Misbehavior_Label
+            };
 
             ProfilePictures = new ObservableCollection<string>
             {
@@ -118,6 +128,16 @@ namespace StrategoApp.ViewModel
             set
             {
                 _profilePicture = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string PlayerTag
+        {
+            get { return _playerTag; }
+            set
+            {
+                _playerTag = value;
                 OnPropertyChanged();
             }
         }
@@ -247,7 +267,7 @@ namespace StrategoApp.ViewModel
 
                 try
                 {
-                    var client = new ProfileServiceClient(new InstanceContext(this));
+                    var client = new ProfileModifierServiceClient(new InstanceContext(this));
                     await client.UpdatePlayerProfileAsync(updatedProfile);
                 }
                 catch (Exception ex)
@@ -274,7 +294,7 @@ namespace StrategoApp.ViewModel
                         PicturePath = SelectedProfilePicture
                     };
 
-                    var client = new ProfileServiceClient(new InstanceContext(this));
+                    var client = new ProfileModifierServiceClient(new InstanceContext(this));
 
                     await client.UpdatePlayerProfileAsync(updatedProfile);
                 }
@@ -294,7 +314,7 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                var client = new ProfileServiceClient(new InstanceContext(this));
+                var client = new ProfileDataServiceClient(new InstanceContext(this));
                 client.GetPlayerInfoAsync(PlayerId);
             }
             catch (Exception ex)

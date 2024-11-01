@@ -132,7 +132,7 @@
   <data name="AddFriend_Button" xml:space="preserve">
     <value>Add</value>
   </data>
-  <data name="Apprentice_Button" xml:space="preserve">
+  <data name="Apprentice_Label" xml:space="preserve">
     <value>Apprentice</value>
   </data>
   <data name="Archfiend_Label" xml:space="preserve">
@@ -159,7 +159,7 @@
   <data name="Code_Label" xml:space="preserve">
     <value>Code</value>
   </data>
-  <data name="Competitive_Button" xml:space="preserve">
+  <data name="Competitive_Label" xml:space="preserve">
     <value>Competitive</value>
   </data>
   <data name="CreateLobby_Button" xml:space="preserve">
@@ -241,7 +241,7 @@
   <data name="MessageReport_Label" xml:space="preserve">
     <value>The player has been reported, thanks for your contribution</value>
   </data>
-  <data name="Misbehavior_Button" xml:space="preserve">
+  <data name="Misbehavior_Label" xml:space="preserve">
     <value>Misbehavior</value>
   </data>
   <data name="NameChange_Label" xml:space="preserve">
@@ -265,7 +265,7 @@
   <data name="NonexistentCode_Label" xml:space="preserve">
     <value>Code doesn't exist</value>
   </data>
-  <data name="NovicePlayer_Button" xml:space="preserve">
+  <data name="NovicePlayer_Label" xml:space="preserve">
     <value>Novice player</value>
   </data>
   <data name="OffensiveLanguage_Button" xml:space="preserve">
@@ -292,7 +292,7 @@
   <data name="Profile_Title" xml:space="preserve">
     <value>Profile</value>
   </data>
-  <data name="ProPlayer_Button" xml:space="preserve">
+  <data name="ProPlayer_Label" xml:space="preserve">
     <value>Pro player</value>
   </data>
   <data name="Register_Title" xml:space="preserve">

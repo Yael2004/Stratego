@@ -96,7 +96,8 @@
                    Margin="465,210,67,180"
                    Style="{StaticResource PlayerSectionLabelStyle}"/>
 
-            <ComboBox Text="{Binding PlayerLabel}"
+            <ComboBox ItemsSource="{Binding ProfileTags}"
+                      SelectedItem="{Binding PlayerTag, Mode=TwoWay}"
                        Background="{StaticResource Beige}"
                        FontSize="30" 
                        FontWeight="Bold" 

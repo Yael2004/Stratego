@@ -1,6 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="ProfileService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsp:Policy wsu:Id="NetTcpBinding_IProfileService_policy">
+  <wsp:Policy wsu:Id="NetTcpBinding_IProfileDataService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:WindowsTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+                  <msf:ProtectionLevel>EncryptAndSign</msf:ProtectionLevel>
+                </msf:WindowsTransportSecurity>
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_IProfileModifierService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:WindowsTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+                  <msf:ProtectionLevel>EncryptAndSign</msf:ProtectionLevel>
+                </msf:WindowsTransportSecurity>
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_IPlayerFriendsListService_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
@@ -37,86 +95,81 @@
       <xsd:import schemaLocation="http://localhost:2022/ProfileService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IProfileService_GetPlayerInfo_InputMessage">
+  <wsdl:message name="IProfileDataService_GetPlayerInfo_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPlayerInfo" />
   </wsdl:message>
-  <wsdl:message name="IProfileService_GetPlayerInfo_OutputMessage">
+  <wsdl:message name="IProfileDataService_GetPlayerInfo_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPlayerInfoResponse" />
   </wsdl:message>
-  <wsdl:message name="IProfileService_UpdatePlayerProfile_InputMessage">
-    <wsdl:part name="parameters" element="tns:UpdatePlayerProfile" />
-  </wsdl:message>
-  <wsdl:message name="IProfileService_UpdatePlayerProfile_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UpdatePlayerProfileResponse" />
-  </wsdl:message>
-  <wsdl:message name="IProfileService_GetPlayerStatistics_InputMessage">
+  <wsdl:message name="IProfileDataService_GetPlayerStatistics_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPlayerStatistics" />
   </wsdl:message>
-  <wsdl:message name="IProfileService_GetPlayerStatistics_OutputMessage">
+  <wsdl:message name="IProfileDataService_GetPlayerStatistics_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPlayerStatisticsResponse" />
   </wsdl:message>
-  <wsdl:message name="IProfileService_GetPlayerFriendsList_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetPlayerFriendsList" />
-  </wsdl:message>
-  <wsdl:message name="IProfileService_GetPlayerFriendsList_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetPlayerFriendsListResponse" />
-  </wsdl:message>
-  <wsdl:message name="IProfileService_PlayerInfo_OutputCallbackMessage">
+  <wsdl:message name="IProfileDataService_PlayerInfo_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:PlayerInfo" />
   </wsdl:message>
-  <wsdl:message name="IProfileService_PlayerStatistics_OutputCallbackMessage">
+  <wsdl:message name="IProfileDataService_PlayerStatistics_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:PlayerStatistics" />
   </wsdl:message>
-  <wsdl:message name="IProfileService_ReceiveUpdatePlayerProfile_OutputCallbackMessage">
+  <wsdl:message name="IProfileModifierService_UpdatePlayerProfile_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePlayerProfile" />
+  </wsdl:message>
+  <wsdl:message name="IProfileModifierService_UpdatePlayerProfile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePlayerProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProfileModifierService_ReceiveUpdatePlayerProfile_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceiveUpdatePlayerProfile" />
   </wsdl:message>
-  <wsdl:message name="IProfileService_PlayerFriendsList_OutputCallbackMessage">
+  <wsdl:message name="IPlayerFriendsListService_GetPlayerFriendsList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPlayerFriendsList" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerFriendsListService_GetPlayerFriendsList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPlayerFriendsListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerFriendsListService_PlayerFriendsList_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:PlayerFriendsList" />
   </wsdl:message>
-  <wsdl:portType name="IProfileService">
+  <wsdl:portType name="IProfileDataService">
     <wsdl:operation name="GetPlayerInfo">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProfileService/GetPlayerInfo" message="tns:IProfileService_GetPlayerInfo_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProfileService/GetPlayerInfoResponse" message="tns:IProfileService_GetPlayerInfo_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UpdatePlayerProfile">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProfileService/UpdatePlayerProfile" message="tns:IProfileService_UpdatePlayerProfile_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProfileService/UpdatePlayerProfileResponse" message="tns:IProfileService_UpdatePlayerProfile_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IProfileDataService/GetPlayerInfo" message="tns:IProfileDataService_GetPlayerInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProfileDataService/GetPlayerInfoResponse" message="tns:IProfileDataService_GetPlayerInfo_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetPlayerStatistics">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProfileService/GetPlayerStatistics" message="tns:IProfileService_GetPlayerStatistics_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProfileService/GetPlayerStatisticsResponse" message="tns:IProfileService_GetPlayerStatistics_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetPlayerFriendsList">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProfileService/GetPlayerFriendsList" message="tns:IProfileService_GetPlayerFriendsList_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProfileService/GetPlayerFriendsListResponse" message="tns:IProfileService_GetPlayerFriendsList_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IProfileDataService/GetPlayerStatistics" message="tns:IProfileDataService_GetPlayerStatistics_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProfileDataService/GetPlayerStatisticsResponse" message="tns:IProfileDataService_GetPlayerStatistics_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="PlayerInfo">
-      <wsdl:output wsaw:Action="http://tempuri.org/IProfileService/PlayerInfo" message="tns:IProfileService_PlayerInfo_OutputCallbackMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProfileDataService/PlayerInfo" message="tns:IProfileDataService_PlayerInfo_OutputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation name="PlayerStatistics">
-      <wsdl:output wsaw:Action="http://tempuri.org/IProfileService/PlayerStatistics" message="tns:IProfileService_PlayerStatistics_OutputCallbackMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ReceiveUpdatePlayerProfile">
-      <wsdl:output wsaw:Action="http://tempuri.org/IProfileService/ReceiveUpdatePlayerProfile" message="tns:IProfileService_ReceiveUpdatePlayerProfile_OutputCallbackMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="PlayerFriendsList">
-      <wsdl:output wsaw:Action="http://tempuri.org/IProfileService/PlayerFriendsList" message="tns:IProfileService_PlayerFriendsList_OutputCallbackMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProfileDataService/PlayerStatistics" message="tns:IProfileDataService_PlayerStatistics_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:binding name="NetTcpBinding_IProfileService" type="tns:IProfileService">
-    <wsp:PolicyReference URI="#NetTcpBinding_IProfileService_policy" />
+  <wsdl:portType name="IProfileModifierService">
+    <wsdl:operation name="UpdatePlayerProfile">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProfileModifierService/UpdatePlayerProfile" message="tns:IProfileModifierService_UpdatePlayerProfile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProfileModifierService/UpdatePlayerProfileResponse" message="tns:IProfileModifierService_UpdatePlayerProfile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveUpdatePlayerProfile">
+      <wsdl:output wsaw:Action="http://tempuri.org/IProfileModifierService/ReceiveUpdatePlayerProfile" message="tns:IProfileModifierService_ReceiveUpdatePlayerProfile_OutputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="IPlayerFriendsListService">
+    <wsdl:operation name="GetPlayerFriendsList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPlayerFriendsListService/GetPlayerFriendsList" message="tns:IPlayerFriendsListService_GetPlayerFriendsList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPlayerFriendsListService/GetPlayerFriendsListResponse" message="tns:IPlayerFriendsListService_GetPlayerFriendsList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PlayerFriendsList">
+      <wsdl:output wsaw:Action="http://tempuri.org/IPlayerFriendsListService/PlayerFriendsList" message="tns:IPlayerFriendsListService_PlayerFriendsList_OutputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetTcpBinding_IProfileDataService" type="tns:IProfileDataService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IProfileDataService_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
     <wsdl:operation name="GetPlayerInfo">
-      <soap12:operation soapAction="http://tempuri.org/IProfileService/GetPlayerInfo" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UpdatePlayerProfile">
-      <soap12:operation soapAction="http://tempuri.org/IProfileService/UpdatePlayerProfile" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IProfileDataService/GetPlayerInfo" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -125,16 +178,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetPlayerStatistics">
-      <soap12:operation soapAction="http://tempuri.org/IProfileService/GetPlayerStatistics" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetPlayerFriendsList">
-      <soap12:operation soapAction="http://tempuri.org/IProfileService/GetPlayerFriendsList" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IProfileDataService/GetPlayerStatistics" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -143,35 +187,79 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="PlayerInfo">
-      <soap12:operation soapAction="http://tempuri.org/IProfileService/PlayerInfo" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IProfileDataService/PlayerInfo" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="PlayerStatistics">
-      <soap12:operation soapAction="http://tempuri.org/IProfileService/PlayerStatistics" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IProfileDataService/PlayerStatistics" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_IProfileModifierService" type="tns:IProfileModifierService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IProfileModifierService_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="UpdatePlayerProfile">
+      <soap12:operation soapAction="http://tempuri.org/IProfileModifierService/UpdatePlayerProfile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="ReceiveUpdatePlayerProfile">
-      <soap12:operation soapAction="http://tempuri.org/IProfileService/ReceiveUpdatePlayerProfile" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IProfileModifierService/ReceiveUpdatePlayerProfile" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_IPlayerFriendsListService" type="tns:IPlayerFriendsListService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IPlayerFriendsListService_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="GetPlayerFriendsList">
+      <soap12:operation soapAction="http://tempuri.org/IPlayerFriendsListService/GetPlayerFriendsList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="PlayerFriendsList">
-      <soap12:operation soapAction="http://tempuri.org/IProfileService/PlayerFriendsList" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IPlayerFriendsListService/PlayerFriendsList" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="ProfileService">
-    <wsdl:port name="NetTcpBinding_IProfileService" binding="tns:NetTcpBinding_IProfileService">
-      <soap12:address location="net.tcp://localhost:1012/ProfileService/ProfileService" />
+    <wsdl:port name="NetTcpBinding_IProfileDataService" binding="tns:NetTcpBinding_IProfileDataService">
+      <soap12:address location="net.tcp://localhost:1012/ProfileService/ProfileDataService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:1012/ProfileService/ProfileService</wsa10:Address>
+        <wsa10:Address>net.tcp://localhost:1012/ProfileService/ProfileDataService</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>LAPTOP-4SRV2TJ2\yaela</Upn>
+        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_IProfileModifierService" binding="tns:NetTcpBinding_IProfileModifierService">
+      <soap12:address location="net.tcp://localhost:1012/ProfileService/ProfileModifierService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:1012/ProfileService/ProfileModifierService</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>LAPTOP-4SRV2TJ2\yaela</Upn>
+        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_IPlayerFriendsListService" binding="tns:NetTcpBinding_IPlayerFriendsListService">
+      <soap12:address location="net.tcp://localhost:1012/ProfileService/PlayerFriendsListService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:1012/ProfileService/PlayerFriendsListService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Upn>LAPTOP-4SRV2TJ2\yaela</Upn>
         </Identity>
