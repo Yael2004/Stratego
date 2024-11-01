@@ -18,6 +18,7 @@ namespace StrategoServices
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<RoomService>().As<IRoomService>().InstancePerLifetimeScope();
             builder.RegisterType<ChatService>().As<IChatService>().InstancePerLifetimeScope();
             builder.RegisterType<LogInService>().As<ILogInService>().InstancePerLifetimeScope();
             builder.RegisterType<ProfileService>().As<IProfileDataService>().InstancePerLifetimeScope();
@@ -32,7 +33,6 @@ namespace StrategoServices
             builder.RegisterType<GamesRepository>().AsSelf().InstancePerLifetimeScope();
 
             builder.RegisterType<StrategoEntities>().AsSelf().InstancePerLifetimeScope();
-
         }
     }
 

@@ -31,14 +31,17 @@ namespace StrategoHost
                     var loginService = scope.Resolve<ILogInService>();
                     var chatService = scope.Resolve<IChatService>();
                     var profileService = scope.Resolve<IProfileDataService>();
+                    var roomService = scope.Resolve<IRoomService>();
 
                     var loginHost = new ServiceHost(loginService);
                     var chatHost = new ServiceHost(chatService);
                     var profileHost = new ServiceHost(profileService);
+                    var roomHost = new ServiceHost(roomService);
 
                     bool loginServiceOpened = false;
                     bool chatServiceOpened = false;
                     bool profileServiceOpened = false;
+                    bool roomServiceOpened = false;
 
                     try
                     {
@@ -79,6 +82,19 @@ namespace StrategoHost
                         Console.WriteLine($"Failed to start Profile service: {ex.Message}");
                     }
 
+                    try
+                    {
+                        roomHost.Open();
+                        roomServiceOpened = true;
+                        log.Info("Room service is running...");
+                        Console.WriteLine("Room service is running...");
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error("Failed to start Room service: " + ex.Message);
+                        Console.WriteLine($"Failed to start Room service: {ex.Message}");
+                    }
+
                     Console.ReadLine();
 
                     if (loginServiceOpened)
@@ -97,6 +113,12 @@ namespace StrategoHost
                     {
                         profileHost.Close();
                         log.Info("Profile service closed.");
+                    }
+
+                    if (roomServiceOpened)
+                    {
+                        roomHost.Close();
+                        log.Info("Room service closed.");
                     }
                 }
             }
