@@ -140,28 +140,28 @@ namespace StrategoApp.RoomService {
     public interface IRoomService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/CreateRoom", ReplyAction="http://tempuri.org/IRoomService/CreateRoomResponse")]
-        void CreateRoom(string playerId);
+        void CreateRoom(int playerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/CreateRoom", ReplyAction="http://tempuri.org/IRoomService/CreateRoomResponse")]
-        System.Threading.Tasks.Task CreateRoomAsync(string playerId);
+        System.Threading.Tasks.Task CreateRoomAsync(int playerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/JoinRoom", ReplyAction="http://tempuri.org/IRoomService/JoinRoomResponse")]
-        void JoinRoom(string roomCode, string playerId);
+        void JoinRoom(string roomCode, int playerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/JoinRoom", ReplyAction="http://tempuri.org/IRoomService/JoinRoomResponse")]
-        System.Threading.Tasks.Task JoinRoomAsync(string roomCode, string playerId);
+        System.Threading.Tasks.Task JoinRoomAsync(string roomCode, int playerId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IRoomService/LeaveRoomAsync")]
-        void LeaveRoomAsync(string playerId);
+        void LeaveRoomAsync(int playerId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IRoomService/LeaveRoomAsync")]
-        System.Threading.Tasks.Task LeaveRoomAsyncAsync(string playerId);
+        System.Threading.Tasks.Task LeaveRoomAsyncAsync(int playerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/SendMessageToRoom", ReplyAction="http://tempuri.org/IRoomService/SendMessageToRoomResponse")]
-        void SendMessageToRoom(string roomCode, string playerId, string message);
+        void SendMessageToRoom(string roomCode, int playerId, string message);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/SendMessageToRoom", ReplyAction="http://tempuri.org/IRoomService/SendMessageToRoomResponse")]
-        System.Threading.Tasks.Task SendMessageToRoomAsync(string roomCode, string playerId, string message);
+        System.Threading.Tasks.Task SendMessageToRoomAsync(string roomCode, int playerId, string message);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -174,7 +174,7 @@ namespace StrategoApp.RoomService {
         void RoomResponseAsync(StrategoApp.RoomService.OperationResult response);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IRoomService/ReceiveMessageAsync")]
-        void ReceiveMessageAsync(string playerId, string message);
+        void ReceiveMessageAsync(int playerId, string message);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -205,35 +205,35 @@ namespace StrategoApp.RoomService {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void CreateRoom(string playerId) {
+        public void CreateRoom(int playerId) {
             base.Channel.CreateRoom(playerId);
         }
         
-        public System.Threading.Tasks.Task CreateRoomAsync(string playerId) {
+        public System.Threading.Tasks.Task CreateRoomAsync(int playerId) {
             return base.Channel.CreateRoomAsync(playerId);
         }
         
-        public void JoinRoom(string roomCode, string playerId) {
+        public void JoinRoom(string roomCode, int playerId) {
             base.Channel.JoinRoom(roomCode, playerId);
         }
         
-        public System.Threading.Tasks.Task JoinRoomAsync(string roomCode, string playerId) {
+        public System.Threading.Tasks.Task JoinRoomAsync(string roomCode, int playerId) {
             return base.Channel.JoinRoomAsync(roomCode, playerId);
         }
         
-        public void LeaveRoomAsync(string playerId) {
+        public void LeaveRoomAsync(int playerId) {
             base.Channel.LeaveRoomAsync(playerId);
         }
         
-        public System.Threading.Tasks.Task LeaveRoomAsyncAsync(string playerId) {
+        public System.Threading.Tasks.Task LeaveRoomAsyncAsync(int playerId) {
             return base.Channel.LeaveRoomAsyncAsync(playerId);
         }
         
-        public void SendMessageToRoom(string roomCode, string playerId, string message) {
+        public void SendMessageToRoom(string roomCode, int playerId, string message) {
             base.Channel.SendMessageToRoom(roomCode, playerId, message);
         }
         
-        public System.Threading.Tasks.Task SendMessageToRoomAsync(string roomCode, string playerId, string message) {
+        public System.Threading.Tasks.Task SendMessageToRoomAsync(string roomCode, int playerId, string message) {
             return base.Channel.SendMessageToRoomAsync(roomCode, playerId, message);
         }
     }

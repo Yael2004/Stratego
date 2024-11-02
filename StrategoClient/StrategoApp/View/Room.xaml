@@ -44,7 +44,7 @@
                     FontWeight="Bold" 
                     VerticalAlignment="Top" HorizontalAlignment="Left"
                     Foreground="{StaticResource DarkViolet}" Margin="393,13,0,0"/>
-                
+
                 <TextBlock Text="{Binding RoomCode}"
                     Grid.Column="1" 
                     FontSize="20" 
@@ -66,13 +66,35 @@
             </StackPanel>
 
             <Border BorderThickness="2" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Width="400" Height="300">
-                <ListBox ItemsSource="{Binding Messages}" Background="#80000000" Foreground="White" Margin="8">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding}" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                <StackPanel>
+                    <ListBox ItemsSource="{Binding Messages}" Background="#80000000" 
+                             Foreground="White" 
+                             Margin="8,8,8,8" 
+                             Height="241">
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,5,0,0">
+                        <TextBox Text="{Binding MessageToSend, UpdateSourceTrigger=PropertyChanged}" 
+                                 Background="#80000000" 
+                                 BorderBrush="Black" 
+                                 BorderThickness="1"
+                                 Foreground="{StaticResource IntenseRed}"
+                                 Width="336"
+                                 Margin="0,0,5,0"/>
+
+                        <Button Width="35" Height="30" 
+                                Background="White" 
+                                BorderThickness="0"
+                                Command="{Binding SendMessageCommand}">
+                        </Button>
+                    </StackPanel>
+
+                </StackPanel>
             </Border>
 
             <Button Content="{x:Static res:Resources.Play_Button}" 

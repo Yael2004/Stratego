@@ -85,7 +85,8 @@ namespace StrategoApp.ViewModel
                     _chatClient = new ChatServiceClient(context);
 
                     _userId = _chatClient.ConnectAsync(_userId, _username).Result;
-                    _isConnected = true;
+                    
+                    PlayerSingleton.Instance.Player.Id = _userId;
 
                     MessageBox.Show($"{_username} conectado al chat.");
                 }
@@ -285,7 +286,7 @@ namespace StrategoApp.ViewModel
                 if (!string.IsNullOrWhiteSpace(JoinRoomCode))
                 {
                     var roomViewModel = new RoomViewModel(_mainWindowViewModel);
-                    await roomViewModel.JoinRoomAsync(JoinRoomCode);
+                    await roomViewModel.JoinToRoomAsync(JoinRoomCode);
                     _mainWindowViewModel.ChangeViewModel(roomViewModel);
                 }
                 else
@@ -317,7 +318,7 @@ namespace StrategoApp.ViewModel
             try
             {
                 var roomViewModel = new RoomViewModel(_mainWindowViewModel);
-                await roomViewModel.CreateRoomAsync();
+                await roomViewModel.CreateARoomAsync();
                 _mainWindowViewModel.ChangeViewModel(roomViewModel);
             }
             catch (Exception ex)

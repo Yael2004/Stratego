@@ -1,9 +1,11 @@
 ﻿using StrategoApp.Model;
 using StrategoApp.RoomService;
+using StrategoApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,19 +18,38 @@ namespace StrategoApp.ViewModel
         private RoomServiceClient _roomServiceClient;
         private string _username;
         private int _userId;
+        private string _messageToSend;
 
         private ObservableCollection<string> _messages;
 
         private readonly MainWindowViewModel _mainWindowViewModel;
         public ICommand ExecuteBackToLobbyCommand { get; }
+        public ICommand SendMessageCommand { get; }
 
         public string RoomCode { get; set; }
-        public string Message { get; set; }
 
         public RoomViewModel(MainWindowViewModel mainWindowViewModel)
         {
             ExecuteBackToLobbyCommand = new ViewModelCommand(ExecuteBackToLobby);
+            SendMessageCommand = new ViewModelCommand(SendMessageAsync);
+            _messages = new ObservableCollection<string>();
             _mainWindowViewModel = mainWindowViewModel;
+            InitializeService();
+        }
+
+        public RoomViewModel() { }
+
+        private void InitializeService()
+        {
+            try
+            {
+                InstanceContext context = new InstanceContext(this);
+                _roomServiceClient = new RoomServiceClient(context);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error initializing the service client: " + ex.Message);
+            }
         }
 
         public string Username
@@ -51,13 +72,26 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public string MessageToSend
+        {
+            get { return _messageToSend; }
+            set
+            {
+                _messageToSend = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ObservableCollection<string> Messages
         {
             get { return _messages; }
             set
             {
-                _messages = value;
-                OnPropertyChanged();
+                if (_messages != value)
+                {
+                    _messages = value;
+                    OnPropertyChanged(nameof(Messages));
+                }
             }
         }
 
@@ -70,12 +104,12 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public async Task CreateRoomAsync()
+        public async Task CreateARoomAsync()
         {
             try
             {
                 var playerId = PlayerSingleton.Instance.Player.Id;
-                await _roomServiceClient.CreateRoomAsync("" + playerId);
+                await _roomServiceClient.CreateRoomAsync(playerId);
             }
             catch (Exception ex)
             {
@@ -83,12 +117,12 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public async Task JoinRoomAsync(string roomCode)
+        public async Task JoinToRoomAsync(string roomCode)
         {
             try
             {
                 var playerId = PlayerSingleton.Instance.Player.Id;
-                await _roomServiceClient.JoinRoomAsync("" + playerId, roomCode);
+                await _roomServiceClient.JoinRoomAsync(roomCode, playerId);
             }
             catch (Exception ex)
             {
@@ -96,12 +130,12 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        private void LeaveRoomAsync()
+        private void LeaveTheRoomAsync()
         {
             try
             {
                 var playerId = PlayerSingleton.Instance.Player.Id;
-                _roomServiceClient.LeaveRoomAsync("" + playerId);
+                _roomServiceClient.LeaveRoomAsync(playerId);
             }
             catch (Exception ex)
             {
@@ -109,12 +143,19 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        private async Task SendMessageAsync(string message)
+        public void SendMessageAsync(object obj)
         {
+            if (string.IsNullOrWhiteSpace(MessageToSend))
+            {
+                MessageBox.Show("Cannot send an empty message.");
+                return;
+            }
+
             try
             {
                 var playerId = PlayerSingleton.Instance.Player.Id;
-                await _roomServiceClient.SendMessageToRoomAsync("" + playerId, RoomCode, message);
+                _roomServiceClient.SendMessageToRoomAsync(RoomCode, playerId, MessageToSend);
+                MessageToSend = string.Empty;
             }
             catch (Exception ex)
             {
@@ -122,7 +163,7 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        private void ExecuteBackToLobby(Object obj)
+        public void ExecuteBackToLobby(Object obj)
         {
             try
             {
@@ -147,7 +188,7 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public void RoomResponseAsync(OperationResult response)
+        public void RoomResponseAsync(RoomService.OperationResult response)
         {
             if (response.IsSuccess)
             {
@@ -159,9 +200,10 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public void ReceiveMessageAsync(string playerId, string message)
+        public void ReceiveMessageAsync(int playerId, string message)
         {
-            MessageBox.Show($"Message from {playerId}: {message}");
+            Messages.Add($"{playerId} {message}");
+            OnPropertyChanged(nameof(Messages));
         }
     }
 }
