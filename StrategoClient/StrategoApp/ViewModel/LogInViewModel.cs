@@ -150,24 +150,11 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        //public async Task ExecuteSignUpCommand()
-        //{
-        //    try
-        //    {
-        //        await _signUpServiceClient.SignUpAsync(Email, Password, Username);
-        //        IsDatabaseError = false;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.Error(ex.Message);
-        //        IsDatabaseError = true;
-        //    }
-        //}
-
         private void ExcuteLogInAsInvitedCommand(object obj)
         {
             try
             {
+                PlayerSingleton.Instance.LogIn(MappingInvited());
                 _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
             }
             catch (Exception ex)
@@ -193,7 +180,8 @@ namespace StrategoApp.ViewModel
 
         public void AccountInfo(PlayerDTO player)
         {
-            PlayerSingleton.Instance.LogIn(player);
+            Player playerInstance = MappingPlayer(player);
+            PlayerSingleton.Instance.LogIn(playerInstance);
         }
 
         private string HashPassword(string password)
@@ -213,6 +201,32 @@ namespace StrategoApp.ViewModel
 
                 return stringBuilder.ToString();
             }
+        }
+
+        private Player MappingPlayer(PlayerDTO playerDTO)
+        {
+            Player player = new Player
+            {
+                Name = playerDTO.Name,
+                Id = playerDTO.Id,
+                LabelPath = playerDTO.LabelPath,
+                PicturePath = playerDTO.PicturePath
+            };
+
+            return player;
+        }
+
+        private Player MappingInvited()
+        {
+            Player player = new Player
+            {
+                Name = "Invited",
+                Id = 0,
+                LabelPath = Properties.Resources.Apprentice_Label,
+                PicturePath = "pack://application:,,,/Assets/Images/ProfilePictures/Picture1.png",
+            };
+
+            return player;
         }
     }
 }

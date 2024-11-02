@@ -30,13 +30,27 @@
                            Grid.Column="1" 
                            FontSize="20" 
                            FontWeight="Bold" 
-                           VerticalAlignment="Center" HorizontalAlignment="Center"
-                           Foreground="{StaticResource DarkViolet}"/>
+                           VerticalAlignment="Top" HorizontalAlignment="Left"
+                           Foreground="{StaticResource DarkViolet}" Margin="283,13,0,0"/>
 
                 <Button Content="{x:Static res:Resources.Report_Button}" 
                         Width="105" Height="30" 
                         HorizontalAlignment="Left" VerticalAlignment="Center"
                         Style="{StaticResource ButtonVioletStyle}" Grid.Column="1" Grid.ColumnSpan="2" Margin="625,0,0,0"/>
+
+                <TextBlock Text="{x:Static res:Resources.Code_Label}"
+                    Grid.Column="1" 
+                    FontSize="20" 
+                    FontWeight="Bold" 
+                    VerticalAlignment="Top" HorizontalAlignment="Left"
+                    Foreground="{StaticResource DarkViolet}" Margin="393,13,0,0"/>
+                
+                <TextBlock Text="{Binding RoomCode}"
+                    Grid.Column="1" 
+                    FontSize="20" 
+                    FontWeight="Bold" 
+                    VerticalAlignment="Top" HorizontalAlignment="Left"
+                    Foreground="{StaticResource DarkViolet}" Margin="465,13,0,0"/>
             </Grid>
 
             <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20">

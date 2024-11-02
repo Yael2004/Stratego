@@ -45,16 +45,21 @@ namespace StrategoApp.ViewModel
         public ICommand JoinToRoomCommand { get; }
         public ICommand CancelJoinToRoomCommand { get; }
         public ICommand CreateRoomCommand { get; }
+        public ICommand JoinToRoomShowCommand { get; }
 
         public LobbyViewModel(MainWindowViewModel mainWindowViewModel)
         {
             AssignValuesToUser();
 
-            Connection();
+            if (!_isConnected)
+            {
+                Connection();
+            }
 
             _mainWindowViewModel = mainWindowViewModel;
             SendMessageCommand = new ViewModelCommand(ClientSendMessage, CanSendMessage);
             ShowProfileCommand = new ViewModelCommand(ClientShowProfile, CanShowProfile);
+            JoinToRoomShowCommand = new ViewModelCommand(JoinToRoomShow);
             JoinToRoomCommand = new ViewModelCommand(JoinToRoom);
             CancelJoinToRoomCommand = new ViewModelCommand(CancelJoinToRoom);
             CreateRoomCommand = new ViewModelCommand(CreateRoom);
@@ -135,12 +140,12 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public string UserId
+        public int UserId
         {
-            get { return _userId.ToString(); }
+            get { return _userId; }
             set
             {
-                _userId = int.Parse(value);
+                _userId = value;
                 OnPropertyChanged();
             }
         }
@@ -220,9 +225,9 @@ namespace StrategoApp.ViewModel
             if (PlayerSingleton.Instance.IsLoggedIn())
             {
                 var player = PlayerSingleton.Instance.Player;
-                _username = player.Name;
-                _userId = player.Id;
-                _profilePicture = player.PicturePath;
+                Username = player.Name;
+                UserId = player.Id;
+                ProfilePicture = player.PicturePath;
             }
         }
 
@@ -251,6 +256,7 @@ namespace StrategoApp.ViewModel
         {
             try
             {
+                Disconnection();
                 _mainWindowViewModel.ChangeViewModel(new PlayerProfileViewModel(_mainWindowViewModel));
             }
             catch (Exception ex)
@@ -259,7 +265,7 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public void JoinToRoom(object obj)
+        public void JoinToRoomShow(object obj)
         {
             try
             {
@@ -269,6 +275,28 @@ namespace StrategoApp.ViewModel
             catch (Exception ex)
             {
                 Log.Error("Error al unirse a la sala", ex);
+            }
+        }
+
+        public async void JoinToRoom(object obj)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(JoinRoomCode))
+                {
+                    var roomViewModel = new RoomViewModel(_mainWindowViewModel);
+                    await roomViewModel.JoinRoomAsync(JoinRoomCode);
+                    _mainWindowViewModel.ChangeViewModel(roomViewModel);
+                }
+                else
+                {
+                    MessageBox.Show("Por favor, ingresa un código de sala válido.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error al unirse a la sala", ex);
+                MessageBox.Show("Error al unirse a la sala: " + ex.Message);
             }
         }
 
@@ -284,15 +312,18 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public void CreateRoom(object obj)
+        public async void CreateRoom(object obj)
         {
             try
             {
-                _mainWindowViewModel.ChangeViewModel(new RoomViewModel(_mainWindowViewModel));
+                var roomViewModel = new RoomViewModel(_mainWindowViewModel);
+                await roomViewModel.CreateRoomAsync();
+                _mainWindowViewModel.ChangeViewModel(roomViewModel);
             }
             catch (Exception ex)
             {
                 Log.Error("Error al crear la sala", ex);
+                MessageBox.Show("Error al crear la sala: " + ex.Message);
             }
         }
 

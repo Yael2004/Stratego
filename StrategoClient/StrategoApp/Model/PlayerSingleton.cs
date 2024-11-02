@@ -10,7 +10,7 @@ namespace StrategoApp.Model
     public class PlayerSingleton
     {
         private static PlayerSingleton _playerInstance;
-        public PlayerDTO Player { get; private set; }
+        public Player Player { get; private set; }
         public static PlayerSingleton Instance
         {
             get
@@ -23,7 +23,7 @@ namespace StrategoApp.Model
             }
         }
 
-        public void LogIn(PlayerDTO player)
+        public void LogIn(Player player)
         {
             Player = player;
         }

@@ -150,7 +150,7 @@
                         Width="150" 
                         HorizontalAlignment="Center" 
                         Margin="10" 
-                        Command="{Binding JoinToRoomCommand}"/>
+                        Command="{Binding JoinToRoomShowCommand}"/>
             </Grid>
             
             <Grid x:Name="JoinRoomDialog" 
@@ -198,7 +198,8 @@
                             <Button Content="{x:Static res:Resources.Join_Button}" 
                                     Style="{StaticResource ButtonGreenStyle}" 
                                     Width="100" 
-                                    Margin="5"/>
+                                    Margin="5"
+                                    Command="{Binding JoinToRoomCommand}"/>
                             
                             <Button Content="{x:Static res:Resources.Cancel_Button}" 
                                     Style="{StaticResource ButtonGreenStyle}" 

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:2023/RoomService?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" />
+  <xs:import schemaLocation="http://localhost:2023/RoomService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
+  <xs:element name="CreateRoom">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateRoomResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="JoinRoom">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="JoinRoomResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeaveRoomAsync">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendMessageToRoom">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendMessageToRoomResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RoomCreatedAsync">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="response" nillable="true" type="q1:RoomCreatedResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RoomResponseAsync">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="response" nillable="true" type="q2:OperationResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveMessageAsync">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
