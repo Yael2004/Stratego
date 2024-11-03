@@ -89,6 +89,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\DTO\OtherPlayerInfoDTO.cs" />
+    <Compile Include="Data\DTO\OtherPlayerInfoResponse.cs" />
     <Compile Include="Data\DTO\PlayerFriendsResponse.cs" />
     <Compile Include="Data\DTO\PlayerInfoResponse.cs" />
     <Compile Include="Data\DTO\PlayerInfoShownDTO.cs" />
@@ -101,6 +103,7 @@
     <Compile Include="Services\ChatService.cs" />
     <Compile Include="Data\DTO\PlayerDTO.cs" />
     <Compile Include="Data\OperationResult.cs" />
+    <Compile Include="Services\Interfaces\Callbacks\IOtherProfileDataCallback.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IPlayerFriendsListServiceCallback.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IProfileModifierServiceCallback.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IProfileDataServiceCallback.cs" />
@@ -114,6 +117,7 @@
     <Compile Include="Logic\ChatManager.cs" />
     <Compile Include="Logic\EmailSender.cs" />
     <Compile Include="Logic\Interfaces\IEmailSender.cs" />
+    <Compile Include="Services\Interfaces\IOtherProfileDataService.cs" />
     <Compile Include="Services\Interfaces\IPlayerFriendsListService.cs" />
     <Compile Include="Services\Interfaces\IProfileModifierService.cs" />
     <Compile Include="Services\Interfaces\IProfileDataService.cs" />

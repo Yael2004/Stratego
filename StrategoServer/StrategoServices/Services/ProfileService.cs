@@ -1,5 +1,4 @@
-﻿using StrategoDataAccess;
-using StrategoServices.Data;
+﻿using StrategoServices.Data;
 using StrategoServices.Data.DTO;
 using StrategoServices.Logic;
 using System;
@@ -13,7 +12,7 @@ using System.Web.Profile;
 namespace StrategoServices.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class ProfileService : Interfaces.IProfileDataService, Interfaces.IPlayerFriendsListService, Interfaces.IProfileModifierService
+    public class ProfileService : Interfaces.IProfileDataService, Interfaces.IPlayerFriendsListService, Interfaces.IProfileModifierService, Interfaces.IOtherProfileDataService
     {
         private readonly Lazy<ProfilesManager> _profilesManager;
 
@@ -22,9 +21,38 @@ namespace StrategoServices.Services
             _profilesManager = profilesManager;
         }
 
-        public Task GetPlayerInfoAsync(int playerId)
+        public Task GetOtherPlayerInfoAsync(int playerId, int requesterPlayerId)
         {
-            throw new NotImplementedException();
+            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IOtherProfileDataCallback>();
+            var response = new OtherPlayerInfoResponse();
+
+            try
+            {
+                var result = _profilesManager.Value.GetPlayerInfoAsync(playerId, requesterPlayerId);
+
+                if (!result.Result.IsSuccess)
+                {
+                    response.Result = new OperationResult(false, result.Result.Error);
+                    response.PlayerInfo = new OtherPlayerInfoDTO();
+                }
+                else
+                {
+                    response.PlayerInfo = result.Result.Value;
+                    response.Result = new OperationResult(true, "Player info retrieved successfully");
+                }
+            }
+            catch (TimeoutException)
+            {
+                response.Result = new OperationResult(false, "Server error");
+                response.PlayerInfo = new OtherPlayerInfoDTO();
+            }
+            catch (Exception)
+            {
+                response.Result = new OperationResult(false, "Unexpected error");
+                response.PlayerInfo = new OtherPlayerInfoDTO();
+            }
+            
+            return Task.Run(() => callback.ReceiveOtherPlayerInfo(response));
         }
 
         public async Task GetPlayerStatisticsAsync(int playerAccountId)
@@ -112,7 +140,7 @@ namespace StrategoServices.Services
 
             try
             {
-                var getFriendsResult = await _profilesManager.Value.GetFriendsListAsync(playerId);
+                var getFriendsResult = await _profilesManager.Value.GetFriendIdsListAsync(playerId);
 
                 if (!getFriendsResult.IsSuccess)
                 {
@@ -121,7 +149,7 @@ namespace StrategoServices.Services
                 else
                 {
                     response.Result = new OperationResult(getFriendsResult.IsSuccess, getFriendsResult.Error);
-                    response.Friends = getFriendsResult.Value;
+                    response.FriendsIds = getFriendsResult.Value;
                 }
             }
             catch (TimeoutException)

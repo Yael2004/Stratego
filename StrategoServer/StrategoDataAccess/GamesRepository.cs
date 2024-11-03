@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Utilities;
 
@@ -12,6 +13,7 @@ namespace StrategoDataAccess
     public class GamesRepository
     {
         private readonly Lazy<StrategoEntities> _context;
+        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
         public GamesRepository(Lazy<StrategoEntities> context)
         {
@@ -20,6 +22,8 @@ namespace StrategoDataAccess
 
         public async Task<Result<Games>> GetGameStatisticsByAccountIdAsync(int accountId)
         {
+            await _semaphore.WaitAsync();
+
             try
             {
                 var games = await _context.Value.Games
@@ -42,8 +46,6 @@ namespace StrategoDataAccess
                 return Result<Games>.Failure($"Unexpected error: {ex.Message}");
             }
         }
-
-
 
     }
 }

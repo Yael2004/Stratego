@@ -8,17 +8,11 @@ using System.Threading.Tasks;
 namespace StrategoServices.Data.DTO
 {
     [DataContract]
-    public class PlayerFriendsResponse
+    public class OtherPlayerInfoResponse
     {
-        public PlayerFriendsResponse()
-        {
-            FriendsIds = new List<int>();
-        }
-
+        [DataMember]
+        public OtherPlayerInfoDTO PlayerInfo { get; set; }
         [DataMember]
         public OperationResult Result { get; set; }
-
-        [DataMember]
-        public List<int> FriendsIds { get; set; }
     }
 }

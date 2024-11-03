@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Profile;
 using Utilities;
 
 namespace StrategoServices.Logic
@@ -39,12 +40,62 @@ namespace StrategoServices.Logic
             return Result<PlayerStatisticsDTO>.Success(gameStatsDto);
         }
 
-        /*
-        public async Task<Result<PlayerInfoShownDTO>> GetPlayerInfoAsync(int playerId)
+        public async Task<Result<OtherPlayerInfoDTO>> GetPlayerInfoAsync(int playerId, int requesterId)
         {
+            try
+            {
+                var playerResult = await _playerRepository.Value.GetOtherPlayerByIdAsync(playerId);
+                if (!playerResult.IsSuccess)
+                {
+                    return Result<OtherPlayerInfoDTO>.Failure(playerResult.Error);
+                }
 
+                var picturePath = await _playerRepository.Value.GetPicturePathByIdAsync(playerResult.Value.PictureId);
+                var labelPath = await _playerRepository.Value.GetLabelPathByIdAsync(playerResult.Value.IdLabel);
+                
+                var playerInfoDto = new PlayerInfoShownDTO
+                {
+                    Name = playerResult.Value.Name,
+                    PicturePath = picturePath.Value,
+                    LabelPath = labelPath.Value
+                };
+
+                var playerStatisticsResult = await _gamesRepository.Value.GetGameStatisticsByAccountIdAsync(playerResult.Value.AccountId);
+                if (!playerStatisticsResult.IsSuccess)
+                {
+                    return Result<OtherPlayerInfoDTO>.Failure(playerStatisticsResult.Error);
+                }
+
+                var isFriendResult = await _playerRepository.Value.IsFriendAsync(requesterId, playerId);
+                if (!isFriendResult.IsSuccess)
+                {
+                    return Result<OtherPlayerInfoDTO>.Failure(isFriendResult.Error);
+                }
+
+                var playerStatistics = new PlayerStatisticsDTO
+                {
+                    WonGames = playerStatisticsResult.Value.WonGames,
+                    LostGames = playerStatisticsResult.Value.DeafeatGames
+                };
+
+                var response = new OtherPlayerInfoDTO
+                {
+                    PlayerInfo = playerInfoDto,
+                    PlayerStatistics = playerStatistics,
+                    IsFriend = isFriendResult.Value
+                };
+
+                return Result<OtherPlayerInfoDTO>.Success(response);
+            }
+            catch (SqlException sqlEx)
+            {
+                return Result<OtherPlayerInfoDTO>.Failure($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Result<OtherPlayerInfoDTO>.Failure($"Unexpected error: {ex.Message}");
+            }
         }
-        */
 
         public async Task<Result<PlayerInfoShownDTO>> UpdatePlayerProfileAsync(PlayerInfoShownDTO PlayerInfoShownDTO)
         {
@@ -84,27 +135,20 @@ namespace StrategoServices.Logic
             };
         }
 
-        public async Task<Result<List<PlayerInfoShownDTO>>> GetFriendsListAsync(int playerId)
+        public async Task<Result<List<int>>> GetFriendIdsListAsync(int playerId)
         {
             var friendsResult = await GetFriendsFromRepositoryAsync(playerId);
 
             if (!friendsResult.IsSuccess)
             {
-                return Result<List<PlayerInfoShownDTO>>.Failure(friendsResult.Error);
+                return Result<List<int>>.Failure(friendsResult.Error);
             }
 
-            var friendsDtoList = new List<PlayerInfoShownDTO>();
-            foreach (var friend in friendsResult.Value)
-            {
-                var friendDtoResult = await MapPlayerToPlayerInfoShownDTOAsync(friend);
-                if (!friendDtoResult.IsSuccess)
-                {
-                    return Result<List<PlayerInfoShownDTO>>.Failure(friendDtoResult.Error);
-                }
-                friendsDtoList.Add(friendDtoResult.Value);
-            }
+            var friendIds = friendsResult.Value.Select(friend => friend.Id).ToList();
 
-            return Result<List<PlayerInfoShownDTO>>.Success(friendsDtoList);
+            return friendIds.Any()
+                ? Result<List<int>>.Success(friendIds)
+                : Result<List<int>>.Failure("No friends found.");
         }
 
         private async Task<Result<IEnumerable<Player>>> GetFriendsFromRepositoryAsync(int playerId)
@@ -116,7 +160,7 @@ namespace StrategoServices.Logic
         {
             try
             {
-                var picturePathResult = await _playerRepository.Value.GetPicturePathByIdAsync(player.PictureId ?? 1);
+                var picturePathResult = await _playerRepository.Value.GetPicturePathByIdAsync(player.PictureId);
                 if (!picturePathResult.IsSuccess)
                 {
                     return Result<PlayerInfoShownDTO>.Failure("Failed to retrieve picture path.");

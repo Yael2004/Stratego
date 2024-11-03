@@ -18,6 +18,7 @@ namespace StrategoDataAccess
         public Pictures()
         {
             this.Player = new HashSet<Player>();
+            this.Player1 = new HashSet<Player>();
         }
     
         public string path { get; set; }
@@ -25,5 +26,7 @@ namespace StrategoDataAccess
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Player> Player { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Player> Player1 { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Utilities;
@@ -15,14 +16,16 @@ namespace StrategoDataAccess
     public class PlayerRepository
     {
         private readonly Lazy<StrategoEntities> _context;
+        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
         public PlayerRepository(Lazy<StrategoEntities> context)
         {
             _context = context;
         }
 
-        public async Task<Result<Player>> GetPlayerByIdAsync(int playerId)
+        public async Task<Result<Player>> GetOtherPlayerByIdAsync(int playerId)
         {
+            await _semaphore.WaitAsync();
             try
             {
                 var player = await _context.Value.Player.FirstOrDefaultAsync(p => p.Id == playerId);
@@ -41,6 +44,26 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 return Result<Player>.Failure($"Unexpected error: {ex.Message}");
+            }
+        }
+
+        public async Task<Result<bool>> IsFriendAsync(int playerId, int otherPlayerId)
+        {
+            try
+            {
+                var isFriend = await _context.Value.Friend.AnyAsync(f =>
+                    (f.PlayerId == playerId && f.FriendId == otherPlayerId && f.Status == "friend") ||
+                    (f.PlayerId == otherPlayerId && f.FriendId == playerId && f.Status == "friend"));
+
+                return Result<bool>.Success(isFriend);
+            }
+            catch (SqlException sqlEx)
+            {
+                return Result<bool>.Failure($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Result<bool>.Failure($"Unexpected error: {ex.Message}");
             }
         }
 

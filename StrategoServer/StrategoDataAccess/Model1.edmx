@@ -59,8 +59,8 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="PictureId" Type="int" />
-          <Property Name="AccountId" Type="int" />
+          <Property Name="PictureId" Type="int" Nullable="false" />
+          <Property Name="AccountId" Type="int" Nullable="false" />
           <Property Name="IdLabel" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Report">
@@ -132,7 +132,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Player__AccountI__48CFD27E">
-          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
           <End Role="Player" Type="Self.Player" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Account">
@@ -144,7 +144,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Player__PictureI__49C3F6B7">
-          <End Role="Pictures" Type="Self.Pictures" Multiplicity="0..1" />
+          <End Role="Pictures" Type="Self.Pictures" Multiplicity="1" />
           <End Role="Player" Type="Self.Player" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Pictures">
@@ -188,6 +188,18 @@
             </Principal>
             <Dependent Role="Player">
               <PropertyRef Name="IdLabel" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Player_Pictures">
+          <End Role="Pictures" Type="Self.Pictures" Multiplicity="1" />
+          <End Role="Player" Type="Self.Player" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pictures">
+              <PropertyRef Name="IdPicture" />
+            </Principal>
+            <Dependent Role="Player">
+              <PropertyRef Name="PictureId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -268,6 +280,10 @@
             <End Role="Label" EntitySet="Label" />
             <End Role="Player" EntitySet="Player" />
           </AssociationSet>
+          <AssociationSet Name="FK_Player_Pictures" Association="Self.FK_Player_Pictures">
+            <End Role="Pictures" EntitySet="Pictures" />
+            <End Role="Player" EntitySet="Player" />
+          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
@@ -329,6 +345,7 @@
           <Property Name="path" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="IdPicture" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Player" Relationship="Self.FK__Player__PictureI__49C3F6B7" FromRole="Pictures" ToRole="Player" />
+          <NavigationProperty Name="Player1" Relationship="Self.FK_Player_Pictures" FromRole="Pictures" ToRole="Player" />
         </EntityType>
         <EntityType Name="Player">
           <Key>
@@ -336,8 +353,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="PictureId" Type="Int32" />
-          <Property Name="AccountId" Type="Int32" />
+          <Property Name="PictureId" Type="Int32" Nullable="false" />
+          <Property Name="AccountId" Type="Int32" Nullable="false" />
           <Property Name="IdLabel" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Account" Relationship="Self.FK__Player__AccountI__48CFD27E" FromRole="Player" ToRole="Account" />
           <NavigationProperty Name="Ban" Relationship="Self.FK__Ban__PlayerId__44FF419A" FromRole="Player" ToRole="Ban" />
@@ -345,6 +362,7 @@
           <NavigationProperty Name="Friend1" Relationship="Self.FK__Friend__PlayerId__46E78A0C" FromRole="Player" ToRole="Friend" />
           <NavigationProperty Name="Label" Relationship="Self.FK_Player_Label" FromRole="Player" ToRole="Label" />
           <NavigationProperty Name="Pictures" Relationship="Self.FK__Player__PictureI__49C3F6B7" FromRole="Player" ToRole="Pictures" />
+          <NavigationProperty Name="Pictures1" Relationship="Self.FK_Player_Pictures" FromRole="Player" ToRole="Pictures" />
           <NavigationProperty Name="Report" Relationship="Self.FK__Report__IdReport__4AB81AF0" FromRole="Player" ToRole="Report" />
           <NavigationProperty Name="Report1" Relationship="Self.FK__Report__IdReport__4BAC3F29" FromRole="Player" ToRole="Report" />
         </EntityType>
@@ -383,7 +401,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Player__AccountI__48CFD27E">
-          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
           <End Role="Player" Type="Self.Player" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Account">
@@ -443,7 +461,19 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Player__PictureI__49C3F6B7">
-          <End Role="Pictures" Type="Self.Pictures" Multiplicity="0..1" />
+          <End Role="Pictures" Type="Self.Pictures" Multiplicity="1" />
+          <End Role="Player" Type="Self.Player" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pictures">
+              <PropertyRef Name="IdPicture" />
+            </Principal>
+            <Dependent Role="Player">
+              <PropertyRef Name="PictureId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Player_Pictures">
+          <End Role="Pictures" Type="Self.Pictures" Multiplicity="1" />
           <End Role="Player" Type="Self.Player" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Pictures">
@@ -513,6 +543,10 @@
             <End Role="Player" EntitySet="Player" />
           </AssociationSet>
           <AssociationSet Name="FK__Player__PictureI__49C3F6B7" Association="Self.FK__Player__PictureI__49C3F6B7">
+            <End Role="Pictures" EntitySet="Pictures" />
+            <End Role="Player" EntitySet="Player" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Player_Pictures" Association="Self.FK_Player_Pictures">
             <End Role="Pictures" EntitySet="Pictures" />
             <End Role="Player" EntitySet="Player" />
           </AssociationSet>

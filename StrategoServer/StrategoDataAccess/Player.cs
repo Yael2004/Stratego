@@ -26,8 +26,8 @@ namespace StrategoDataAccess
     
         public int Id { get; set; }
         public string Name { get; set; }
-        public Nullable<int> PictureId { get; set; }
-        public Nullable<int> AccountId { get; set; }
+        public int PictureId { get; set; }
+        public int AccountId { get; set; }
         public int IdLabel { get; set; }
     
         public virtual Account Account { get; set; }
@@ -39,6 +39,7 @@ namespace StrategoDataAccess
         public virtual ICollection<Friend> Friend1 { get; set; }
         public virtual Label Label { get; set; }
         public virtual Pictures Pictures { get; set; }
+        public virtual Pictures Pictures1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Report> Report { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
