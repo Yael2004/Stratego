@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StrategoServices.Services.Interfaces.Callbacks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ namespace StrategoServices.Logic
         public int Player2Id { get; set; }
         public bool IsFull { get; set; }
         public List<string> Messages { get; set; }
+        public List<IRoomServiceCallback> PlayerCallbacks { get; set; }
 
         public Room()
         {
@@ -21,6 +23,7 @@ namespace StrategoServices.Logic
             Player2Id = 0;
             IsFull = false;
             Messages = new List<string>();
+            PlayerCallbacks = new List<IRoomServiceCallback> { null, null };
         }
     }
 }

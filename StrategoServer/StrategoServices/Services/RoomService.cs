@@ -32,7 +32,8 @@ namespace StrategoServices.Services
             var newRoom = new Room
             {
                 Code = roomCode,
-                Player1Id = playerId
+                Player1Id = playerId,
+                PlayerCallbacks = new List<IRoomServiceCallback> { callback, null }
             };
 
             if (_rooms.TryAdd(roomCode, newRoom))
@@ -70,6 +71,7 @@ namespace StrategoServices.Services
                 else
                 {
                     room.Player2Id = playerId;
+                    room.PlayerCallbacks[1] = callback;
                     room.IsFull = true;
 
                     var communicationObject = (ICommunicationObject)callback;
@@ -124,21 +126,20 @@ namespace StrategoServices.Services
 
         public async Task SendMessageToRoomAsync(string roomCode, int playerId, string message)
         {
-            var receiverCallback = OperationContext.Current.GetCallbackChannel<IRoomServiceCallback>();
-
             if (_rooms.TryGetValue(roomCode, out var room))
             {
-                int receiverId = room.Player1Id == playerId ? room.Player2Id : room.Player1Id;
-
-                if (receiverId != 0)
+                foreach (var callback in room.PlayerCallbacks)
                 {
-
-                    await Task.Run(() => receiverCallback.ReceiveMessageAsync(playerId, message));
+                    if (callback != null)
+                    {
+                        await Task.Run(() => callback.ReceiveMessageAsync(playerId, message));
+                    }
                 }
             }
             else
             {
-                await Task.Run(() => receiverCallback.RoomResponseAsync(new OperationResult(false, "Room does not exist.")));
+                var callback = OperationContext.Current.GetCallbackChannel<IRoomServiceCallback>();
+                await Task.Run(() => callback.RoomResponseAsync(new OperationResult(false, "Room does not exist.")));
             }
         }
 
