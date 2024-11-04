@@ -122,7 +122,8 @@ namespace StrategoApp.ViewModel
             try
             {
                 var playerId = PlayerSingleton.Instance.Player.Id;
-                await _roomServiceClient.JoinRoomAsync(roomCode, playerId);
+                RoomCode = roomCode;
+                await _roomServiceClient.JoinRoomAsync(RoomCode, playerId);
             }
             catch (Exception ex)
             {

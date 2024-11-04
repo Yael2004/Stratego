@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:2022/ProfileService?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" />
-  <xs:element name="GetPlayerInfo">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="playerId" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetPlayerInfoResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
   <xs:element name="GetPlayerStatistics">
     <xs:complexType>
       <xs:sequence>
@@ -74,6 +62,26 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="playerFriends" nillable="true" type="q5:PlayerFriendsResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetOtherPlayerInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="playerId" type="xs:int" />
+        <xs:element minOccurs="0" name="requesterPlayerId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetOtherPlayerInfoResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveOtherPlayerInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="response" nillable="true" type="q6:OtherPlayerInfoResponse" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

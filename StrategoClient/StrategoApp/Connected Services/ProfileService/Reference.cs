@@ -376,7 +376,7 @@ namespace StrategoApp.ProfileService {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private StrategoApp.ProfileService.PlayerInfoShownDTO[] FriendsField;
+        private int[] FriendsIdsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private StrategoApp.ProfileService.OperationResult ResultField;
@@ -392,14 +392,14 @@ namespace StrategoApp.ProfileService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public StrategoApp.ProfileService.PlayerInfoShownDTO[] Friends {
+        public int[] FriendsIds {
             get {
-                return this.FriendsField;
+                return this.FriendsIdsField;
             }
             set {
-                if ((object.ReferenceEquals(this.FriendsField, value) != true)) {
-                    this.FriendsField = value;
-                    this.RaisePropertyChanged("Friends");
+                if ((object.ReferenceEquals(this.FriendsIdsField, value) != true)) {
+                    this.FriendsIdsField = value;
+                    this.RaisePropertyChanged("FriendsIds");
                 }
             }
         }
@@ -427,15 +427,147 @@ namespace StrategoApp.ProfileService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="OtherPlayerInfoResponse", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
+    [System.SerializableAttribute()]
+    public partial class OtherPlayerInfoResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategoApp.ProfileService.OtherPlayerInfoDTO PlayerInfoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategoApp.ProfileService.OperationResult ResultField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategoApp.ProfileService.OtherPlayerInfoDTO PlayerInfo {
+            get {
+                return this.PlayerInfoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PlayerInfoField, value) != true)) {
+                    this.PlayerInfoField = value;
+                    this.RaisePropertyChanged("PlayerInfo");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategoApp.ProfileService.OperationResult Result {
+            get {
+                return this.ResultField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ResultField, value) != true)) {
+                    this.ResultField = value;
+                    this.RaisePropertyChanged("Result");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="OtherPlayerInfoDTO", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
+    [System.SerializableAttribute()]
+    public partial class OtherPlayerInfoDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsFriendField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategoApp.ProfileService.PlayerInfoShownDTO PlayerInfoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategoApp.ProfileService.PlayerStatisticsDTO PlayerStatisticsField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsFriend {
+            get {
+                return this.IsFriendField;
+            }
+            set {
+                if ((this.IsFriendField.Equals(value) != true)) {
+                    this.IsFriendField = value;
+                    this.RaisePropertyChanged("IsFriend");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategoApp.ProfileService.PlayerInfoShownDTO PlayerInfo {
+            get {
+                return this.PlayerInfoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PlayerInfoField, value) != true)) {
+                    this.PlayerInfoField = value;
+                    this.RaisePropertyChanged("PlayerInfo");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategoApp.ProfileService.PlayerStatisticsDTO PlayerStatistics {
+            get {
+                return this.PlayerStatisticsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PlayerStatisticsField, value) != true)) {
+                    this.PlayerStatisticsField = value;
+                    this.RaisePropertyChanged("PlayerStatistics");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ProfileService.IProfileDataService", CallbackContract=typeof(StrategoApp.ProfileService.IProfileDataServiceCallback))]
     public interface IProfileDataService {
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileDataService/GetPlayerInfo", ReplyAction="http://tempuri.org/IProfileDataService/GetPlayerInfoResponse")]
-        void GetPlayerInfo(int playerId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileDataService/GetPlayerInfo", ReplyAction="http://tempuri.org/IProfileDataService/GetPlayerInfoResponse")]
-        System.Threading.Tasks.Task GetPlayerInfoAsync(int playerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileDataService/GetPlayerStatistics", ReplyAction="http://tempuri.org/IProfileDataService/GetPlayerStatisticsResponse")]
         void GetPlayerStatistics(int playerId);
@@ -480,14 +612,6 @@ namespace StrategoApp.ProfileService {
         
         public ProfileDataServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, binding, remoteAddress) {
-        }
-        
-        public void GetPlayerInfo(int playerId) {
-            base.Channel.GetPlayerInfo(playerId);
-        }
-        
-        public System.Threading.Tasks.Task GetPlayerInfoAsync(int playerId) {
-            return base.Channel.GetPlayerInfoAsync(playerId);
         }
         
         public void GetPlayerStatistics(int playerId) {
@@ -606,6 +730,61 @@ namespace StrategoApp.ProfileService {
         
         public System.Threading.Tasks.Task GetPlayerFriendsListAsync(int playerId) {
             return base.Channel.GetPlayerFriendsListAsync(playerId);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ProfileService.IOtherProfileDataService", CallbackContract=typeof(StrategoApp.ProfileService.IOtherProfileDataServiceCallback))]
+    public interface IOtherProfileDataService {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOtherProfileDataService/GetOtherPlayerInfo", ReplyAction="http://tempuri.org/IOtherProfileDataService/GetOtherPlayerInfoResponse")]
+        void GetOtherPlayerInfo(int playerId, int requesterPlayerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IOtherProfileDataService/GetOtherPlayerInfo", ReplyAction="http://tempuri.org/IOtherProfileDataService/GetOtherPlayerInfoResponse")]
+        System.Threading.Tasks.Task GetOtherPlayerInfoAsync(int playerId, int requesterPlayerId);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IOtherProfileDataServiceCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IOtherProfileDataService/ReceiveOtherPlayerInfo")]
+        void ReceiveOtherPlayerInfo(StrategoApp.ProfileService.OtherPlayerInfoResponse response);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IOtherProfileDataServiceChannel : StrategoApp.ProfileService.IOtherProfileDataService, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class OtherProfileDataServiceClient : System.ServiceModel.DuplexClientBase<StrategoApp.ProfileService.IOtherProfileDataService>, StrategoApp.ProfileService.IOtherProfileDataService {
+        
+        public OtherProfileDataServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
+        }
+        
+        public OtherProfileDataServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
+        }
+        
+        public OtherProfileDataServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public OtherProfileDataServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public OtherProfileDataServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
+        }
+        
+        public void GetOtherPlayerInfo(int playerId, int requesterPlayerId) {
+            base.Channel.GetOtherPlayerInfo(playerId, requesterPlayerId);
+        }
+        
+        public System.Threading.Tasks.Task GetOtherPlayerInfoAsync(int playerId, int requesterPlayerId) {
+            return base.Channel.GetOtherPlayerInfoAsync(playerId, requesterPlayerId);
         }
     }
 }

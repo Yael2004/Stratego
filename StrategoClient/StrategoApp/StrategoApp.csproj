@@ -218,6 +218,9 @@
     <None Include="Connected Services\ProfileService\ProfileService3.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\ProfileService\ProfileService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\RoomService\RoomService.wsdl" />
     <None Include="Connected Services\RoomService\RoomService.xsd">
       <SubType>Designer</SubType>

@@ -47,7 +47,6 @@ namespace StrategoApp.ViewModel
 
         public ICommand EditProfilePictureCommand { get; }
         public ICommand EditUsernameCommand { get; }
-        public ICommand RemoveFriendCommand { get; }
         public ICommand BackToLobbyCommand { get; }
         public ICommand SelectProfilePictureCommand { get; }
         public ICommand ToggleProfileSelectorVisibilityCommand { get; }
@@ -65,6 +64,7 @@ namespace StrategoApp.ViewModel
             PlayerStatisticsResponse playerStatisticsResponse = new PlayerStatisticsResponse();
 
             LoadPlayerInfoFromSingleton();
+            LoadPlayerStatisticsAsync();
 
             ProfileTags = new ObservableCollection<string>
             {
@@ -346,20 +346,6 @@ namespace StrategoApp.ViewModel
             IsServiceErrorVisible = false;
         }
 
-        private void LoadPlayerInfo()
-        {
-            try
-            {
-                var client = new ProfileDataServiceClient(new InstanceContext(this));
-                client.GetPlayerInfoAsync(PlayerId);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-                IsServiceErrorVisible = true;
-            }
-        }
-
         public void PlayerInfo(PlayerInfoResponse response)
         {
             if (response != null)
@@ -367,6 +353,20 @@ namespace StrategoApp.ViewModel
                 Username = response.Profile.Name;
                 PlayerId = response.Profile.Id;
                 ProfilePicture = response.Profile.PicturePath;
+            }
+        }
+
+        private async void LoadPlayerStatisticsAsync()
+        {
+            try
+            {
+                var client = new ProfileDataServiceClient(new InstanceContext(this));
+                await client.GetPlayerStatisticsAsync(PlayerId);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error al cargar las estadísticas del jugador", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -402,11 +402,6 @@ namespace StrategoApp.ViewModel
                 MessageBox.Show("No se pudo actualizar el perfil en el servidor.");
                 IsEditUsernameVisible = false;
             }
-        }
-
-        public void PlayerFriendsList(PlayerFriendsResponse playerFriends)
-        {
-            throw new NotImplementedException();
         }
     }
 }

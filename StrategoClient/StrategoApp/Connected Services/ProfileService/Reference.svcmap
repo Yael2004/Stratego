@@ -22,6 +22,7 @@
     <MetadataSource Address="http://localhost:2022/ProfileService" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
+    <MetadataFile FileName="ProfileService4.xsd" MetadataType="Schema" ID="62cea3a8-528d-4473-89d6-a3099ac83fa1" SourceId="1" SourceUrl="http://localhost:2022/ProfileService?xsd=xsd4" />
     <MetadataFile FileName="ProfileService.disco" MetadataType="Disco" ID="f654bf0c-d10b-44f5-a286-44e6656ad6a3" SourceId="1" SourceUrl="http://localhost:2022/ProfileService?disco" />
     <MetadataFile FileName="ProfileService.xsd" MetadataType="Schema" ID="30c21c5d-49c9-437c-a1f4-64f0d6c0b90b" SourceId="1" SourceUrl="http://localhost:2022/ProfileService?xsd=xsd3" />
     <MetadataFile FileName="ProfileService1.xsd" MetadataType="Schema" ID="77a2b373-419f-4e39-940d-bdf378934c7f" SourceId="1" SourceUrl="http://localhost:2022/ProfileService?xsd=xsd2" />

@@ -1,6 +1,7 @@
 ﻿using log4net;
 using StrategoApp.Helpers;
 using StrategoApp.Model;
+using StrategoApp.ProfileService;
 using StrategoApp.Service;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ using System.Windows.Media.Animation;
 
 namespace StrategoApp.ViewModel
 {
-    public class LobbyViewModel : ViewModelBase, Service.IChatServiceCallback
+    public class LobbyViewModel : ViewModelBase, Service.IChatServiceCallback, ProfileService.IPlayerFriendsListServiceCallback
     {
         private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
 
@@ -38,9 +39,10 @@ namespace StrategoApp.ViewModel
         private ChatServiceClient _chatClient;
         private MainWindowViewModel _mainWindowViewModel;
         private ObservableCollection<string> _messages;
+        private ObservableCollection<Player> _friends;
 
         public ICommand SendMessagesCommand;
-        public ICommand ShowProfileCommand { get;  }
+        public ICommand ShowProfileCommand { get; }
         public ICommand SendMessageCommand { get; }
         public ICommand JoinToRoomCommand { get; }
         public ICommand CancelJoinToRoomCommand { get; }
@@ -64,6 +66,7 @@ namespace StrategoApp.ViewModel
             CancelJoinToRoomCommand = new ViewModelCommand(CancelJoinToRoom);
             CreateRoomCommand = new ViewModelCommand(CreateRoom);
             _messages = new ObservableCollection<string>();
+            _friends = new ObservableCollection<Player>();
         }
 
         public LobbyViewModel()
@@ -85,7 +88,7 @@ namespace StrategoApp.ViewModel
                     _chatClient = new ChatServiceClient(context);
 
                     _userId = _chatClient.ConnectAsync(_userId, _username).Result;
-                    
+
                     PlayerSingleton.Instance.Player.Id = _userId;
 
                     MessageBox.Show($"{_username} conectado al chat.");
@@ -117,8 +120,8 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public ObservableCollection<string> Messages 
-        { 
+        public ObservableCollection<string> Messages
+        {
             get { return _messages; }
             set
             {
@@ -128,6 +131,16 @@ namespace StrategoApp.ViewModel
                     OnPropertyChanged(nameof(Messages));
                 }
 
+            }
+        }
+
+        public ObservableCollection<Player> Friends
+        {
+            get => _friends;
+            set
+            {
+                _friends = value;
+                OnPropertyChanged(nameof(Friends));
             }
         }
 
@@ -207,7 +220,7 @@ namespace StrategoApp.ViewModel
             set
             {
                 _isConnected = value;
-                OnPropertyChanged(); 
+                OnPropertyChanged();
             }
         }
 
@@ -253,7 +266,7 @@ namespace StrategoApp.ViewModel
             return true;
         }
 
-        public void ClientShowProfile(object obj) 
+        public void ClientShowProfile(object obj)
         {
             try
             {
@@ -328,17 +341,50 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public async Task LoadFriendsListAsync()
+        {
+            try
+            {
+                var client = new PlayerFriendsListServiceClient(new InstanceContext(this));
+                await client.GetPlayerFriendsListAsync(_userId);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error al cargar la lista de amigos", ex);
+                MessageBox.Show("Error al cargar la lista de amigos.");
+            }
+        }
+
         public void ReceiveMessage(string username, string message)
         {
             Messages.Add($"{username} {message}");
             OnPropertyChanged(nameof(Messages));
         }
 
-        public void ChatResponse(OperationResult result)
+        public void ChatResponse(Service.OperationResult result)
         {
             if (!result.IsSuccess)
             {
                 ErrorMessage = "Error al enviar el mensaje";
+            }
+        }
+
+        public void PlayerFriendsList(PlayerFriendsResponse response)
+        {
+            if (response.Result.IsSuccess)
+            {
+                foreach (var friendId in response.FriendsIds)
+                {
+                    Friends.Add(new Player
+                    {
+                        Id = friendId,
+                        Name = "Nombre de Ejemplo",
+                    });
+                }
+            }
+            else
+            {
+                MessageBox.Show($"Error al cargar la lista de amigos: {response.Result.Message}");
             }
         }
     }
