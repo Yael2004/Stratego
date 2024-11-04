@@ -1,4 +1,5 @@
 ﻿using StrategoApp.Model;
+using StrategoApp.ProfileService;
 using StrategoApp.RoomService;
 using StrategoApp.Service;
 using System;
@@ -13,11 +14,17 @@ using System.Windows.Input;
 
 namespace StrategoApp.ViewModel
 {
-    public class RoomViewModel : ViewModelBase, RoomService.IRoomServiceCallback
+    public class RoomViewModel : ViewModelBase, RoomService.IRoomServiceCallback, ProfileService.IOtherProfileDataServiceCallback
     {
         private RoomServiceClient _roomServiceClient;
+        private OtherProfileDataServiceClient _otherProfileDataService;
+
         private string _username;
         private int _userId;
+        private string _profilePicture;
+        private string _usernameOponent;
+        private int _userIdOponent;
+        private string _profilePictureOponent;
         private string _messageToSend;
 
         private ObservableCollection<string> _messages;
@@ -35,6 +42,8 @@ namespace StrategoApp.ViewModel
             _messages = new ObservableCollection<string>();
             _mainWindowViewModel = mainWindowViewModel;
             InitializeService();
+            LoadPlayerData();
+            LoadOponentPlayerData();
         }
 
         public RoomViewModel() { }
@@ -72,6 +81,46 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public string ProfilePicture
+        {
+            get { return _profilePicture; }
+            set
+            {
+                _profilePicture = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string UsernameOponent
+        {
+            get { return _usernameOponent; }
+            set
+            {
+                _usernameOponent = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int UserIdOponent
+        {
+            get { return _userIdOponent; }
+            set
+            {
+                _userIdOponent = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ProfilePictureOponent
+        {
+            get { return _profilePictureOponent; }
+            set
+            {
+                _profilePictureOponent = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string MessageToSend
         {
             get { return _messageToSend; }
@@ -101,34 +150,47 @@ namespace StrategoApp.ViewModel
             {
                 Username = PlayerSingleton.Instance.Player.Name;
                 UserId = PlayerSingleton.Instance.Player.Id;
+                ProfilePicture = PlayerSingleton.Instance.Player.PicturePath;
             }
         }
 
-        public async Task CreateARoomAsync()
+        private void LoadOponentPlayerData()
+        {
+            _otherProfileDataService = new OtherProfileDataServiceClient(new InstanceContext(this));
+            _otherProfileDataService.GetOtherPlayerInfoAsync(UserIdOponent, UserId);
+        }
+
+        public async Task<bool> CreateARoomAsync()
         {
             try
             {
                 var playerId = PlayerSingleton.Instance.Player.Id;
                 await _roomServiceClient.CreateRoomAsync(playerId);
+                return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error creating room: " + ex.Message);
+                return false;
             }
         }
 
-        public async Task JoinToRoomAsync(string roomCode)
+        public async Task<bool> JoinToRoomAsync(string roomCode)
         {
+            bool canJoin = false;
+            var playerId = PlayerSingleton.Instance.Player.Id;
+            RoomCode = roomCode;
+
             try
             {
-                var playerId = PlayerSingleton.Instance.Player.Id;
-                RoomCode = roomCode;
-                await _roomServiceClient.JoinRoomAsync(RoomCode, playerId);
+                canJoin = await _roomServiceClient.JoinRoomAsync(RoomCode, playerId);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error joining room: " + ex.Message);
             }
+
+            return canJoin;
         }
 
         private void LeaveTheRoomAsync()
@@ -205,6 +267,20 @@ namespace StrategoApp.ViewModel
         {
             Messages.Add($"{playerId} {message}");
             OnPropertyChanged(nameof(Messages));
+        }
+
+        public void ReceiveOtherPlayerInfo(OtherPlayerInfoResponse response)
+        {
+            if (response.Result.IsSuccess)
+            {
+                UsernameOponent = response.PlayerInfo.PlayerInfo.Name;
+                UserIdOponent = response.PlayerInfo.PlayerInfo.Id;
+                ProfilePictureOponent = response.PlayerInfo.PlayerInfo.PicturePath;
+            }
+            else
+            {
+                MessageBox.Show($"{response.Result.Message}");
+            }
         }
     }
 }

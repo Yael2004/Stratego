@@ -18,7 +18,7 @@ using System.Windows.Media.Animation;
 
 namespace StrategoApp.ViewModel
 {
-    public class LobbyViewModel : ViewModelBase, Service.IChatServiceCallback, ProfileService.IPlayerFriendsListServiceCallback
+    public class LobbyViewModel : ViewModelBase, Service.IChatServiceCallback, ProfileService.IPlayerFriendsListServiceCallback, ProfileService.IOtherProfileDataServiceCallback
     {
         private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
 
@@ -37,6 +37,7 @@ namespace StrategoApp.ViewModel
         private static LobbyViewModel _instance;
 
         private ChatServiceClient _chatClient;
+        private OtherProfileDataServiceClient _otherProfileDataServiceClient;
         private MainWindowViewModel _mainWindowViewModel;
         private ObservableCollection<string> _messages;
         private ObservableCollection<Player> _friends;
@@ -299,8 +300,11 @@ namespace StrategoApp.ViewModel
                 if (!string.IsNullOrWhiteSpace(JoinRoomCode))
                 {
                     var roomViewModel = new RoomViewModel(_mainWindowViewModel);
-                    await roomViewModel.JoinToRoomAsync(JoinRoomCode);
-                    _mainWindowViewModel.ChangeViewModel(roomViewModel);
+                    
+                    if (await roomViewModel.JoinToRoomAsync(JoinRoomCode))
+                    {
+                        _mainWindowViewModel.ChangeViewModel(roomViewModel);
+                    }
                 }
                 else
                 {
@@ -331,8 +335,10 @@ namespace StrategoApp.ViewModel
             try
             {
                 var roomViewModel = new RoomViewModel(_mainWindowViewModel);
-                await roomViewModel.CreateARoomAsync();
-                _mainWindowViewModel.ChangeViewModel(roomViewModel);
+                if (await roomViewModel.CreateARoomAsync())
+                {
+                    _mainWindowViewModel.ChangeViewModel(roomViewModel);
+                }
             }
             catch (Exception ex)
             {
@@ -372,20 +378,27 @@ namespace StrategoApp.ViewModel
         public void PlayerFriendsList(PlayerFriendsResponse response)
         {
             if (response.Result.IsSuccess)
-            {
+            {                
+                _otherProfileDataServiceClient = new OtherProfileDataServiceClient(new InstanceContext(this));
+                
                 foreach (var friendId in response.FriendsIds)
                 {
-                    Friends.Add(new Player
-                    {
-                        Id = friendId,
-                        Name = "Nombre de Ejemplo",
-                    });
+                    _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendId, UserId);
                 }
             }
             else
             {
                 MessageBox.Show($"Error al cargar la lista de amigos: {response.Result.Message}");
             }
+        }
+
+        public void ReceiveOtherPlayerInfo(OtherPlayerInfoResponse response)
+        {
+            Friends.Add(new Player
+            {
+                AccountId = response.PlayerInfo.PlayerInfo.Id,
+                Name = response.PlayerInfo.PlayerInfo.Name,
+            });
         }
     }
 }

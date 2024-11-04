@@ -140,16 +140,16 @@ namespace StrategoApp.RoomService {
     public interface IRoomService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/CreateRoom", ReplyAction="http://tempuri.org/IRoomService/CreateRoomResponse")]
-        void CreateRoom(int playerId);
+        bool CreateRoom(int playerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/CreateRoom", ReplyAction="http://tempuri.org/IRoomService/CreateRoomResponse")]
-        System.Threading.Tasks.Task CreateRoomAsync(int playerId);
+        System.Threading.Tasks.Task<bool> CreateRoomAsync(int playerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/JoinRoom", ReplyAction="http://tempuri.org/IRoomService/JoinRoomResponse")]
-        void JoinRoom(string roomCode, int playerId);
+        bool JoinRoom(string roomCode, int playerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/JoinRoom", ReplyAction="http://tempuri.org/IRoomService/JoinRoomResponse")]
-        System.Threading.Tasks.Task JoinRoomAsync(string roomCode, int playerId);
+        System.Threading.Tasks.Task<bool> JoinRoomAsync(string roomCode, int playerId);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IRoomService/LeaveRoomAsync")]
         void LeaveRoomAsync(int playerId);
@@ -205,19 +205,19 @@ namespace StrategoApp.RoomService {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void CreateRoom(int playerId) {
-            base.Channel.CreateRoom(playerId);
+        public bool CreateRoom(int playerId) {
+            return base.Channel.CreateRoom(playerId);
         }
         
-        public System.Threading.Tasks.Task CreateRoomAsync(int playerId) {
+        public System.Threading.Tasks.Task<bool> CreateRoomAsync(int playerId) {
             return base.Channel.CreateRoomAsync(playerId);
         }
         
-        public void JoinRoom(string roomCode, int playerId) {
-            base.Channel.JoinRoom(roomCode, playerId);
+        public bool JoinRoom(string roomCode, int playerId) {
+            return base.Channel.JoinRoom(roomCode, playerId);
         }
         
-        public System.Threading.Tasks.Task JoinRoomAsync(string roomCode, int playerId) {
+        public System.Threading.Tasks.Task<bool> JoinRoomAsync(string roomCode, int playerId) {
             return base.Channel.JoinRoomAsync(roomCode, playerId);
         }
         

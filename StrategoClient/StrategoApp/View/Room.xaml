@@ -60,15 +60,46 @@
             </Grid>
 
             <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20">
-                <Ellipse Width="80" Height="80" Fill="Black"/>
-                <TextBlock Text="{Binding Username}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                <TextBlock Text="{Binding UserId}" FontSize="14" HorizontalAlignment="Center"/>
+                <Ellipse Width="80" Height="80">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{Binding ProfilePicture}" Stretch="UniformToFill"/>
+                    </Ellipse.Fill>
+                </Ellipse>
+                
+                <TextBlock Text="{Binding Username}" 
+                           FontSize="18" 
+                           FontWeight="Bold" 
+                           FontFamily="{StaticResource AugustaFont}"
+                           Foreground="{StaticResource DarkViolet}"
+                           HorizontalAlignment="Center" 
+                           Margin="0,10,0,0"/>
+                
+                <TextBlock Text="{Binding UserId}" 
+                           FontSize="14" 
+                           FontFamily="{StaticResource AugustaFont}"
+                           Foreground="{StaticResource DarkViolet}"
+                           HorizontalAlignment="Center"/>
             </StackPanel>
 
             <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20">
-                <Ellipse Width="80" Height="80" Fill="Black"/>
-                <TextBlock Text="{Binding Username}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                <TextBlock Text="{Binding UserId}" FontSize="14" HorizontalAlignment="Center"/>
+                <Ellipse Width="80" Height="80">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{Binding ProfilePictureOponent}" Stretch="UniformToFill"/>
+                    </Ellipse.Fill>
+                </Ellipse>
+                <TextBlock Text="{Binding UsernameOponent}" 
+                           FontSize="18" 
+                           FontWeight="Bold" 
+                           FontFamily="{StaticResource AugustaFont}"
+                           Foreground="{StaticResource DarkViolet}"
+                           HorizontalAlignment="Center" 
+                           Margin="0,10,0,0"/>
+                
+                <TextBlock Text="{Binding UserIdOponent}" 
+                           FontSize="14" 
+                           FontFamily="{StaticResource AugustaFont}"
+                           Foreground="{StaticResource DarkViolet}"
+                           HorizontalAlignment="Center"/>
             </StackPanel>
 
             <Border BorderThickness="2" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Width="400" Height="300">
