@@ -12,10 +12,10 @@ namespace StrategoServices.Services.Interfaces
     public interface IRoomService
     {
         [OperationContract]
-        Task CreateRoomAsync(int playerId);
+        Task<bool> CreateRoomAsync(int playerId);
 
         [OperationContract]
-        Task JoinRoomAsync(string roomCode, int playerId);
+        Task<bool> JoinRoomAsync(string roomCode, int playerId);
 
         [OperationContract(IsOneWay = true)]
         void LeaveRoomAsync(int playerId);

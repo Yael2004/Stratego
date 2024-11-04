@@ -18,10 +18,11 @@ namespace StrategoServices.Services
     {
         private readonly ConcurrentDictionary<string, Room> _rooms = new ConcurrentDictionary<string, Room>();
 
-        public async Task CreateRoomAsync(int playerId)
+        public async Task<bool> CreateRoomAsync(int playerId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IRoomServiceCallback>();
             var response = new RoomCreatedResponse();
+            bool canCreate = false;
 
             string roomCode;
             do
@@ -44,6 +45,7 @@ namespace StrategoServices.Services
 
                 response.Result = new OperationResult(true, "Room created successfully");
                 response.RoomCode = roomCode;
+                canCreate = true;
             }
             else
             {
@@ -51,12 +53,14 @@ namespace StrategoServices.Services
             }
 
             await Task.Run(() => callback.RoomCreatedAsync(response));
+            return canCreate;
         }
 
-        public async Task JoinRoomAsync(string roomCode, int playerId)
+        public async Task<bool> JoinRoomAsync(string roomCode, int playerId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IRoomServiceCallback>();
             OperationResult response;
+            bool canJoin = false;
 
             if (_rooms.TryGetValue(roomCode, out var room))
             {
@@ -79,6 +83,7 @@ namespace StrategoServices.Services
                     communicationObject.Closed += (s, e) => HandlePlayerDisconnection(roomCode, playerId);
 
                     response = new OperationResult(true, "Joined room successfully.");
+                    canJoin = true;
                 }
             }
             else
@@ -87,6 +92,7 @@ namespace StrategoServices.Services
             }
 
             await Task.Run(() => callback.RoomResponseAsync(response));
+            return canJoin;
         }
 
         public void LeaveRoomAsync(int playerId)
