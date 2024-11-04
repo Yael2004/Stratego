@@ -20,5 +20,8 @@ namespace StrategoServices.Services.Interfaces.Callbacks
 
         [OperationContract(IsOneWay = true)]
         void ReceiveMessageAsync(int playerId, string message);
+
+        [OperationContract(IsOneWay = true)]
+        void GetConnectedPlayerId(int connectedPlayerId);
     }
 }

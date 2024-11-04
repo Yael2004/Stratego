@@ -176,5 +176,29 @@ namespace StrategoServices.Services
             }
         }
 
+        public async Task NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId)
+        {
+            if (_rooms.TryGetValue(roomCode, out var room))
+            {
+                foreach (var callback in room.PlayerCallbacks)
+                {
+                    if (callback != null)
+                    {
+                        await Task.Run(() => callback.GetConnectedPlayerId(connectedPlayerId));
+                    }
+                }
+            }
+            else
+            {
+                foreach (var callback in room.PlayerCallbacks)
+                {
+                    if (callback != null)
+                    {
+                        await Task.Run(() => callback.GetConnectedPlayerId(0));
+                    }
+                }
+            }
+        }
+
     }
 }
