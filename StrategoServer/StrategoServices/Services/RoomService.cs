@@ -180,22 +180,26 @@ namespace StrategoServices.Services
         {
             if (_rooms.TryGetValue(roomCode, out var room))
             {
-                foreach (var callback in room.PlayerCallbacks)
+                if (room.PlayerCallbacks[0] != null)
                 {
-                    if (callback != null)
-                    {
-                        await Task.Run(() => callback.GetConnectedPlayerId(connectedPlayerId));
-                    }
+                    await Task.Run(() => room.PlayerCallbacks[0].GetConnectedPlayerId(room.Player2Id));
+                }
+
+                if (room.PlayerCallbacks[1] != null)
+                {
+                    await Task.Run(() => room.PlayerCallbacks[1].GetConnectedPlayerId(room.Player1Id));
                 }
             }
             else
             {
-                foreach (var callback in room.PlayerCallbacks)
+                if (room.PlayerCallbacks[0] != null)
                 {
-                    if (callback != null)
-                    {
-                        await Task.Run(() => callback.GetConnectedPlayerId(0));
-                    }
+                    await Task.Run(() => room.PlayerCallbacks[0].GetConnectedPlayerId(0));
+                }
+
+                if (room.PlayerCallbacks[1] != null)
+                {
+                    await Task.Run(() => room.PlayerCallbacks[1].GetConnectedPlayerId(0));
                 }
             }
         }

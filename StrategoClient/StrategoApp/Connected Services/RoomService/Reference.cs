@@ -162,6 +162,12 @@ namespace StrategoApp.RoomService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/SendMessageToRoom", ReplyAction="http://tempuri.org/IRoomService/SendMessageToRoomResponse")]
         System.Threading.Tasks.Task SendMessageToRoomAsync(string roomCode, int playerId, string message);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnection", ReplyAction="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnectionResponse")]
+        void NotifyPlayersOfNewConnection(string roomCode, int connectedPlayerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnection", ReplyAction="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnectionResponse")]
+        System.Threading.Tasks.Task NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -175,6 +181,9 @@ namespace StrategoApp.RoomService {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IRoomService/ReceiveMessageAsync")]
         void ReceiveMessageAsync(int playerId, string message);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IRoomService/GetConnectedPlayerId")]
+        void GetConnectedPlayerId(int connectedPlayerId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -235,6 +244,14 @@ namespace StrategoApp.RoomService {
         
         public System.Threading.Tasks.Task SendMessageToRoomAsync(string roomCode, int playerId, string message) {
             return base.Channel.SendMessageToRoomAsync(roomCode, playerId, message);
+        }
+        
+        public void NotifyPlayersOfNewConnection(string roomCode, int connectedPlayerId) {
+            base.Channel.NotifyPlayersOfNewConnection(roomCode, connectedPlayerId);
+        }
+        
+        public System.Threading.Tasks.Task NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId) {
+            return base.Channel.NotifyPlayersOfNewConnectionAsync(roomCode, connectedPlayerId);
         }
     }
 }

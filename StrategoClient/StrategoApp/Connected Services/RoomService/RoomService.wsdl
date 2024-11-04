@@ -58,6 +58,12 @@
   <wsdl:message name="IRoomService_SendMessageToRoom_OutputMessage">
     <wsdl:part name="parameters" element="tns:SendMessageToRoomResponse" />
   </wsdl:message>
+  <wsdl:message name="IRoomService_NotifyPlayersOfNewConnection_InputMessage">
+    <wsdl:part name="parameters" element="tns:NotifyPlayersOfNewConnection" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_NotifyPlayersOfNewConnection_OutputMessage">
+    <wsdl:part name="parameters" element="tns:NotifyPlayersOfNewConnectionResponse" />
+  </wsdl:message>
   <wsdl:message name="IRoomService_RoomCreatedAsync_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:RoomCreatedAsync" />
   </wsdl:message>
@@ -66,6 +72,9 @@
   </wsdl:message>
   <wsdl:message name="IRoomService_ReceiveMessageAsync_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceiveMessageAsync" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_GetConnectedPlayerId_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetConnectedPlayerId" />
   </wsdl:message>
   <wsdl:portType name="IRoomService">
     <wsdl:operation name="CreateRoom">
@@ -83,6 +92,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IRoomService/SendMessageToRoom" message="tns:IRoomService_SendMessageToRoom_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/SendMessageToRoomResponse" message="tns:IRoomService_SendMessageToRoom_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="NotifyPlayersOfNewConnection">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnection" message="tns:IRoomService_NotifyPlayersOfNewConnection_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnectionResponse" message="tns:IRoomService_NotifyPlayersOfNewConnection_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="RoomCreatedAsync">
       <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/RoomCreatedAsync" message="tns:IRoomService_RoomCreatedAsync_OutputCallbackMessage" />
     </wsdl:operation>
@@ -91,6 +104,9 @@
     </wsdl:operation>
     <wsdl:operation name="ReceiveMessageAsync">
       <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/ReceiveMessageAsync" message="tns:IRoomService_ReceiveMessageAsync_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetConnectedPlayerId">
+      <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/GetConnectedPlayerId" message="tns:IRoomService_GetConnectedPlayerId_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IRoomService" type="tns:IRoomService">
@@ -129,6 +145,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="NotifyPlayersOfNewConnection">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnection" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="RoomCreatedAsync">
       <soap12:operation soapAction="http://tempuri.org/IRoomService/RoomCreatedAsync" style="document" />
       <wsdl:output>
@@ -147,6 +172,12 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetConnectedPlayerId">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/GetConnectedPlayerId" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="RoomService">
     <wsdl:port name="NetTcpBinding_IRoomService" binding="tns:NetTcpBinding_IRoomService">
@@ -154,7 +185,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:1013/RoomService/RoomService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-4SRV2TJ2\yaela</Upn>
+          <Upn>LAPTOP-1UFSE68T\armas</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

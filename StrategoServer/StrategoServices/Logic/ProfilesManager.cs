@@ -55,6 +55,7 @@ namespace StrategoServices.Logic
                 
                 var playerInfoDto = new PlayerInfoShownDTO
                 {
+                    Id = playerResult.Value.Id,
                     Name = playerResult.Value.Name,
                     PicturePath = picturePath.Value,
                     LabelPath = labelPath.Value

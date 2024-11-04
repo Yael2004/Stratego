@@ -52,6 +52,19 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="NotifyPlayersOfNewConnection">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="connectedPlayerId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NotifyPlayersOfNewConnectionResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="RoomCreatedAsync">
     <xs:complexType>
       <xs:sequence>
@@ -71,6 +84,13 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="playerId" type="xs:int" />
         <xs:element minOccurs="0" name="message" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetConnectedPlayerId">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="connectedPlayerId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
