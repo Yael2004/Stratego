@@ -92,6 +92,7 @@
     <Compile Include="ViewModel\LobbyViewModel.cs" />
     <Compile Include="ViewModel\LogInViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\PlayerProfileNotOwnViewModel.cs" />
     <Compile Include="ViewModel\PlayerProfileViewModel.cs" />
     <Compile Include="ViewModel\RoomViewModel.cs" />
     <Compile Include="ViewModel\SignUpViewModel.cs" />
@@ -105,6 +106,9 @@
     </Compile>
     <Compile Include="View\PlayerProfile.xaml.cs">
       <DependentUpon>PlayerProfile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PlayerProfileNotOwn.xaml.cs">
+      <DependentUpon>PlayerProfileNotOwn.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Room.xaml.cs">
       <DependentUpon>Room.xaml</DependentUpon>
@@ -140,6 +144,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\PlayerProfile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PlayerProfileNotOwn.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

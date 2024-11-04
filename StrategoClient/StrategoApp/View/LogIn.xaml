@@ -13,15 +13,19 @@
     <UserControl.Resources>
         <helpers:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
         <helpers:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
 
     <Viewbox Stretch="Fill">
-        <Grid Height="440" Width="800" 
+        <Grid>
+            <Grid Height="440" Width="800" 
               Background="{StaticResource InitialBackground}"
               Cursor="{StaticResource NormalCursor}">
-            <Canvas>
-                <Label Content="{x:Static res:Resources.Stratego_Label}" 
+
+                <Rectangle Fill="#80000000" Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="1" IsHitTestVisible="True"/>
+
+                <Canvas>
+                    <Label Content="{x:Static res:Resources.Stratego_Label}" 
                        FontSize="70" 
                        FontWeight="Bold"
                        Foreground="{StaticResource IntenseRed}"
@@ -29,27 +33,27 @@
                        Canvas.Left="275" Canvas.Top="46" 
                        HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
-                <Label Content="{x:Static res:Resources.UserName_Label}" Canvas.Left="142" Canvas.Top="162" 
+                    <Label Content="{x:Static res:Resources.UserName_Label}" Canvas.Left="142" Canvas.Top="162" 
                        FontSize="20"
                        FontWeight="Bold"
                        Foreground="{StaticResource IntenseRed}"
                        FontFamily="{StaticResource AugustaFont}"
                        HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-                <TextBox Style="{StaticResource InputBoxStyle}"
+                    <TextBox Style="{StaticResource InputBoxStyle}"
                          Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                          Canvas.Left="260" Canvas.Top="169" 
                          Width="280" Height="33" 
                          HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-                <Label Content="{x:Static res:Resources.UserPassword_Label}" Canvas.Left="142" Canvas.Top="219" 
+                    <Label Content="{x:Static res:Resources.UserPassword_Label}" Canvas.Left="142" Canvas.Top="219" 
                        FontSize="20"
                        FontWeight="Bold"
                        Foreground="{StaticResource IntenseRed}"
                        FontFamily="{StaticResource AugustaFont}"
                        HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
-                <PasswordBox x:Name="PasswordBox"
+                    <PasswordBox x:Name="PasswordBox"
                             Style="{StaticResource InputBoxStyle}"
                             Canvas.Left="260" Canvas.Top="220"
                             Width="280" Height="33"
@@ -58,23 +62,23 @@
                             Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
                             Loaded="SyncPassword" />
 
-                <TextBox x:Name="PasswordTextBox"
+                    <TextBox x:Name="PasswordTextBox"
                         Style="{StaticResource InputBoxStyle}"
                         Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
                         Canvas.Left="260" Canvas.Top="220"
                         Width="280" Height="33"
                         HorizontalAlignment="Center" VerticalAlignment="Top"
-                        Visibility="{Binding IsPasswordVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Visibility="{Binding IsPasswordVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                         Loaded="SyncPassword" />
 
-                <Button Content="{x:Static res:Resources.Login_Button}" 
+                    <Button Content="{x:Static res:Resources.Login_Button}" 
                         Style="{StaticResource ButtonStyle}"
                         Canvas.Left="320" Canvas.Top="298" 
                         Width="160" Height="40" 
                         HorizontalAlignment="Center" VerticalAlignment="Top"
                         Command="{Binding LogInCommand}"/>
 
-                <Button Content="{x:Static res:Resources.SignUp_Button}"
+                    <Button Content="{x:Static res:Resources.SignUp_Button}"
                         Style="{StaticResource ButtonStyle}"
                         Canvas.Left="330" Canvas.Top="348" 
                         Width="140" Height="40" 
@@ -82,43 +86,43 @@
                         VerticalAlignment="Top"
                         Command="{Binding SignUpCommand}"/>
 
-                <Button Content="{x:Static res:Resources.LoginAsInvited_Button}" 
+                    <Button Content="{x:Static res:Resources.LoginAsInvited_Button}" 
                         Style="{StaticResource ButtonStyle}"
                         Canvas.Left="588" Canvas.Top="390" 
                         Width="202" Height="40" 
                         HorizontalAlignment="Left" VerticalAlignment="Top"
                         Command="{Binding LogInAsInvitedCommand}"/>
 
-                <CheckBox Command="{Binding TogglePasswordVisibilityCommand}"
+                    <CheckBox Command="{Binding TogglePasswordVisibilityCommand}"
                           Canvas.Left="545" Canvas.Top="220"
                           Width="50" Height="33"
                           HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <CheckBox.Template>
-                        <ControlTemplate TargetType="CheckBox">
-                            <ContentPresenter />
-                        </ControlTemplate>
-                    </CheckBox.Template>
+                        <CheckBox.Template>
+                            <ControlTemplate TargetType="CheckBox">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </CheckBox.Template>
 
-                    <CheckBox.Content>
-                        <Image Width="30" Height="33">
-                            <Image.Style>
-                                <Style TargetType="Image">
-                                    <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}" Value="True">
-                                            <Setter Property="Source" Value="/Assets/Images/Icons/EyeOpen_Icon.png"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}" Value="False">
-                                            <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Image.Style>
-                        </Image>
-                    </CheckBox.Content>
-                </CheckBox>
+                        <CheckBox.Content>
+                            <Image Width="30" Height="33">
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}" Value="True">
+                                                <Setter Property="Source" Value="/Assets/Images/Icons/EyeOpen_Icon.png"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}" Value="False">
+                                                <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                        </CheckBox.Content>
+                    </CheckBox>
 
-                <Label Content="{Binding ErrorMessage}"
+                    <Label Content="{Binding ErrorMessage}"
                    FontSize="15" 
                    FontWeight="Bold"
                    Foreground="{StaticResource IntenseRed}"
@@ -126,13 +130,34 @@
                    Canvas.Left="260" Canvas.Top="258" 
                    HorizontalAlignment="Left" VerticalAlignment="Center"
                    Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                </Canvas>
+            </Grid>
 
-                <ContentControl x:Name="ModalControl"
-                            Content="{x:Static res:Resources.DatabaseConnectionErrorMessage_Label}"
-                            Template="{StaticResource ModalTemplate}"
-                            Tag="{x:Static res:Resources.Accept_Button}"
-                            Visibility="Hidden" Canvas.Left="200" Canvas.Top="120"/>
-            </Canvas>
+            <Grid x:Name="ModalContainer"
+                    Background="{StaticResource SemiTransparent}"
+                    Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="340"
+                    Height="148" Canvas.Left="230" Canvas.Top="146">
+
+                <Border Background="Black" BorderBrush="{StaticResource DarkRed}" BorderThickness="2" CornerRadius="10" Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="{x:Static res:Resources.ServerConnectionLostMessage_Label}"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           FontSize="16"
+                           Margin="0,20,0,20"
+                           Foreground="{StaticResource IntenseRed}"/>
+
+                        <Button Content="{x:Static res:Resources.Accept_Button}"
+                        Command="{Binding ExecuteCloseServiceErrorCommand}"
+                        Style="{StaticResource ButtonStyle}"
+                        Width="100"
+                        HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
     </Viewbox>
 </UserControl>

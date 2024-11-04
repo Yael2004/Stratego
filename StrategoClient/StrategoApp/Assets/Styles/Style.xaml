@@ -5,9 +5,10 @@
     <SolidColorBrush x:Key="GrayFontColor" Color="#A7A1A1"/>
     <SolidColorBrush x:Key="DarkRed" Color="#650000"/>
     <SolidColorBrush x:Key="SemiTransparent" Color="#80000000"/>
-    <SolidColorBrush x:Key="DarkViolet" Color="#4A117D"/>
+    <SolidColorBrush x:Key="DarkViolet" Color="#6A2DA0"/>
     <SolidColorBrush x:Key="Beige" Color="#FEFDC9"/>
     <SolidColorBrush x:Key="DarkGreen" Color="#1B4D3E"/>
+    <SolidColorBrush x:Key="IntenseGreen" Color="#008C00"/>
 
     <FontFamily x:Key="AugustaFont">pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta</FontFamily>
 
@@ -125,22 +126,27 @@
     </Style>
 
     <ControlTemplate x:Key="ModalTemplate" TargetType="ContentControl">
-        <Grid x:Name="ModalOverlay" 
-              Background="{StaticResource SemiTransparent}" 
-              Visibility="{TemplateBinding Visibility}"> 
-            <Grid Background="White"
-                  Height="200" Width="400">
-                <TextBlock Text="{TemplateBinding Content}"
-                           TextAlignment="Center"
-                           TextWrapping="Wrap"
-                           FontSize="16" 
-                           Margin="0,44,0,100"/>
-                <Button Content="{TemplateBinding Tag}" 
-                        Width="100" Height="30" 
-                        Margin="150,130,150,40"/>
+        <Grid x:Name="ModalOverlay" Background="{StaticResource SemiTransparent}" Visibility="{TemplateBinding Visibility}">
+            <Grid Background="White" Height="200" Width="400" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border Background="{StaticResource DarkRed}" BorderThickness="2" CornerRadius="10" Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="{TemplateBinding Content}"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               FontSize="16"
+                               Margin="0,20,0,20"
+                               Foreground="{StaticResource IntenseRed}"/>
+                        <Button Content="{TemplateBinding Tag}" 
+                            Command="{Binding CloseModalCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                            Style="{StaticResource ButtonStyle}"
+                            Width="100"
+                            HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
             </Grid>
         </Grid>
     </ControlTemplate>
+
 
     <Style x:Key="RepeatButtonStyle" TargetType="RepeatButton">
         <Setter Property="Background" Value="{StaticResource DarkRed}"/>

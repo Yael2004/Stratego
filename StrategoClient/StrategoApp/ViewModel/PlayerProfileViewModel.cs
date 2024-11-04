@@ -14,11 +14,14 @@ using StrategoApp.Helpers;
 using StrategoApp.LogInService;
 using System.Windows;
 using System.Web.UI.WebControls;
+using log4net;
 
 namespace StrategoApp.ViewModel
 {
     public class PlayerProfileViewModel : ViewModelBase, ProfileService.IProfileDataServiceCallback, ProfileService.IProfileModifierServiceCallback
     {
+        private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
+
         private string _username;
         private string _usernameEdited;
         private int _playerId;
@@ -28,9 +31,10 @@ namespace StrategoApp.ViewModel
         private int _gamesLost;
         private int _gamesPlayed;
         private string _selectedProfilePicture;
-
+        
         private string _usernameError;
 
+        private bool _isServiceErrorVisible;
         private bool _isProileSelectorVisible;
         private bool _isEditUsernameVisible;
         public ObservableCollection<string> ProfilePictures { get; set; }
@@ -53,11 +57,14 @@ namespace StrategoApp.ViewModel
         public ICommand AcceptEditUsernameCommand { get; }
         public ICommand SaveProfilePictureSelectionCommand { get; }
         public ICommand LogoutCommand { get; }
+        public ICommand ExecuteCloseServiceErrorCommand { get; }
 
         public PlayerProfileViewModel(MainWindowViewModel mainWindowViewModel)
         {
             PlayerInfoResponse playerInfoResponse = new PlayerInfoResponse();
             PlayerStatisticsResponse playerStatisticsResponse = new PlayerStatisticsResponse();
+
+            LoadPlayerInfoFromSingleton();
 
             ProfileTags = new ObservableCollection<string>
             {
@@ -90,6 +97,8 @@ namespace StrategoApp.ViewModel
             AcceptEditUsernameCommand = new ViewModelCommand(AcceptEditUsername, CanAcceptEditUsername);
             SaveProfilePictureSelectionCommand = new ViewModelCommand(ConfirmProfileSelection);
             LogoutCommand = new ViewModelCommand(Logout);
+            ExecuteCloseServiceErrorCommand = new ViewModelCommand(ExecuteCloseServerError);
+            IsServiceErrorVisible = false;
         }
 
         public string Username
@@ -190,6 +199,16 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public bool IsServiceErrorVisible
+        {
+            get { return _isServiceErrorVisible; }
+            set
+            {
+                _isServiceErrorVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string UsernameError
         {
             get { return _usernameError; }
@@ -272,7 +291,8 @@ namespace StrategoApp.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al intentar actualizar el perfil en el servidor: " + ex.Message);
+                    Log.Error(ex.Message);
+                    IsServiceErrorVisible = true;
                 }
             }
             else
@@ -310,6 +330,22 @@ namespace StrategoApp.ViewModel
             _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
         }
 
+        private void LoadPlayerInfoFromSingleton()
+        {
+            if (PlayerSingleton.Instance.IsLoggedIn())
+            {
+                var player = PlayerSingleton.Instance.Player;
+                Username = player.Name;
+                PlayerId = player.Id;
+                ProfilePicture = player.PicturePath;
+            }
+        }
+
+        private void ExecuteCloseServerError(object obj)
+        {
+            IsServiceErrorVisible = false;
+        }
+
         private void LoadPlayerInfo()
         {
             try
@@ -319,7 +355,8 @@ namespace StrategoApp.ViewModel
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error al cargar la información del jugador: " + ex.Message);
+                Log.Error(ex.Message);
+                IsServiceErrorVisible = true;
             }
         }
 

@@ -20,6 +20,7 @@ namespace StrategoApp.ViewModel
         private string _username;
         private string _password;
         private string _email;
+        private bool _isServiceErrorVisible;
         private bool _isPasswordVisible;
         private string _togglePasswordVisibilityIcon;
 
@@ -33,6 +34,7 @@ namespace StrategoApp.ViewModel
         public ICommand SignUpCommand { get; }
         public ICommand CancelCommand { get; }
         public ICommand TogglePasswordVisibilityCommand { get; }
+        public ICommand ExecuteCloseServiceErrorCommand { get; }
 
         public string Username
         {
@@ -60,6 +62,16 @@ namespace StrategoApp.ViewModel
             set
             {
                 _email = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsServiceErrorVisible
+        {
+            get { return _isServiceErrorVisible; }
+            set
+            {
+                _isServiceErrorVisible = value;
                 OnPropertyChanged();
             }
         }
@@ -122,9 +134,12 @@ namespace StrategoApp.ViewModel
             InstanceContext context = new InstanceContext(this);
             _signUpServiceClient = new SignUpServiceClient(context, "NetTcpBinding_ISignUpService");
 
+            IsServiceErrorVisible = false;
+
             SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand, CanExecuteSignUpCommand);
             CancelCommand = new ViewModelCommand(ExecuteCancelCommand);
             TogglePasswordVisibilityCommand = new ViewModelCommand(p => ExecuteTogglePasswordVisibilityCommand());
+            ExecuteCloseServiceErrorCommand = new ViewModelCommand(ExecuteCloseServiceError);
         }
 
         private void ExecuteTogglePasswordVisibilityCommand()
@@ -154,6 +169,7 @@ namespace StrategoApp.ViewModel
                 }
                 catch (Exception ex)
                 {
+                    IsServiceErrorVisible = true;
                     Log.Error(ex.Message);
                 }
             }
@@ -162,6 +178,11 @@ namespace StrategoApp.ViewModel
         private void ExecuteCancelCommand(object obj)
         {
             _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+        }
+
+        private void ExecuteCloseServiceError(object obj)
+        {
+            IsServiceErrorVisible = false;
         }
 
         public void SignUpResult(OperationResult result)

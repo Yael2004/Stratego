@@ -16,7 +16,7 @@
     <Viewbox Stretch="Fill">
         <Grid>
             <Grid Background="{StaticResource LobbyBackground}" />
-            <Rectangle Fill="#80000000" />
+            <Rectangle Fill="#A0000000" />
             <Rectangle Fill="#80000000" Visibility="{Binding IsJoinRoomDialogVisible, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="1" IsHitTestVisible="True"/>
 
             <Grid IsEnabled="{Binding IsJoinRoomDialogVisible, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=False}">
@@ -57,12 +57,14 @@
                         <TextBlock Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
                                    FontSize="20" 
                                    FontWeight="Bold"
-                                   Foreground="{StaticResource IntenseRed}"/>
+                                   Foreground="{StaticResource IntenseGreen}"
+                                   FontFamily="{StaticResource AugustaFont}"/>
 
                         <TextBlock Text="{Binding UserId, UpdateSourceTrigger=PropertyChanged}" 
                                    FontSize="14" 
                                    FontWeight="Bold" 
-                                   Foreground="{StaticResource IntenseRed}"/>
+                                   Foreground="{StaticResource IntenseGreen}"
+                                   FontFamily="{StaticResource AugustaFont}"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -72,13 +74,14 @@
                                    Margin="10" 
                                    FontSize="16" 
                                    FontWeight="Bold" 
-                                   Foreground="{StaticResource IntenseRed}" 
-                                   Background="{StaticResource SemiTransparent}" Width="298"/>
+                                   Foreground="{StaticResource IntenseGreen}" 
+                                   Background="{StaticResource SemiTransparent}" Width="298"
+                                   FontFamily="{StaticResource AugustaFont}"/>
                         
                         <ListBox ItemsSource="{Binding Messages}" 
                                  Height="250" Width="300" 
                                  Background="#80000000" 
-                                 Foreground="White">
+                                 Foreground="{StaticResource IntenseGreen}">
                             
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
@@ -105,7 +108,7 @@
                                                        FontSize="16" 
                                                        FontWeight="Bold" 
                                                        Width="100" 
-                                                       Foreground="Red"/>
+                                                       Foreground="{StaticResource IntenseGreen}"/>
                                             
                                             <TextBlock Text="{Binding Status}" 
                                                        Foreground="Gray" />
@@ -133,7 +136,7 @@
                              Background="#80000000" 
                              BorderBrush="Black" 
                              BorderThickness="1" 
-                             Foreground="{StaticResource IntenseRed}" 
+                             Foreground="{StaticResource IntenseGreen}" 
                              Margin="10, 0, 0, 0"/>
                     
                     <Button Content="{x:Static res:Resources.Send_Button}" 
@@ -169,21 +172,21 @@
                     <StackPanel>
                         <TextBlock Text="{x:Static res:Resources.LobbyCode_Title}" 
                                    FontFamily="{StaticResource AugustaFont}" 
-                                   Foreground="{StaticResource IntenseRed}" 
+                                   Foreground="{StaticResource IntenseGreen}" 
                                    FontSize="18" 
                                    FontWeight="Bold" 
                                    HorizontalAlignment="Center"/>
                         
                         <TextBlock Text="{x:Static res:Resources.Code_Label}" 
                                    FontFamily="{StaticResource AugustaFont}" 
-                                   Foreground="{StaticResource DarkRed}" 
+                                   Foreground="{StaticResource IntenseGreen}" 
                                    TextAlignment="Center" 
                                    FontSize="16" 
                                    Margin="0,10,0,0"/>
 
                         <TextBox Text="{Binding JoinRoomCode, UpdateSourceTrigger=PropertyChanged}"
                                  Style="{StaticResource InputBoxStyle}" 
-                                 BorderBrush="{StaticResource DarkRed}" 
+                                 BorderBrush="{StaticResource IntenseGreen}" 
                                  BorderThickness="1" 
                                  HorizontalAlignment="Center" 
                                  Width="200" 

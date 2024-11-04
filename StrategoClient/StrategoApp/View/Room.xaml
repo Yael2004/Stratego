@@ -11,7 +11,7 @@
 
     <Viewbox Stretch="Fill">
         <Grid Background="{StaticResource RoomBackground}" Width="800" Height="450">
-            <Rectangle Fill="#80000000" />
+            <Rectangle Fill="#A0000000" />
             <Grid Height="50" VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
@@ -26,12 +26,14 @@
                         Style="{StaticResource ButtonVioletStyle}"
                         Command="{Binding ExecuteBackToLobbyCommand}"/>
 
-                <TextBlock Text="Sala" 
+                <TextBlock Text="Room" 
                            Grid.Column="1" 
                            FontSize="20" 
                            FontWeight="Bold" 
                            VerticalAlignment="Top" HorizontalAlignment="Left"
-                           Foreground="{StaticResource DarkViolet}" Margin="283,13,0,0"/>
+                           FontFamily="{StaticResource AugustaFont}"
+                           Foreground="{StaticResource DarkViolet}" 
+                           Margin="283,13,0,0"/>
 
                 <Button Content="{x:Static res:Resources.Report_Button}" 
                         Width="105" Height="30" 
@@ -43,14 +45,18 @@
                     FontSize="20" 
                     FontWeight="Bold" 
                     VerticalAlignment="Top" HorizontalAlignment="Left"
-                    Foreground="{StaticResource DarkViolet}" Margin="393,13,0,0"/>
+                    FontFamily="{StaticResource AugustaFont}"
+                    Foreground="{StaticResource DarkViolet}" 
+                    Margin="393,13,0,0"/>
 
                 <TextBlock Text="{Binding RoomCode}"
                     Grid.Column="1" 
                     FontSize="20" 
                     FontWeight="Bold" 
                     VerticalAlignment="Top" HorizontalAlignment="Left"
-                    Foreground="{StaticResource DarkViolet}" Margin="465,13,0,0"/>
+                    FontFamily="{StaticResource AugustaFont}"
+                    Foreground="{StaticResource DarkViolet}" 
+                    Margin="465,13,0,0"/>
             </Grid>
 
             <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20">

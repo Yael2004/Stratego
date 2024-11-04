@@ -1,4 +1,5 @@
-﻿using StrategoApp.Helpers;
+﻿using log4net;
+using StrategoApp.Helpers;
 using StrategoApp.LogInService;
 using StrategoApp.Model;
 using StrategoApp.Properties;
@@ -12,14 +13,18 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media.Converters;
 
 namespace StrategoApp.ViewModel
 {
     public class LogInViewModel : ViewModelBase, LogInService.ILogInServiceCallback
     {
+        private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
+
         private string _username;
         private string _password;
         private string _errorMessage;
+        private bool _isServiceErrorVisible;
         private bool _isPasswordVisible;
         private bool _isDatabaseError;
         private string _togglePasswordVisibilityIcon;
@@ -46,6 +51,16 @@ namespace StrategoApp.ViewModel
             set
             {
                 _password = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsServiceErrorVisible
+        {
+            get { return _isServiceErrorVisible; }
+            set
+            {
+                _isServiceErrorVisible = value;
                 OnPropertyChanged();
             }
         }
@@ -95,6 +110,7 @@ namespace StrategoApp.ViewModel
         public ICommand SignUpCommand { get; }
         public ICommand LogInAsInvitedCommand { get; }
         public ICommand TogglePasswordVisibilityCommand { get; }
+        public ICommand ExecuteCloseServiceErrorCommand { get; }
 
         public LogInViewModel(MainWindowViewModel mainWindowViewModel)
         {
@@ -105,6 +121,8 @@ namespace StrategoApp.ViewModel
             LogInAsInvitedCommand = new ViewModelCommand(ExcuteLogInAsInvitedCommand);
             SignUpCommand = new ViewModelCommand(p => ExecuteSignUpCommand());
             TogglePasswordVisibilityCommand = new ViewModelCommand(p => ExecuteTogglePasswordVisibilityCommand());
+            ExecuteCloseServiceErrorCommand = new ViewModelCommand(ExecuteCloseServerError);
+            IsServiceErrorVisible = false;
         }
 
         public LogInViewModel()
@@ -146,7 +164,8 @@ namespace StrategoApp.ViewModel
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Log.Error(ex);
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -159,8 +178,14 @@ namespace StrategoApp.ViewModel
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Error al conectar con el servidor: {ex.Message}";
+                Log.Error(ex.Message);
+                IsServiceErrorVisible = true;
             }
+        }
+
+        private void ExecuteCloseServerError(object obj)
+        {
+            IsServiceErrorVisible = false;
         }
 
         public void LogInResult(OperationResult result)
