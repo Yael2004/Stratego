@@ -22,15 +22,18 @@ namespace StrategoServices
             builder.RegisterType<ChatService>().As<IChatService>().InstancePerLifetimeScope();
             builder.RegisterType<LogInService>().As<ILogInService>().InstancePerLifetimeScope();
             builder.RegisterType<ProfileService>().As<IProfileDataService>().InstancePerLifetimeScope();
+            builder.RegisterType<FriendOperationsService>().As<IFriendOperationsService>().InstancePerLifetimeScope();
 
             builder.RegisterType<AccountManager>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<ProfilesManager>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<FriendsManager>().AsSelf().InstancePerLifetimeScope();
 
             builder.RegisterType<AccountRepository>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<PlayerRepository>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<PictureRepository>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<LabelRepository>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<GamesRepository>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<FriendsRepository>().AsSelf().InstancePerLifetimeScope();
 
             builder.RegisterType<StrategoEntities>().AsSelf().InstancePerLifetimeScope();
         }
