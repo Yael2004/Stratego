@@ -53,7 +53,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public async Task GetPictureByIdAsync_ShouldReturnPictureWhenFound()
+        public async Task Test_GetPictureByIdAsync_ShouldReturnPictureWhenFound()
         {
             var repository = new PictureRepository(_lazyMockContext);
             var pictureId = 1;
@@ -68,7 +68,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public async Task GetPictureByIdAsync_ShouldReturnFailureWhenNotFound()
+        public async Task Test_GetPictureByIdAsync_ShouldReturnFailureWhenNotFound()
         {
             var repository = new PictureRepository(_lazyMockContext);
             var pictureId = 1;
@@ -82,7 +82,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public async Task GetPictureByIdAsync_ShouldReturnFailureOnSqlException()
+        public async Task Test_GetPictureByIdAsync_ShouldReturnFailureOnSqlException()
         {
             var repository = new PictureRepository(_lazyMockContext);
             var pictureId = 1;

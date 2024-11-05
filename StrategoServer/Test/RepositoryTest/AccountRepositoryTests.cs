@@ -56,7 +56,7 @@ namespace Test
 
 
         [TestMethod]
-        public async Task CreateAccountAsync_ShouldReturnFailureIfAccountExists()
+        public async Task Test_CreateAccountAsync_ShouldReturnFailureIfAccountExists()
         {
             var repository = new AccountRepository(_lazyMockContext);
             string testEmail = "test@example.com";
@@ -81,7 +81,7 @@ namespace Test
         }
 
         [TestMethod]
-        public async Task CreateAccountAsync_ShouldReturnSuccessWhenAccountIsCreated()
+        public async Task Test_CreateAccountAsync_ShouldReturnSuccessWhenAccountIsCreated()
         {
             var repository = new AccountRepository(_lazyMockContext);
             string testEmail = "test@example.com";
@@ -111,7 +111,7 @@ namespace Test
         }
 
         [TestMethod]
-        public async Task CreateAccountAsync_ShouldReturnFailureOnEntityValidationError()
+        public async Task Test_CreateAccountAsync_ShouldReturnFailureOnEntityValidationError()
         {
             var repository = new AccountRepository(_lazyMockContext);
 
@@ -130,7 +130,7 @@ namespace Test
 
 
         [TestMethod]
-        public async Task ValidateCredentialsAsync_ShouldReturnSuccessWhenCredentialsAreValid()
+        public async Task Test_ValidateCredentialsAsync_ShouldReturnSuccessWhenCredentialsAreValid()
         {
             var validEmail = "test@example.com";
             var validPassword = "hashed_password";
@@ -150,7 +150,7 @@ namespace Test
 
 
         [TestMethod]
-        public async Task ValidateCredentialsAsync_ShouldReturnFailureWhenCredentialsAreInvalid()
+        public async Task Test_ValidateCredentialsAsync_ShouldReturnFailureWhenCredentialsAreInvalid()
         {
             var invalidEmail = "test@example.com";
             var invalidPassword = "wrong_password";
@@ -169,7 +169,7 @@ namespace Test
 
 
         [TestMethod]
-        public async Task AlreadyExistentAccountAsync_ShouldReturnTrueWhenAccountExists()
+        public async Task Test_AlreadyExistentAccountAsync_ShouldReturnTrueWhenAccountExists()
         {
             var repository = new AccountRepository(_lazyMockContext);
             string testEmail = "test@example.com";
@@ -188,7 +188,7 @@ namespace Test
         }
 
         [TestMethod]
-        public async Task AlreadyExistentAccountAsync_ShouldReturnFailureWhenDatabaseErrorOccurs()
+        public async Task Test_AlreadyExistentAccountAsync_ShouldReturnFailureWhenDatabaseErrorOccurs()
         {
             var repository = new AccountRepository(_lazyMockContext);
             string testEmail = "test@example.com";
@@ -202,7 +202,7 @@ namespace Test
         }
 
         [TestMethod]
-        public async Task AlreadyExistentAccountAsync_ShouldReturnFailureWhenUnexpectedErrorOccurs()
+        public async Task Test_AlreadyExistentAccountAsync_ShouldReturnFailureWhenUnexpectedErrorOccurs()
         {
             var repository = new AccountRepository(_lazyMockContext);
             string testEmail = "test@example.com";

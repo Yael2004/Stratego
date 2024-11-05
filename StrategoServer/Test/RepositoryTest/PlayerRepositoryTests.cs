@@ -41,7 +41,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public async Task GetOtherPlayerByIdAsync_ShouldReturnPlayerWhenFound()
+        public async Task Test_GetOtherPlayerByIdAsync_ShouldReturnPlayerWhenFound()
         {
             var playerId = 1;
             var player = new Player { Id = playerId, Name = "Player1" };
@@ -57,7 +57,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public async Task GetOtherPlayerByIdAsync_ShouldReturnFailureWhenNotFound()
+        public async Task Test_GetOtherPlayerByIdAsync_ShouldReturnFailureWhenNotFound()
         {
             var players = new List<Player>(); 
             _mockPlayerSet = CreateMockDbSet(players);
@@ -71,7 +71,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public async Task GetOtherPlayerByIdAsync_ShouldReturnFailureOnGeneralException()
+        public async Task Test_GetOtherPlayerByIdAsync_ShouldReturnFailureOnGeneralException()
         {
             _mockPlayerSet = new Mock<DbSet<Player>>();
             _mockPlayerSet.As<IQueryable<Player>>().Setup(m => m.Provider)
@@ -86,7 +86,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public async Task IsFriendAsync_ShouldReturnTrueWhenFriends()
+        public async Task Test_IsFriendAsync_ShouldReturnTrueWhenFriends()
         {
             var playerId = 1;
             var otherPlayerId = 2;
@@ -105,7 +105,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public async Task GetPlayerByAccountIdAsync_ShouldReturnPlayerWhenFound()
+        public async Task Test_GetPlayerByAccountIdAsync_ShouldReturnPlayerWhenFound()
         {
             var accountId = 100;
             var player = new Player { AccountId = accountId, Name = "John Doe" };

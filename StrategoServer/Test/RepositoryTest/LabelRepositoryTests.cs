@@ -52,7 +52,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public async Task GetLabelByIdAsync_ShouldReturnLabelWhenFound()
+        public async Task Test_GetLabelByIdAsync_ShouldReturnLabelWhenFound()
         {
             var repository = new LabelRepository(_lazyMockContext);
             var labelId = 1;
@@ -67,7 +67,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public async Task GetLabelByIdAsync_ShouldReturnFailureWhenNotFound()
+        public async Task Test_GetLabelByIdAsync_ShouldReturnFailureWhenNotFound()
         {
             var repository = new LabelRepository(_lazyMockContext);
             var labelId = 1;
@@ -81,7 +81,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public async Task GetLabelByIdAsync_ShouldReturnFailureOnSqlException()
+        public async Task Test_GetLabelByIdAsync_ShouldReturnFailureOnSqlException()
         {
             var repository = new LabelRepository(_lazyMockContext);
             var labelId = 1;

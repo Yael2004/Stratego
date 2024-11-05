@@ -34,7 +34,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public async Task GetGameStatisticsByAccountIdAsync_ShouldReturnGameStatistics_WhenStatisticsExist()
+        public async Task Test_GetGameStatisticsByAccountIdAsync_ShouldReturnGameStatistics_WhenStatisticsExist()
         {
             var repository = new GamesRepository(_lazyMockContext);
             int accountId = 1;
@@ -57,7 +57,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public async Task GetGameStatisticsByAccountIdAsync_ShouldReturnFailure_WhenStatisticsDoNotExist()
+        public async Task Test_GetGameStatisticsByAccountIdAsync_ShouldReturnFailure_WhenStatisticsDoNotExist()
         {
             var repository = new GamesRepository(_lazyMockContext);
             int accountId = 2;
@@ -73,7 +73,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public async Task GetGameStatisticsByAccountIdAsync_ShouldReturnDatabaseError_WhenExceptionIsThrown()
+        public async Task Test_GetGameStatisticsByAccountIdAsync_ShouldReturnDatabaseError_WhenExceptionIsThrown()
         {
             var repository = new GamesRepository(_lazyMockContext);
             int accountId = 1;
