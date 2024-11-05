@@ -26,7 +26,7 @@ namespace StrategoServices.Services
 
             try
             {
-                var result = await _friendsManager.Value.SendFriendRequestAsync(destinationId, requesterId);
+                var result = _friendsManager.Value.SendFriendRequest(destinationId, requesterId);
                 operationResult = new OperationResult(result.IsSuccess, result.Error);
             }
             catch (TimeoutException)
@@ -48,7 +48,7 @@ namespace StrategoServices.Services
 
             try
             {
-                var result = await _friendsManager.Value.AcceptFriendRequestAsync(destinationId, requesterId);
+                var result = _friendsManager.Value.AcceptFriendRequest(destinationId, requesterId);
                 operationResult = new OperationResult(result.IsSuccess, result.Error);
             }
             catch (TimeoutException)
@@ -70,7 +70,7 @@ namespace StrategoServices.Services
 
             try
             {
-                var result = await _friendsManager.Value.DeclineFriendRequestAsync(destinationId, requesterId);
+                var result = _friendsManager.Value.DeclineFriendRequest(destinationId, requesterId);
                 operationResult = new OperationResult(result.IsSuccess, result.Error);
             }
             catch (TimeoutException)
@@ -92,7 +92,7 @@ namespace StrategoServices.Services
 
             try
             {
-                var result = await _friendsManager.Value.RemoveFriendAsync(destinationId, requesterId);
+                var result = _friendsManager.Value.RemoveFriend(destinationId, requesterId);
                 operationResult = new OperationResult(result.IsSuccess, result.Error);
             }
             catch (TimeoutException)

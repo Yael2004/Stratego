@@ -18,12 +18,12 @@ namespace StrategoDataAccess
             _context = context;
         }
 
-        public async Task<Result<string>> SendFriendRequest(int destinationId, int requesterId)
+        public Result<string> SendFriendRequest(int destinationId, int requesterId)
         {
             try
             {
-                var existingRequest = await _context.Value.Friend
-                    .FirstOrDefaultAsync(f => (f.PlayerId == requesterId && f.FriendId == destinationId) ||
+                var existingRequest = _context.Value.Friend
+                    .FirstOrDefault(f => (f.PlayerId == requesterId && f.FriendId == destinationId) ||
                                               (f.PlayerId == destinationId && f.FriendId == requesterId));
 
                 if (existingRequest != null)
@@ -47,7 +47,7 @@ namespace StrategoDataAccess
                     _context.Value.Friend.Add(friendRequest);
                 }
 
-                await _context.Value.SaveChangesAsync();
+                _context.Value.SaveChanges();
                 return Result<string>.Success("Friend request sent successfully.");
             }
             catch (SqlException sqlEx)
@@ -60,12 +60,12 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<Result<string>> AcceptFriendRequest(int destinationId, int requesterId)
+        public Result<string> AcceptFriendRequest(int destinationId, int requesterId)
         {
             try
             {
-                var request = await _context.Value.Friend
-                    .FirstOrDefaultAsync(f => f.PlayerId == destinationId && f.FriendId == requesterId && f.Status == "sent");
+                var request = _context.Value.Friend
+                    .FirstOrDefault(f => f.PlayerId == destinationId && f.FriendId == requesterId && f.Status == "sent");
 
                 if (request == null)
                 {
@@ -73,7 +73,7 @@ namespace StrategoDataAccess
                 }
 
                 request.Status = "accepted";
-                await _context.Value.SaveChangesAsync();
+                _context.Value.SaveChanges();
 
                 return Result<string>.Success("Friend request accepted successfully.");
             }
@@ -87,12 +87,12 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<Result<string>> DeclineFriendRequest(int destinationId, int requesterId)
+        public Result<string> DeclineFriendRequest(int destinationId, int requesterId)
         {
             try
             {
-                var request = await _context.Value.Friend
-                    .FirstOrDefaultAsync(f => f.PlayerId == destinationId && f.FriendId == requesterId && f.Status == "sent");
+                var request = _context.Value.Friend
+                    .FirstOrDefault(f => f.PlayerId == destinationId && f.FriendId == requesterId && f.Status == "sent");
 
                 if (request == null)
                 {
@@ -100,7 +100,7 @@ namespace StrategoDataAccess
                 }
 
                 request.Status = "canceled";
-                await _context.Value.SaveChangesAsync();
+                _context.Value.SaveChanges();
 
                 return Result<string>.Success("Friend request declined successfully.");
             }
@@ -114,12 +114,12 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<Result<string>> RemoveFriend(int destinationId, int requesterId)
+        public Result<string> RemoveFriend(int destinationId, int requesterId)
         {
             try
             {
-                var friendship = await _context.Value.Friend
-                    .FirstOrDefaultAsync(f => (f.PlayerId == requesterId && f.FriendId == destinationId && f.Status == "accepted") ||
+                var friendship = _context.Value.Friend
+                    .FirstOrDefault(f => (f.PlayerId == requesterId && f.FriendId == destinationId && f.Status == "accepted") ||
                                               (f.PlayerId == destinationId && f.FriendId == requesterId && f.Status == "accepted"));
 
                 if (friendship == null)
@@ -128,7 +128,7 @@ namespace StrategoDataAccess
                 }
 
                 friendship.Status = "canceled";
-                await _context.Value.SaveChangesAsync();
+                _context.Value.SaveChanges();
 
                 return Result<string>.Success("Friend removed successfully.");
             }

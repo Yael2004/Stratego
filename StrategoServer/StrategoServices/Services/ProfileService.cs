@@ -28,16 +28,16 @@ namespace StrategoServices.Services
 
             try
             {
-                var result = _profilesManager.Value.GetPlayerInfoAsync(playerId, requesterPlayerId);
+                var result = _profilesManager.Value.GetPlayerInfo(playerId, requesterPlayerId);
 
-                if (!result.Result.IsSuccess)
+                if (!result.IsSuccess)
                 {
-                    response.Result = new OperationResult(false, result.Result.Error);
+                    response.Result = new OperationResult(false, result.Error);
                     response.PlayerInfo = new OtherPlayerInfoDTO();
                 }
                 else
                 {
-                    response.PlayerInfo = result.Result.Value;
+                    response.PlayerInfo = result.Value;
                     response.Result = new OperationResult(true, "Player info retrieved successfully");
                 }
             }
@@ -62,7 +62,7 @@ namespace StrategoServices.Services
 
             try
             {
-                var result = await _profilesManager.Value.GetPlayerGameStatisticsAsync(playerAccountId);
+                var result = _profilesManager.Value.GetPlayerGameStatistics(playerAccountId);
 
                 if (!result.IsSuccess)
                 {
@@ -100,7 +100,7 @@ namespace StrategoServices.Services
 
             try
             {
-                var updateResult = await _profilesManager.Value.UpdatePlayerProfileAsync(newProfile);
+                var updateResult = _profilesManager.Value.UpdatePlayerProfile(newProfile);
 
                 if (!updateResult.IsSuccess)
                 {
@@ -130,7 +130,7 @@ namespace StrategoServices.Services
                 response.Profile = new PlayerInfoShownDTO();
             }
 
-            callback.ReceiveUpdatePlayerProfile(response);
+            await Task.Run(() => callback.ReceiveUpdatePlayerProfile(response));
         }
 
         public async Task GetPlayerFriendsListAsync(int playerId)
@@ -140,7 +140,7 @@ namespace StrategoServices.Services
 
             try
             {
-                var getFriendsResult = await _profilesManager.Value.GetFriendIdsListAsync(playerId);
+                var getFriendsResult = _profilesManager.Value.GetFriendIdsList(playerId);
 
                 if (!getFriendsResult.IsSuccess)
                 {
@@ -161,7 +161,7 @@ namespace StrategoServices.Services
                 response.Result = new OperationResult(false, $"Unexpected error: {ex.Message}");
             }
 
-            callback.PlayerFriendsList(response);
+            await Task.Run(() => callback.PlayerFriendsList(response));
         }
 
     }

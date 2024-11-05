@@ -22,9 +22,9 @@ namespace StrategoServices.Logic
             _playerRepository = playerRepository;
         }
 
-        public async Task<Result<PlayerStatisticsDTO>> GetPlayerGameStatisticsAsync(int accountId)
+        public Result<PlayerStatisticsDTO> GetPlayerGameStatistics(int accountId)
         {
-            var result = await _gamesRepository.Value.GetGameStatisticsByAccountIdAsync(accountId);
+            var result = _gamesRepository.Value.GetGameStatisticsByAccountId(accountId);
 
             if (!result.IsSuccess)
             {
@@ -40,18 +40,18 @@ namespace StrategoServices.Logic
             return Result<PlayerStatisticsDTO>.Success(gameStatsDto);
         }
 
-        public async Task<Result<OtherPlayerInfoDTO>> GetPlayerInfoAsync(int playerId, int requesterId)
+        public Result<OtherPlayerInfoDTO> GetPlayerInfo(int playerId, int requesterId)
         {
             try
             {
-                var playerResult = await _playerRepository.Value.GetOtherPlayerByIdAsync(playerId);
+                var playerResult = _playerRepository.Value.GetOtherPlayerById(playerId);
                 if (!playerResult.IsSuccess)
                 {
                     return Result<OtherPlayerInfoDTO>.Failure(playerResult.Error);
                 }
 
-                var picturePath = await _playerRepository.Value.GetPicturePathByIdAsync(playerResult.Value.PictureId);
-                var labelPath = await _playerRepository.Value.GetLabelPathByIdAsync(playerResult.Value.IdLabel);
+                var picturePath = _playerRepository.Value.GetPicturePathById(playerResult.Value.PictureId);
+                var labelPath = _playerRepository.Value.GetLabelPathById(playerResult.Value.IdLabel);
                 
                 var playerInfoDto = new PlayerInfoShownDTO
                 {
@@ -61,13 +61,13 @@ namespace StrategoServices.Logic
                     LabelPath = labelPath.Value
                 };
 
-                var playerStatisticsResult = await _gamesRepository.Value.GetGameStatisticsByAccountIdAsync(playerResult.Value.AccountId);
+                var playerStatisticsResult = _gamesRepository.Value.GetGameStatisticsByAccountId(playerResult.Value.AccountId);
                 if (!playerStatisticsResult.IsSuccess)
                 {
                     return Result<OtherPlayerInfoDTO>.Failure(playerStatisticsResult.Error);
                 }
 
-                var isFriendResult = await _playerRepository.Value.IsFriendAsync(requesterId, playerId);
+                var isFriendResult = _playerRepository.Value.IsFriend(requesterId, playerId);
                 if (!isFriendResult.IsSuccess)
                 {
                     return Result<OtherPlayerInfoDTO>.Failure(isFriendResult.Error);
@@ -98,11 +98,11 @@ namespace StrategoServices.Logic
             }
         }
 
-        public async Task<Result<PlayerInfoShownDTO>> UpdatePlayerProfileAsync(PlayerInfoShownDTO PlayerInfoShownDTO)
+        public Result<PlayerInfoShownDTO> UpdatePlayerProfile(PlayerInfoShownDTO PlayerInfoShownDTO)
         {
             var player = MapPlayerInfoShownDTOToPlayer(PlayerInfoShownDTO);
 
-            var result = await _playerRepository.Value.UpdatePlayerAsync(player, PlayerInfoShownDTO.LabelPath, PlayerInfoShownDTO.PicturePath);
+            var result = _playerRepository.Value.UpdatePlayer(player, PlayerInfoShownDTO.LabelPath, PlayerInfoShownDTO.PicturePath);
 
             if (!result.IsSuccess)
             {
@@ -136,9 +136,9 @@ namespace StrategoServices.Logic
             };
         }
 
-        public async Task<Result<List<int>>> GetFriendIdsListAsync(int playerId)
+        public Result<List<int>> GetFriendIdsList(int playerId)
         {
-            var friendsResult = await GetFriendsFromRepositoryAsync(playerId);
+            var friendsResult = GetFriendsFromRepository(playerId);
 
             if (!friendsResult.IsSuccess)
             {
@@ -152,22 +152,22 @@ namespace StrategoServices.Logic
                 : Result<List<int>>.Failure("No friends found.");
         }
 
-        private async Task<Result<IEnumerable<Player>>> GetFriendsFromRepositoryAsync(int playerId)
+        private Result<IEnumerable<Player>> GetFriendsFromRepository(int playerId)
         {
-            return await _playerRepository.Value.GetPlayerFriendsListAsync(playerId);
+            return _playerRepository.Value.GetPlayerFriendsList(playerId);
         }
 
-        private async Task<Result<PlayerInfoShownDTO>> MapPlayerToPlayerInfoShownDTOAsync(Player player)
+        private Result<PlayerInfoShownDTO> MapPlayerToPlayerInfoShownDTO(Player player)
         {
             try
             {
-                var picturePathResult = await _playerRepository.Value.GetPicturePathByIdAsync(player.PictureId);
+                var picturePathResult = _playerRepository.Value.GetPicturePathById(player.PictureId);
                 if (!picturePathResult.IsSuccess)
                 {
                     return Result<PlayerInfoShownDTO>.Failure("Failed to retrieve picture path.");
                 }
 
-                var labelPathResult = await _playerRepository.Value.GetLabelPathByIdAsync(player.IdLabel);
+                var labelPathResult = _playerRepository.Value.GetLabelPathById(player.IdLabel);
                 if (!labelPathResult.IsSuccess)
                 {
                     return Result<PlayerInfoShownDTO>.Failure("Failed to retrieve label path.");

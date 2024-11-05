@@ -25,7 +25,7 @@ namespace StrategoServices.Services
         {
             var callback = OperationContext.Current.GetCallbackChannel<ILogInServiceCallback>();
 
-            var loginResult = await _accountManager.Value.LogInAccountAsync(email, password);
+            var loginResult = _accountManager.Value.LogInAccount(email, password);
 
             if (!loginResult.IsSuccess)
             {
@@ -33,7 +33,7 @@ namespace StrategoServices.Services
                 return;
             }
 
-            var playerResult = await _accountManager.Value.GetLogInAccountAsync(loginResult.Value);
+            var playerResult = _accountManager.Value.GetLogInAccount(loginResult.Value);
 
             if (!playerResult.IsSuccess)
             {
@@ -51,7 +51,7 @@ namespace StrategoServices.Services
         {
             var callback = OperationContext.Current.GetCallbackChannel<ISignUpServiceCallback>();
 
-            var result = await _accountManager.Value.CreateAccountAsync(email, password, playername);
+            var result = _accountManager.Value.CreateAccount(email, password, playername);
 
             if (result.IsSuccess)
             {

@@ -16,19 +16,17 @@ namespace StrategoDataAccess
     public class PlayerRepository
     {
         private readonly Lazy<StrategoEntities> _context;
-        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
         public PlayerRepository(Lazy<StrategoEntities> context)
         {
             _context = context;
         }
 
-        public async Task<Result<Player>> GetOtherPlayerByIdAsync(int playerId)
+        public Result<Player> GetOtherPlayerById(int playerId)
         {
-            await _semaphore.WaitAsync();
             try
             {
-                var player = await _context.Value.Player.FirstOrDefaultAsync(p => p.Id == playerId);
+                var player = _context.Value.Player.FirstOrDefault(p => p.Id == playerId);
 
                 if (player == null)
                 {
@@ -47,11 +45,11 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<Result<bool>> IsFriendAsync(int playerId, int otherPlayerId)
+        public Result<bool> IsFriend(int playerId, int otherPlayerId)
         {
             try
             {
-                var isFriend = await _context.Value.Friend.AnyAsync(f =>
+                var isFriend = _context.Value.Friend.Any(f =>
                     (f.PlayerId == playerId && f.FriendId == otherPlayerId && f.Status == "friend") ||
                     (f.PlayerId == otherPlayerId && f.FriendId == playerId && f.Status == "friend"));
 
@@ -67,11 +65,11 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<Result<IEnumerable<Player>>> GetPlayerFriendsListAsync(int playerId)
+        public Result<IEnumerable<Player>> GetPlayerFriendsList(int playerId)
         {
             try
             {
-                var result = await _context.Value.Friend
+                var result = _context.Value.Friend
                     .Where(f => f.PlayerId == playerId && f.Status == "accepted")
                     .Join(
                         _context.Value.Player,
@@ -79,7 +77,7 @@ namespace StrategoDataAccess
                         player => player.Id,
                         (friend, player) => player
                     )
-                    .ToListAsync();
+                    .ToList();
 
                 if (result.Count == 0)
                 {
@@ -97,26 +95,26 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<Result<Player>> UpdatePlayerAsync(Player updatedPlayer, string labelPath, string picturePath)
+        public Result<Player> UpdatePlayer(Player updatedPlayer, string labelPath, string picturePath)
         {
             using (var transaction = _context.Value.Database.BeginTransaction())
             {
                 try
                 {
-                    var pictureIdResult = await GetPictureIdAsync(picturePath);
+                    var pictureIdResult = GetPictureId(picturePath);
                     if (!pictureIdResult.IsSuccess)
                     {
                         return Result<Player>.Failure(pictureIdResult.Error);
                     }
 
-                    var labelIdResult = await GetLabelIdAsync(labelPath);
+                    var labelIdResult = GetLabelId(labelPath);
                     if (!labelIdResult.IsSuccess)
                     {
                         return Result<Player>.Failure(labelIdResult.Error);
                     }
 
-                    var playerInDb = await _context.Value.Player
-                        .FirstOrDefaultAsync(p => p.Id == updatedPlayer.Id);
+                    var playerInDb = _context.Value.Player
+                        .FirstOrDefault(p => p.Id == updatedPlayer.Id);
 
                     if (playerInDb == null)
                     {
@@ -127,7 +125,7 @@ namespace StrategoDataAccess
                     playerInDb.PictureId = pictureIdResult.Value;
                     playerInDb.IdLabel = labelIdResult.Value;
 
-                    await _context.Value.SaveChangesAsync();
+                    _context.Value.SaveChanges();
 
                     transaction.Commit();
 
@@ -157,11 +155,11 @@ namespace StrategoDataAccess
         }
 
 
-        public async Task<Result<Player>> GetPlayerByAccountIdAsync(int accountId)
+        public Result<Player> GetPlayerByAccountId(int accountId)
         {
             try
             {
-                var player = await _context.Value.Player.FirstOrDefaultAsync(p => p.AccountId == accountId);
+                var player = _context.Value.Player.FirstOrDefault(p => p.AccountId == accountId);
 
                 if (player == null)
                 {
@@ -180,12 +178,12 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<Result<int>> GetLabelIdAsync(string labelPath)
+        public Result<int> GetLabelId(string labelPath)
         {
             try
             {
-                var label = await _context.Value.Label
-                    .FirstOrDefaultAsync(l => l.Path == labelPath);
+                var label = _context.Value.Label
+                    .FirstOrDefault(l => l.Path == labelPath);
 
                 if (label == null)
                 {
@@ -200,12 +198,12 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<Result<int>> GetPictureIdAsync(string picturePath)
+        public Result<int> GetPictureId(string picturePath)
         {
             try
             {
-                var picture = await _context.Value.Pictures
-                    .FirstOrDefaultAsync(p => p.path == picturePath);
+                var picture = _context.Value.Pictures
+                    .FirstOrDefault(p => p.path == picturePath);
 
                 if (picture == null)
                 {
@@ -220,12 +218,12 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<Result<string>> GetPicturePathByIdAsync(int pictureId)
+        public Result<string> GetPicturePathById(int pictureId)
         {
             try
             {
-                var picture = await _context.Value.Pictures
-                    .FirstOrDefaultAsync(p => p.IdPicture == pictureId);
+                var picture = _context.Value.Pictures
+                    .FirstOrDefault(p => p.IdPicture == pictureId);
 
                 if (picture == null)
                 {
@@ -240,12 +238,12 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<Result<string>> GetLabelPathByIdAsync(int labelId)
+        public Result<string> GetLabelPathById(int labelId)
         {
             try
             {
-                var label = await _context.Value.Label
-                    .FirstOrDefaultAsync(l => l.IdLabel == labelId);
+                var label = _context.Value.Label
+                    .FirstOrDefault(l => l.IdLabel == labelId);
 
                 if (label == null)
                 {

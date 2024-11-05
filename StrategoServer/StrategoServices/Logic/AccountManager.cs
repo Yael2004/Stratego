@@ -25,21 +25,21 @@ namespace StrategoServices.Logic
             _labelRepository = labelRepository;
         }
 
-        public Task<Result<string>> CreateAccountAsync(string email, string password, string playername)
+        public Result<string> CreateAccount(string email, string password, string playername)
         {
-            var result = _accountRepository.Value.CreateAccountAsync(email, password, playername);
+            var result = _accountRepository.Value.CreateAccount(email, password, playername);
             return result;
         }
 
-        public Task<Result<int>> LogInAccountAsync(string email, string password)
+        public Result<int> LogInAccount(string email, string password)
         {
-            var result = _accountRepository.Value.ValidateCredentialsAsync(email, password);
+            var result = _accountRepository.Value.ValidateCredentials(email, password);
             return result;
         }
 
-        public async Task<Result<PlayerDTO>> GetLogInAccountAsync(int accountId)
+        public Result<PlayerDTO> GetLogInAccount(int accountId)
         {
-            var result = await _playerRepository.Value.GetPlayerByAccountIdAsync(accountId);
+            var result = _playerRepository.Value.GetPlayerByAccountId(accountId);
 
             if (!result.IsSuccess)
             {
@@ -48,13 +48,8 @@ namespace StrategoServices.Logic
 
             var player = result.Value;
 
-            var pictureTask = _picturesRepository.Value.GetPictureByIdAsync((int)player.PictureId);
-            var labelTask = _labelRepository.Value.GetLabelByIdAsync(player.IdLabel);
-
-            await Task.WhenAll(pictureTask, labelTask);
-
-            var pictureResult = await pictureTask;
-            var labelResult = await labelTask;
+            var pictureResult = _picturesRepository.Value.GetPictureById((int)player.PictureId);
+            var labelResult = _labelRepository.Value.GetLabelById(player.IdLabel);
 
             if (!pictureResult.IsSuccess)
             {

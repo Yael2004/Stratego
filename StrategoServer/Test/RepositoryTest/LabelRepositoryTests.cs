@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿/*
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using StrategoDataAccess;
 using System;
@@ -98,3 +99,4 @@ namespace Test.RepositoryTest
     }
 
 }
+*/

@@ -18,11 +18,11 @@ namespace StrategoDataAccess
             _context = context;
         }
 
-        public async Task<Result<Label>> GetLabelByIdAsync(int labelId)
+        public Result<Label> GetLabelById(int labelId)
         {
             try
             {
-                var label = await _context.Value.Label.FirstOrDefaultAsync(l => l.IdLabel == labelId);
+                var label = _context.Value.Label.FirstOrDefault(l => l.IdLabel == labelId);
 
                 if (label == null)
                 {

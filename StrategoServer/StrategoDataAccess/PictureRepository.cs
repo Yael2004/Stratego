@@ -18,11 +18,11 @@ namespace StrategoDataAccess
             _context = context;
         }
 
-        public async Task<Result<Pictures>> GetPictureByIdAsync(int pictureId)
+        public Result<Pictures> GetPictureById(int pictureId)
         {
             try
             {
-                var picture = await _context.Value.Pictures.FirstOrDefaultAsync(p => p.IdPicture == pictureId);
+                var picture = _context.Value.Pictures.FirstOrDefault(p => p.IdPicture == pictureId);
 
                 if (picture == null)
                 {

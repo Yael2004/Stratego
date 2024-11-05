@@ -17,29 +17,29 @@ namespace StrategoServices.Logic
             _friendsRepository = friendsRepository;
         }
 
-        public async Task<Result<string>> SendFriendRequestAsync(int destinationId, int requesterId)
+        public Result<string> SendFriendRequest(int destinationId, int requesterId)
         {
             if (destinationId == requesterId)
             {
                 return Result<string>.Failure("Cannot send a friend request to yourself.");
             }
 
-            return await _friendsRepository.Value.SendFriendRequest(destinationId, requesterId);
+            return _friendsRepository.Value.SendFriendRequest(destinationId, requesterId);
         }
 
-        public async Task<Result<string>> AcceptFriendRequestAsync(int destinationId, int requesterId)
+        public Result<string> AcceptFriendRequest(int destinationId, int requesterId)
         {
-            return await _friendsRepository.Value.AcceptFriendRequest(destinationId, requesterId);
+            return _friendsRepository.Value.AcceptFriendRequest(destinationId, requesterId);
         }
 
-        public async Task<Result<string>> DeclineFriendRequestAsync(int destinationId, int requesterId)
+        public Result<string> DeclineFriendRequest(int destinationId, int requesterId)
         {
-            return await _friendsRepository.Value.DeclineFriendRequest(destinationId, requesterId);
+            return _friendsRepository.Value.DeclineFriendRequest(destinationId, requesterId);
         }
 
-        public async Task<Result<string>> RemoveFriendAsync(int destinationId, int requesterId)
+        public Result<string> RemoveFriend(int destinationId, int requesterId)
         {
-            return await _friendsRepository.Value.RemoveFriend(destinationId, requesterId);
+            return _friendsRepository.Value.RemoveFriend(destinationId, requesterId);
         }
 
     }

@@ -13,22 +13,19 @@ namespace StrategoDataAccess
     public class GamesRepository
     {
         private readonly Lazy<StrategoEntities> _context;
-        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
         public GamesRepository(Lazy<StrategoEntities> context)
         {
             _context = context;
         }
 
-        public async Task<Result<Games>> GetGameStatisticsByAccountIdAsync(int accountId)
+        public Result<Games> GetGameStatisticsByAccountId(int accountId)
         {
-            await _semaphore.WaitAsync();
-
             try
             {
-                var games = await _context.Value.Games
+                var games = _context.Value.Games
                     .Where(g => g.AccountId == accountId)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefault();
 
                 if (games == null)
                 {

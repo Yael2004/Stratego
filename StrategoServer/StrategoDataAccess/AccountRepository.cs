@@ -19,9 +19,9 @@ namespace StrategoDataAccess
             _context = context;
         }
 
-        public async Task<Result<string>> CreateAccountAsync(string email, string hashedPassword, string playerName)
+        public Result<string> CreateAccount(string email, string hashedPassword, string playerName)
         {
-            var existenceCheckResult = await AlreadyExistentAccountAsync(email);
+            var existenceCheckResult = AlreadyExistentAccount(email);
 
             if (!existenceCheckResult.IsSuccess)
             {
@@ -44,7 +44,7 @@ namespace StrategoDataAccess
                     };
 
                     _context.Value.Account.Add(newAccount);
-                    await _context.Value.SaveChangesAsync();
+                    _context.Value.SaveChanges();
 
                     const int defaultPictureId = 1;
                     const int defaultLabelId = 1;
@@ -58,7 +58,7 @@ namespace StrategoDataAccess
                     };
 
                     _context.Value.Player.Add(newPlayer);
-                    await _context.Value.SaveChangesAsync();
+                    _context.Value.SaveChangesAsync();
 
                     var playerStatistics = new Games
                     {
@@ -68,7 +68,7 @@ namespace StrategoDataAccess
                     };
 
                     _context.Value.Games.Add(playerStatistics);
-                    await _context.Value.SaveChangesAsync();
+                    _context.Value.SaveChangesAsync();
 
                     transaction.Commit();
 
@@ -92,11 +92,11 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<Result<int>> ValidateCredentialsAsync(string email, string hashedPassword)
+        public Result<int> ValidateCredentials(string email, string hashedPassword)
         {
             try
             {
-                var account = await _context.Value.Account.FirstOrDefaultAsync(a => a.mail == email && a.password == hashedPassword);
+                var account = _context.Value.Account.FirstOrDefault(a => a.mail == email && a.password == hashedPassword);
 
                 if (account == null)
                 {
@@ -119,11 +119,11 @@ namespace StrategoDataAccess
             }
         }
 
-        public async Task<Result<bool>> AlreadyExistentAccountAsync(string email)
+        public Result<bool> AlreadyExistentAccount(string email)
         {
             try
             {
-                bool exists = await _context.Value.Account.AnyAsync(a => a.mail == email);
+                bool exists = _context.Value.Account.Any(a => a.mail == email);
                 return Result<bool>.Success(exists);
             }
             catch (SqlException sqlEx)
