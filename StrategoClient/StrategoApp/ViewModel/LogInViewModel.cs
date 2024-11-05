@@ -235,7 +235,8 @@ namespace StrategoApp.ViewModel
                 Name = playerDTO.Name,
                 Id = playerDTO.Id,
                 LabelPath = playerDTO.LabelPath,
-                PicturePath = playerDTO.PicturePath
+                PicturePath = playerDTO.PicturePath,
+                AccountId = playerDTO.AccountId
             };
 
             return player;

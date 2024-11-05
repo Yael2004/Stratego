@@ -18,7 +18,7 @@
     <Viewbox Stretch="Fill">
         <Grid Height="440" Width="800" 
               Background="{StaticResource ProfileSectionBackground}">
-            <Rectangle Fill="#80000000"/>
+            <Rectangle Fill="#C0000000"/>
             <Rectangle Fill="#80000000" Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="1" IsHitTestVisible="True"/>
             
             <Label Content="{x:Static res:Resources.GamesLost_Label}"
@@ -43,7 +43,7 @@
                    Margin="562,327,0,64"
                    Style="{StaticResource PlayerSectionLabelStyle}"/>
 
-            <Label Content="{Binding GamesLostNumber}"
+            <Label Content="{Binding GamesLost}"
                    FontWeight="Bold"
                    HorizontalContentAlignment="Center"
                    FontFamily="{StaticResource AugustaFont}" 
@@ -52,7 +52,7 @@
                    Margin="0,367,552,24"
                    Style="{StaticResource PlayerSectionLabelStyle}"/>
 
-            <Label Content="{Binding GamesPlayedNumber}"
+            <Label Content="{Binding GamesPlayed}"
                    FontWeight="Bold"
                    HorizontalContentAlignment="Center"
                    FontFamily="{StaticResource AugustaFont}" 
@@ -61,7 +61,7 @@
                    Margin="256,367,256,24"
                    Style="{StaticResource PlayerSectionLabelStyle}"/>
 
-            <Label Content="{Binding GamesWonNumber}"
+            <Label Content="{Binding GamesWon}"
                    FontWeight="Bold"
                    HorizontalContentAlignment="Center"
                    FontFamily="{StaticResource AugustaFont}" 

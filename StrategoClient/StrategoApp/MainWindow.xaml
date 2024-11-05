@@ -30,6 +30,10 @@
             <view:Room/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModel:ScoreboardViewModel}">
+            <view:ScoreTable/>
+        </DataTemplate>
+
     </Window.Resources>
 
     <Window.DataContext>

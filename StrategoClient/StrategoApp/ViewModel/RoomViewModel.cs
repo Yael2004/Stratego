@@ -26,12 +26,15 @@ namespace StrategoApp.ViewModel
         private int _userIdOponent;
         private string _profilePictureOponent;
         private string _messageToSend;
+        private bool _isReportVisible;
 
         private ObservableCollection<string> _messages;
 
         private readonly MainWindowViewModel _mainWindowViewModel;
         public ICommand ExecuteBackToLobbyCommand { get; }
         public ICommand SendMessageCommand { get; }
+        public ICommand ToggleReportVisibilityCommand { get; }
+        public ICommand CancelReportCommand { get; }
 
         public string RoomCode { get; set; }
 
@@ -39,8 +42,13 @@ namespace StrategoApp.ViewModel
         {
             ExecuteBackToLobbyCommand = new ViewModelCommand(ExecuteBackToLobby);
             SendMessageCommand = new ViewModelCommand(SendMessageAsync);
+            ToggleReportVisibilityCommand = new ViewModelCommand(ToggleReportVisibility);
+            CancelReportCommand = new ViewModelCommand(CancelReport);
+
             _messages = new ObservableCollection<string>();
             _mainWindowViewModel = mainWindowViewModel;
+            IsReportVisible = false;
+
             InitializeService();
             LoadPlayerData();
         }
@@ -126,6 +134,16 @@ namespace StrategoApp.ViewModel
             set
             {
                 _messageToSend = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsReportVisible
+        {
+            get { return _isReportVisible; }
+            set
+            {
+                _isReportVisible = value;
                 OnPropertyChanged();
             }
         }
@@ -223,6 +241,16 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public void ToggleReportVisibility(object obj)
+        {
+            IsReportVisible = !IsReportVisible;
+        }
+
+        public void CancelReport(object obj)
+        {
+            IsReportVisible = false;
+        }
+
         public void ExecuteBackToLobby(Object obj)
         {
             try
@@ -286,6 +314,10 @@ namespace StrategoApp.ViewModel
             {
                 _otherProfileDataService = new OtherProfileDataServiceClient(new InstanceContext(this));
                 _otherProfileDataService.GetOtherPlayerInfoAsync(connectedPlayerId, UserId);
+            }
+            else
+            {
+                PlayerSingleton.Instance.Player.Id = connectedPlayerId;
             }
         }
     }

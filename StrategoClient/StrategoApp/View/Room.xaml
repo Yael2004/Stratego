@@ -9,9 +9,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+
     <Viewbox Stretch="Fill">
         <Grid Background="{StaticResource RoomBackground}" Width="800" Height="450">
-            <Rectangle Fill="#A0000000" />
+            <Rectangle Fill="#C0000000" />
             <Grid Height="50" VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
@@ -38,7 +42,10 @@
                 <Button Content="{x:Static res:Resources.Report_Button}" 
                         Width="105" Height="30" 
                         HorizontalAlignment="Left" VerticalAlignment="Center"
-                        Style="{StaticResource ButtonVioletStyle}" Grid.Column="1" Grid.ColumnSpan="2" Margin="625,0,0,0"/>
+                        Style="{StaticResource ButtonVioletStyle}" 
+                        Grid.Column="1" Grid.ColumnSpan="2" 
+                        Margin="625,0,0,0"
+                        Command="{Binding ToggleReportVisibilityCommand}"/>
 
                 <TextBlock Text="{x:Static res:Resources.Code_Label}"
                     Grid.Column="1" 
@@ -65,7 +72,7 @@
                         <ImageBrush ImageSource="{Binding ProfilePicture}" Stretch="UniformToFill"/>
                     </Ellipse.Fill>
                 </Ellipse>
-                
+
                 <TextBlock Text="{Binding Username}" 
                            FontSize="18" 
                            FontWeight="Bold" 
@@ -73,7 +80,7 @@
                            Foreground="{StaticResource DarkViolet}"
                            HorizontalAlignment="Center" 
                            Margin="0,10,0,0"/>
-                
+
                 <TextBlock Text="{Binding UserId}" 
                            FontSize="14" 
                            FontFamily="{StaticResource AugustaFont}"
@@ -94,7 +101,7 @@
                            Foreground="{StaticResource DarkViolet}"
                            HorizontalAlignment="Center" 
                            Margin="0,10,0,0"/>
-                
+
                 <TextBlock Text="{Binding UserIdOponent}" 
                            FontSize="14" 
                            FontFamily="{StaticResource AugustaFont}"
@@ -139,6 +146,31 @@
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Bottom" Margin="0,0,0,20"
                     Style="{StaticResource ButtonVioletStyle}"/>
+
+            <Grid Background="#FFF" 
+                  Margin="170,54,170,54"
+                  Visibility="{Binding IsReportVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" BorderThickness="2" BorderBrush="Black" Margin="10">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Button Content="{x:Static res:Resources.OffensiveLanguage_Button}" Width="300" Height="40" Margin="0,5" BorderThickness="2" BorderBrush="Black" Background="White" />
+                        <Button Content="{x:Static res:Resources.RulesViolation_Button}" Width="300" Height="40" Margin="0,5" BorderThickness="2" BorderBrush="Black" Background="White" />
+                        <Button Content="{x:Static res:Resources.Misbehavior_Label}" Width="300" Height="40" Margin="0,5" BorderThickness="2" BorderBrush="Black" Background="White" />
+                        <Button Content="{x:Static res:Resources.Toxicity_Button}" Width="300" Height="40" Margin="0,5" BorderThickness="2" BorderBrush="Black" Background="White" />
+                        <Button Content="{x:Static res:Resources.UseHacks_Button}" Width="300" Height="40" Margin="0,5" BorderThickness="2" BorderBrush="Black" Background="White" />
+                    </StackPanel>
+                </Border>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,10">
+                    <Button Content="{x:Static res:Resources.Report_Button}" Width="100" Height="40" Margin="10,0" Background="#D3D3D3" FontWeight="Bold" />
+                    <Button Content="{x:Static res:Resources.Cancel_Button}" Width="100" Height="40" Margin="10,0" Background="#D3D3D3" FontWeight="Bold" />
+                </StackPanel>
+            </Grid>
+
         </Grid>
     </Viewbox>
 </UserControl>

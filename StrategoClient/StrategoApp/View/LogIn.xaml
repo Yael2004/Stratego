@@ -22,6 +22,7 @@
               Background="{StaticResource InitialBackground}"
               Cursor="{StaticResource NormalCursor}">
 
+                <Rectangle Fill="#A0000000" />
                 <Rectangle Fill="#80000000" Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="1" IsHitTestVisible="True"/>
 
                 <Canvas>

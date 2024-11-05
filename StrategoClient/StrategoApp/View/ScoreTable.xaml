@@ -42,9 +42,10 @@
                 </ListView>
             </ScrollViewer>
             <Button Height="40" Width="40" 
-                    Margin="20,20,740,380">
-
+                    Margin="20,20,740,380"
+                    Command="{Binding BackToLobbyCommand}">
             </Button>
+            
             <Label Content="{x:Static res:Resources.Scoreboard_Title}" 
                    FontSize="40" 
                    FontWeight="Bold"

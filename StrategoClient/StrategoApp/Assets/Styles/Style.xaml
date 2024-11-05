@@ -111,7 +111,7 @@
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Background" Value="Black"/>
         <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource DarkGreen}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource IntenseGreen}"/>
         <Setter Property="BorderThickness" Value="3"/>
         <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -120,7 +120,7 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="Black"/>
                 <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
-                <Setter Property="BorderBrush" Value="{StaticResource DarkGreen}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource IntenseGreen}"/>
             </Trigger>
         </Style.Triggers>
     </Style>

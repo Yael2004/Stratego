@@ -95,6 +95,7 @@
     <Compile Include="ViewModel\PlayerProfileNotOwnViewModel.cs" />
     <Compile Include="ViewModel\PlayerProfileViewModel.cs" />
     <Compile Include="ViewModel\RoomViewModel.cs" />
+    <Compile Include="ViewModel\ScoreboardViewModel.cs" />
     <Compile Include="ViewModel\SignUpViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\ViewModelCommand.cs" />

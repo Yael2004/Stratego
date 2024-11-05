@@ -86,9 +86,6 @@ namespace StrategoApp.ViewModel
 
             _mainWindowViewModel = mainWindowViewModel;
             BackToLobbyCommand = new ViewModelCommand(ExecuteBackToLobby);
-            //EditProfilePictureCommand = new ViewModelCommand(EditProfilePicture, CanEditProfilePicture);
-            //EditUsernameCommand = new ViewModelCommand(EditUsername);
-            //RemoveFriendCommand = new ViewModelCommand(RemoveFriend, CanRemoveFriend);
             SelectProfilePictureCommand = new ViewModelCommand(SelectProfilePicture);
             ToggleProfileSelectorVisibilityCommand = new ViewModelCommand(ToggleProfileSelectorVisibility);
             ToggleEditUsernameVisibilityCommand = new ViewModelCommand(ToggleEditUsernameVisibility);
@@ -149,6 +146,11 @@ namespace StrategoApp.ViewModel
                 _playerTag = value;
                 OnPropertyChanged();
             }
+        }
+
+        public int AccountId
+        {
+            get { return PlayerSingleton.Instance.Player.AccountId; }
         }
 
         public string SelectedProfilePicture
@@ -222,7 +224,7 @@ namespace StrategoApp.ViewModel
         private void ExecuteBackToLobby(Object obj)
         {
             try
-            { 
+            {
                 _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel)); 
             }
             catch (Exception e) 
@@ -288,6 +290,7 @@ namespace StrategoApp.ViewModel
                 {
                     var client = new ProfileModifierServiceClient(new InstanceContext(this));
                     await client.UpdatePlayerProfileAsync(updatedProfile);
+                    PlayerSingleton.Instance.Player.Name = UsernameEdited;
                 }
                 catch (Exception ex)
                 {
@@ -311,12 +314,15 @@ namespace StrategoApp.ViewModel
                     {
                         Name = Username,
                         Id = PlayerId,
-                        PicturePath = SelectedProfilePicture
+                        PicturePath = SelectedProfilePicture,
+                        LabelPath = "label1"
                     };
 
                     var client = new ProfileModifierServiceClient(new InstanceContext(this));
 
                     await client.UpdatePlayerProfileAsync(updatedProfile);
+
+                    PlayerSingleton.Instance.Player.PicturePath = SelectedProfilePicture;
                 }
             }
             catch (Exception ex)
@@ -348,7 +354,7 @@ namespace StrategoApp.ViewModel
 
         public void PlayerInfo(PlayerInfoResponse response)
         {
-            if (response != null)
+            if (response.Result.IsSuccess)
             {
                 Username = response.Profile.Name;
                 PlayerId = response.Profile.Id;
@@ -361,7 +367,7 @@ namespace StrategoApp.ViewModel
             try
             {
                 var client = new ProfileDataServiceClient(new InstanceContext(this));
-                await client.GetPlayerStatisticsAsync(PlayerId);
+                await client.GetPlayerStatisticsAsync(AccountId);
             }
             catch (Exception ex)
             {
@@ -372,7 +378,7 @@ namespace StrategoApp.ViewModel
 
         public void PlayerStatistics(PlayerStatisticsResponse response)
         {
-            if (response != null) 
+            if (response.Result.IsSuccess) 
             { 
                 GamesWon = response.Statistics.WonGames;
                 GamesLost = response.Statistics.LostGames;
