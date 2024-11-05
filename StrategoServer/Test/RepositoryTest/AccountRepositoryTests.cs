@@ -187,5 +187,33 @@ namespace Test
             Assert.IsTrue(result.Value);
         }
 
+        [TestMethod]
+        public async Task AlreadyExistentAccountAsync_ShouldReturnFailureWhenDatabaseErrorOccurs()
+        {
+            var repository = new AccountRepository(_lazyMockContext);
+            string testEmail = "test@example.com";
+
+            _mockContext.Setup(c => c.Account).Throws(new Exception("Simulated database error"));
+
+            var result = await repository.AlreadyExistentAccountAsync(testEmail);
+
+            StringAssert.StartsWith(result.Error, "Unexpected error: Simulated database error");
+            Assert.IsFalse(result.IsSuccess);
+        }
+
+        [TestMethod]
+        public async Task AlreadyExistentAccountAsync_ShouldReturnFailureWhenUnexpectedErrorOccurs()
+        {
+            var repository = new AccountRepository(_lazyMockContext);
+            string testEmail = "test@example.com";
+
+            _mockContext.Setup(c => c.Account).Throws(new InvalidOperationException("Simulated unexpected error"));
+
+            var result = await repository.AlreadyExistentAccountAsync(testEmail);
+
+            StringAssert.StartsWith(result.Error, "Unexpected error");
+            Assert.IsFalse(result.IsSuccess);
+        }
+
     }
 }
