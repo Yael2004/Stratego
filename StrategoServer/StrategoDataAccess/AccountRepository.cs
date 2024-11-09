@@ -58,7 +58,7 @@ namespace StrategoDataAccess
                     };
 
                     _context.Value.Player.Add(newPlayer);
-                    _context.Value.SaveChangesAsync();
+                    _context.Value.SaveChanges();
 
                     var playerStatistics = new Games
                     {
@@ -68,7 +68,7 @@ namespace StrategoDataAccess
                     };
 
                     _context.Value.Games.Add(playerStatistics);
-                    _context.Value.SaveChangesAsync();
+                    _context.Value.SaveChanges();
 
                     transaction.Commit();
 
@@ -133,6 +133,54 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 return Result<bool>.Failure($"Unexpected error: {ex.Message}");
+            }
+        }
+
+        public Result<string> ChangePassword(string email, string newHashedPassword)
+        {
+            using (var transaction = _context.Value.Database.BeginTransaction())
+            {
+                try
+                {
+                    var existenceCheckResult = AlreadyExistentAccount(email);
+                    if (!existenceCheckResult.IsSuccess)
+                    {
+                        return Result<string>.Failure(existenceCheckResult.Error);
+                    }
+
+                    if (!existenceCheckResult.Value)
+                    {
+                        return Result<string>.Failure("Account does not exist");
+                    }
+
+                    var account = _context.Value.Account.FirstOrDefault(a => a.mail == email);
+                    if (account == null)
+                    {
+                        return Result<string>.Failure("Account not found");
+                    }
+
+                    account.password = newHashedPassword;
+                    _context.Value.SaveChanges();
+
+                    transaction.Commit();
+
+                    return Result<string>.Success("Password changed successfully");
+                }
+                catch (DbEntityValidationException dbEx)
+                {
+                    transaction.Rollback();
+                    return Result<string>.Failure($"Entity validation error: {dbEx.Message}");
+                }
+                catch (SqlException sqlEx)
+                {
+                    transaction.Rollback();
+                    return Result<string>.Failure($"Database error: {sqlEx.Message}");
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return Result<string>.Failure($"Unexpected error: {ex.Message}");
+                }
             }
         }
 

@@ -27,6 +27,7 @@ namespace StrategoServices
             builder.RegisterType<AccountManager>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<ProfilesManager>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<FriendsManager>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<PasswordManager>().AsSelf().InstancePerLifetimeScope();
 
             builder.RegisterType<AccountRepository>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<PlayerRepository>().AsSelf().InstancePerLifetimeScope();

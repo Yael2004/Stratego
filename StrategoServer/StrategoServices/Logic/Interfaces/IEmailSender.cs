@@ -8,6 +8,6 @@ namespace StrategoServices.Logic.Interfaces
 {
     internal interface IEmailSender
     {
-        void SendEmail(string destinationAddress);
+        void SendEmail(string destinationAddress, string message);
     }
 }

@@ -2,7 +2,9 @@
 using StrategoServices.Data.DTO;
 using StrategoServices.Logic;
 using StrategoServices.Services.Interfaces;
+using StrategoServices.Services.Interfaces.Callbacks;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -12,13 +14,15 @@ using System.Threading.Tasks;
 namespace StrategoServices.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class LogInService : ILogInService, ISignUpService
+    public class LogInService : ILogInService, ISignUpService, IChangePasswordService
     {
         private readonly Lazy<AccountManager> _accountManager;
+        private readonly Lazy<PasswordManager> _passwordManager;
 
-        public LogInService(Lazy<AccountManager> accountManager)
+        public LogInService(Lazy<AccountManager> accountManager, Lazy<PasswordManager> passwordManager)
         {
             _accountManager = accountManager;
+            _passwordManager = passwordManager;
         }
 
         public async Task LogInAsync(string email, string password)
@@ -46,7 +50,6 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.LogInResult(new OperationResult(true, "Login successful")));
         }
 
-
         public async Task SignUpAsync(string email, string password, string playername)
         {
             var callback = OperationContext.Current.GetCallbackChannel<ISignUpServiceCallback>();
@@ -61,6 +64,55 @@ namespace StrategoServices.Services
             {
                 await Task.Run(() => callback.SignUpResult(new OperationResult(false, result.Error)));
             }
+        }
+
+        public async Task ObtainVerificationCodeAsync(string email)
+        {
+            var callback = OperationContext.Current.GetCallbackChannel<IChangePasswordServiceCallback>();
+            OperationResult response;
+
+            var accountExistsResult = _passwordManager.Value.AlreadyExistentAccount(email);
+            if (!accountExistsResult.IsSuccess || !accountExistsResult.Value)
+            {
+                response = new OperationResult(false, "Account not found");
+            } 
+            else
+            {
+                var verificationCode = _passwordManager.Value.GenerateVerificationCode(email);
+                EmailSender.Instance.SendEmail(email, verificationCode);
+                response = new OperationResult(true, "Verification code sent.");
+            }
+
+            await Task.Run(() => callback.ChangePasswordResult(response));
+        }
+
+        public async Task SendVerificationCodeAsync(string email, string code)
+        {
+            var callback = OperationContext.Current.GetCallbackChannel<IChangePasswordServiceCallback>();
+
+            var verificationResult = _passwordManager.Value.ValidateVerificationCode(email, code);
+            if (!verificationResult.IsSuccess)
+            {
+                await Task.Run(() => callback.ChangePasswordResult(new OperationResult(false, "Invalid verification code.")));
+                return;
+            }
+
+            await Task.Run(() => callback.ChangePasswordResult(new OperationResult(true, "Verification code is correct.")));
+        }
+
+        public async Task SendNewPasswordAsync(string email, string newHashedPassword)
+        {
+            var callback = OperationContext.Current.GetCallbackChannel<IChangePasswordServiceCallback>();
+
+            var result = _passwordManager.Value.ChangePassword(email, newHashedPassword);
+
+            if (!result.IsSuccess)
+            {
+                await Task.Run(() => callback.ChangePasswordResult(new OperationResult(false, result.Error)));
+                return;
+            }
+
+            await Task.Run(() => callback.ChangePasswordResult(new OperationResult(true, "Password changed successfully.")));
         }
 
     }

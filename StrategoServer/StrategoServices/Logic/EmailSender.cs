@@ -6,13 +6,14 @@ using System.Configuration;
 
 namespace StrategoServices.Logic
 {
-    public class EmailSender : IEmailSender
+    public class EmailSender : IEmailSender, IDisposable
     {
-        private static EmailSender _instance;
-        private string _mailHost;
-        private int _port;
-        private string _userMail;
-        private string _password;
+        private static readonly Lazy<EmailSender> _instance = new Lazy<EmailSender>(() => new EmailSender());
+        private readonly string _mailHost;
+        private readonly int _port;
+        private readonly string _userMail;
+        private readonly string _password;
+        private SmtpClient _smtpClient;
 
         private EmailSender()
         {
@@ -22,57 +23,37 @@ namespace StrategoServices.Logic
             _password = ConfigurationManager.AppSettings["EmailFromPassword"];
         }
 
-        public static EmailSender Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new EmailSender();
-                }
-                return _instance;
-            }
-        }
+        public static EmailSender Instance => _instance.Value;
 
-        public void SendEmail(string destinationAddress)
+        public void SendEmail(string destinationAddress, string verificationCode)
         {
-            SmtpClient smtpClient = null;
             try
             {
-                var message = MakeMessage(destinationAddress);
-                smtpClient = ConfigureMailClient();
-                AuthenticateSmtpClient(smtpClient);
-                SendMessage(smtpClient, message);
+                var message = MakeMessage(destinationAddress, verificationCode);
+                _smtpClient = ConfigureMailClient();
+                AuthenticateSmtpClient(_smtpClient);
+                _smtpClient.Send(message);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al enviar el correo: {ex.Message}");
+                Console.WriteLine($"Sending mail error: {ex.Message}");
             }
             finally
             {
-                if (smtpClient != null && smtpClient.IsConnected)
-                {
-                    DisconnectMailClient(smtpClient);
-                }
+                DisconnectMailClient();
             }
         }
 
-        private BodyBuilder MakeMessageBody()
+        private MimeMessage MakeMessage(string destinationAddress, string verificationCode)
         {
-            BodyBuilder body = new BodyBuilder
-            {
-                HtmlBody = "<h1>Bienvenido, tu contraseña se encuentra en el siguiente enlace: </h1>"
-            };
-            return body;
-        }
-
-        private MimeMessage MakeMessage(string destinationAddress)
-        {
-            MimeMessage message = new MimeMessage();
+            var message = new MimeMessage();
             message.From.Add(new MailboxAddress("Stratego", _userMail));
             message.To.Add(new MailboxAddress("Stratego", destinationAddress));
-            message.Subject = "Recuperación de contraseña";
-            message.Body = MakeMessageBody().ToMessageBody();
+            message.Subject = "Stratego";
+            message.Body = new TextPart("plain")
+            {
+                Text = $"Verification code: {verificationCode}"
+            };
             return message;
         }
 
@@ -91,14 +72,19 @@ namespace StrategoServices.Logic
             smtpClient.Authenticate(_userMail, _password);
         }
 
-        private void SendMessage(SmtpClient smtpClient, MimeMessage message)
+        private void DisconnectMailClient()
         {
-            smtpClient.Send(message);
+            if (_smtpClient != null && _smtpClient.IsConnected)
+            {
+                _smtpClient.Disconnect(true);
+                _smtpClient.Dispose();
+                _smtpClient = null;
+            }
         }
 
-        private void DisconnectMailClient(SmtpClient smtpClient)
+        public void Dispose()
         {
-            smtpClient.Disconnect(true);
+            DisconnectMailClient();
         }
 
     }
