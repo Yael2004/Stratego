@@ -265,7 +265,8 @@
                                  BorderThickness="1" 
                                  HorizontalAlignment="Center" 
                                  Width="200" 
-                                 Margin="0,30,0,5"/>
+                                 Margin="0,30,0,5"
+                                 MaxLength="16"/>
 
                         <Border Height="28" Width="292" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <TextBlock Text="{Binding UsernameError}"
@@ -279,7 +280,6 @@
                                        Margin="0,0,0,0"
                                        VerticalAlignment="Center"/>
                         </Border>
-
 
                         <StackPanel Orientation="Horizontal" 
                                     HorizontalAlignment="Center" 

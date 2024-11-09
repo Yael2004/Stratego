@@ -24,6 +24,7 @@
 
                 <Rectangle Fill="#A0000000" />
                 <Rectangle Fill="#80000000" Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="1" IsHitTestVisible="True"/>
+                <Rectangle Fill="#80000000" Visibility="{Binding ToggleForgotPasswordVisibility, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="1" IsHitTestVisible="True"/>
 
                 <Canvas>
                     <Label Content="{x:Static res:Resources.Stratego_Label}" 
@@ -34,7 +35,7 @@
                        Canvas.Left="275" Canvas.Top="46" 
                        HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
-                    <Label Content="{x:Static res:Resources.UserName_Label}" Canvas.Left="142" Canvas.Top="162" 
+                    <Label Content="{x:Static res:Resources.UserMail_Label}" Canvas.Left="142" Canvas.Top="162" 
                        FontSize="20"
                        FontWeight="Bold"
                        Foreground="{StaticResource IntenseRed}"
@@ -42,10 +43,11 @@
                        HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                     <TextBox Style="{StaticResource InputBoxStyle}"
-                         Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding Mail, UpdateSourceTrigger=PropertyChanged}"
                          Canvas.Left="260" Canvas.Top="169" 
                          Width="280" Height="33" 
-                         HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                         HorizontalAlignment="Left" VerticalAlignment="Top"
+                         MaxLength="100"/>
 
                     <Label Content="{x:Static res:Resources.UserPassword_Label}" Canvas.Left="142" Canvas.Top="219" 
                        FontSize="20"
@@ -132,6 +134,12 @@
                    HorizontalAlignment="Left" VerticalAlignment="Center"
                    Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
                 </Canvas>
+
+                <TextBlock FontSize="14" Foreground="{StaticResource IntenseRed}" Canvas.Left="260" Canvas.Top="310" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,411,0,0">
+                    <Hyperlink Command="{Binding ForgotPasswordCommand}" Foreground="{StaticResource IntenseRed}">
+                        <TextBlock Text="{x:Static res:Resources.ForgotPassword_Label}" FontSize="14" Foreground="{StaticResource IntenseRed}"/>
+                    </Hyperlink>
+                </TextBlock>
             </Grid>
 
             <Grid x:Name="ModalContainer"
@@ -156,6 +164,68 @@
                         Style="{StaticResource ButtonStyle}"
                         Width="100"
                         HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid Visibility="{Binding ToggleForgotPasswordVisibility, Converter={StaticResource BoolToVisibilityConverter}}" 
+                  Background="#CC000000" 
+                  HorizontalAlignment="Center" 
+                  VerticalAlignment="Center" 
+                  Panel.ZIndex="2" 
+                  Width="400" Height="200">
+
+                <Border Background="{StaticResource SemiTransparent}" 
+                        Padding="34" 
+                        BorderThickness="2" 
+                        BorderBrush="Black">
+
+                    <StackPanel Margin="0,-26,0,-26">
+                        <TextBlock Text="{x:Static res:Resources.NameChange_Label}" 
+                                   FontFamily="{StaticResource AugustaFont}" 
+                                   Foreground="{StaticResource IntenseRed}" 
+                                   FontSize="18" 
+                                   FontWeight="Bold" 
+                                   HorizontalAlignment="Center"/>
+
+                        <TextBox Text="{Binding Mail, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource InputBoxStyle}" 
+                                 BorderBrush="{StaticResource IntenseRed}" 
+                                 BorderThickness="1" 
+                                 HorizontalAlignment="Center" 
+                                 Width="200" 
+                                 Margin="0,30,0,5"
+                                 MaxLength="16"/>       
+
+                        <Border Height="28" Width="292" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding ErrorMessage}"
+                                       FontFamily="{StaticResource AugustaFont}"
+                                       Foreground="{StaticResource IntenseRed}" 
+                                       FontSize="12" 
+                                       Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       MaxWidth="250"
+                                       Margin="0,0,0,0"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+
+                        <StackPanel Orientation="Horizontal" 
+                                    HorizontalAlignment="Center" 
+                                    Margin="0,20,0,0">
+
+                            <Button Content="{x:Static res:Resources.Accept_Button}" 
+                                    Style="{StaticResource ButtonStyle}" 
+                                    Width="100" 
+                                    Margin="5"
+                                    Command="{Binding SendMailCommand}"/>
+
+                            <Button Content="{x:Static res:Resources.Cancel_Button}" 
+                                    Style="{StaticResource ButtonStyle}" 
+                                    Width="100" 
+                                    Margin="5"
+                                    Command="{Binding CancelSendMailCommand}"/>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
             </Grid>

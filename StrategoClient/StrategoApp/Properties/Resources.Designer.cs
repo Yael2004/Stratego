@@ -106,6 +106,15 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a .
+        /// </summary>
+        public static string Apprentice_Button {
+            get {
+                return ResourceManager.GetString("Apprentice_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Apprentice.
         /// </summary>
         public static string Apprentice_Label {
@@ -196,6 +205,15 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a .
+        /// </summary>
+        public static string Competitive_Button {
+            get {
+                return ResourceManager.GetString("Competitive_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Competitive.
         /// </summary>
         public static string Competitive_Label {
@@ -273,6 +291,15 @@ namespace StrategoApp.Properties {
         public static string FieldsInBlank_Label {
             get {
                 return ResourceManager.GetString("FieldsInBlank_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Forgot your password?.
+        /// </summary>
+        public static string ForgotPassword_Label {
+            get {
+                return ResourceManager.GetString("ForgotPassword_Label", resourceCulture);
             }
         }
         
@@ -466,6 +493,15 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a .
+        /// </summary>
+        public static string Misbehavior_Button {
+            get {
+                return ResourceManager.GetString("Misbehavior_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Misbehavior.
         /// </summary>
         public static string Misbehavior_Label {
@@ -534,6 +570,15 @@ namespace StrategoApp.Properties {
         public static string NonexistentCode_Label {
             get {
                 return ResourceManager.GetString("NonexistentCode_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a .
+        /// </summary>
+        public static string NovicePlayer_Button {
+            get {
+                return ResourceManager.GetString("NovicePlayer_Button", resourceCulture);
             }
         }
         
@@ -615,6 +660,15 @@ namespace StrategoApp.Properties {
         public static string Profile_Title {
             get {
                 return ResourceManager.GetString("Profile_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a .
+        /// </summary>
+        public static string ProPlayer_Button {
+            get {
+                return ResourceManager.GetString("ProPlayer_Button", resourceCulture);
             }
         }
         

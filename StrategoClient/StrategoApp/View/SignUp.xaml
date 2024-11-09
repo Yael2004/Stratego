@@ -48,7 +48,9 @@
                          Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                          Canvas.Left="260" Canvas.Top="162" 
                          Width="280" Height="33" 
-                         HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                         HorizontalAlignment="Center" VerticalAlignment="Top"
+                         MaxLength="16"/>
+                    
                     <Label Content="{Binding UsernameError}" 
                        FontFamily="{StaticResource AugustaFont}"
                        Foreground="Red" 
@@ -67,7 +69,8 @@
                          Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
                          Canvas.Left="260" Canvas.Top="220" 
                          Width="280" Height="33" 
-                         HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                         HorizontalAlignment="Center" VerticalAlignment="Top"
+                         MaxLength="100"/>
 
                     <Label Content="{Binding EmailError}" 
                        FontFamily="{StaticResource AugustaFont}"

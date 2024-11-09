@@ -21,12 +21,13 @@ namespace StrategoApp.ViewModel
     {
         private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
 
-        private string _username;
+        private string _mail;
         private string _password;
         private string _errorMessage;
         private bool _isServiceErrorVisible;
         private bool _isPasswordVisible;
         private bool _isDatabaseError;
+        private bool _toggleForgotPasswordVisibility;
         private string _togglePasswordVisibilityIcon;
 
         public string LogInErrorMessage { get; set; }
@@ -35,12 +36,12 @@ namespace StrategoApp.ViewModel
 
         private readonly MainWindowViewModel _mainWindowViewModel;
 
-        public string Username
+        public string Mail
         {
-            get { return _username; }
+            get { return _mail; }
             set
             {
-                _username = value;
+                _mail = value;
                 OnPropertyChanged();
             }
         }
@@ -86,6 +87,16 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public bool ToggleForgotPasswordVisibility
+        {
+            get { return _toggleForgotPasswordVisibility; }
+            set
+            {
+                _toggleForgotPasswordVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string ErrorMessage
         {
             get { return _errorMessage; }
@@ -111,6 +122,9 @@ namespace StrategoApp.ViewModel
         public ICommand LogInAsInvitedCommand { get; }
         public ICommand TogglePasswordVisibilityCommand { get; }
         public ICommand ExecuteCloseServiceErrorCommand { get; }
+        public ICommand ForgotPasswordCommand { get; }
+        public ICommand SendMailCommand { get; }
+        public ICommand CancelSendMailCommand { get; }
 
         public LogInViewModel(MainWindowViewModel mainWindowViewModel)
         {
@@ -122,6 +136,10 @@ namespace StrategoApp.ViewModel
             SignUpCommand = new ViewModelCommand(p => ExecuteSignUpCommand());
             TogglePasswordVisibilityCommand = new ViewModelCommand(p => ExecuteTogglePasswordVisibilityCommand());
             ExecuteCloseServiceErrorCommand = new ViewModelCommand(ExecuteCloseServerError);
+            ForgotPasswordCommand = new ViewModelCommand(p => ForgotPassword());
+            CancelSendMailCommand = new ViewModelCommand(p => CancelForgotPassword());
+
+            ToggleForgotPasswordVisibility = false;
             IsServiceErrorVisible = false;
         }
 
@@ -140,6 +158,16 @@ namespace StrategoApp.ViewModel
             IsPasswordVisible = !IsPasswordVisible;
         }
 
+        private void ForgotPassword()
+        {
+            ToggleForgotPasswordVisibility = true;
+        }
+
+        private void CancelForgotPassword()
+        {
+            ToggleForgotPasswordVisibility = false;
+        }
+
         private void ExecuteSignUpCommand()
         {
             _mainWindowViewModel.ChangeViewModel(new SignUpViewModel(_mainWindowViewModel));
@@ -147,7 +175,7 @@ namespace StrategoApp.ViewModel
 
         private bool CanExecuteLogInCommand(object obj)
         {
-            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
+            if (string.IsNullOrEmpty(Mail) || string.IsNullOrEmpty(Password))
             {
                 return false;
             }
@@ -160,7 +188,7 @@ namespace StrategoApp.ViewModel
             string hashedPassword = HashPassword(Password);
             try
             {
-                await _logInServiceClient.LogInAsync(Username, hashedPassword);
+                await _logInServiceClient.LogInAsync(Mail, hashedPassword);
             }
             catch (Exception ex)
             {
