@@ -86,18 +86,25 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.ChangePasswordResult(response));
         }
 
-        public async Task SendVerificationCodeAsync(string email, string code)
+        public async Task<bool> SendVerificationCodeAsync(string email, string code)
         {
             var callback = OperationContext.Current.GetCallbackChannel<IChangePasswordServiceCallback>();
+            OperationResult response;
+            bool isValid = false;
 
             var verificationResult = _passwordManager.Value.ValidateVerificationCode(email, code);
             if (!verificationResult.IsSuccess)
             {
-                await Task.Run(() => callback.ChangePasswordResult(new OperationResult(false, "Invalid verification code.")));
-                return;
+                response = new OperationResult(false, "Invalid verification code");
+            }
+            else
+            {
+                response = new OperationResult(true, "Verification code is correct");
+                isValid = true;
             }
 
-            await Task.Run(() => callback.ChangePasswordResult(new OperationResult(true, "Verification code is correct.")));
+            await Task.Run(() => callback.ChangePasswordResult(response));
+            return isValid;
         }
 
         public async Task SendNewPasswordAsync(string email, string newHashedPassword)
@@ -105,14 +112,18 @@ namespace StrategoServices.Services
             var callback = OperationContext.Current.GetCallbackChannel<IChangePasswordServiceCallback>();
 
             var result = _passwordManager.Value.ChangePassword(email, newHashedPassword);
+            OperationResult response;
 
             if (!result.IsSuccess)
             {
-                await Task.Run(() => callback.ChangePasswordResult(new OperationResult(false, result.Error)));
-                return;
+                response = new OperationResult(false, result.Error);
+            }
+            else
+            {
+                response = new OperationResult(true, "Password changed successfully");
             }
 
-            await Task.Run(() => callback.ChangePasswordResult(new OperationResult(true, "Password changed successfully.")));
+            await Task.Run(() => callback.ChangePasswordResult(response));
         }
 
     }

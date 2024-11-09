@@ -14,7 +14,7 @@ namespace StrategoServices.Services.Interfaces
         Task ObtainVerificationCodeAsync(string email);
 
         [OperationContract]
-        Task SendVerificationCodeAsync(string email, string code);
+        Task<bool> SendVerificationCodeAsync(string email, string code);
 
         [OperationContract]
         Task SendNewPasswordAsync(string email, string newHashedPassword);
