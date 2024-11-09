@@ -58,6 +58,35 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_IChangePasswordService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:WindowsTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+                  <msf:ProtectionLevel>EncryptAndSign</msf:ProtectionLevel>
+                </msf:WindowsTransportSecurity>
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://localhost:2021/LogInService?xsd=xsd0" namespace="http://tempuri.org/" />
@@ -87,6 +116,30 @@
   <wsdl:message name="ISignUpService_SignUpResult_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:SignUpResult" />
   </wsdl:message>
+  <wsdl:message name="IChangePasswordService_ObtainVerificationCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:ObtainVerificationCode" />
+  </wsdl:message>
+  <wsdl:message name="IChangePasswordService_ObtainVerificationCode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ObtainVerificationCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IChangePasswordService_SendVerificationCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendVerificationCode" />
+  </wsdl:message>
+  <wsdl:message name="IChangePasswordService_SendVerificationCode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendVerificationCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IChangePasswordService_SendNewPassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendNewPassword" />
+  </wsdl:message>
+  <wsdl:message name="IChangePasswordService_SendNewPassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendNewPasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IChangePasswordService_ChangePasswordResult_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ChangePasswordResult" />
+  </wsdl:message>
+  <wsdl:message name="IChangePasswordService_ChangePasswordResult_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ChangePasswordResultResponse" />
+  </wsdl:message>
   <wsdl:portType name="ILogInService">
     <wsdl:operation name="LogIn">
       <wsdl:input wsaw:Action="http://tempuri.org/ILogInService/LogIn" message="tns:ILogInService_LogIn_InputMessage" />
@@ -106,6 +159,24 @@
     </wsdl:operation>
     <wsdl:operation name="SignUpResult">
       <wsdl:output wsaw:Action="http://tempuri.org/ISignUpService/SignUpResult" message="tns:ISignUpService_SignUpResult_OutputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="IChangePasswordService">
+    <wsdl:operation name="ObtainVerificationCode">
+      <wsdl:input wsaw:Action="http://tempuri.org/IChangePasswordService/ObtainVerificationCode" message="tns:IChangePasswordService_ObtainVerificationCode_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IChangePasswordService/ObtainVerificationCodeResponse" message="tns:IChangePasswordService_ObtainVerificationCode_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendVerificationCode">
+      <wsdl:input wsaw:Action="http://tempuri.org/IChangePasswordService/SendVerificationCode" message="tns:IChangePasswordService_SendVerificationCode_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IChangePasswordService/SendVerificationCodeResponse" message="tns:IChangePasswordService_SendVerificationCode_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendNewPassword">
+      <wsdl:input wsaw:Action="http://tempuri.org/IChangePasswordService/SendNewPassword" message="tns:IChangePasswordService_SendNewPassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IChangePasswordService/SendNewPasswordResponse" message="tns:IChangePasswordService_SendNewPassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangePasswordResult">
+      <wsdl:output wsaw:Action="http://tempuri.org/IChangePasswordService/ChangePasswordResult" message="tns:IChangePasswordService_ChangePasswordResult_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IChangePasswordService/ChangePasswordResultResponse" message="tns:IChangePasswordService_ChangePasswordResult_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_ILogInService" type="tns:ILogInService">
@@ -152,13 +223,53 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_IChangePasswordService" type="tns:IChangePasswordService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IChangePasswordService_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="ObtainVerificationCode">
+      <soap12:operation soapAction="http://tempuri.org/IChangePasswordService/ObtainVerificationCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendVerificationCode">
+      <soap12:operation soapAction="http://tempuri.org/IChangePasswordService/SendVerificationCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendNewPassword">
+      <soap12:operation soapAction="http://tempuri.org/IChangePasswordService/SendNewPassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePasswordResult">
+      <soap12:operation soapAction="http://tempuri.org/IChangePasswordService/ChangePasswordResult" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
   <wsdl:service name="LogInService">
     <wsdl:port name="NetTcpBinding_ILogInService" binding="tns:NetTcpBinding_ILogInService">
       <soap12:address location="net.tcp://localhost:1011/LogInService/LogInService" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:1011/LogInService/LogInService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-1UFSE68T\armas</Upn>
+          <Upn>LAPTOP-4SRV2TJ2\yaela</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -167,7 +278,16 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:1011/LogInService/SignUpService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-1UFSE68T\armas</Upn>
+          <Upn>LAPTOP-4SRV2TJ2\yaela</Upn>
+        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_IChangePasswordService" binding="tns:NetTcpBinding_IChangePasswordService">
+      <soap12:address location="net.tcp://localhost:1011/LogInService/ChangePasswordService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:1011/LogInService/ChangePasswordService</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>LAPTOP-4SRV2TJ2\yaela</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

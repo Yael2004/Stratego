@@ -311,4 +311,87 @@ namespace StrategoApp.LogInService {
             return base.Channel.SignUpAsync(email, password, playername);
         }
     }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="LogInService.IChangePasswordService", CallbackContract=typeof(StrategoApp.LogInService.IChangePasswordServiceCallback))]
+    public interface IChangePasswordService {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChangePasswordService/ObtainVerificationCode", ReplyAction="http://tempuri.org/IChangePasswordService/ObtainVerificationCodeResponse")]
+        void ObtainVerificationCode(string email);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChangePasswordService/ObtainVerificationCode", ReplyAction="http://tempuri.org/IChangePasswordService/ObtainVerificationCodeResponse")]
+        System.Threading.Tasks.Task ObtainVerificationCodeAsync(string email);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChangePasswordService/SendVerificationCode", ReplyAction="http://tempuri.org/IChangePasswordService/SendVerificationCodeResponse")]
+        void SendVerificationCode(string email, string code);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChangePasswordService/SendVerificationCode", ReplyAction="http://tempuri.org/IChangePasswordService/SendVerificationCodeResponse")]
+        System.Threading.Tasks.Task SendVerificationCodeAsync(string email, string code);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChangePasswordService/SendNewPassword", ReplyAction="http://tempuri.org/IChangePasswordService/SendNewPasswordResponse")]
+        void SendNewPassword(string email, string newHashedPassword);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChangePasswordService/SendNewPassword", ReplyAction="http://tempuri.org/IChangePasswordService/SendNewPasswordResponse")]
+        System.Threading.Tasks.Task SendNewPasswordAsync(string email, string newHashedPassword);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IChangePasswordServiceCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChangePasswordService/ChangePasswordResult", ReplyAction="http://tempuri.org/IChangePasswordService/ChangePasswordResultResponse")]
+        void ChangePasswordResult(StrategoApp.LogInService.OperationResult result);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IChangePasswordServiceChannel : StrategoApp.LogInService.IChangePasswordService, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class ChangePasswordServiceClient : System.ServiceModel.DuplexClientBase<StrategoApp.LogInService.IChangePasswordService>, StrategoApp.LogInService.IChangePasswordService {
+        
+        public ChangePasswordServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
+        }
+        
+        public ChangePasswordServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
+        }
+        
+        public ChangePasswordServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public ChangePasswordServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public ChangePasswordServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
+        }
+        
+        public void ObtainVerificationCode(string email) {
+            base.Channel.ObtainVerificationCode(email);
+        }
+        
+        public System.Threading.Tasks.Task ObtainVerificationCodeAsync(string email) {
+            return base.Channel.ObtainVerificationCodeAsync(email);
+        }
+        
+        public void SendVerificationCode(string email, string code) {
+            base.Channel.SendVerificationCode(email, code);
+        }
+        
+        public System.Threading.Tasks.Task SendVerificationCodeAsync(string email, string code) {
+            return base.Channel.SendVerificationCodeAsync(email, code);
+        }
+        
+        public void SendNewPassword(string email, string newHashedPassword) {
+            base.Channel.SendNewPassword(email, newHashedPassword);
+        }
+        
+        public System.Threading.Tasks.Task SendNewPasswordAsync(string email, string newHashedPassword) {
+            return base.Channel.SendNewPasswordAsync(email, newHashedPassword);
+        }
+    }
 }
