@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,7 @@ namespace StrategoApp.ViewModel
         private string _profilePictureOponent;
         private string _messageToSend;
         private bool _isReportVisible;
+        private bool _isPlayAvalible;
 
         private ObservableCollection<string> _messages;
 
@@ -35,6 +37,7 @@ namespace StrategoApp.ViewModel
         public ICommand SendMessageCommand { get; }
         public ICommand ToggleReportVisibilityCommand { get; }
         public ICommand CancelReportCommand { get; }
+        public ICommand PlayCommand { get; }
 
         public string RoomCode { get; set; }
 
@@ -44,6 +47,7 @@ namespace StrategoApp.ViewModel
             SendMessageCommand = new ViewModelCommand(SendMessageAsync);
             ToggleReportVisibilityCommand = new ViewModelCommand(ToggleReportVisibility);
             CancelReportCommand = new ViewModelCommand(CancelReport);
+            PlayCommand = new ViewModelCommand(ExecutePlay, CanExecutePlay);
 
             _messages = new ObservableCollection<string>();
             _mainWindowViewModel = mainWindowViewModel;
@@ -148,6 +152,16 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public bool IsPlayAvalible
+        {
+            get { return _isPlayAvalible; }
+            set
+            {
+                _isPlayAvalible = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ObservableCollection<string> Messages
         {
             get { return _messages; }
@@ -198,6 +212,7 @@ namespace StrategoApp.ViewModel
                 if (canJoin)
                 {
                     await _roomServiceClient.NotifyPlayersOfNewConnectionAsync(RoomCode, UserId);
+                    IsPlayAvalible = true;
                 }
             }
             catch (Exception ex)
@@ -249,6 +264,30 @@ namespace StrategoApp.ViewModel
         public void CancelReport(object obj)
         {
             IsReportVisible = false;
+        }
+
+        public void ExecutePlay(object obj)
+        {
+            try
+            {
+                _mainWindowViewModel.ChangeViewModel(new GameViewModel(_mainWindowViewModel));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        public bool CanExecutePlay(object obj)
+        {
+            if (IsPlayAvalible)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void ExecuteBackToLobby(Object obj)

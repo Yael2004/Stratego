@@ -145,7 +145,8 @@
                     Width="100" Height="40" 
                     HorizontalAlignment="Center" 
                     VerticalAlignment="Bottom" Margin="0,0,0,20"
-                    Style="{StaticResource ButtonVioletStyle}"/>
+                    Style="{StaticResource ButtonVioletStyle}"
+                    Command="{Binding PlayCommand}"/>
 
             <Grid Background="#FFF" 
                   Margin="170,54,170,54"
