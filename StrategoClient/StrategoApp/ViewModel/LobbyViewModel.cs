@@ -51,6 +51,7 @@ namespace StrategoApp.ViewModel
         public ICommand CreateRoomCommand { get; }
         public ICommand JoinToRoomShowCommand { get; }
         public ICommand ShowScoreboardCommand { get; }
+        public ICommand ShowFriendsCommand { get; }
 
         public LobbyViewModel(MainWindowViewModel mainWindowViewModel)
         {
@@ -66,6 +67,8 @@ namespace StrategoApp.ViewModel
             }
 
             _mainWindowViewModel = mainWindowViewModel;
+
+            ShowFriendsCommand = new ViewModelCommand(ShowFriends);
             SendMessageCommand = new ViewModelCommand(ClientSendMessage, CanSendMessage);
             ShowProfileCommand = new ViewModelCommand(ClientShowProfile, CanShowProfile);
             JoinToRoomShowCommand = new ViewModelCommand(JoinToRoomShow);
@@ -110,11 +113,6 @@ namespace StrategoApp.ViewModel
                     MessageBox.Show("Ha ocurrido un error inesperado.");
                 }
             }
-        }
-
-        ~LobbyViewModel()
-        {
-            Disconnection();
         }
 
         public void Disconnection()
@@ -295,6 +293,19 @@ namespace StrategoApp.ViewModel
             catch (Exception ex)
             {
                 Log.Error("Error al mostrar el marcador", ex);
+            }
+        }
+
+        public void ShowFriends(object obj)
+        {
+            try
+            {
+                Disconnection();
+                _mainWindowViewModel.ChangeViewModel(new FriendsViewModel(_mainWindowViewModel));
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error al mostrar la lista de amigos", ex);
             }
         }
 

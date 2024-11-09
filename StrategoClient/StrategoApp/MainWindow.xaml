@@ -38,6 +38,10 @@
             <view:Game/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModel:FriendsViewModel}">
+            <view:Friends/>
+        </DataTemplate>
+
     </Window.Resources>
 
     <Window.DataContext>

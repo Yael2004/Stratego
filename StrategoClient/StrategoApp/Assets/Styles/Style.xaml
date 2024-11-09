@@ -9,6 +9,7 @@
     <SolidColorBrush x:Key="Beige" Color="#FEFDC9"/>
     <SolidColorBrush x:Key="DarkGreen" Color="#1B4D3E"/>
     <SolidColorBrush x:Key="IntenseGreen" Color="#008C00"/>
+    <SolidColorBrush x:Key="Prueba" Color="#FFFF00"/>
 
     <FontFamily x:Key="AugustaFont">pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta</FontFamily>
 
@@ -32,6 +33,10 @@
     <ImageBrush x:Key="RoomBackground" 
             ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/RoomBackground2.png" 
             Stretch="UniformToFill"/>
+
+    <ImageBrush x:Key="FriendsBackground" 
+        ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/FriendsBackground.png" 
+        Stretch="UniformToFill"/>
 
     <Style x:Key="InputBoxStyle" TargetType="Control">
         <Setter Property="FontSize" Value="25"/>
@@ -121,6 +126,25 @@
                 <Setter Property="Background" Value="Black"/>
                 <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
                 <Setter Property="BorderBrush" Value="{StaticResource IntenseGreen}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ButtonYellowStyle" TargetType="Button">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Background" Value="Black"/>
+        <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Prueba}"/>
+        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="Black"/>
+                <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource Prueba}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
