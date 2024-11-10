@@ -79,7 +79,7 @@ namespace StrategoServices.Services
             else
             {
                 var verificationCode = _passwordManager.Value.GenerateVerificationCode(email);
-                EmailSender.Instance.SendEmail(email, verificationCode);
+                EmailSender.Instance.SendVerificationEmail(email, verificationCode);
                 response = new OperationResult(true, "Verification code sent.");
             }
 

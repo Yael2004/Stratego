@@ -123,7 +123,7 @@ namespace StrategoServices.Services
             }
             else
             {
-                EmailSender.Instance.SendEmail(mailResult.Value, roomCode);
+                EmailSender.Instance.SendInvitationEmail(mailResult.Value, roomCode);
                 operationResult = new OperationResult(true, "Room invitation sent");
                 response = true;
             }

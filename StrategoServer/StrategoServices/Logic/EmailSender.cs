@@ -25,11 +25,11 @@ namespace StrategoServices.Logic
 
         public static EmailSender Instance => _instance.Value;
 
-        public void SendEmail(string destinationAddress, string verificationCode)
+        public void SendVerificationEmail(string destinationAddress, string verificationCode)
         {
             try
             {
-                var message = MakeMessage(destinationAddress, verificationCode);
+                var message = MakeVerificationMessage(destinationAddress, verificationCode);
                 _smtpClient = ConfigureMailClient();
                 AuthenticateSmtpClient(_smtpClient);
                 _smtpClient.Send(message);
@@ -44,7 +44,26 @@ namespace StrategoServices.Logic
             }
         }
 
-        private MimeMessage MakeMessage(string destinationAddress, string verificationCode)
+        public void SendInvitationEmail(string destinationAddress, string message)
+        {
+            try
+            {
+                var mailMessage = MakeInvitationMessage(destinationAddress, message);
+                _smtpClient = ConfigureMailClient();
+                AuthenticateSmtpClient(_smtpClient);
+                _smtpClient.Send(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Sending mail error: {ex.Message}");
+            }
+            finally
+            {
+                DisconnectMailClient();
+            }
+        }
+
+        private MimeMessage MakeVerificationMessage(string destinationAddress, string verificationCode)
         {
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("Stratego", _userMail));
@@ -55,6 +74,19 @@ namespace StrategoServices.Logic
                 Text = $"Verification code: {verificationCode}"
             };
             return message;
+        }
+
+        private MimeMessage MakeInvitationMessage(string destinationAddress, string roomCode)
+        {
+            var mailMessage = new MimeMessage();
+            mailMessage.From.Add(new MailboxAddress("Stratego", _userMail));
+            mailMessage.To.Add(new MailboxAddress("Stratego", destinationAddress));
+            mailMessage.Subject = "Stratego";
+            mailMessage.Body = new TextPart("plain")
+            {
+                Text = $"Let's play, join to room: {roomCode}"
+            };
+            return mailMessage;
         }
 
         private SmtpClient ConfigureMailClient()
