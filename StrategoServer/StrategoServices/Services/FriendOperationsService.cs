@@ -10,13 +10,15 @@ using System.Threading.Tasks;
 namespace StrategoServices.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class FriendOperationsService : Interfaces.IFriendOperationsService
+    public class FriendOperationsService : Interfaces.IFriendOperationsService, Interfaces.ISendRoomInvitationService
     {
         private readonly Lazy<FriendsManager> _friendsManager;
+        private readonly Lazy<InvitationManager> _invitationManager;
 
-        public FriendOperationsService(Lazy<FriendsManager> friendsManager)
+        public FriendOperationsService(Lazy<FriendsManager> friendsManager, Lazy<InvitationManager> invitationManager)
         {
             _friendsManager = friendsManager;
+            _invitationManager = invitationManager;
         }
 
         public async Task SendFriendRequest(int destinationId, int requesterId)
@@ -105,6 +107,29 @@ namespace StrategoServices.Services
             }
 
             await Task.Run(() => callback.GetFriendOperation(operationResult));
+        }
+
+        public async Task<bool> SendRoomInvitation(int playerId, string roomCode)
+        {
+            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.ISendRoomInvitationServiceCallback>();
+            OperationResult operationResult;
+            bool response = false;
+
+            var mailResult = _invitationManager.Value.GetPlayerMail(playerId);
+
+            if (!mailResult.IsSuccess)
+            {
+                operationResult = new OperationResult(false, mailResult.Error);
+            }
+            else
+            {
+                EmailSender.Instance.SendEmail(mailResult.Value, roomCode);
+                operationResult = new OperationResult(true, "Room invitation sent");
+                response = true;
+            }
+
+            await Task.Run(() => callback.SendRoomInvitationResponseCall(operationResult));
+            return response;
         }
 
     }

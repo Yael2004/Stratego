@@ -98,6 +98,7 @@
     <Compile Include="Data\DTO\PlayerStatisticsResponse.cs" />
     <Compile Include="Data\DTO\RoomCreatedResponse.cs" />
     <Compile Include="Logic\FriendsManager.cs" />
+    <Compile Include="Logic\InvitationManager.cs" />
     <Compile Include="Logic\PasswordManager.cs" />
     <Compile Include="Logic\ProfilesManager.cs" />
     <Compile Include="Logic\Room.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Services\Interfaces\Callbacks\IProfileModifierServiceCallback.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IProfileDataServiceCallback.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IRoomServiceCallback.cs" />
+    <Compile Include="Services\Interfaces\Callbacks\ISendRoomInvitationServiceCallback.cs" />
     <Compile Include="Services\Interfaces\IChangePasswordService.cs" />
     <Compile Include="Services\Interfaces\IFriendOperationsService.cs" />
     <Compile Include="Services\Interfaces\ILogInService.cs" />
@@ -129,6 +131,7 @@
     <Compile Include="Services\Interfaces\IProfileModifierService.cs" />
     <Compile Include="Services\Interfaces\IProfileDataService.cs" />
     <Compile Include="Services\Interfaces\IRoomService.cs" />
+    <Compile Include="Services\Interfaces\ISendRoomInvitationService.cs" />
     <Compile Include="Services\Interfaces\ISignUpService.cs" />
     <Compile Include="Services\Interfaces\Callbacks\ISignUpServiceCallback.cs" />
     <Compile Include="Services\LogInService.cs" />

@@ -258,5 +258,31 @@ namespace StrategoDataAccess
             }
         }
 
+        public Result<string> GetMailByPlayerId(int playerId)
+        {
+            try
+            {
+                var email = _context.Value.Player
+                    .Where(p => p.Id == playerId)
+                    .Select(p => p.Account.mail) 
+                    .FirstOrDefault();
+
+                if (email == null)
+                {
+                    return Result<string>.Failure("Player or account not found.");
+                }
+
+                return Result<string>.Success(email);
+            }
+            catch (SqlException sqlEx)
+            {
+                return Result<string>.Failure($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Result<string>.Failure($"Unexpected error: {ex.Message}");
+            }
+        }
+
     }
 }
