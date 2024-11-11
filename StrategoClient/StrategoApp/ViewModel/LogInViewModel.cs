@@ -26,11 +26,15 @@ namespace StrategoApp.ViewModel
         private string _password;
         private string _editedPassword;
         private string _errorMessage;
+        private string _codeErrorMessage;
+        private string _emailErrorMessage;
+        private string _passwordErrorMessage;
         private bool _isServiceErrorVisible;
         private bool _isPasswordVisible;
         private bool _isDatabaseError;
         private bool _isForgotPasswordVisible;
         private bool _isCodeVerificationVisible;
+        private bool _isChangePasswordVisible;
         private string _togglePasswordVisibilityIcon;
 
         private string _codePart1;
@@ -138,6 +142,16 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public bool IsChangePasswordVisible
+        {
+            get { return _isChangePasswordVisible; }
+            set
+            {
+                _isChangePasswordVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string TogglePasswordVisibilityIcon
         {
             get { return _togglePasswordVisibilityIcon; }
@@ -178,6 +192,36 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public string CodeErrorMessage
+        {
+            get { return _codeErrorMessage; }
+            set
+            {
+                _codeErrorMessage = value;
+                OnPropertyChanged(nameof(CodeErrorMessage));
+            }
+        }
+
+        public string EmailErrorMessage
+        {
+            get { return _emailErrorMessage; }
+            set
+            {
+                _emailErrorMessage = value;
+                OnPropertyChanged(nameof(EmailErrorMessage));
+            }
+        }
+
+        public string PasswordErrorMessage
+        {
+            get { return _passwordErrorMessage; }
+            set
+            {
+                _passwordErrorMessage = value;
+                OnPropertyChanged(nameof(PasswordErrorMessage));
+            }
+        }
+
         public bool IsDatabaseError
         {
             get { return _isDatabaseError; }
@@ -198,6 +242,8 @@ namespace StrategoApp.ViewModel
         public ICommand CancelSendMailCommand { get; }
         public ICommand VerifyCodeCommand { get; }
         public ICommand CancelVerificationCommand { get; }
+        public ICommand ChangePasswordCommand { get; }
+        public ICommand CancelChangePasswordCommand { get; }
 
         public LogInViewModel(MainWindowViewModel mainWindowViewModel)
         {
@@ -207,18 +253,22 @@ namespace StrategoApp.ViewModel
 
             LogInCommand = new ViewModelCommand(ExecuteLogInCommand, CanExecuteLogInCommand);
             LogInAsInvitedCommand = new ViewModelCommand(ExcuteLogInAsInvitedCommand);
-            SignUpCommand = new ViewModelCommand(p => ExecuteSignUpCommand());
-            TogglePasswordVisibilityCommand = new ViewModelCommand(p => ExecuteTogglePasswordVisibilityCommand());
+            SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand);
+            TogglePasswordVisibilityCommand = new ViewModelCommand(ExecuteTogglePasswordVisibilityCommand);
             ExecuteCloseServiceErrorCommand = new ViewModelCommand(ExecuteCloseServerError);
-            ForgotPasswordCommand = new ViewModelCommand(p => ForgotPassword());
-            CancelSendMailCommand = new ViewModelCommand(p => CancelForgotPassword());
-            SendMailCommand = new ViewModelCommand(p => SendMail());
-            VerifyCodeCommand = new ViewModelCommand(p => VerifyCode());
-            CancelVerificationCommand = new ViewModelCommand(p => CancelVerification());
+            ForgotPasswordCommand = new ViewModelCommand(ForgotPassword);
+            CancelSendMailCommand = new ViewModelCommand(CancelForgotPassword);
+            SendMailCommand = new ViewModelCommand(SendMail);
+            VerifyCodeCommand = new ViewModelCommand(VerifyCode);
+            CancelVerificationCommand = new ViewModelCommand(CancelVerification);
+            ChangePasswordCommand = new ViewModelCommand(ChangePassword);
+            CancelChangePasswordCommand = new ViewModelCommand(CancelChangePassword);
 
             IsForgotPasswordVisible = false;
             IsServiceErrorVisible = false;
             IsPasswordVisible = false;
+            IsCodeVerificationVisible = false;
+            IsChangePasswordVisible = false;
         }
 
         public LogInViewModel()
@@ -226,47 +276,70 @@ namespace StrategoApp.ViewModel
             _logInServiceClient = new LogInServiceClient(new System.ServiceModel.InstanceContext(this));
 
             LogInCommand = new ViewModelCommand(ExecuteLogInCommand, CanExecuteLogInCommand);
-            SignUpCommand = new ViewModelCommand(p => ExecuteSignUpCommand());
+            SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand);
             LogInAsInvitedCommand = new ViewModelCommand(ExcuteLogInAsInvitedCommand);
-            TogglePasswordVisibilityCommand = new ViewModelCommand(p => ExecuteTogglePasswordVisibilityCommand());
+            TogglePasswordVisibilityCommand = new ViewModelCommand(ExecuteTogglePasswordVisibilityCommand);
         }
 
-        private void ExecuteTogglePasswordVisibilityCommand()
+        private void ExecuteTogglePasswordVisibilityCommand(object obj)
         {
             IsPasswordVisible = !IsPasswordVisible;
         }
 
-        private void ForgotPassword()
+        private void ForgotPassword(object obj)
         {
             IsForgotPasswordVisible = true;
         }
 
-        private void CancelForgotPassword()
+        private void CancelForgotPassword(object obj)
         {
+            RecoveryMail = string.Empty;
             IsForgotPasswordVisible = false;
         }
 
-        private void SendMail()
+        private void ChangePassword(object obj)
+        {
+            ChangePasswordClient();
+        }
+
+        private void CancelChangePassword(object obj)
+        {
+            IsChangePasswordVisible = false;
+        }
+
+        private void SendMail(object obj)
         {
             ObtainVerificationCodeClient();
+            RecoveryMail = string.Empty;
         }
-        private void VerifyCode()
+
+        private async void VerifyCode(object obj)
         {
             string fullCode = $"{CodePart1}{CodePart2}{CodePart3}{CodePart4}{CodePart5}{CodePart6}";
             bool isCodeValid = false;
 
             if (fullCode.Length == 6)
             {
-                _changePasswordServiceClient.SendVerificationCodeAsync(Mail, fullCode);
+                isCodeValid = await _changePasswordServiceClient.SendVerificationCodeAsync(RecoveryMail, fullCode);
+            }
+
+            if (isCodeValid)
+            {
+                IsCodeVerificationVisible = false;
+                IsChangePasswordVisible = true;
+            }
+            else
+            {
+                CodeErrorMessage = Properties.Resources.InvalidCode_Label;
             }
         }
 
-        private void CancelVerification()
+        private void CancelVerification(object obj)
         {
             IsCodeVerificationVisible = false;
         }
 
-        private void ExecuteSignUpCommand()
+        private void ExecuteSignUpCommand(object obj)
         {
             _mainWindowViewModel.ChangeViewModel(new SignUpViewModel(_mainWindowViewModel));
         }
@@ -392,7 +465,7 @@ namespace StrategoApp.ViewModel
                 }
                 else
                 {
-                    MessageBox.Show(result.Message);
+                    EmailErrorMessage = Properties.Resources.NonexistentAccount_Label;
                 }
             }
             catch (Exception ex)
@@ -411,7 +484,8 @@ namespace StrategoApp.ViewModel
 
         public async void ChangePasswordClient()
         {
-            await _changePasswordServiceClient.SendNewPasswordAsync(RecoveryMail, EditedPassword);
+            string hashedPassword = HashPassword(EditedPassword);
+            await _changePasswordServiceClient.SendNewPasswordAsync(RecoveryMail, hashedPassword);
         }
 
     }

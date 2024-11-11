@@ -323,10 +323,10 @@ namespace StrategoApp.LogInService {
         System.Threading.Tasks.Task ObtainVerificationCodeAsync(string email);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChangePasswordService/SendVerificationCode", ReplyAction="http://tempuri.org/IChangePasswordService/SendVerificationCodeResponse")]
-        void SendVerificationCode(string email, string code);
+        bool SendVerificationCode(string email, string code);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChangePasswordService/SendVerificationCode", ReplyAction="http://tempuri.org/IChangePasswordService/SendVerificationCodeResponse")]
-        System.Threading.Tasks.Task SendVerificationCodeAsync(string email, string code);
+        System.Threading.Tasks.Task<bool> SendVerificationCodeAsync(string email, string code);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChangePasswordService/SendNewPassword", ReplyAction="http://tempuri.org/IChangePasswordService/SendNewPasswordResponse")]
         void SendNewPassword(string email, string newHashedPassword);
@@ -378,11 +378,11 @@ namespace StrategoApp.LogInService {
             return base.Channel.ObtainVerificationCodeAsync(email);
         }
         
-        public void SendVerificationCode(string email, string code) {
-            base.Channel.SendVerificationCode(email, code);
+        public bool SendVerificationCode(string email, string code) {
+            return base.Channel.SendVerificationCode(email, code);
         }
         
-        public System.Threading.Tasks.Task SendVerificationCodeAsync(string email, string code) {
+        public System.Threading.Tasks.Task<bool> SendVerificationCodeAsync(string email, string code) {
             return base.Channel.SendVerificationCodeAsync(email, code);
         }
         

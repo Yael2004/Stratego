@@ -182,7 +182,7 @@
                         BorderBrush="Black">
 
                     <StackPanel Margin="0,-26,0,-26">
-                        <TextBlock Text="{x:Static res:Resources.NameChange_Label}" 
+                        <TextBlock Text="{x:Static res:Resources.EnterEmail_Label}" 
                                    FontFamily="{StaticResource AugustaFont}" 
                                    Foreground="{StaticResource IntenseRed}" 
                                    FontSize="18" 
@@ -199,11 +199,11 @@
                                  MaxLength="100"/>       
 
                         <Border Height="28" Width="292" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding ErrorMessage}"
+                            <TextBlock Text="{Binding EmailErrorMessage}"
                                        FontFamily="{StaticResource AugustaFont}"
                                        Foreground="{StaticResource IntenseRed}" 
                                        FontSize="12" 
-                                       Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"
+                                       Visibility="{Binding EmailErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"
                                        HorizontalAlignment="Center"
                                        TextWrapping="Wrap"
                                        MaxWidth="250"
@@ -232,66 +232,77 @@
             </Grid>
 
             <Grid Visibility="{Binding IsCodeVerificationVisible, Converter={StaticResource BoolToVisibilityConverter}}" 
-      Background="#CC000000" 
-      HorizontalAlignment="Center" 
-      VerticalAlignment="Center" 
-      Panel.ZIndex="2" 
-      Width="400" Height="200">
+                  Background="#CC000000" 
+                  HorizontalAlignment="Center" 
+                  VerticalAlignment="Center" 
+                  Panel.ZIndex="2" 
+                  Width="400" Height="200">
 
                 <Border Background="{StaticResource SemiTransparent}" 
-            Padding="34" 
-            BorderThickness="2" 
-            BorderBrush="Black">
+                        Padding="34" 
+                        BorderThickness="2" 
+                        BorderBrush="Black">
 
                     <StackPanel Margin="0,-26,0,-26">
                         <TextBlock Text="Enter Verification Code" 
-                       FontFamily="{StaticResource AugustaFont}" 
-                       Foreground="{StaticResource IntenseRed}" 
-                       FontSize="18" 
-                       FontWeight="Bold" 
-                       HorizontalAlignment="Center"/>
+                                   FontFamily="{StaticResource AugustaFont}" 
+                                   Foreground="{StaticResource IntenseRed}" 
+                                   FontSize="18" 
+                                   FontWeight="Bold" 
+                                   HorizontalAlignment="Center"/>
 
                         <StackPanel Orientation="Horizontal" 
-                        HorizontalAlignment="Center" 
-                        Margin="0,30,0,5">
+                                    HorizontalAlignment="Center" 
+                                    Margin="0,30,0,5">
                             
                             <TextBox Width="40" Height="40" MaxLength="1" TextAlignment="Center"
-                         Style="{StaticResource InputBoxStyle}" 
-                         BorderBrush="{StaticResource IntenseRed}" 
-                         BorderThickness="1" 
-                         Text="{Binding CodePart1, UpdateSourceTrigger=PropertyChanged}"/>
+                                     Style="{StaticResource InputBoxStyle}" 
+                                     BorderBrush="{StaticResource IntenseRed}" 
+                                     BorderThickness="1" 
+                                     Text="{Binding CodePart1, UpdateSourceTrigger=PropertyChanged}"/>
                             
                             <TextBox Width="40" Height="40" MaxLength="1" TextAlignment="Center"
-                         Style="{StaticResource InputBoxStyle}" 
-                         BorderBrush="{StaticResource IntenseRed}" 
-                         BorderThickness="1" 
-                         Text="{Binding CodePart2, UpdateSourceTrigger=PropertyChanged}"/>
+                                     Style="{StaticResource InputBoxStyle}" 
+                                     BorderBrush="{StaticResource IntenseRed}" 
+                                     BorderThickness="1" 
+                                     Text="{Binding CodePart2, UpdateSourceTrigger=PropertyChanged}"/>
                             
                             <TextBox Width="40" Height="40" MaxLength="1" TextAlignment="Center"
-                         Style="{StaticResource InputBoxStyle}" 
-                         BorderBrush="{StaticResource IntenseRed}" 
-                         BorderThickness="1" 
-                         Text="{Binding CodePart3, UpdateSourceTrigger=PropertyChanged}"/>
+                                     Style="{StaticResource InputBoxStyle}" 
+                                     BorderBrush="{StaticResource IntenseRed}" 
+                                     BorderThickness="1" 
+                                     Text="{Binding CodePart3, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBox Width="40" Height="40" MaxLength="1" TextAlignment="Center"
-                         Style="{StaticResource InputBoxStyle}" 
-                         BorderBrush="{StaticResource IntenseRed}" 
-                         BorderThickness="1" 
-                         Text="{Binding CodePart4, UpdateSourceTrigger=PropertyChanged}"/>
+                                     Style="{StaticResource InputBoxStyle}" 
+                                     BorderBrush="{StaticResource IntenseRed}" 
+                                     BorderThickness="1" 
+                                     Text="{Binding CodePart4, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBox Width="40" Height="40" MaxLength="1" TextAlignment="Center"
-                         Style="{StaticResource InputBoxStyle}" 
-                         BorderBrush="{StaticResource IntenseRed}" 
-                         BorderThickness="1" 
-                         Text="{Binding CodePart5, UpdateSourceTrigger=PropertyChanged}"/>
+                                     Style="{StaticResource InputBoxStyle}" 
+                                     BorderBrush="{StaticResource IntenseRed}" 
+                                     BorderThickness="1" 
+                                     Text="{Binding CodePart5, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBox Width="40" Height="40" MaxLength="1" TextAlignment="Center"
-                         Style="{StaticResource InputBoxStyle}" 
-                         BorderBrush="{StaticResource IntenseRed}" 
-                         BorderThickness="1" 
-                         Text="{Binding CodePart6, UpdateSourceTrigger=PropertyChanged}"/>
+                                     Style="{StaticResource InputBoxStyle}" 
+                                     BorderBrush="{StaticResource IntenseRed}" 
+                                     BorderThickness="1" 
+                                     Text="{Binding CodePart6, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
+                        
+                            <TextBlock Text="{Binding CodeErrorMessage}"
+                                       FontFamily="{StaticResource AugustaFont}"
+                                       Foreground="{StaticResource IntenseRed}" 
+                                       FontSize="12" 
+                                       Visibility="{Binding CodeErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       MaxWidth="250"
+                                       Margin="0,0,0,0"
+                                       VerticalAlignment="Center"/>
 
-                        <StackPanel Orientation="Horizontal" 
-                        HorizontalAlignment="Center" 
-                        Margin="0,20,0,0">
+                            <StackPanel Orientation="Horizontal" 
+                                        HorizontalAlignment="Center" 
+                                        Margin="0,20,0,0">
 
                             <Button Content="Verify" 
                         Style="{StaticResource ButtonStyle}" 
@@ -304,6 +315,70 @@
                         Width="100" 
                         Margin="5"
                         Command="{Binding CancelVerificationCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid Visibility="Hidden" 
+                  Background="#CC000000" 
+                  HorizontalAlignment="Center" 
+                  VerticalAlignment="Center" 
+                  Panel.ZIndex="2" 
+                  Width="400" Height="200">
+
+                <Border Background="{StaticResource SemiTransparent}" 
+                        Padding="34" 
+                        BorderThickness="2" 
+                        BorderBrush="Black">
+
+                    <StackPanel Margin="0,-26,0,-26">
+                        <TextBlock Text="{x:Static res:Resources.EnterEmail_Label}" 
+                                   FontFamily="{StaticResource AugustaFont}" 
+                                   Foreground="{StaticResource IntenseRed}" 
+                                   FontSize="18" 
+                                   FontWeight="Bold" 
+                                   HorizontalAlignment="Center"/>
+
+                        <TextBox Text="{Binding EditedPassword, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource InputBoxStyle}" 
+                                 BorderBrush="{StaticResource IntenseRed}" 
+                                 BorderThickness="1" 
+                                 HorizontalAlignment="Center" 
+                                 Width="200" 
+                                 Margin="0,30,0,5"
+                                 MaxLength="100"/>
+
+                        <Border Height="28" Width="292" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center">
+                            
+                            <TextBlock Text="{Binding PasswordErrorMessage}"
+                                       FontFamily="{StaticResource AugustaFont}"
+                                       Foreground="{StaticResource IntenseRed}" 
+                                       FontSize="12" 
+                                       Visibility="{Binding PasswordErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       MaxWidth="250"
+                                       Margin="0,0,0,0"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+
+                        <StackPanel Orientation="Horizontal" 
+                                    HorizontalAlignment="Center" 
+                                    Margin="0,20,0,0">
+
+                            <Button Content="{x:Static res:Resources.Accept_Button}" 
+                                    Style="{StaticResource ButtonStyle}" 
+                                    Width="100" 
+                                    Margin="5"
+                                    Command="{Binding ChangePasswordCommand}"/>
+
+                            <Button Content="{x:Static res:Resources.Cancel_Button}" 
+                                    Style="{StaticResource ButtonStyle}" 
+                                    Width="100" 
+                                    Margin="5"
+                                    Command="{Binding CancelChangePasswordCommand}"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>

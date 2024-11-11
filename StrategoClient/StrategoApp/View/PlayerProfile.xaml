@@ -98,7 +98,7 @@
                    Style="{StaticResource PlayerSectionLabelStyle}"/>
 
             <ComboBox ItemsSource="{Binding ProfileTags}"
-                      SelectedItem="{Binding PlayerTag, Mode=TwoWay}"
+                       SelectedItem="{Binding PlayerTag, Mode=TwoWay}"
                        Background="{StaticResource Beige}"
                        FontSize="30" 
                        FontWeight="Bold" 

@@ -286,6 +286,15 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Enter your email.
+        /// </summary>
+        public static string EnterEmail_Label {
+            get {
+                return ResourceManager.GetString("EnterEmail_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Some fields are in blank.
         /// </summary>
         public static string FieldsInBlank_Label {

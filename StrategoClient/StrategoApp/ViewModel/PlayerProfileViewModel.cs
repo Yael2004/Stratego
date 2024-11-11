@@ -225,11 +225,35 @@ namespace StrategoApp.ViewModel
         {
             try
             {
+                EditProfileTag();
+                PlayerSingleton.Instance.Player.LabelPath = PlayerTag;
                 _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel)); 
             }
             catch (Exception e) 
             { 
                 Console.WriteLine(e.Message); 
+            }
+        }
+
+        private void EditProfileTag()
+        {
+            var updatedProfile = new ProfileService.PlayerInfoShownDTO
+            {
+                Name = Username,
+                Id = PlayerId,
+                PicturePath = ProfilePicture,
+                LabelPath = PlayerTag
+            };
+
+            try
+            {
+                var client = new ProfileModifierServiceClient(new InstanceContext(this));
+                client.UpdatePlayerProfileAsync(updatedProfile);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -283,7 +307,8 @@ namespace StrategoApp.ViewModel
                 {
                     Name = UsernameEdited,
                     Id = PlayerId,
-                    PicturePath = ProfilePicture
+                    PicturePath = ProfilePicture,
+                    LabelPath = PlayerTag
                 };
 
                 try
@@ -315,7 +340,7 @@ namespace StrategoApp.ViewModel
                         Name = Username,
                         Id = PlayerId,
                         PicturePath = SelectedProfilePicture,
-                        LabelPath = "label1"
+                        LabelPath = PlayerTag
                     };
 
                     var client = new ProfileModifierServiceClient(new InstanceContext(this));
@@ -344,6 +369,7 @@ namespace StrategoApp.ViewModel
                 Username = player.Name;
                 PlayerId = player.Id;
                 ProfilePicture = player.PicturePath;
+                PlayerTag = player.LabelPath;
             }
         }
 

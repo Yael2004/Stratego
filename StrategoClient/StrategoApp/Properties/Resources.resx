@@ -406,4 +406,7 @@
   <data name="ForgotPassword_Label" xml:space="preserve">
     <value>Forgot your password?</value>
   </data>
+  <data name="EnterEmail_Label" xml:space="preserve">
+    <value>Enter your email</value>
+  </data>
 </root>
