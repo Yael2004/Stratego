@@ -21,7 +21,7 @@ namespace StrategoServices.Services
             _profilesManager = profilesManager;
         }
 
-        public Task GetOtherPlayerInfoAsync(int playerId, int requesterPlayerId)
+        public async Task GetOtherPlayerInfoAsync(int playerId, int requesterPlayerId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IOtherProfileDataCallback>();
             var response = new OtherPlayerInfoResponse();
@@ -52,7 +52,7 @@ namespace StrategoServices.Services
                 response.PlayerInfo = new OtherPlayerInfoDTO();
             }
             
-            return Task.Run(() => callback.ReceiveOtherPlayerInfo(response));
+            await Task.Run(() => callback.ReceiveOtherPlayerInfo(response));
         }
 
         public async Task GetPlayerStatisticsAsync(int playerAccountId)
