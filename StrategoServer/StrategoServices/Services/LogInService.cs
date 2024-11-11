@@ -66,10 +66,11 @@ namespace StrategoServices.Services
             }
         }
 
-        public async Task ObtainVerificationCodeAsync(string email)
+        public async Task<bool> ObtainVerificationCodeAsync(string email)
         {
             var callback = OperationContext.Current.GetCallbackChannel<IChangePasswordServiceCallback>();
             OperationResult response;
+            bool isSuccessResponse = false;
 
             var accountExistsResult = _passwordManager.Value.AlreadyExistentAccount(email);
             if (!accountExistsResult.IsSuccess || !accountExistsResult.Value)
@@ -81,9 +82,11 @@ namespace StrategoServices.Services
                 var verificationCode = _passwordManager.Value.GenerateVerificationCode(email);
                 EmailSender.Instance.SendVerificationEmail(email, verificationCode);
                 response = new OperationResult(true, "Verification code sent.");
+                isSuccessResponse = true;
             }
 
             await Task.Run(() => callback.ChangePasswordResult(response));
+            return isSuccessResponse;
         }
 
         public async Task<bool> SendVerificationCodeAsync(string email, string code)

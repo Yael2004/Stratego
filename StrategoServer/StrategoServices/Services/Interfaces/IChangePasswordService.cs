@@ -11,7 +11,7 @@ namespace StrategoServices.Services.Interfaces
     public interface IChangePasswordService
     {
         [OperationContract]
-        Task ObtainVerificationCodeAsync(string email);
+        Task<bool> ObtainVerificationCodeAsync(string email);
 
         [OperationContract]
         Task<bool> SendVerificationCodeAsync(string email, string code);
