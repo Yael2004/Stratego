@@ -1,4 +1,5 @@
 ﻿using StrategoServices.Data;
+using StrategoServices.Data.DTO;
 using StrategoServices.Logic;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace StrategoServices.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class FriendOperationsService : Interfaces.IFriendOperationsService, Interfaces.ISendRoomInvitationService
+    public class FriendOperationsService : Interfaces.IFriendOperationsService, Interfaces.ISendRoomInvitationService, Interfaces.IPlayerFriendRequestService
     {
         private readonly Lazy<FriendsManager> _friendsManager;
         private readonly Lazy<InvitationManager> _invitationManager;
@@ -130,6 +131,37 @@ namespace StrategoServices.Services
 
             await Task.Run(() => callback.SendRoomInvitationResponseCall(operationResult));
             return response;
+        }
+
+        public async Task GetPlayerFriendRequestAsync(int playerId)
+        {
+            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IPlayerFriendRequestServiceCallback>();
+            var response = new PlayerFriendRequestResponse();
+
+            try
+            {
+                var result = _friendsManager.Value.GetFriendRequestIdsList(playerId);
+
+                if (!result.IsSuccess)
+                {
+                    response.Result = new OperationResult(false, result.Error);
+                }
+                else
+                {
+                    response.FriendRequestIds = result.Value;
+                    response.Result = new OperationResult(true, "Friend requests retrieved successfully");
+                }
+            }
+            catch (TimeoutException)
+            {
+                response.Result = new OperationResult(false, "Server error");
+            }
+            catch (Exception)
+            {
+                response.Result = new OperationResult(false, "Unexpected error");
+            }
+
+            await Task.Run(() => callback.ReceiveFriendRequestIds(response));
         }
 
     }

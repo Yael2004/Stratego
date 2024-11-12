@@ -42,5 +42,26 @@ namespace StrategoServices.Logic
             return _friendsRepository.Value.RemoveFriend(destinationId, requesterId);
         }
 
+        public Result<IEnumerable<Player>> GetFriendRequestsFromRepository(int playerId)
+        {
+            return _friendsRepository.Value.GetPendingFriendRequests(playerId);
+        }
+
+        public Result<List<int>> GetFriendRequestIdsList(int playerId)
+        {
+            var friendRequestsResult = GetFriendRequestsFromRepository(playerId);
+
+            if (!friendRequestsResult.IsSuccess)
+            {
+                return Result<List<int>>.Failure(friendRequestsResult.Error);
+            }
+
+            var friendRequestsIds = friendRequestsResult.Value.Select(f => f.Id).ToList();
+
+            return friendRequestsIds.Any() 
+                ? Result<List<int>>.Success(friendRequestsIds) 
+                : Result<List<int>>.Failure("No friend requests found.");
+        }
+
     }
 }

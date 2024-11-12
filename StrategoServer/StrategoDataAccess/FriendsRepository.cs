@@ -142,5 +142,37 @@ namespace StrategoDataAccess
             }
         }
 
+        public Result<IEnumerable<Player>> GetPendingFriendRequests(int playerId)
+        {
+            try
+            {
+                var pendingRequests = _context.Value.Friend
+                    .Where(f => f.FriendId == playerId && f.Status == "sent")
+                    .Join
+                    (
+                        _context.Value.Player,
+                        friend => friend.FriendId,
+                        player => player.Id,
+                        (friend, player) => player
+                    )
+                    .ToList();
+
+                if (!pendingRequests.Any())
+                {
+                    return Result<IEnumerable<Player>>.Failure("No pending friend requests found.");
+                }
+
+                return Result<IEnumerable<Player>>.Success(pendingRequests);
+            }
+            catch (SqlException sqlEx)
+            {
+                return Result<IEnumerable<Player>>.Failure($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Result<IEnumerable<Player>>.Failure($"Unexpected error: {ex.Message}");
+            }
+        }
+
     }
 }

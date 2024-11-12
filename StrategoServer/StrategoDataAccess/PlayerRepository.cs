@@ -71,7 +71,8 @@ namespace StrategoDataAccess
             {
                 var result = _context.Value.Friend
                     .Where(f => f.PlayerId == playerId && f.Status == "accepted")
-                    .Join(
+                    .Join
+                    (
                         _context.Value.Player,
                         friend => friend.FriendId,
                         player => player.Id,
