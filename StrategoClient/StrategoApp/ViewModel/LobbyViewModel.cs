@@ -34,8 +34,6 @@ namespace StrategoApp.ViewModel
 
         private string _joinRoomCode;
 
-        private static LobbyViewModel _instance;
-
         private ChatServiceClient _chatClient;
         private OtherProfileDataServiceClient _otherProfileDataServiceClient;
         private PlayerFriendsListServiceClient _playerFriendsListServiceClient;
@@ -61,11 +59,6 @@ namespace StrategoApp.ViewModel
 
             AssignValuesToUser();
 
-            if (!_isConnected)
-            {
-                Connection();
-            }
-
             _mainWindowViewModel = mainWindowViewModel;
 
             ShowFriendsCommand = new ViewModelCommand(ShowFriends);
@@ -79,6 +72,8 @@ namespace StrategoApp.ViewModel
 
             _messages = new ObservableCollection<string>();
             _friends = new ObservableCollection<Player>();
+
+            LoadFriendsListAsync();
         }
 
         public LobbyViewModel()
@@ -378,11 +373,11 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public async Task LoadFriendsListAsync()
+        public async void LoadFriendsListAsync()
         {
             try
             {
-                await _playerFriendsListServiceClient.GetPlayerFriendsListAsync(_userId);
+                await _playerFriendsListServiceClient.GetPlayerFriendsListAsync(UserId);
             }
             catch (Exception ex)
             {
@@ -405,13 +400,15 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public void PlayerFriendsList(PlayerFriendsResponse response)
+        public async void PlayerFriendsList(PlayerFriendsResponse response)
         {
             if (response.Result.IsSuccess)
             {
-                foreach (var friendId in response.FriendsIds)
+                var myFriends = response.FriendsIds;
+                
+                foreach (var friendId in myFriends)
                 {
-                    _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendId, UserId);
+                    await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendId, UserId);
                 }
             }
             else
@@ -424,21 +421,19 @@ namespace StrategoApp.ViewModel
 
         public void ReceiveOtherPlayerInfo(OtherPlayerInfoResponse response)
         {
-            if (response.Result.IsSuccess && response.PlayerInfo != null)
+            if (response.Result.IsSuccess)
             {
                 MessageBox.Show(response.PlayerInfo.PlayerInfo.Name);
-                MessageBox.Show(response.PlayerInfo.PlayerInfo.PicturePath);
+                //MessageBox.Show(response.PlayerInfo.PlayerInfo.PicturePath);
 
                 var friend = new Player
                 {
+                    AccountId = response.PlayerInfo.PlayerInfo.Id,
                     Name = response.PlayerInfo.PlayerInfo.Name,
                     PicturePath = response.PlayerInfo.PlayerInfo.PicturePath
                 };
-
-                if (!Friends.Any(f => f.AccountId == friend.AccountId))
-                {
-                    Friends.Add(friend);
-                }
+                   
+                Friends.Add(friend);
             }
             else
             {

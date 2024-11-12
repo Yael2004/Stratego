@@ -9,7 +9,7 @@
     <SolidColorBrush x:Key="Beige" Color="#FEFDC9"/>
     <SolidColorBrush x:Key="DarkGreen" Color="#1B4D3E"/>
     <SolidColorBrush x:Key="IntenseGreen" Color="#008C00"/>
-    <SolidColorBrush x:Key="Prueba" Color="#FFFF00"/>
+    <SolidColorBrush x:Key="Prueba" Color="#FFB6C1"/>
 
     <FontFamily x:Key="AugustaFont">pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta</FontFamily>
 
@@ -35,7 +35,7 @@
             Stretch="UniformToFill"/>
 
     <ImageBrush x:Key="FriendsBackground" 
-        ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/FriendsBackground.png" 
+        ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/FriendsBackground2.png" 
         Stretch="UniformToFill"/>
 
     <Style x:Key="InputBoxStyle" TargetType="Control">

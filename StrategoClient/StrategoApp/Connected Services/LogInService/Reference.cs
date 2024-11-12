@@ -317,10 +317,10 @@ namespace StrategoApp.LogInService {
     public interface IChangePasswordService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChangePasswordService/ObtainVerificationCode", ReplyAction="http://tempuri.org/IChangePasswordService/ObtainVerificationCodeResponse")]
-        void ObtainVerificationCode(string email);
+        bool ObtainVerificationCode(string email);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChangePasswordService/ObtainVerificationCode", ReplyAction="http://tempuri.org/IChangePasswordService/ObtainVerificationCodeResponse")]
-        System.Threading.Tasks.Task ObtainVerificationCodeAsync(string email);
+        System.Threading.Tasks.Task<bool> ObtainVerificationCodeAsync(string email);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IChangePasswordService/SendVerificationCode", ReplyAction="http://tempuri.org/IChangePasswordService/SendVerificationCodeResponse")]
         bool SendVerificationCode(string email, string code);
@@ -370,11 +370,11 @@ namespace StrategoApp.LogInService {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void ObtainVerificationCode(string email) {
-            base.Channel.ObtainVerificationCode(email);
+        public bool ObtainVerificationCode(string email) {
+            return base.Channel.ObtainVerificationCode(email);
         }
         
-        public System.Threading.Tasks.Task ObtainVerificationCodeAsync(string email) {
+        public System.Threading.Tasks.Task<bool> ObtainVerificationCodeAsync(string email) {
             return base.Channel.ObtainVerificationCodeAsync(email);
         }
         

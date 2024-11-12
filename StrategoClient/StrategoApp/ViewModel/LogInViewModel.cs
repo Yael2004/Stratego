@@ -293,6 +293,7 @@ namespace StrategoApp.ViewModel
 
         private void CancelForgotPassword(object obj)
         {
+            EmailErrorMessage = string.Empty;
             RecoveryMail = string.Empty;
             IsForgotPasswordVisible = false;
         }
@@ -310,7 +311,6 @@ namespace StrategoApp.ViewModel
         private void SendMail(object obj)
         {
             ObtainVerificationCodeClient();
-            RecoveryMail = string.Empty;
         }
 
         private async void VerifyCode(object obj)
@@ -336,7 +336,14 @@ namespace StrategoApp.ViewModel
 
         private void CancelVerification(object obj)
         {
+            CodePart1 = string.Empty;
+            CodePart2 = string.Empty;
+            CodePart3 = string.Empty;
+            CodePart4 = string.Empty;
+            CodePart5 = string.Empty;
+            CodePart6 = string.Empty;
             IsCodeVerificationVisible = false;
+            RecoveryMail = string.Empty;
         }
 
         private void ExecuteSignUpCommand(object obj)
@@ -476,10 +483,19 @@ namespace StrategoApp.ViewModel
 
         public async void ObtainVerificationCodeClient()
         {
-            await _changePasswordServiceClient.ObtainVerificationCodeAsync(RecoveryMail);
+            bool isMailValid = await _changePasswordServiceClient.ObtainVerificationCodeAsync(RecoveryMail);
 
-            IsForgotPasswordVisible = false;
-            IsCodeVerificationVisible = true;
+            if (!isMailValid)
+            {
+                EmailErrorMessage = Properties.Resources.NonexistentAccount_Label;
+                return;
+            }
+            else
+            {
+                EmailErrorMessage = string.Empty;
+                IsForgotPasswordVisible = false;
+                IsCodeVerificationVisible = true;
+            }
         }
 
         public async void ChangePasswordClient()

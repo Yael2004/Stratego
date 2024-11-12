@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StrategoApp.View"
              xmlns:res="clr-namespace:StrategoApp.Properties"
-xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" xmlns:helpers="clr-namespace:StrategoApp.Helpers" d:DataContext="{d:DesignInstance Type=viewModel:PlayerProfileNotOwnViewModel}"
+             xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" 
+             xmlns:helpers="clr-namespace:StrategoApp.Helpers" 
+             d:DataContext="{d:DesignInstance Type=viewModel:PlayerProfileNotOwnViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     
@@ -42,7 +44,7 @@ xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" xmlns:helpers="clr-namespa
                Margin="562,327,0,64"
                Style="{StaticResource PlayerSectionLabelStyle}"/>
 
-            <Label Content="{Binding GamesLostNumber}"
+            <Label Content="{Binding GamesLost}"
                FontWeight="Bold"
                HorizontalContentAlignment="Center"
                FontFamily="{StaticResource AugustaFont}" 
@@ -51,7 +53,7 @@ xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" xmlns:helpers="clr-namespa
                Margin="0,367,552,24"
                Style="{StaticResource PlayerSectionLabelStyle}"/>
 
-            <Label Content="{Binding GamesPlayedNumber}"
+            <Label Content="{Binding GamesPlayed}"
                FontWeight="Bold"
                HorizontalContentAlignment="Center"
                FontFamily="{StaticResource AugustaFont}" 
@@ -60,7 +62,7 @@ xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" xmlns:helpers="clr-namespa
                Margin="256,367,256,24"
                Style="{StaticResource PlayerSectionLabelStyle}"/>
 
-            <Label Content="{Binding GamesWonNumber}"
+            <Label Content="{Binding GamesWon}"
                FontWeight="Bold"
                HorizontalContentAlignment="Center"
                FontFamily="{StaticResource AugustaFont}" 
@@ -96,8 +98,7 @@ xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" xmlns:helpers="clr-namespa
                Margin="465,210,67,180"
                Style="{StaticResource PlayerSectionLabelStyle}"/>
 
-            <ComboBox ItemsSource="{Binding ProfileTags}"
-                  SelectedItem="{Binding PlayerTag, Mode=TwoWay}"
+            <Label Content="{Binding PlayerTag}"
                    Background="{StaticResource Beige}"
                    FontSize="30" 
                    FontWeight="Bold" 
@@ -107,7 +108,7 @@ xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" xmlns:helpers="clr-namespa
                    Margin="0,271,0,0" 
                    Height="34" Width="412"/>
 
-            <Button Command="{Binding ToggleProfileSelectorVisibilityCommand}" Background="Transparent" BorderThickness="0" Margin="325,55,325,235">
+            <Button Background="Transparent" BorderThickness="0" Margin="325,55,325,235">
                 <Ellipse Width="150" Height="150">
                     <Ellipse.Fill>
                         <ImageBrush ImageSource="{Binding ProfilePicture}" Stretch="UniformToFill"/>
@@ -133,7 +134,6 @@ xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" xmlns:helpers="clr-namespa
                         </Style>
                     </Image.Style>
                 </Image>
-
             </Button>
         </Grid>
     </Viewbox>

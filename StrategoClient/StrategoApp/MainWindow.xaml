@@ -42,6 +42,10 @@
             <view:Friends/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModel:PlayerProfileNotOwnViewModel}">
+            <view:PlayerProfileNotOwn/>
+        </DataTemplate>
+
     </Window.Resources>
 
     <Window.DataContext>

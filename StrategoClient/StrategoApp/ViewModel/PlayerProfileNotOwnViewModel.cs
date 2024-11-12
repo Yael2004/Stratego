@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace StrategoApp.ViewModel
@@ -24,14 +25,21 @@ namespace StrategoApp.ViewModel
 
         private bool _isServiceErrorVisible;
 
-        public PlayerProfileNotOwnViewModel()
-        {
-            RemoveFriendCommand = new ViewModelCommand(RemoveFriend);
-        }
+        private MainWindowViewModel _mainWindowViewModel;
+
+        private OtherProfileDataServiceClient _otherProfileDataServiceClient;
 
         public ICommand RemoveFriendCommand { get; }
         public ICommand BackToLobbyCommand { get; }
 
+        public PlayerProfileNotOwnViewModel(MainWindowViewModel mainWindowViewModel)
+        {
+            _mainWindowViewModel = mainWindowViewModel;
+            MessageBox.Show("PlayerProfileNotOwnViewModel inicializado", "Debug");
+            _otherProfileDataServiceClient = new OtherProfileDataServiceClient(new System.ServiceModel.InstanceContext(this));
+            RemoveFriendCommand = new ViewModelCommand(RemoveFriend);
+            BackToLobbyCommand = new ViewModelCommand(BackToLobby);
+        }
 
         public string Username
         {
@@ -113,6 +121,10 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        private void BackToLobby(object obj)
+        {
+            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+        }
 
         public void RemoveFriend(object obj)
         {
@@ -128,6 +140,12 @@ namespace StrategoApp.ViewModel
             GamesWon = response.PlayerInfo.PlayerStatistics.WonGames;
             GamesLost = response.PlayerInfo.PlayerStatistics.LostGames;
             GamesPlayed = response.PlayerInfo.PlayerStatistics.TotalGames;
+        }
+
+        public void LoadPlayerInfo(int playerId, int accountId)
+        {
+            MessageBox.Show($"Cargando perfil de jugador con ID: {playerId}", "Debug");
+            _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(playerId, accountId);
         }
     }
 }
