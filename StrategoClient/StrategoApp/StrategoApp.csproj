@@ -62,6 +62,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Connected Services\FriendService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\LogInService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -209,6 +214,22 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="Assets\Fonts\Augusta.ttf" />
+    <None Include="Connected Services\FriendService\FriendOperationsService.wsdl" />
+    <None Include="Connected Services\FriendService\FriendsService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendService\FriendsService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendService\FriendsService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendService\FriendsService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendService\FriendsService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\LogInService\LogInService.wsdl" />
     <None Include="Connected Services\LogInService\LogInService.xsd">
       <SubType>Designer</SubType>
@@ -307,6 +328,7 @@
     <Resource Include="Assets\Images\ProfilePicturesFrame2.png" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\FriendService\" />
     <WCFMetadataStorage Include="Connected Services\LogInService\" />
     <WCFMetadataStorage Include="Connected Services\ProfileService\" />
     <WCFMetadataStorage Include="Connected Services\RoomService\" />
@@ -398,6 +420,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\FriendsBackground2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\FriendService\FriendsService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\FriendService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\FriendService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\FriendService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

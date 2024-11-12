@@ -58,6 +58,7 @@ namespace StrategoApp.ViewModel
             _otherProfileDataServiceClient = new OtherProfileDataServiceClient(new InstanceContext(this));
 
             AssignValuesToUser();
+            Connection();
 
             _mainWindowViewModel = mainWindowViewModel;
 
@@ -74,15 +75,6 @@ namespace StrategoApp.ViewModel
             _friends = new ObservableCollection<Player>();
 
             LoadFriendsListAsync();
-        }
-
-        public LobbyViewModel()
-        {
-            {
-                _messages = new ObservableCollection<string>();
-                SendMessagesCommand = new ViewModelCommand(ClientSendMessage, CanSendMessage);
-                ShowProfileCommand = new ViewModelCommand(ClientShowProfile, CanShowProfile);
-            }
         }
 
         public void Connection()
