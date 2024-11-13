@@ -97,8 +97,10 @@
     <Compile Include="Data\DTO\PlayerInfoShownDTO.cs" />
     <Compile Include="Data\DTO\PlayerStatisticsDTO.cs" />
     <Compile Include="Data\DTO\PlayerStatisticsResponse.cs" />
+    <Compile Include="Data\DTO\PositionDTO.cs" />
     <Compile Include="Data\DTO\RoomCreatedResponse.cs" />
     <Compile Include="Logic\FriendsManager.cs" />
+    <Compile Include="Logic\GameSession.cs" />
     <Compile Include="Logic\InvitationManager.cs" />
     <Compile Include="Logic\PasswordManager.cs" />
     <Compile Include="Logic\ProfilesManager.cs" />
@@ -108,8 +110,10 @@
     <Compile Include="Data\DTO\PlayerDTO.cs" />
     <Compile Include="Data\OperationResult.cs" />
     <Compile Include="Services\FriendOperationsService.cs" />
+    <Compile Include="Services\GameService.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IChangePasswordServiceCallback.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IFriendOperationCallback.cs" />
+    <Compile Include="Services\Interfaces\Callbacks\IGameServiceCallback.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IOtherProfileDataCallback.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IPlayerFriendRequestServiceCallback.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IPlayerFriendsListServiceCallback.cs" />
@@ -119,6 +123,7 @@
     <Compile Include="Services\Interfaces\Callbacks\ISendRoomInvitationServiceCallback.cs" />
     <Compile Include="Services\Interfaces\IChangePasswordService.cs" />
     <Compile Include="Services\Interfaces\IFriendOperationsService.cs" />
+    <Compile Include="Services\Interfaces\IGameService.cs" />
     <Compile Include="Services\Interfaces\ILogInService.cs" />
     <Compile Include="Services\Interfaces\IChatService.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IChatServiceCallback.cs" />

@@ -33,18 +33,21 @@ namespace StrategoHost
                     var profileService = scope.Resolve<IProfileDataService>();
                     var roomService = scope.Resolve<IRoomService>();
                     var friendService = scope.Resolve<IFriendOperationsService>();
+                    var gameService = scope.Resolve<IGameService>();
 
                     var loginHost = new ServiceHost(loginService);
                     var chatHost = new ServiceHost(chatService);
                     var profileHost = new ServiceHost(profileService);
                     var roomHost = new ServiceHost(roomService);
                     var friendHost = new ServiceHost(friendService);
+                    var gameHost = new ServiceHost(gameService);
 
                     bool loginServiceOpened = false;
                     bool chatServiceOpened = false;
                     bool profileServiceOpened = false;
                     bool roomServiceOpened = false;
                     bool friendServiceOpened = false;
+                    bool gameServiceOpened = false;
 
                     try
                     {
@@ -111,6 +114,19 @@ namespace StrategoHost
                         Console.WriteLine($"Failed to start Friend service: {ex.Message}");
                     }
 
+                    try
+                    {
+                        gameHost.Open();
+                        gameServiceOpened = true;
+                        log.Info("Game service is running...");
+                        Console.WriteLine("Game service is running...");
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error("Failed to start Game service: " + ex.Message);
+                        Console.WriteLine($"Failed to start Game service: {ex.Message}");
+                    }
+
                     Console.ReadLine();
 
                     if (loginServiceOpened)
@@ -141,6 +157,12 @@ namespace StrategoHost
                     {
                         friendHost.Close();
                         log.Info("Friend service closed.");
+                    }
+
+                    if (gameServiceOpened)
+                    {
+                        gameHost.Close();
+                        log.Info("Game service closed.");
                     }
                 }
             }
