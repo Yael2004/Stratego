@@ -1,92 +1,83 @@
-﻿/*
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using StrategoDataAccess;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
+using StrategoDataAccess;
 using Utilities;
+using System.Linq;
+using System.Collections.Generic;
+using Test.RepositoryTest;
 
-namespace Test.RepositoryTest
+namespace Tests
 {
     [TestClass]
     public class GamesRepositoryTests
     {
         private Mock<StrategoEntities> _mockContext;
-        private Lazy<StrategoEntities> _lazyMockContext;
+        private FakeDbSet<Games> _fakeGamesSet;
+        private GamesRepository _gamesRepository;
 
         [TestInitialize]
-        public void Initialize()
+        public void Setup()
         {
             _mockContext = new Mock<StrategoEntities>();
-            _lazyMockContext = new Lazy<StrategoEntities>(() => _mockContext.Object);
-        }
 
-        private Mock<DbSet<T>> CreateMockDbSet<T>(IQueryable<T> data) where T : class
-        {
-            var mockSet = new Mock<DbSet<T>>();
-            mockSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(data.Provider);
-            mockSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(data.Expression);
-            mockSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(data.ElementType);
-            mockSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
-            return mockSet;
-        }
-
-        [TestMethod]
-        public async Task Test_GetGameStatisticsByAccountIdAsync_ShouldReturnGameStatistics_WhenStatisticsExist()
-        {
-            var repository = new GamesRepository(_lazyMockContext);
-            int accountId = 1;
-
-            var gameStatistics = new Games
+            _fakeGamesSet = new FakeDbSet<Games>
             {
-                AccountId = accountId,
-                WonGames = 5,
-                DeafeatGames = 2
+                new Games { AccountId = 1, WonGames = 10, DeafeatGames = 5 }
             };
 
-            var gamesData = new List<Games> { gameStatistics }.AsQueryable();
-            var mockGamesSet = CreateMockDbSet(gamesData);
+            _mockContext.Setup(c => c.Games).Returns(_fakeGamesSet);
 
-            _mockContext.Setup(c => c.Games).Returns(mockGamesSet.Object);
-
-            var result = await repository.GetGameStatisticsByAccountIdAsync(accountId);
-
-            Assert.AreEqual(gameStatistics, result.Value);
+            _gamesRepository = new GamesRepository(new Lazy<StrategoEntities>(() => _mockContext.Object));
         }
 
         [TestMethod]
-        public async Task Test_GetGameStatisticsByAccountIdAsync_ShouldReturnFailure_WhenStatisticsDoNotExist()
+        public void GetGameStatisticsByAccountId_ShouldReturnStatistics_WhenAccountIdExists()
         {
-            var repository = new GamesRepository(_lazyMockContext);
-            int accountId = 2;
+            var accountId = 1;
 
-            var gamesData = new List<Games>().AsQueryable();
-            var mockGamesSet = CreateMockDbSet(gamesData);
+            var result = _gamesRepository.GetGameStatisticsByAccountId(accountId);
 
-            _mockContext.Setup(c => c.Games).Returns(mockGamesSet.Object);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNotNull(result.Value);
+            Assert.AreEqual(accountId, result.Value.AccountId);
+            Assert.AreEqual(10, result.Value.WonGames);
+            Assert.AreEqual(5, result.Value.DeafeatGames);
+        }
 
-            var result = await repository.GetGameStatisticsByAccountIdAsync(accountId);
+        [TestMethod]
+        public void GetGameStatisticsByAccountId_ShouldReturnFailure_WhenAccountIdDoesNotExist()
+        {
+            var accountId = 2;
+
+            var result = _gamesRepository.GetGameStatisticsByAccountId(accountId);
 
             Assert.AreEqual("Not available", result.Error);
         }
 
         [TestMethod]
-        public async Task Test_GetGameStatisticsByAccountIdAsync_ShouldReturnDatabaseError_WhenExceptionIsThrown()
+        public void GetGameStatisticsByAccountId_ShouldHandleSqlException()
         {
-            var repository = new GamesRepository(_lazyMockContext);
-            int accountId = 1;
+            var accountId = 1;
+            _mockContext.Setup(c => c.Games).Throws(new InvalidOperationException("Simulated database error"));
 
-            var mockGamesSet = new Mock<DbSet<Games>>();
-            _mockContext.Setup(c => c.Games).Returns(mockGamesSet.Object);
-            _mockContext.Setup(c => c.Games.FirstOrDefault(It.IsAny<Func<Games, bool>>())).Throws(new Exception("Simulated database error"));
-
-            var result = await repository.GetGameStatisticsByAccountIdAsync(accountId);
+            var result = _gamesRepository.GetGameStatisticsByAccountId(accountId);
 
             Assert.IsFalse(result.IsSuccess);
         }
+
+        [TestMethod]
+        public void GetGameStatisticsByAccountId_ShouldHandleUnexpectedException()
+        {
+            var accountId = 1;
+            _mockContext.Setup(c => c.Games).Throws(new Exception("Unexpected error"));
+
+            var result = _gamesRepository.GetGameStatisticsByAccountId(accountId);
+
+            Assert.IsFalse(result.IsSuccess);
+            Assert.IsTrue(result.Error.Contains("Unexpected error"));
+        }
     }
 }
-*/

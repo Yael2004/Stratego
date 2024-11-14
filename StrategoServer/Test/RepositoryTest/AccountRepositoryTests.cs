@@ -1,221 +1,205 @@
-﻿/*
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
-using StrategoDataAccess;
-using Utilities;
-using System;
 using System.Data.Entity.Validation;
 using System.Data.SqlClient;
+using System.Linq;
+using StrategoDataAccess;
+using Utilities;
 using Test.RepositoryTest;
 
-namespace Test
+namespace Tests
 {
     [TestClass]
     public class AccountRepositoryTests
     {
         private Mock<StrategoEntities> _mockContext;
-        private Mock<DbSet<Account>> _mockAccountSet;
-        private Mock<DbSet<Player>> _mockPlayerSet;
-        private Lazy<StrategoEntities> _lazyMockContext;
+        private FakeDbSet<Account> _fakeAccountSet;
+        private AccountRepository _accountRepository;
 
         [TestInitialize]
-        public void Initialize()
+        public void Setup()
         {
             _mockContext = new Mock<StrategoEntities>();
 
-            _mockAccountSet = new Mock<DbSet<Account>>();
-            _mockPlayerSet = new Mock<DbSet<Player>>();
-
-            _mockContext.Setup(c => c.Account).Returns(_mockAccountSet.Object);
-            _mockContext.Setup(c => c.Player).Returns(_mockPlayerSet.Object);
-
-            _lazyMockContext = new Lazy<StrategoEntities>(() => _mockContext.Object);
-        }
-
-        private Mock<DbSet<T>> CreateMockDbSet<T>(List<T> sourceList) where T : class
-        {
-            var queryable = sourceList.AsQueryable();
-
-            var mockSet = new Mock<DbSet<T>>();
-
-            mockSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<T>(queryable.Provider));
-            mockSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryable.Expression);
-            mockSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
-            mockSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(queryable.GetEnumerator());
-
-            mockSet.As<IDbAsyncEnumerable<T>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<T>(queryable.GetEnumerator()));
-
-            return mockSet;
-        }
-
-
-        [TestMethod]
-        public async Task Test_CreateAccountAsync_ShouldReturnFailureIfAccountExists()
-        {
-            var repository = new AccountRepository(_lazyMockContext);
-            string testEmail = "test@example.com";
-            string testHashedPassword = "hashedPassword123";
-            string testPlayerName = "TestPlayer";
-
-            var existingAccounts = new List<Account>
+            _fakeAccountSet = new FakeDbSet<Account>
             {
-                new Account { mail = testEmail }
+                new Account { mail = "valid@example.com", password = "hashedPassword", IdAccount = 1 }
             };
 
-            var mockAccountSet = CreateMockDbSet(existingAccounts);
-            _mockContext.Setup(c => c.Account).Returns(mockAccountSet.Object);
+            _mockContext.Setup(c => c.Account).Returns(_fakeAccountSet);
 
-            var result = await repository.CreateAccountAsync(testEmail, testHashedPassword, testPlayerName);
-
-            Assert.AreEqual("Account already exists", result.Error);
-
-            _mockAccountSet.Verify(m => m.Add(It.IsAny<Account>()), Times.Never);
-            _mockPlayerSet.Verify(m => m.Add(It.IsAny<Player>()), Times.Never);
-            _mockContext.Verify(m => m.SaveChangesAsync(), Times.Never);
+            _accountRepository = new AccountRepository(new Lazy<StrategoEntities>(() => _mockContext.Object));
         }
 
         [TestMethod]
-        public async Task Test_CreateAccountAsync_ShouldReturnSuccessWhenAccountIsCreated()
+        public void CreateAccount_ShouldReturnSuccess_WhenAccountIsCreated()
         {
-            var repository = new AccountRepository(_lazyMockContext);
-            string testEmail = "test@example.com";
-            string testHashedPassword = "hashedPassword123";
-            string testPlayerName = "TestPlayer";
+            var email = "test@example.com";
+            var hashedPassword = "hashedPassword";
+            var playerName = "TestPlayer";
 
-            var existingAccounts = new List<Account>();
-            var mockAccountSet = CreateMockDbSet(existingAccounts);
-            mockAccountSet.Setup(m => m.Add(It.IsAny<Account>())).Callback<Account>(account => existingAccounts.Add(account));
-            _mockContext.Setup(c => c.Account).Returns(mockAccountSet.Object);
+            _mockContext.Setup(m => m.SaveChanges()).Returns(1);
 
-            var players = new List<Player>();
-            var mockPlayerSet = CreateMockDbSet(players);
-            mockPlayerSet.Setup(m => m.Add(It.IsAny<Player>())).Callback<Player>(player => players.Add(player));
-            _mockContext.Setup(c => c.Player).Returns(mockPlayerSet.Object);
-
-            var games = new List<Games>();
-            var mockGamesSet = CreateMockDbSet(games);
-            mockGamesSet.Setup(m => m.Add(It.IsAny<Games>())).Callback<Games>(game => games.Add(game));
-            _mockContext.Setup(c => c.Games).Returns(mockGamesSet.Object);
-
-            _mockContext.Setup(c => c.SaveChangesAsync()).ReturnsAsync(1);
-
-            var result = await repository.CreateAccountAsync(testEmail, testHashedPassword, testPlayerName);
+            var result = _accountRepository.CreateAccount(email, hashedPassword, playerName);
 
             Assert.AreEqual("Account and player created successfully", result.Value);
         }
 
         [TestMethod]
-        public async Task Test_CreateAccountAsync_ShouldReturnFailureOnEntityValidationError()
+        public void CreateAccount_ShouldReturnFailure_WhenAccountAlreadyExists()
         {
-            var repository = new AccountRepository(_lazyMockContext);
+            var email = "valid@example.com";
 
-            var existingAccounts = new List<Account>();
-            var mockAccountSet = CreateMockDbSet(existingAccounts);
-            _mockContext.Setup(c => c.Account).Returns(mockAccountSet.Object);
+            var result = _accountRepository.CreateAccount(email, "hashedPassword", "ExistingPlayer");
 
-            _mockContext.Setup(c => c.SaveChangesAsync())
-                        .ThrowsAsync(new DbEntityValidationException("Validation Error"));
-
-            var result = await repository.CreateAccountAsync("test@example.com", "hashed_password", "Player1");
-
-            Assert.AreEqual("Entity validation error: Validation Error", result.Error);
+            Assert.AreEqual("Account already exists", result.Error);
         }
 
+        [TestMethod]
+        public void CreateAccount_ShouldHandleDbEntityValidationException()
+        {
+            var email = "test@example.com";
+            _mockContext.Setup(m => m.SaveChanges()).Throws(new DbEntityValidationException("Validation error"));
 
+            var result = _accountRepository.CreateAccount(email, "hashedPassword", "TestPlayer");
+
+            Assert.IsTrue(result.Error.Contains("Entity validation error"));
+        }
 
         [TestMethod]
-        public async Task Test_ValidateCredentialsAsync_ShouldReturnSuccessWhenCredentialsAreValid()
+        public void ValidateCredentials_ShouldReturnSuccess_WhenCredentialsAreValid()
         {
-            var validEmail = "test@example.com";
-            var validPassword = "hashed_password";
-            var account = new Account { IdAccount = 1, mail = validEmail, password = validPassword };
+            var email = "valid@example.com";
+            var hashedPassword = "hashedPassword";
 
-            var existingAccounts = new List<Account> { account };
-            var mockAccountSet = CreateMockDbSet(existingAccounts);
-
-            _mockContext.Setup(c => c.Account).Returns(mockAccountSet.Object);
-
-            var accountRepo = new AccountRepository(_lazyMockContext);
-
-            var result = await accountRepo.ValidateCredentialsAsync(validEmail, validPassword);
+            var result = _accountRepository.ValidateCredentials(email, hashedPassword);
 
             Assert.AreEqual(1, result.Value);
         }
 
-
         [TestMethod]
-        public async Task Test_ValidateCredentialsAsync_ShouldReturnFailureWhenCredentialsAreInvalid()
+        public void ValidateCredentials_ShouldReturnFailure_WhenCredentialsAreInvalid()
         {
-            var invalidEmail = "test@example.com";
-            var invalidPassword = "wrong_password";
+            var email = "invalid@example.com";
+            var hashedPassword = "wrongPassword";
 
-            var emptyAccounts = new List<Account>();
-
-            var mockAccountSet = CreateMockDbSet(emptyAccounts);
-            _mockContext.Setup(c => c.Account).Returns(mockAccountSet.Object);
-
-            var accountRepo = new AccountRepository(_lazyMockContext);
-
-            var result = await accountRepo.ValidateCredentialsAsync(invalidEmail, invalidPassword);
+            var result = _accountRepository.ValidateCredentials(email, hashedPassword);
 
             Assert.AreEqual("Invalid credentials", result.Error);
         }
 
+        [TestMethod]
+        public void ValidateCredentials_ShouldHandleDbEntityValidationException()
+        {
+            var email = "valid@example.com";
+            var hashedPassword = "hashedPassword";
+            _mockContext.Setup(c => c.Account).Throws(new DbEntityValidationException("Validation error"));
+
+            var result = _accountRepository.ValidateCredentials(email, hashedPassword);
+
+            Assert.IsFalse(result.IsSuccess);
+            Assert.IsTrue(result.Error.Contains("Entity validation error"));
+        }
 
         [TestMethod]
-        public async Task Test_AlreadyExistentAccountAsync_ShouldReturnTrueWhenAccountExists()
+        public void ValidateCredentials_ShouldHandleUnexpectedException()
         {
-            var repository = new AccountRepository(_lazyMockContext);
-            string testEmail = "test@example.com";
+            var email = "valid@example.com";
+            var hashedPassword = "hashedPassword";
+            _mockContext.Setup(c => c.Account).Throws(new Exception("Unexpected error"));
 
-            var existingAccounts = new List<Account>
-            {
-                new Account { mail = testEmail }
-            };
+            var result = _accountRepository.ValidateCredentials(email, hashedPassword);
 
-            var mockAccountSet = CreateMockDbSet(existingAccounts);
-            _mockContext.Setup(c => c.Account).Returns(mockAccountSet.Object);
+            Assert.IsFalse(result.IsSuccess);
+            Assert.IsTrue(result.Error.Contains("Unexpected error"));
+        }
 
-            var result = await repository.AlreadyExistentAccountAsync(testEmail);
+        [TestMethod]
+        public void AlreadyExistentAccount_ShouldReturnTrue_WhenAccountExists()
+        {
+            var email = "valid@example.com";
+
+            var result = _accountRepository.AlreadyExistentAccount(email);
 
             Assert.IsTrue(result.Value);
         }
 
         [TestMethod]
-        public async Task Test_AlreadyExistentAccountAsync_ShouldReturnFailureWhenDatabaseErrorOccurs()
+        public void AlreadyExistentAccount_ShouldReturnFalse_WhenAccountDoesNotExist()
         {
-            var repository = new AccountRepository(_lazyMockContext);
-            string testEmail = "test@example.com";
+            var email = "new@example.com";
 
-            _mockContext.Setup(c => c.Account).Throws(new Exception("Simulated database error"));
+            var result = _accountRepository.AlreadyExistentAccount(email);
 
-            var result = await repository.AlreadyExistentAccountAsync(testEmail);
+            Assert.IsFalse(result.Value);
+        }
 
-            StringAssert.StartsWith(result.Error, "Unexpected error: Simulated database error");
+        [TestMethod]
+        public void AlreadyExistentAccount_ShouldHandleSqlException()
+        {
+            var email = "valid@example.com";
+            _mockContext.Setup(c => c.Account).Throws(new InvalidOperationException("Simulated database error"));
+
+            var result = _accountRepository.AlreadyExistentAccount(email);
+
             Assert.IsFalse(result.IsSuccess);
         }
 
         [TestMethod]
-        public async Task Test_AlreadyExistentAccountAsync_ShouldReturnFailureWhenUnexpectedErrorOccurs()
+        public void ChangePassword_ShouldReturnSuccess_WhenPasswordIsChanged()
         {
-            var repository = new AccountRepository(_lazyMockContext);
-            string testEmail = "test@example.com";
+            var email = "valid@example.com";
+            var newHashedPassword = "newHashedPassword";
+            var account = _fakeAccountSet.FirstOrDefault(a => a.mail == email);
 
-            _mockContext.Setup(c => c.Account).Throws(new InvalidOperationException("Simulated unexpected error"));
+            if (account != null)
+            {
+                account.password = newHashedPassword;
+                _mockContext.Setup(m => m.SaveChanges()).Returns(1);
+            }
 
-            var result = await repository.AlreadyExistentAccountAsync(testEmail);
+            var result = _accountRepository.ChangePassword(email, newHashedPassword);
 
-            StringAssert.StartsWith(result.Error, "Unexpected error");
-            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual("Password changed successfully", result.Value);
         }
 
+        [TestMethod]
+        public void ChangePassword_ShouldReturnFailure_WhenAccountDoesNotExist()
+        {
+            var email = "nonexistent@example.com";
+
+            var result = _accountRepository.ChangePassword(email, "newHashedPassword");
+
+            Assert.AreEqual("Account does not exist", result.Error);
+        }
+
+        [TestMethod]
+        public void ChangePassword_ShouldHandleDbEntityValidationException()
+        {
+            var email = "valid@example.com";
+            var newHashedPassword = "newHashedPassword";
+            _mockContext.Setup(m => m.SaveChanges()).Throws(new DbEntityValidationException("Validation error"));
+
+            var result = _accountRepository.ChangePassword(email, newHashedPassword);
+
+            Assert.IsFalse(result.IsSuccess);
+            Assert.IsTrue(result.Error.Contains("Entity validation error"));
+        }
+
+        [TestMethod]
+        public void ChangePassword_ShouldHandleUnexpectedException()
+        {
+            var email = "valid@example.com";
+            var newHashedPassword = "newHashedPassword";
+            _mockContext.Setup(m => m.SaveChanges()).Throws(new Exception("Unexpected error"));
+
+            var result = _accountRepository.ChangePassword(email, newHashedPassword);
+
+            Assert.IsFalse(result.IsSuccess);
+            Assert.IsTrue(result.Error.Contains("Unexpected error"));
+        }
     }
 }
-*/

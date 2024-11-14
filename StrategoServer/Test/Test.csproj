@@ -73,7 +73,8 @@
   <ItemGroup>
     <Compile Include="RepositoryTest\AccountRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepositoryTest\AuxTestClasses.cs" />
+    <Compile Include="RepositoryTest\FakeDbSet.cs" />
+    <Compile Include="RepositoryTest\FriendsRepositoryTests.cs" />
     <Compile Include="RepositoryTest\GamesRepositoryTests.cs" />
     <Compile Include="RepositoryTest\LabelRepositoryTests.cs" />
     <Compile Include="RepositoryTest\PictureRepositoryTests.cs" />

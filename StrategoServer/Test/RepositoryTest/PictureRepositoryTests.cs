@@ -1,111 +1,114 @@
-﻿/*
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using StrategoDataAccess;
 using System;
-using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
 using System.Data.Entity;
 using System.Data.SqlClient;
+using StrategoDataAccess;
+using Utilities;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq.Expressions;
+using System.Collections.Generic;
 
-namespace Test.RepositoryTest
+namespace Tests
 {
+    public class FakeDbSet<T> : DbSet<T>, IQueryable, IEnumerable<T> where T : class
+    {
+        private readonly List<T> _data;
+
+        public FakeDbSet()
+        {
+            _data = new List<T>();
+        }
+
+        public override T Add(T entity)
+        {
+            _data.Add(entity);
+            return entity;
+        }
+
+        public override T Remove(T entity)
+        {
+            _data.Remove(entity);
+            return entity;
+        }
+
+        public override T Find(params object[] keyValues)
+        {
+            return _data.FirstOrDefault();
+        }
+
+        public IEnumerator<T> GetEnumerator() => _data.GetEnumerator();
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => _data.GetEnumerator();
+
+        Type IQueryable.ElementType => typeof(T);
+
+        System.Linq.Expressions.Expression IQueryable.Expression => _data.AsQueryable().Expression;
+
+        IQueryProvider IQueryable.Provider => _data.AsQueryable().Provider;
+    }
+
     [TestClass]
     public class PictureRepositoryTests
     {
         private Mock<StrategoEntities> _mockContext;
-        private Mock<DbSet<Pictures>> _mockPictureSet;
-        private Lazy<StrategoEntities> _lazyMockContext;
+        private FakeDbSet<Pictures> _fakePictureSet;
+        private PictureRepository _pictureRepository;
 
         [TestInitialize]
-        public void Initialize()
+        public void Setup()
         {
             _mockContext = new Mock<StrategoEntities>();
 
-            var pictures = new List<Pictures>
+            _fakePictureSet = new FakeDbSet<Pictures>
             {
-                new Pictures { IdPicture = 1, path = "Picture1.jpg" },
-                new Pictures { IdPicture = 2, path = "Picture2.jpg" }
+                new Pictures { IdPicture = 1, path = "http://example.com/image1.jpg" }
             };
 
-            _mockPictureSet = CreateMockDbSet(pictures);
+            _mockContext.Setup(c => c.Pictures).Returns(_fakePictureSet);
 
-            _mockContext.Setup(c => c.Pictures).Returns(_mockPictureSet.Object);
-
-            _lazyMockContext = new Lazy<StrategoEntities>(() => _mockContext.Object);
-        }
-
-        private Mock<DbSet<T>> CreateMockDbSet<T>(List<T> sourceList) where T : class
-        {
-            var queryable = sourceList.AsQueryable();
-
-            var mockSet = new Mock<DbSet<T>>();
-            mockSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<T>(queryable.Provider));
-            mockSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryable.Expression);
-            mockSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
-            mockSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(queryable.GetEnumerator());
-            mockSet.As<IDbAsyncEnumerable<T>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<T>(queryable.GetEnumerator()));
-
-            return mockSet;
+            _pictureRepository = new PictureRepository(new Lazy<StrategoEntities>(() => _mockContext.Object));
         }
 
         [TestMethod]
-        public async Task Test_GetPictureByIdAsync_ShouldReturnPictureWhenFound()
+        public void GetPictureById_ShouldReturnPicture_WhenPictureExists()
         {
-            var repository = new PictureRepository(_lazyMockContext);
             var pictureId = 1;
-            var picture = new Pictures { IdPicture = pictureId, path = "picture1.jpg" };
 
-            var mockPictureSet = CreateMockDbSet(new List<Pictures> { picture });
-            _mockContext.Setup(c => c.Pictures).Returns(mockPictureSet.Object);
+            var result = _pictureRepository.GetPictureById(pictureId);
 
-            var result = await repository.GetPictureByIdAsync(pictureId);
-
-            Assert.AreEqual(picture, result.Value);
+            Assert.IsNotNull(result.Value);
         }
 
         [TestMethod]
-        public async Task Test_GetPictureByIdAsync_ShouldReturnFailureWhenNotFound()
+        public void GetPictureById_ShouldReturnFailure_WhenPictureDoesNotExist()
         {
-            var repository = new PictureRepository(_lazyMockContext);
-            var pictureId = 1;
+            var pictureId = 2;
 
-            var mockPictureSet = CreateMockDbSet(new List<Pictures>());
-            _mockContext.Setup(c => c.Pictures).Returns(mockPictureSet.Object);
-
-            var result = await repository.GetPictureByIdAsync(pictureId);
+            var result = _pictureRepository.GetPictureById(pictureId);
 
             Assert.AreEqual("Picture not found", result.Error);
         }
 
         [TestMethod]
-        public async Task Test_GetPictureByIdAsync_ShouldReturnFailureOnSqlException()
+        public void GetPictureById_ShouldHandleSqlException()
         {
-            var repository = new PictureRepository(_lazyMockContext);
             var pictureId = 1;
+            _mockContext.Setup(c => c.Pictures).Throws(new InvalidOperationException("Simulated database error"));
 
-            var existingPictures = new List<Pictures>
-            {
-                new Pictures { IdPicture = pictureId, path = "picture1.jpg" }
-            };
+            var result = _pictureRepository.GetPictureById(pictureId);
 
-            var mockPictureSet = CreateMockDbSet(existingPictures);
-
-            mockPictureSet.As<IQueryable<Pictures>>().Setup(m => m.Provider).Throws(new InvalidOperationException("Database error"));
-
-            _mockContext.Setup(c => c.Pictures).Returns(mockPictureSet.Object);
-
-            var result = await repository.GetPictureByIdAsync(pictureId);
-
-            Assert.IsTrue(result.Error.Contains("Database error"));
+            Assert.IsFalse(result.IsSuccess);
         }
 
+        [TestMethod]
+        public void GetPictureById_ShouldHandleUnexpectedException()
+        {
+            var pictureId = 1;
+            _mockContext.Setup(c => c.Pictures).Throws(new Exception("Unexpected error"));
 
+            var result = _pictureRepository.GetPictureById(pictureId);
+
+            Assert.IsTrue(result.Error.Contains("Unexpected error"));
+        }
     }
-
 }
-*/

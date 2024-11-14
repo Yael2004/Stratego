@@ -1,102 +1,78 @@
-﻿/*
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using StrategoDataAccess;
 using System;
-using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
 using System.Data.Entity;
+using System.Data.SqlClient;
+using StrategoDataAccess;
+using Utilities;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using Test.RepositoryTest;
 
-namespace Test.RepositoryTest
+namespace Tests
 {
     [TestClass]
     public class LabelRepositoryTests
     {
         private Mock<StrategoEntities> _mockContext;
-        private Mock<DbSet<Label>> _mockLabelSet;
-        private Lazy<StrategoEntities> _lazyMockContext;
+        private FakeDbSet<Label> _fakeLabelSet;
+        private LabelRepository _labelRepository;
 
         [TestInitialize]
-        public void Initialize()
+        public void Setup()
         {
             _mockContext = new Mock<StrategoEntities>();
 
-            var labels = new List<Label>
+            _fakeLabelSet = new FakeDbSet<Label>
             {
-                new Label { IdLabel = 1, Path = "Label1" },
-                new Label { IdLabel = 2, Path = "Label2" }
+                new Label { IdLabel = 1, Path = "TestLabel" }
             };
 
-            _mockLabelSet = CreateMockDbSet(labels);
+            _mockContext.Setup(c => c.Label).Returns(_fakeLabelSet);
 
-            _mockContext.Setup(c => c.Label).Returns(_mockLabelSet.Object);
-
-            _lazyMockContext = new Lazy<StrategoEntities>(() => _mockContext.Object);
-        }
-
-
-        private Mock<DbSet<T>> CreateMockDbSet<T>(List<T> sourceList) where T : class
-        {
-            var queryable = sourceList.AsQueryable();
-
-            var mockSet = new Mock<DbSet<T>>();
-            mockSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<T>(queryable.Provider));
-            mockSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryable.Expression);
-            mockSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
-            mockSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(queryable.GetEnumerator());
-            mockSet.As<IDbAsyncEnumerable<T>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<T>(queryable.GetEnumerator()));
-
-            return mockSet;
+            _labelRepository = new LabelRepository(new Lazy<StrategoEntities>(() => _mockContext.Object));
         }
 
         [TestMethod]
-        public async Task Test_GetLabelByIdAsync_ShouldReturnLabelWhenFound()
+        public void GetLabelById_ShouldReturnLabel_WhenLabelExists()
         {
-            var repository = new LabelRepository(_lazyMockContext);
             var labelId = 1;
-            var label = new Label { IdLabel = labelId, Path = "label1.jpg" };
 
-            var mockLabelSet = CreateMockDbSet(new List<Label> { label });
-            _mockContext.Setup(c => c.Label).Returns(mockLabelSet.Object);
+            var result = _labelRepository.GetLabelById(labelId);
 
-            var result = await repository.GetLabelByIdAsync(labelId);
-
-            Assert.AreEqual(label, result.Value);
+            Assert.IsNotNull(result.Value);
         }
 
         [TestMethod]
-        public async Task Test_GetLabelByIdAsync_ShouldReturnFailureWhenNotFound()
+        public void GetLabelById_ShouldReturnFailure_WhenLabelDoesNotExist()
         {
-            var repository = new LabelRepository(_lazyMockContext);
-            var labelId = 1;
+            var labelId = 2;
 
-            var mockLabelSet = CreateMockDbSet(new List<Label>()); 
-            _mockContext.Setup(c => c.Label).Returns(mockLabelSet.Object);
-
-            var result = await repository.GetLabelByIdAsync(labelId);
+            var result = _labelRepository.GetLabelById(labelId);
 
             Assert.AreEqual("Label not found", result.Error);
         }
 
         [TestMethod]
-        public async Task Test_GetLabelByIdAsync_ShouldReturnFailureOnSqlException()
+        public void GetLabelById_ShouldHandleSqlException()
         {
-            var repository = new LabelRepository(_lazyMockContext);
             var labelId = 1;
+            _mockContext.Setup(c => c.Label).Throws(new InvalidOperationException("Simulated database error"));
 
-            var mockLabelSet = new Mock<DbSet<Label>>();
-            mockLabelSet.As<IQueryable<Label>>().Setup(m => m.Provider).Throws(new InvalidOperationException("Database error"));
+            var result = _labelRepository.GetLabelById(labelId);
 
-            _mockContext.Setup(c => c.Label).Returns(mockLabelSet.Object);
+            Assert.IsFalse(result.IsSuccess);
+        }
 
-            var result = await repository.GetLabelByIdAsync(labelId);
+        [TestMethod]
+        public void GetLabelById_ShouldHandleUnexpectedException()
+        {
+            var labelId = 1;
+            _mockContext.Setup(c => c.Label).Throws(new Exception("Unexpected error"));
 
-            Assert.IsTrue(result.Error.Contains("Database error"));
+            var result = _labelRepository.GetLabelById(labelId);
+
+            Assert.IsTrue(result.Error.Contains("Unexpected error"));
         }
     }
-
 }
-*/

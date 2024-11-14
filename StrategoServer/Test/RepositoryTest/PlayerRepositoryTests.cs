@@ -1,124 +1,199 @@
-﻿/*
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using StrategoDataAccess;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Data.Entity.Validation;
+using System.Data.SqlClient;
+using StrategoDataAccess;
 using Utilities;
+using System.Linq;
+using System.Collections.Generic;
 
-namespace Test.RepositoryTest
+namespace Tests
 {
     [TestClass]
     public class PlayerRepositoryTests
     {
         private Mock<StrategoEntities> _mockContext;
-        private Lazy<StrategoEntities> _lazyMockContext;
-        private Mock<DbSet<Player>> _mockPlayerSet;
+        private FakeDbSet<Player> _fakePlayerSet;
+        private FakeDbSet<Friend> _fakeFriendSet;
+        private PlayerRepository _playerRepository;
 
         [TestInitialize]
-        public void Initialize()
+        public void Setup()
         {
             _mockContext = new Mock<StrategoEntities>();
-            _lazyMockContext = new Lazy<StrategoEntities>(() => _mockContext.Object);
-        }
 
-        private Mock<DbSet<T>> CreateMockDbSet<T>(IEnumerable<T> data) where T : class
-        {
-            var queryable = data.AsQueryable();
+            _fakePlayerSet = new FakeDbSet<Player>
+            {
+                new Player { Id = 1, Name = "Player1", AccountId = 1 },
+                new Player { Id = 2, Name = "Player2", AccountId = 2 }
+            };
 
-            var mockSet = new Mock<DbSet<T>>();
-            mockSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<T>(queryable.Provider));
-            mockSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryable.Expression);
-            mockSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
-            mockSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(queryable.GetEnumerator());
+            _fakeFriendSet = new FakeDbSet<Friend>
+            {
+                new Friend { PlayerId = 1, FriendId = 2, Status = "friend" }
+            };
 
-            mockSet.As<IDbAsyncEnumerable<T>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<T>(queryable.GetEnumerator()));
+            _mockContext.Setup(c => c.Player).Returns(_fakePlayerSet);
+            _mockContext.Setup(c => c.Friend).Returns(_fakeFriendSet);
 
-            return mockSet;
+            _playerRepository = new PlayerRepository(new Lazy<StrategoEntities>(() => _mockContext.Object));
         }
 
         [TestMethod]
-        public async Task Test_GetOtherPlayerByIdAsync_ShouldReturnPlayerWhenFound()
+        public void GetOtherPlayerById_ShouldReturnPlayer_WhenPlayerExists()
         {
             var playerId = 1;
-            var player = new Player { Id = playerId, Name = "Player1" };
-            var players = new List<Player> { player };
-            _mockPlayerSet = CreateMockDbSet(players);
-            _mockContext.Setup(c => c.Player).Returns(_mockPlayerSet.Object);
 
-            var repository = new PlayerRepository(_lazyMockContext);
+            var result = _playerRepository.GetOtherPlayerById(playerId);
 
-            var result = await repository.GetOtherPlayerByIdAsync(playerId);
-
-            Assert.AreEqual("Player1", result.Value.Name);
+            Assert.AreEqual(playerId, result.Value.Id);
         }
 
         [TestMethod]
-        public async Task Test_GetOtherPlayerByIdAsync_ShouldReturnFailureWhenNotFound()
+        public void GetOtherPlayerById_ShouldReturnFailure_WhenPlayerDoesNotExist()
         {
-            var players = new List<Player>(); 
-            _mockPlayerSet = CreateMockDbSet(players);
-            _mockContext.Setup(c => c.Player).Returns(_mockPlayerSet.Object);
+            var playerId = 3;
 
-            var repository = new PlayerRepository(_lazyMockContext);
-
-            var result = await repository.GetOtherPlayerByIdAsync(1);
+            var result = _playerRepository.GetOtherPlayerById(playerId);
 
             Assert.AreEqual("Player not found", result.Error);
         }
 
         [TestMethod]
-        public async Task Test_GetOtherPlayerByIdAsync_ShouldReturnFailureOnGeneralException()
+        public void GetOtherPlayerById_ShouldHandleUnexpectedException()
         {
-            _mockPlayerSet = new Mock<DbSet<Player>>();
-            _mockPlayerSet.As<IQueryable<Player>>().Setup(m => m.Provider)
-                .Throws(new Exception("Unexpected error"));
-            _mockContext.Setup(c => c.Player).Returns(_mockPlayerSet.Object);
+            var playerId = 1;
+            _mockContext.Setup(c => c.Player).Throws(new Exception("Unexpected error"));
 
-            var repository = new PlayerRepository(_lazyMockContext);
+            var result = _playerRepository.GetOtherPlayerById(playerId);
+            
+            Assert.IsTrue(result.Error.Contains("Unexpected error"));
+        }
 
-            var result = await repository.GetOtherPlayerByIdAsync(1);
+        [TestMethod]
+        public void IsFriend_ShouldReturnTrue_WhenPlayersAreFriends()
+        {
+            var playerId = 1;
+            var otherPlayerId = 2;
+
+            var result = _playerRepository.IsFriend(playerId, otherPlayerId);
+
+            Assert.IsTrue(result.Value);
+        }
+
+        [TestMethod]
+        public void IsFriend_ShouldReturnFalse_WhenPlayersAreNotFriends()
+        {
+            var playerId = 1;
+            var otherPlayerId = 3;
+
+            var result = _playerRepository.IsFriend(playerId, otherPlayerId);
+
+            Assert.IsFalse(result.Value);
+        }
+
+        [TestMethod]
+        public void IsFriend_ShouldHandleSqlException()
+        {
+            var playerId = 1;
+            var otherPlayerId = 2;
+            _mockContext.Setup(c => c.Friend).Throws(new InvalidOperationException("Simulated database error"));
+
+            var result = _playerRepository.IsFriend(playerId, otherPlayerId);
+
+            Assert.IsFalse(result.IsSuccess);
+        }
+
+        [TestMethod]
+        public void GetPlayerFriendsList_ShouldReturnFriendsList_WhenFriendsExist()
+        {
+            var playerId = 1;
+
+            _fakeFriendSet.Add(new Friend { PlayerId = playerId, FriendId = 2, Status = "accepted" });
+
+            _fakePlayerSet.Add(new Player { Id = 2, Name = "FriendPlayer" });
+
+            _mockContext.Setup(c => c.Friend).Returns(_fakeFriendSet);
+            _mockContext.Setup(c => c.Player).Returns(_fakePlayerSet);
+
+            var result = _playerRepository.GetPlayerFriendsList(playerId);
+
+            Assert.AreEqual(2, result.Value.First().Id);
+        }
+
+
+        [TestMethod]
+        public void GetPlayerFriendsList_ShouldReturnFailure_WhenNoFriendsExist()
+        {
+            var playerId = 3;
+
+            var result = _playerRepository.GetPlayerFriendsList(playerId);
+
+            Assert.AreEqual("No friends found for the given player ID", result.Error);
+        }
+
+        [TestMethod]
+        public void GetPlayerFriendsList_ShouldHandleUnexpectedException()
+        {
+            var playerId = 1;
+            _mockContext.Setup(c => c.Friend).Throws(new Exception("Unexpected error"));
+
+            var result = _playerRepository.GetPlayerFriendsList(playerId);
 
             Assert.IsTrue(result.Error.Contains("Unexpected error"));
         }
 
         [TestMethod]
-        public async Task Test_IsFriendAsync_ShouldReturnTrueWhenFriends()
+        public void UpdatePlayer_ShouldReturnUpdatedPlayer_WhenUpdateIsSuccessful()
         {
-            var playerId = 1;
-            var otherPlayerId = 2;
-            var friendData = new List<Friend>
+            var updatedPlayer = new Player { Id = 1, Name = "UpdatedPlayer", AccountId = 1 };
+
+            var existingPlayer = _fakePlayerSet.FirstOrDefault(p => p.Id == updatedPlayer.Id);
+            if (existingPlayer == null)
             {
-                new Friend { PlayerId = playerId, FriendId = otherPlayerId, Status = "friend" }
-            };
-            var mockFriendSet = CreateMockDbSet(friendData);
-            _mockContext.Setup(c => c.Friend).Returns(mockFriendSet.Object);
+                _fakePlayerSet.Add(new Player { Id = 1, Name = "OriginalPlayer", AccountId = 1, PictureId = 1, IdLabel = 1 });
+            }
 
-            var repository = new PlayerRepository(_lazyMockContext);
+            _mockContext.Setup(c => c.Pictures)
+                .Returns(new FakeDbSet<Pictures> { new Pictures { IdPicture = 1, path = "picturePath" } });
+            _mockContext.Setup(c => c.Label)
+                .Returns(new FakeDbSet<Label> { new Label { IdLabel = 1, Path = "labelPath" } });
 
-            var result = await repository.IsFriendAsync(playerId, otherPlayerId);
+            _mockContext.Setup(c => c.SaveChanges()).Returns(1);
 
-            Assert.IsTrue(result.IsSuccess);
+            var result = _playerRepository.UpdatePlayer(updatedPlayer, "labelPath", "picturePath");
+
+            Assert.AreEqual("UpdatedPlayer", result.Value.Name);
         }
 
+
         [TestMethod]
-        public async Task Test_GetPlayerByAccountIdAsync_ShouldReturnPlayerWhenFound()
+        public void UpdatePlayer_ShouldReturnFailure_WhenPlayerNotFound()
         {
-            var accountId = 100;
-            var player = new Player { AccountId = accountId, Name = "John Doe" };
-            _mockPlayerSet = CreateMockDbSet(new List<Player> { player });
-            _mockContext.Setup(c => c.Player).Returns(_mockPlayerSet.Object);
+            var updatedPlayer = new Player { Id = 3, Name = "NonExistentPlayer", AccountId = 3 }; 
 
-            var repository = new PlayerRepository(_lazyMockContext);
+            _mockContext.Setup(c => c.Pictures)
+                .Returns(new FakeDbSet<Pictures> { new Pictures { IdPicture = 1, path = "picturePath" } });
+            _mockContext.Setup(c => c.Label)
+                .Returns(new FakeDbSet<Label> { new Label { IdLabel = 1, Path = "labelPath" } });
 
-            var result = await repository.GetPlayerByAccountIdAsync(accountId);
+            var result = _playerRepository.UpdatePlayer(updatedPlayer, "labelPath", "picturePath");
 
-            Assert.AreEqual("John Doe", result.Value.Name);
+            Assert.IsFalse(result.IsSuccess);
+        }
+
+
+        [TestMethod]
+        public void UpdatePlayer_ShouldHandleDbEntityValidationException()
+        {
+            var updatedPlayer = new Player { Id = 1, Name = "UpdatedPlayer", AccountId = 1 };
+            _mockContext.Setup(c => c.SaveChanges()).Throws(new DbEntityValidationException("Validation error"));
+
+            var result = _playerRepository.UpdatePlayer(updatedPlayer, "labelPath", "picturePath");
+
+            Assert.IsFalse(result.IsSuccess);
         }
     }
 }
-*/
