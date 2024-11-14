@@ -5,8 +5,6 @@ using StrategoApp.ProfileService;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -39,11 +37,13 @@ namespace StrategoApp.ViewModel
         public ICommand OpenSearchPlayerPopupCommand { get; }
         public ICommand AcceptSendRequestCommand { get; }
         public ICommand CancelSearchCommand { get; }
+        public ICommand AcceptFriendRequestCommand { get; }
+        public ICommand DeclineFriendRequestCommand { get; }
 
         public FriendsViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
-            
+
             AssignValuesToUser();
 
             Friends = new ObservableCollection<Player>();
@@ -61,6 +61,8 @@ namespace StrategoApp.ViewModel
             OpenSearchPlayerPopupCommand = new ViewModelCommand(OpenSearchPlayerPopup);
             AcceptSendRequestCommand = new ViewModelCommand(SearchPlayerById);
             CancelSearchCommand = new ViewModelCommand(CloseSearchPlayerPopup);
+            AcceptFriendRequestCommand = new ViewModelCommand(AcceptFriendRequest);
+            DeclineFriendRequestCommand = new ViewModelCommand(RejectFriendRequest);
 
             LoadFriendsListAsync();
 
@@ -139,7 +141,6 @@ namespace StrategoApp.ViewModel
             }
         }
 
-
         private void BackToLobby(object obj)
         {
             _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
@@ -178,7 +179,7 @@ namespace StrategoApp.ViewModel
             {
                 FriendRequests.Clear();
                 await _playerFriendRequestServiceClient.GetPlayerFriendRequestAsync(PlayerId);
- 
+
                 IsRequestsPopupOpen = true;
             }
             catch (Exception ex)
@@ -205,7 +206,7 @@ namespace StrategoApp.ViewModel
         }
 
         private async void SearchPlayerById(object obj)
-        {                
+        {
             try
             {
                 await _friendOperationsServiceClient.SendFriendRequestAsync(FriendIdRequested, PlayerId);
@@ -213,9 +214,50 @@ namespace StrategoApp.ViewModel
             catch (Exception ex)
             {
                 MessageBox.Show("Error al buscar jugador por ID.");
-            }           
+            }
         }
 
+        private async void AcceptFriendRequest(object obj)
+        {
+            if (obj is Player friend && friend.AccountId > 0)
+            {
+                try
+                {
+                    await _friendOperationsServiceClient.AcceptFriendRequestAsync(friend.AccountId, PlayerId);
+                    FriendRequests.Remove(friend);
+                    MessageBox.Show("Solicitud de amistad aceptada.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al aceptar solicitud de amistad.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("El parámetro no es un objeto Player válido o el ID es 0.");
+            }
+        }
+
+        private async void RejectFriendRequest(object obj)
+        {
+            if (obj is Player friend && friend.AccountId > 0)
+            {
+                try
+                {
+                    await _friendOperationsServiceClient.DeclineFriendRequestAsync(friend.AccountId, PlayerId);
+                    FriendRequests.Remove(friend);
+                    MessageBox.Show("Solicitud de amistad rechazada.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al rechazar solicitud de amistad.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("El parámetro no es un objeto Player válido o el ID es 0.");
+            }
+        }
 
         public void ReceiveOtherPlayerInfo(OtherPlayerInfoResponse response)
         {
@@ -223,15 +265,16 @@ namespace StrategoApp.ViewModel
             {
                 var player = new Player
                 {
+                    Id = response.PlayerInfo.PlayerInfo.Id,
                     AccountId = response.PlayerInfo.PlayerInfo.Id,
                     Name = response.PlayerInfo.PlayerInfo.Name,
                     PicturePath = response.PlayerInfo.PlayerInfo.PicturePath
                 };
 
-                if (pendingFriendRequests.Contains(player.AccountId))
+                if (pendingFriendRequests.Contains(player.Id))
                 {
                     FriendRequests.Add(player);
-                    pendingFriendRequests.Remove(player.AccountId);
+                    pendingFriendRequests.Remove(player.Id);
                 }
                 else
                 {
@@ -257,6 +300,8 @@ namespace StrategoApp.ViewModel
         {
             if (response.Result.IsSuccess)
             {
+                FriendRequests.Clear();
+
                 foreach (var friendRequestId in response.FriendRequestIds)
                 {
                     pendingFriendRequests.Add(friendRequestId);

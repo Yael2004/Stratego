@@ -46,6 +46,10 @@
             <view:PlayerProfileNotOwn/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModel:GameSetupViewModel}">
+            <view:GameSetup/>
+        </DataTemplate>
+        
     </Window.Resources>
 
     <Window.DataContext>

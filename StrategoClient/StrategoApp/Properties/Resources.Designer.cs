@@ -322,6 +322,15 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Friend requests.
+        /// </summary>
+        public static string FriendRequests_Title {
+            get {
+                return ResourceManager.GetString("FriendRequests_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Friends.
         /// </summary>
         public static string Friends_Button {

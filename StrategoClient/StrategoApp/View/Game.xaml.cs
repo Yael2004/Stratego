@@ -1,49 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using StrategoApp.ViewModel;
 
 namespace StrategoApp.View
 {
-    /// <summary>
-    /// Lógica de interacción para Game.xaml
-    /// </summary>
     public partial class Game : UserControl
     {
         public Game()
         {
             InitializeComponent();
-            InitializeBoard();
         }
 
-        private void InitializeBoard()
+        private void OnPieceDragStart(object sender, MouseEventArgs e)
         {
-            for (int i = 0; i < 100; i++)
+            if (e.LeftButton == MouseButtonState.Pressed && sender is Image draggedImage)
             {
-                Button cellButton = new Button
-                {
-                    Background = Brushes.Transparent,
-                    Margin = new Thickness(1)
-                };
+                DragDrop.DoDragDrop(draggedImage, draggedImage.Source, DragDropEffects.Move);
+            }
+        }
 
-                cellButton.Click += CellButton_Click;
-                BoardGrid.Children.Add(cellButton);
+        private void OnPieceDropped(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.Bitmap) && sender is Button targetCell)
+            {
+                var droppedImage = e.Data.GetData(DataFormats.Bitmap) as BitmapImage;
+                targetCell.Background = new ImageBrush(droppedImage);
+                targetCell.IsEnabled = false; // Impide colocar otra ficha en la misma celda
             }
         }
 
         private void CellButton_Click(object sender, RoutedEventArgs e)
         {
+            // Aquí puedes implementar la lógica que deseas al hacer clic en las celdas
             Button clickedButton = sender as Button;
+            if (clickedButton != null)
+            {
+                // Ejemplo de cómo manejar el clic en una celda
+                MessageBox.Show("Celda seleccionada: " + clickedButton.Tag);
+            }
         }
 
     }

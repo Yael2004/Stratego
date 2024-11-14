@@ -409,4 +409,7 @@
   <data name="EnterEmail_Label" xml:space="preserve">
     <value>Enter your email</value>
   </data>
+  <data name="FriendRequests_Title" xml:space="preserve">
+    <value>Friend requests</value>
+  </data>
 </root>

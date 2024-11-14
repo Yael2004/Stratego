@@ -87,14 +87,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ImagePathToBrushConverter.cs" />
     <Compile Include="Helpers\ImageSelectionConverter.cs" />
     <Compile Include="Helpers\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\Validations.cs" />
     <Compile Include="Helpers\StringToVisibilityConverter.cs" />
+    <Compile Include="Model\Piece.cs" />
+    <Compile Include="ViewModel\Cell.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\PlayerSingleton.cs" />
     <Compile Include="ViewModel\FriendsViewModel.cs" />
+    <Compile Include="ViewModel\GameSetupViewModel.cs" />
     <Compile Include="ViewModel\GameViewModel.cs" />
     <Compile Include="ViewModel\LobbyViewModel.cs" />
     <Compile Include="ViewModel\LogInViewModel.cs" />
@@ -106,11 +110,15 @@
     <Compile Include="ViewModel\SignUpViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\ViewModelCommand.cs" />
+    <Compile Include="ViewModel\ViewModelCommandGeneric.cs" />
     <Compile Include="View\Friends.xaml.cs">
       <DependentUpon>Friends.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Game.xaml.cs">
       <DependentUpon>Game.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\GameSetup.xaml.cs">
+      <DependentUpon>GameSetup.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LogIn.xaml.cs">
       <DependentUpon>LogIn.xaml</DependentUpon>
@@ -154,6 +162,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Game.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GameSetup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -435,6 +447,41 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Game\Staff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Board2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Board3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Game\Dragon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Board4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Game\Necronomicon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Game\Abysswatcher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Game\DarkKnight.png" />
+    <Resource Include="Assets\Game\Darkwraith.png" />
+    <Resource Include="Assets\Game\GrimReaper.png" />
+    <Resource Include="Assets\Game\Hellhound.png" />
+    <Resource Include="Assets\Game\Necrofiend.png" />
+    <Resource Include="Assets\Game\Nightmare.png" />
+    <Resource Include="Assets\Game\PotionTrap.png" />
+    <Resource Include="Assets\Game\Soulhunter.png" />
+    <Resource Include="Assets\Game\Trapbreaker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Game\Archfiend.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

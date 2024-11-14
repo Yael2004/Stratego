@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" 
+             xmlns:res="clr-namespace:StrategoApp.Properties"
              d:DataContext="{d:DesignInstance Type=viewModel:FriendsViewModel}" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -102,9 +103,10 @@
                     Width="400" Height="300">
 
             <Border Background="{StaticResource SemiTransparent}" 
-                        BorderBrush="Black" 
-                        BorderThickness="2" 
-                        Padding="10">
+        BorderBrush="Black" 
+        BorderThickness="2" 
+        Padding="10"
+        Width="400" Height="300">
 
                 <Grid>
                     <Grid.RowDefinitions>
@@ -113,33 +115,57 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="Solicitudes de Amistad" 
-                                   Foreground="{StaticResource Prueba}"
-                                   FontSize="18" 
-                                   FontWeight="Bold" 
-                                   HorizontalAlignment="Center" 
-                                   Margin="0,0,0,10" 
-                                   Grid.Row="0"/>
+                    <TextBlock Text="{x:Static res:Resources.FriendRequests_Title}" 
+                   Foreground="{StaticResource Prueba}"
+                   FontSize="18" 
+                   FontWeight="Bold" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,0,0,10" 
+                   Grid.Row="0"/>
 
                     <ItemsControl ItemsSource="{Binding FriendRequests}" Grid.Row="1">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Margin="5">
-                                    <Image Source="{Binding PicturePath}" Width="30" Height="30" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,10,0"/>
-                                    <Button Content="Aceptar" Width="75" Margin="5,0,0,0"/>
-                                    <Button Content="Rechazar" Width="75" Margin="5,0,0,0"/>
-                                </StackPanel>
+                                <Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="0,5,0,0">
+                                    <DockPanel LastChildFill="True">
+                                        <Image Source="{Binding PicturePath}" Width="40" Height="40" Margin="0,0,10,0" DockPanel.Dock="Left"/>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Name}" 
+                                                       Foreground="{StaticResource Prueba}"
+                                                       FontWeight="Bold" 
+                                                       Margin="0,0,10,0" 
+                                                       VerticalAlignment="Center"
+                                                       Width="100"/>
+
+                                            <StackPanel HorizontalAlignment="Right">
+                                                <Button Content="Aceptar" 
+                                                        Width="75" 
+                                                        Margin="5,0,0,0" 
+                                                        Command="{Binding DataContext.AcceptFriendRequestCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}" />
+
+                                                <Button Content="Rechazar" 
+                                                        Width="75" 
+                                                        Margin="5,0,0,0" 
+                                                        Command="{Binding DataContext.DeclineFriendRequestCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
 
                     <Button Content="Cerrar"
-                                Style="{StaticResource ButtonYellowStyle}"
-                                Command="{Binding CloseRequestsPopupCommand}"
-                                HorizontalAlignment="Right" Margin="0,10,0,0" Grid.Row="2"/>
+                Style="{StaticResource ButtonYellowStyle}"
+                Command="{Binding CloseRequestsPopupCommand}"
+                HorizontalAlignment="Right" 
+                Margin="0,10,0,0" 
+                Grid.Row="2"/>
                 </Grid>
             </Border>
+
         </Border>
 
         <Border Background="#80000000" 
@@ -155,7 +181,7 @@
                     Padding="10">
 
                 <StackPanel>
-                    <TextBlock Text="Buscar jugador" 
+                    <TextBlock Text="{x:Static res:Resources.SearchPlayer_Label}"
                                FontSize="18" 
                                FontWeight="Bold" 
                                HorizontalAlignment="Center" 

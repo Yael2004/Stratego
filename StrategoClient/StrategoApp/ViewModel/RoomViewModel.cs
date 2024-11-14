@@ -270,7 +270,7 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                _mainWindowViewModel.ChangeViewModel(new GameViewModel(_mainWindowViewModel));
+                _mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel));
             }
             catch (Exception e)
             {
