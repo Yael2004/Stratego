@@ -18,7 +18,7 @@ namespace StrategoDataAccess
             _context = context;
         }
 
-        public Result<Pictures> GetPictureById(int pictureId)
+        public virtual Result<Pictures> GetPictureById(int pictureId)
         {
             try
             {

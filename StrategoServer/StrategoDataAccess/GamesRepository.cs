@@ -19,7 +19,7 @@ namespace StrategoDataAccess
             _context = context;
         }
 
-        public Result<Games> GetGameStatisticsByAccountId(int accountId)
+        public virtual Result<Games> GetGameStatisticsByAccountId(int accountId)
         {
             try
             {

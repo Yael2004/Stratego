@@ -22,7 +22,7 @@ namespace StrategoDataAccess
             _context = context;
         }
 
-        public Result<Player> GetOtherPlayerById(int playerId)
+        public virtual Result<Player> GetOtherPlayerById(int playerId)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<bool> IsFriend(int playerId, int otherPlayerId)
+        public virtual Result<bool> IsFriend(int playerId, int otherPlayerId)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<IEnumerable<Player>> GetPlayerFriendsList(int playerId)
+        public virtual Result<IEnumerable<Player>> GetPlayerFriendsList(int playerId)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<Player> UpdatePlayer(Player updatedPlayer, string labelPath, string picturePath)
+        public virtual Result<Player> UpdatePlayer(Player updatedPlayer, string labelPath, string picturePath)
         {
             using (var transaction = _context.Value.Database.BeginTransaction())
             {
@@ -156,7 +156,7 @@ namespace StrategoDataAccess
         }
 
 
-        public Result<Player> GetPlayerByAccountId(int accountId)
+        public virtual Result<Player> GetPlayerByAccountId(int accountId)
         {
             try
             {
@@ -219,7 +219,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<string> GetPicturePathById(int pictureId)
+        public virtual Result<string> GetPicturePathById(int pictureId)
         {
             try
             {
@@ -239,7 +239,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<string> GetLabelPathById(int labelId)
+        public virtual Result<string> GetLabelPathById(int labelId)
         {
             try
             {
@@ -259,7 +259,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<string> GetMailByPlayerId(int playerId)
+        public virtual Result<string> GetMailByPlayerId(int playerId)
         {
             try
             {

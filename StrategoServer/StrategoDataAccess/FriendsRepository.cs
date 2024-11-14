@@ -18,7 +18,7 @@ namespace StrategoDataAccess
             _context = context;
         }
 
-        public Result<string> SendFriendRequest(int destinationId, int requesterId)
+        public virtual Result<string> SendFriendRequest(int destinationId, int requesterId)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<string> AcceptFriendRequest(int destinationId, int requesterId)
+        public virtual Result<string> AcceptFriendRequest(int destinationId, int requesterId)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<string> DeclineFriendRequest(int destinationId, int requesterId)
+        public virtual Result<string> DeclineFriendRequest(int destinationId, int requesterId)
         {
             try
             {
@@ -114,7 +114,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<string> RemoveFriend(int destinationId, int requesterId)
+        public virtual Result<string> RemoveFriend(int destinationId, int requesterId)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<IEnumerable<Player>> GetPendingFriendRequests(int playerId)
+        public virtual Result<IEnumerable<Player>> GetPendingFriendRequests(int playerId)
         {
             try
             {

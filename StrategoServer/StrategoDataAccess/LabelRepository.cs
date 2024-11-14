@@ -18,7 +18,7 @@ namespace StrategoDataAccess
             _context = context;
         }
 
-        public Result<Label> GetLabelById(int labelId)
+        public virtual Result<Label> GetLabelById(int labelId)
         {
             try
             {

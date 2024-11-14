@@ -71,6 +71,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logic\AccountManagerTests.cs" />
+    <Compile Include="Logic\FriendsManagerTests.cs" />
+    <Compile Include="Logic\InvitationManagerTests.cs" />
+    <Compile Include="Logic\PasswordManagerTests.cs" />
+    <Compile Include="Logic\ProfilesManagerTests.cs" />
     <Compile Include="RepositoryTest\AccountRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryTest\FakeDbSet.cs" />

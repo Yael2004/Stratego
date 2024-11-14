@@ -19,7 +19,7 @@ namespace StrategoDataAccess
             _context = context;
         }
 
-        public Result<string> CreateAccount(string email, string hashedPassword, string playerName)
+        public virtual Result<string> CreateAccount(string email, string hashedPassword, string playerName)
         {
             var existenceCheckResult = AlreadyExistentAccount(email);
 
@@ -92,7 +92,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<int> ValidateCredentials(string email, string hashedPassword)
+        public virtual Result<int> ValidateCredentials(string email, string hashedPassword)
         {
             try
             {
@@ -119,7 +119,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<bool> AlreadyExistentAccount(string email)
+        public virtual Result<bool> AlreadyExistentAccount(string email)
         {
             try
             {
@@ -136,7 +136,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<string> ChangePassword(string email, string newHashedPassword)
+        public virtual Result<string> ChangePassword(string email, string newHashedPassword)
         {
             using (var transaction = _context.Value.Database.BeginTransaction())
             {
