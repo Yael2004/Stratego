@@ -285,5 +285,42 @@ namespace StrategoDataAccess
             }
         }
 
+        public virtual Result<IEnumerable<Player>> GetTopPlayersByWins()
+        {
+            try
+            {
+                var result = _context.Value.Games
+                    .GroupBy(g => g.AccountId) 
+                    .Select(g => new
+                    {
+                        AccountId = g.Key,
+                        WonGames = g.Sum(x => x.WonGames) 
+                    })
+                    .OrderByDescending(g => g.WonGames) 
+                    .Take(10) 
+                    .Join(
+                        _context.Value.Player, 
+                        games => games.AccountId, 
+                        player => player.AccountId, 
+                        (games, player) => player 
+                    )
+                    .ToList();
+
+                if (result.Count == 0)
+                {
+                    return Result<IEnumerable<Player>>.Failure("No players found with games won.");
+                }
+                return Result<IEnumerable<Player>>.Success(result);
+            }
+            catch (SqlException sqlEx)
+            {
+                return Result<IEnumerable<Player>>.Failure($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Result<IEnumerable<Player>>.Failure($"Unexpected error: {ex.Message}");
+            }
+        }
+
     }
 }

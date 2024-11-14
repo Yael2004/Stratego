@@ -157,36 +157,25 @@ namespace StrategoServices.Logic
             return _playerRepository.Value.GetPlayerFriendsList(playerId);
         }
 
-        private Result<PlayerInfoShownDTO> MapPlayerToPlayerInfoShownDTO(Player player)
+        public Result<List<int>> GetTopPlayersIds()
         {
-            try
+            var topPlayersResult = GetTopPlayersFromRepository();
+
+            if (!topPlayersResult.IsSuccess)
             {
-                var picturePathResult = _playerRepository.Value.GetPicturePathById(player.PictureId);
-                if (!picturePathResult.IsSuccess)
-                {
-                    return Result<PlayerInfoShownDTO>.Failure("Failed to retrieve picture path.");
-                }
-
-                var labelPathResult = _playerRepository.Value.GetLabelPathById(player.IdLabel);
-                if (!labelPathResult.IsSuccess)
-                {
-                    return Result<PlayerInfoShownDTO>.Failure("Failed to retrieve label path.");
-                }
-
-                var playerInfoDto = new PlayerInfoShownDTO
-                {
-                    Name = player.Name,
-                    PicturePath = picturePathResult.Value,
-                    LabelPath = labelPathResult.Value
-                };
-
-                return Result<PlayerInfoShownDTO>.Success(playerInfoDto);
+                return Result<List<int>>.Failure(topPlayersResult.Error);
             }
-            catch (Exception ex)
-            {
-                return Result<PlayerInfoShownDTO>.Failure($"Unexpected error: {ex.Message}");
-            }
+
+            var topPlayersIds = topPlayersResult.Value.Select(player => player.Id).ToList();
+
+            return topPlayersIds.Any()
+                ? Result<List<int>>.Success(topPlayersIds)
+                : Result<List<int>>.Failure("No top players found.");
         }
 
+        private Result<IEnumerable<Player>> GetTopPlayersFromRepository()
+        {
+            return _playerRepository.Value.GetTopPlayersByWins();
+        }
     }
 }

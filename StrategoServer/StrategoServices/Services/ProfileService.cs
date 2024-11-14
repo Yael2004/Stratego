@@ -12,7 +12,8 @@ using System.Web.Profile;
 namespace StrategoServices.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class ProfileService : Interfaces.IProfileDataService, Interfaces.IPlayerFriendsListService, Interfaces.IProfileModifierService, Interfaces.IOtherProfileDataService
+    public class ProfileService : Interfaces.IProfileDataService, Interfaces.IPlayerFriendsListService, Interfaces.IProfileModifierService, 
+        Interfaces.IOtherProfileDataService, Interfaces.ITopPlayersListService
     {
         private readonly Lazy<ProfilesManager> _profilesManager;
 
@@ -164,5 +165,35 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.PlayerFriendsList(response));
         }
 
+        public async Task GetTopPlayersListAsync()
+        {
+            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.ITopPlayersListCallback>();
+            var response = new TopPlayersResponse();
+
+            try
+            {
+                var getTopPlayersResult = _profilesManager.Value.GetTopPlayersIds();
+
+                if (!getTopPlayersResult.IsSuccess)
+                {
+                    response.Result = new OperationResult(false, getTopPlayersResult.Error);
+                }
+                else
+                {
+                    response.Result = new OperationResult(getTopPlayersResult.IsSuccess, getTopPlayersResult.Error);
+                    response.TopPlayersIds = getTopPlayersResult.Value;
+                }
+            } 
+            catch (TimeoutException)
+            {
+                response.Result = new OperationResult(false, "Server error");
+            }
+            catch (Exception ex)
+            {
+                response.Result = new OperationResult(false, $"Unexpected error: {ex.Message}");
+            }
+
+            await Task.Run(() => callback.TopPlayersList(response));
+        }
     }
 }
