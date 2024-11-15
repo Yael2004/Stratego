@@ -10,10 +10,20 @@
     <Viewbox Stretch="Fill">
         <Grid Height="440" Width="800" 
               Background="{StaticResource InitialBackground}">
+
+            <!-- Título del Scoreboard -->
+            <Label Content="{x:Static res:Resources.Scoreboard_Title}" 
+                   FontSize="40" 
+                   FontWeight="Bold"
+                   Foreground="{StaticResource IntenseRed}"
+                   FontFamily="{StaticResource AugustaFont}" 
+                   Margin="268,5,268,375"
+                   HorizontalAlignment="Center"/>
+
             <ScrollViewer HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Auto"
-                          Height="300" Width="500" 
-                          Margin="150,70,150,70">
+                          Height="300" Width="600" 
+                          Margin="100,70,100,70">
                 <ListView ItemsSource="{Binding PlayerScores}"
                           Background="{StaticResource SemiTransparent}"
                           BorderThickness="0">
@@ -22,37 +32,47 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="100"/>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="100"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Label Content="{Binding Position}"
-                                   FontFamily="{StaticResource AugustaFont}" 
-                                   FontSize="30"
-                                   Foreground="red" 
-                                   Grid.Column="0" />
+                                <TextBlock Text="{Binding Position}"
+                                           FontFamily="{StaticResource AugustaFont}" 
+                                           FontSize="20"
+                                           Foreground="Red" 
+                                           VerticalAlignment="Center" 
+                                           HorizontalAlignment="Center"
+                                           Grid.Column="0" />
 
-                                <Label Content="{Binding PlayerName}"
-                                   FontFamily="{StaticResource AugustaFont}" 
-                                   FontSize="30"
-                                   Foreground="red" 
-                                   Grid.Column="1" />
+                                <TextBlock Text="{Binding PlayerName}"
+                                           FontFamily="{StaticResource AugustaFont}" 
+                                           FontSize="20"
+                                           Foreground="White" 
+                                           VerticalAlignment="Center"
+                                           Grid.Column="2" />
+
+                                <Button Content="Ver Perfil"
+                                        Command="{Binding DataContext.ViewProfileCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                        CommandParameter="{Binding}"
+                                        FontSize="16"
+                                        Background="DarkRed"
+                                        Foreground="White"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Width="80"
+                                        Grid.Column="3" />
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
             </ScrollViewer>
+
             <Button Height="40" Width="40" 
                     Margin="20,20,740,380"
                     Command="{Binding BackToLobbyCommand}">
             </Button>
-            
-            <Label Content="{x:Static res:Resources.Scoreboard_Title}" 
-                   FontSize="40" 
-                   FontWeight="Bold"
-                   Foreground="{StaticResource IntenseRed}"
-                   FontFamily="{StaticResource AugustaFont}" 
-                   Margin="268,5,268,375"
-                   HorizontalAlignment="Center"/>
+
         </Grid>
     </Viewbox>
 </UserControl>

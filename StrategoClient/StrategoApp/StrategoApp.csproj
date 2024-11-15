@@ -100,6 +100,7 @@
     <Compile Include="Helpers\Validations.cs" />
     <Compile Include="Helpers\StringToVisibilityConverter.cs" />
     <Compile Include="Model\Piece.cs" />
+    <Compile Include="Model\PlayerScore.cs" />
     <Compile Include="Model\Room.cs" />
     <Compile Include="ViewModel\Cell.cs" />
     <Compile Include="Model\Player.cs" />

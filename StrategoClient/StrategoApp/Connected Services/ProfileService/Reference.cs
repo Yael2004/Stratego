@@ -565,6 +565,67 @@ namespace StrategoApp.ProfileService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TopPlayersResponse", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
+    [System.SerializableAttribute()]
+    public partial class TopPlayersResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategoApp.ProfileService.OperationResult ResultField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int[] TopPlayersIdsField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategoApp.ProfileService.OperationResult Result {
+            get {
+                return this.ResultField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ResultField, value) != true)) {
+                    this.ResultField = value;
+                    this.RaisePropertyChanged("Result");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int[] TopPlayersIds {
+            get {
+                return this.TopPlayersIdsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TopPlayersIdsField, value) != true)) {
+                    this.TopPlayersIdsField = value;
+                    this.RaisePropertyChanged("TopPlayersIds");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ProfileService.IProfileDataService", CallbackContract=typeof(StrategoApp.ProfileService.IProfileDataServiceCallback))]
     public interface IProfileDataService {
@@ -785,6 +846,61 @@ namespace StrategoApp.ProfileService {
         
         public System.Threading.Tasks.Task GetOtherPlayerInfoAsync(int playerId, int requesterPlayerId) {
             return base.Channel.GetOtherPlayerInfoAsync(playerId, requesterPlayerId);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ProfileService.ITopPlayersListService", CallbackContract=typeof(StrategoApp.ProfileService.ITopPlayersListServiceCallback))]
+    public interface ITopPlayersListService {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITopPlayersListService/GetTopPlayersList", ReplyAction="http://tempuri.org/ITopPlayersListService/GetTopPlayersListResponse")]
+        void GetTopPlayersList();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITopPlayersListService/GetTopPlayersList", ReplyAction="http://tempuri.org/ITopPlayersListService/GetTopPlayersListResponse")]
+        System.Threading.Tasks.Task GetTopPlayersListAsync();
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface ITopPlayersListServiceCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/ITopPlayersListService/TopPlayersList")]
+        void TopPlayersList([System.ServiceModel.MessageParameterAttribute(Name="topPlayersList")] StrategoApp.ProfileService.TopPlayersResponse topPlayersList1);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface ITopPlayersListServiceChannel : StrategoApp.ProfileService.ITopPlayersListService, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class TopPlayersListServiceClient : System.ServiceModel.DuplexClientBase<StrategoApp.ProfileService.ITopPlayersListService>, StrategoApp.ProfileService.ITopPlayersListService {
+        
+        public TopPlayersListServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
+        }
+        
+        public TopPlayersListServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
+        }
+        
+        public TopPlayersListServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public TopPlayersListServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public TopPlayersListServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
+        }
+        
+        public void GetTopPlayersList() {
+            base.Channel.GetTopPlayersList();
+        }
+        
+        public System.Threading.Tasks.Task GetTopPlayersListAsync() {
+            return base.Channel.GetTopPlayersListAsync();
         }
     }
 }
