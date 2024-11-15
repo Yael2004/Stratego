@@ -1,43 +1,34 @@
-﻿using StrategoServices.Services.Interfaces.Callbacks;
+﻿using StrategoServices.Data.DTO;
+using StrategoServices.Services.Interfaces.Callbacks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace StrategoServices.Logic
 {
     public class GameSession
     {
-        private int _player1Id;
-        private int _player2Id;
+        private readonly int _player1Id;
+        private readonly int _player2Id;
         private IGameServiceCallback _player1Callback;
         private IGameServiceCallback _player2Callback;
         private int _currentTurnPlayerId;
 
-        public int GameId { get; } 
+        public int GameId { get; }
 
-        public int Player1Id => _player1Id;
-        public int Player2Id => _player2Id;
-
-        public GameSession(int gameId, int player1Id, int player2Id = 0)
+        public GameSession(int player1Id, int player2Id)
         {
-            GameId = gameId;
             _player1Id = player1Id;
             _player2Id = player2Id;
             _currentTurnPlayerId = player1Id;
+            GameId = new Random().Next(1, 100000);
         }
 
         public void SetCallbacks(IGameServiceCallback player1Callback, IGameServiceCallback player2Callback)
         {
             _player1Callback = player1Callback;
-            _player2Callback = player2Callback;
-        }
-
-        public void SetPlayer1(int player1Id, IGameServiceCallback player1Callback)
-        {
-            _player1Id = player1Id;
-            _player1Callback = player1Callback;
-        }
-
-        public void SetPlayer2(int player2Id, IGameServiceCallback player2Callback)
-        {
-            _player2Id = player2Id;
             _player2Callback = player2Callback;
         }
 
@@ -60,5 +51,6 @@ namespace StrategoServices.Logic
         {
             return playerId == _player1Id ? _player2Id : _player1Id;
         }
+
     }
 }

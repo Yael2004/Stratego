@@ -23,8 +23,5 @@ namespace StrategoServices.Services.Interfaces.Callbacks
 
         [OperationContract(IsOneWay = true)]
         void GetConnectedPlayerId(int connectedPlayerId);
-
-        [OperationContract(IsOneWay = true)]
-        void OnJoinGameRequired(int gameId);
     }
 }

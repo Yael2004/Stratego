@@ -14,18 +14,15 @@ namespace StrategoServices.Services.Interfaces
     public interface IGameService
     {
         [OperationContract]
-        Task<int> CreateGameAsync(int player1Id, int player2Id);
+        Task<OperationResult> StartGameAsync(int player1Id, int player2Id);
 
         [OperationContract]
-        Task JoinGameAsync(int gameId, int playerId);
+        Task<OperationResult> SendPositionAsync(int gameId, int playerId, PositionDTO position);
 
         [OperationContract]
-        Task SendPositionAsync(int gameId, int playerId, PositionDTO position);
+        Task<OperationResult> EndGameAsync(int gameId, int playerId);
 
         [OperationContract]
-        Task EndGameAsync(int gameId, int playerId);
-
-        [OperationContract]
-        Task AbandonGameAsync(int gameId, int playerId);
+        Task<OperationResult> AbandonGameAsync(int gameId, int playerId);
     }
 }

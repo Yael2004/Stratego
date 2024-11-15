@@ -1,5 +1,4 @@
-﻿using StrategoServices.Data;
-using StrategoServices.Services.Interfaces.Callbacks;
+﻿using StrategoServices.Services.Interfaces.Callbacks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,8 +25,5 @@ namespace StrategoServices.Services.Interfaces
 
         [OperationContract]
         Task NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId);
-
-        [OperationContract]
-        Task<OperationResult> NotifyJoinGameAsync(string roomCode, int gameId);
     }
 }
