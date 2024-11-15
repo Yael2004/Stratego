@@ -39,14 +39,6 @@ namespace StrategoApp.ViewModel
 
         public GameViewModel(MainWindowViewModel mainWindowViewModel, ObservableCollection<Piece> availablePieces)
         {
-            for (int i = 0; i < 12; i++)
-            {
-                invalidPositions.Add((0, i));
-                invalidPositions.Add((11, i));
-                invalidPositions.Add((i, 0));
-                invalidPositions.Add((i, 11));
-            }
-
             invalidPositions.Add((5, 3));
             invalidPositions.Add((5, 4));
             invalidPositions.Add((6, 3));
@@ -160,9 +152,9 @@ namespace StrategoApp.ViewModel
 
         private void InitializeBoard()
         {
-            for (int row = 0; row < 12; row++)
+            for (int row = 0; row < 10; row++)
             {
-                for (int col = 0; col < 12; col++)
+                for (int col = 0; col < 10; col++)
                 {
                     Board.Add(new Cell { Row = row, Column = col });
                 }
@@ -171,7 +163,7 @@ namespace StrategoApp.ViewModel
 
         private void InitializePlayerPieces()
         {
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 10; i++)
             {
 
                 PlayerPieces.Add(new Piece
@@ -197,10 +189,10 @@ namespace StrategoApp.ViewModel
         {
             foreach (var position in initialPositions)
             {
-                int adjustedRow = position.InitialX + 7;
-                int adjustedColumn = position.InitialY + 1;
+                int adjustedRow = position.InitialX + 6;
+                int adjustedColumn = position.InitialY;
 
-                if (adjustedRow >= 0 && adjustedRow < 12 && adjustedColumn >= 0 && adjustedColumn < 12)
+                if (adjustedRow >= 0 && adjustedRow < 10 && adjustedColumn >= 0 && adjustedColumn < 10)
                 {
                     var cell = Board.FirstOrDefault(c => c.Row == adjustedRow && c.Column == adjustedColumn);
 

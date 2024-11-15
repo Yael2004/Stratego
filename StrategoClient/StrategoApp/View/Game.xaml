@@ -36,12 +36,13 @@
             </TextBlock>
         </Border>
 
-        <Grid Grid.Column="2">
-            <Image Source="/StrategoApp;component/Assets/Images/Board4.png" Stretch="Fill" />
-            <ItemsControl ItemsSource="{Binding Board}">
+        <Grid Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Image Source="/StrategoApp;component/Assets/Images/Board.png" Stretch="Fill" />
+
+            <ItemsControl ItemsSource="{Binding Board}" Margin="0" MaxWidth="700" MaxHeight="700" RenderTransformOrigin="0.5,0.5">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="12" Columns="12"/>
+                        <UniformGrid Rows="10" Columns="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -49,11 +50,9 @@
                         <Button Background="Transparent" BorderThickness="1" BorderBrush="Black" 
                                 Click="OnCellClicked">
                             <Image Source="{Binding OccupiedPieceImage, Converter={StaticResource NullToDefaultImageConverter}}" 
-                                    Visibility="{Binding IsOccupied, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                   Visibility="{Binding IsOccupied, Converter={StaticResource BoolToVisibilityConverter}}" />
                         </Button>
-
                     </DataTemplate>
-
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
