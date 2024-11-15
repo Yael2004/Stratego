@@ -34,7 +34,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetGameStatisticsByAccountId_ShouldReturnStatistics_WhenAccountIdExists()
+        public void Test_GetGameStatisticsByAccountId_ShouldReturnStatistics_WhenAccountIdExists()
         {
             var accountId = 1;
 
@@ -48,7 +48,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetGameStatisticsByAccountId_ShouldReturnFailure_WhenAccountIdDoesNotExist()
+        public void Test_GetGameStatisticsByAccountId_ShouldReturnFailure_WhenAccountIdDoesNotExist()
         {
             var accountId = 2;
 
@@ -58,7 +58,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetGameStatisticsByAccountId_ShouldHandleSqlException()
+        public void Test_GetGameStatisticsByAccountId_ShouldHandleSqlException()
         {
             var accountId = 1;
             _mockContext.Setup(c => c.Games).Throws(new InvalidOperationException("Simulated database error"));
@@ -69,7 +69,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetGameStatisticsByAccountId_ShouldHandleUnexpectedException()
+        public void Test_GetGameStatisticsByAccountId_ShouldHandleUnexpectedException()
         {
             var accountId = 1;
             _mockContext.Setup(c => c.Games).Throws(new Exception("Unexpected error"));

@@ -35,7 +35,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void CreateAccount_ShouldReturnSuccess_WhenAccountIsCreated()
+        public void Test_CreateAccount_ShouldReturnSuccess_WhenAccountIsCreated()
         {
             var email = "test@example.com";
             var hashedPassword = "hashedPassword";
@@ -49,7 +49,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void CreateAccount_ShouldReturnFailure_WhenAccountAlreadyExists()
+        public void Test_CreateAccount_ShouldReturnFailure_WhenAccountAlreadyExists()
         {
             var email = "valid@example.com";
 
@@ -59,7 +59,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void CreateAccount_ShouldHandleDbEntityValidationException()
+        public void Test_CreateAccount_ShouldHandleDbEntityValidationException()
         {
             var email = "test@example.com";
             _mockContext.Setup(m => m.SaveChanges()).Throws(new DbEntityValidationException("Validation error"));
@@ -70,7 +70,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ValidateCredentials_ShouldReturnSuccess_WhenCredentialsAreValid()
+        public void Test_ValidateCredentials_ShouldReturnSuccess_WhenCredentialsAreValid()
         {
             var email = "valid@example.com";
             var hashedPassword = "hashedPassword";
@@ -81,7 +81,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ValidateCredentials_ShouldReturnFailure_WhenCredentialsAreInvalid()
+        public void Test_ValidateCredentials_ShouldReturnFailure_WhenCredentialsAreInvalid()
         {
             var email = "invalid@example.com";
             var hashedPassword = "wrongPassword";
@@ -92,7 +92,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ValidateCredentials_ShouldHandleDbEntityValidationException()
+        public void Test_ValidateCredentials_ShouldHandleDbEntityValidationException()
         {
             var email = "valid@example.com";
             var hashedPassword = "hashedPassword";
@@ -105,7 +105,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ValidateCredentials_ShouldHandleUnexpectedException()
+        public void Test_ValidateCredentials_ShouldHandleUnexpectedException()
         {
             var email = "valid@example.com";
             var hashedPassword = "hashedPassword";
@@ -118,7 +118,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void AlreadyExistentAccount_ShouldReturnTrue_WhenAccountExists()
+        public void Test_AlreadyExistentAccount_ShouldReturnTrue_WhenAccountExists()
         {
             var email = "valid@example.com";
 
@@ -128,7 +128,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void AlreadyExistentAccount_ShouldReturnFalse_WhenAccountDoesNotExist()
+        public void Test_AlreadyExistentAccount_ShouldReturnFalse_WhenAccountDoesNotExist()
         {
             var email = "new@example.com";
 
@@ -138,7 +138,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void AlreadyExistentAccount_ShouldHandleSqlException()
+        public void Test_AlreadyExistentAccount_ShouldHandleSqlException()
         {
             var email = "valid@example.com";
             _mockContext.Setup(c => c.Account).Throws(new InvalidOperationException("Simulated database error"));
@@ -149,7 +149,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ChangePassword_ShouldReturnSuccess_WhenPasswordIsChanged()
+        public void Test_ChangePassword_ShouldReturnSuccess_WhenPasswordIsChanged()
         {
             var email = "valid@example.com";
             var newHashedPassword = "newHashedPassword";
@@ -167,7 +167,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ChangePassword_ShouldReturnFailure_WhenAccountDoesNotExist()
+        public void Test_ChangePassword_ShouldReturnFailure_WhenAccountDoesNotExist()
         {
             var email = "nonexistent@example.com";
 
@@ -177,7 +177,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ChangePassword_ShouldHandleDbEntityValidationException()
+        public void Test_ChangePassword_ShouldHandleDbEntityValidationException()
         {
             var email = "valid@example.com";
             var newHashedPassword = "newHashedPassword";
@@ -190,7 +190,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ChangePassword_ShouldHandleUnexpectedException()
+        public void Test_ChangePassword_ShouldHandleUnexpectedException()
         {
             var email = "valid@example.com";
             var newHashedPassword = "newHashedPassword";

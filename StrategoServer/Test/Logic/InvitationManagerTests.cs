@@ -21,7 +21,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetPlayerMail_ShouldReturnSuccess_WhenPlayerExists()
+        public void Test_GetPlayerMail_ShouldReturnSuccess_WhenPlayerExists()
         {
             _mockPlayerRepository.Setup(repo => repo.GetMailByPlayerId(1))
                 .Returns(Result<string>.Success("player@example.com"));
@@ -32,7 +32,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetPlayerMail_ShouldReturnFailure_WhenPlayerDoesNotExist()
+        public void Test_GetPlayerMail_ShouldReturnFailure_WhenPlayerDoesNotExist()
         {
             _mockPlayerRepository.Setup(repo => repo.GetMailByPlayerId(1))
                 .Returns(Result<string>.Failure("Player not found"));

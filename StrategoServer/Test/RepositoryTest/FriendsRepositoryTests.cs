@@ -40,7 +40,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void SendFriendRequest_ShouldReturnSuccess_WhenRequestIsSent()
+        public void Test_SendFriendRequest_ShouldReturnSuccess_WhenRequestIsSent()
         {
             var result = _friendsRepository.SendFriendRequest(2, 1);
 
@@ -48,7 +48,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void SendFriendRequest_ShouldReturnFailure_WhenRequestAlreadyExists()
+        public void Test_SendFriendRequest_ShouldReturnFailure_WhenRequestAlreadyExists()
         {
             _fakeFriendSet.Add(new Friend { PlayerId = 1, FriendId = 2, Status = "accepted" });
 
@@ -58,7 +58,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void SendFriendRequest_ShouldHandleSqlException()
+        public void Test_SendFriendRequest_ShouldHandleSqlException()
         {
             _mockContext.Setup(c => c.Friend).Throws(new InvalidOperationException("Database error"));
 
@@ -68,7 +68,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void AcceptFriendRequest_ShouldReturnSuccess_WhenRequestIsAccepted()
+        public void Test_AcceptFriendRequest_ShouldReturnSuccess_WhenRequestIsAccepted()
         {
             _fakeFriendSet.FirstOrDefault(f => f.PlayerId == 1 && f.FriendId == 2).Status = "sent";
 
@@ -78,7 +78,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void AcceptFriendRequest_ShouldReturnFailure_WhenRequestNotFound()
+        public void Test_AcceptFriendRequest_ShouldReturnFailure_WhenRequestNotFound()
         {
             var result = _friendsRepository.AcceptFriendRequest(1, 3);
 
@@ -86,7 +86,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void AcceptFriendRequest_ShouldHandleSqlException()
+        public void Test_AcceptFriendRequest_ShouldHandleSqlException()
         {
             _mockContext.Setup(c => c.Friend).Throws(new InvalidOperationException("Database error"));
 
@@ -96,7 +96,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void DeclineFriendRequest_ShouldReturnSuccess_WhenRequestIsDeclined()
+        public void Test_DeclineFriendRequest_ShouldReturnSuccess_WhenRequestIsDeclined()
         {
             _fakeFriendSet.FirstOrDefault(f => f.PlayerId == 1 && f.FriendId == 2).Status = "sent";
 
@@ -106,7 +106,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void DeclineFriendRequest_ShouldReturnFailure_WhenRequestNotFound()
+        public void Test_DeclineFriendRequest_ShouldReturnFailure_WhenRequestNotFound()
         {
             var result = _friendsRepository.DeclineFriendRequest(1, 3);
 
@@ -114,7 +114,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void DeclineFriendRequest_ShouldHandleSqlException()
+        public void Test_DeclineFriendRequest_ShouldHandleSqlException()
         {
             _mockContext.Setup(c => c.Friend).Throws(new InvalidOperationException("Database error"));
 
@@ -124,7 +124,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void RemoveFriend_ShouldReturnSuccess_WhenFriendIsRemoved()
+        public void Test_RemoveFriend_ShouldReturnSuccess_WhenFriendIsRemoved()
         {
             _fakeFriendSet.Add(new Friend { PlayerId = 1, FriendId = 2, Status = "accepted" });
 
@@ -134,7 +134,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void RemoveFriend_ShouldReturnFailure_WhenFriendshipNotFound()
+        public void Test_RemoveFriend_ShouldReturnFailure_WhenFriendshipNotFound()
         {
             var result = _friendsRepository.RemoveFriend(2, 3);
 
@@ -142,7 +142,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void RemoveFriend_ShouldHandleSqlException()
+        public void Test_RemoveFriend_ShouldHandleSqlException()
         {
             _mockContext.Setup(c => c.Friend).Throws(new InvalidOperationException("Database error"));
 
@@ -152,7 +152,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void GetPendingFriendRequests_ShouldReturnRequests_WhenPendingRequestsExist()
+        public void Test_GetPendingFriendRequests_ShouldReturnRequests_WhenPendingRequestsExist()
         {
             _fakeFriendSet.Add(new Friend { PlayerId = 1, FriendId = 2, Status = "sent" });
 
@@ -162,7 +162,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void GetPendingFriendRequests_ShouldReturnFailure_WhenNoPendingRequestsExist()
+        public void Test_GetPendingFriendRequests_ShouldReturnFailure_WhenNoPendingRequestsExist()
         {
             var result = _friendsRepository.GetPendingFriendRequests(3);
 
@@ -170,7 +170,7 @@ namespace Test.RepositoryTest
         }
 
         [TestMethod]
-        public void GetPendingFriendRequests_ShouldHandleSqlException()
+        public void Test_GetPendingFriendRequests_ShouldHandleSqlException()
         {
             _mockContext.Setup(c => c.Friend).Throws(new InvalidOperationException("Database error"));
 

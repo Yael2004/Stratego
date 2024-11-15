@@ -70,7 +70,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetPictureById_ShouldReturnPicture_WhenPictureExists()
+        public void Test_GetPictureById_ShouldReturnPicture_WhenPictureExists()
         {
             var pictureId = 1;
 
@@ -80,7 +80,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetPictureById_ShouldReturnFailure_WhenPictureDoesNotExist()
+        public void Test_GetPictureById_ShouldReturnFailure_WhenPictureDoesNotExist()
         {
             var pictureId = 2;
 
@@ -90,7 +90,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetPictureById_ShouldHandleSqlException()
+        public void Test_GetPictureById_ShouldHandleSqlException()
         {
             var pictureId = 1;
             _mockContext.Setup(c => c.Pictures).Throws(new InvalidOperationException("Simulated database error"));
@@ -101,7 +101,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetPictureById_ShouldHandleUnexpectedException()
+        public void Test_GetPictureById_ShouldHandleUnexpectedException()
         {
             var pictureId = 1;
             _mockContext.Setup(c => c.Pictures).Throws(new Exception("Unexpected error"));

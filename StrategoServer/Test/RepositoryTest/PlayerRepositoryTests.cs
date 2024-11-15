@@ -42,7 +42,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetOtherPlayerById_ShouldReturnPlayer_WhenPlayerExists()
+        public void Test_GetOtherPlayerById_ShouldReturnPlayer_WhenPlayerExists()
         {
             var playerId = 1;
 
@@ -52,7 +52,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetOtherPlayerById_ShouldReturnFailure_WhenPlayerDoesNotExist()
+        public void Test_GetOtherPlayerById_ShouldReturnFailure_WhenPlayerDoesNotExist()
         {
             var playerId = 3;
 
@@ -62,7 +62,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetOtherPlayerById_ShouldHandleUnexpectedException()
+        public void Test_GetOtherPlayerById_ShouldHandleUnexpectedException()
         {
             var playerId = 1;
             _mockContext.Setup(c => c.Player).Throws(new Exception("Unexpected error"));
@@ -73,7 +73,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IsFriend_ShouldReturnTrue_WhenPlayersAreFriends()
+        public void Test_IsFriend_ShouldReturnTrue_WhenPlayersAreFriends()
         {
             var playerId = 1;
             var otherPlayerId = 2;
@@ -84,7 +84,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IsFriend_ShouldReturnFalse_WhenPlayersAreNotFriends()
+        public void Test_IsFriend_ShouldReturnFalse_WhenPlayersAreNotFriends()
         {
             var playerId = 1;
             var otherPlayerId = 3;
@@ -95,7 +95,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void IsFriend_ShouldHandleSqlException()
+        public void Test_IsFriend_ShouldHandleSqlException()
         {
             var playerId = 1;
             var otherPlayerId = 2;
@@ -107,7 +107,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetPlayerFriendsList_ShouldReturnFriendsList_WhenFriendsExist()
+        public void Test_GetPlayerFriendsList_ShouldReturnFriendsList_WhenFriendsExist()
         {
             var playerId = 1;
 
@@ -125,7 +125,7 @@ namespace Tests
 
 
         [TestMethod]
-        public void GetPlayerFriendsList_ShouldReturnFailure_WhenNoFriendsExist()
+        public void Test_GetPlayerFriendsList_ShouldReturnFailure_WhenNoFriendsExist()
         {
             var playerId = 3;
 
@@ -135,7 +135,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetPlayerFriendsList_ShouldHandleUnexpectedException()
+        public void Test_GetPlayerFriendsList_ShouldHandleUnexpectedException()
         {
             var playerId = 1;
             _mockContext.Setup(c => c.Friend).Throws(new Exception("Unexpected error"));
@@ -146,7 +146,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void UpdatePlayer_ShouldReturnUpdatedPlayer_WhenUpdateIsSuccessful()
+        public void Test_UpdatePlayer_ShouldReturnUpdatedPlayer_WhenUpdateIsSuccessful()
         {
             var updatedPlayer = new Player { Id = 1, Name = "UpdatedPlayer", AccountId = 1 };
 
@@ -170,7 +170,7 @@ namespace Tests
 
 
         [TestMethod]
-        public void UpdatePlayer_ShouldReturnFailure_WhenPlayerNotFound()
+        public void Test_UpdatePlayer_ShouldReturnFailure_WhenPlayerNotFound()
         {
             var updatedPlayer = new Player { Id = 3, Name = "NonExistentPlayer", AccountId = 3 }; 
 
@@ -186,7 +186,7 @@ namespace Tests
 
 
         [TestMethod]
-        public void UpdatePlayer_ShouldHandleDbEntityValidationException()
+        public void Test_UpdatePlayer_ShouldHandleDbEntityValidationException()
         {
             var updatedPlayer = new Player { Id = 1, Name = "UpdatedPlayer", AccountId = 1 };
             _mockContext.Setup(c => c.SaveChanges()).Throws(new DbEntityValidationException("Validation error"));

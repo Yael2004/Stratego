@@ -33,7 +33,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void CreateAccount_ShouldReturnSuccess_WhenAccountIsCreated()
+        public void Test_CreateAccount_ShouldReturnSuccess_WhenAccountIsCreated()
         {
             _mockAccountRepository.Setup(repo => repo.CreateAccount("test@example.com", "password", "TestPlayer"))
                 .Returns(Result<string>.Success("Account created"));
@@ -44,7 +44,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void CreateAccount_ShouldReturnFailure_WhenAccountCreationFails()
+        public void Test_CreateAccount_ShouldReturnFailure_WhenAccountCreationFails()
         {
             _mockAccountRepository.Setup(repo => repo.CreateAccount("test@example.com", "password", "TestPlayer"))
                 .Returns(Result<string>.Failure("Account creation failed"));
@@ -55,7 +55,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void LogInAccount_ShouldReturnSuccess_WhenCredentialsAreValid()
+        public void Test_LogInAccount_ShouldReturnSuccess_WhenCredentialsAreValid()
         {
             _mockAccountRepository.Setup(repo => repo.ValidateCredentials("test@example.com", "password"))
                 .Returns(Result<int>.Success(1));
@@ -66,7 +66,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void LogInAccount_ShouldReturnFailure_WhenCredentialsAreInvalid()
+        public void Test_LogInAccount_ShouldReturnFailure_WhenCredentialsAreInvalid()
         {
             _mockAccountRepository.Setup(repo => repo.ValidateCredentials("test@example.com", "password"))
                 .Returns(Result<int>.Failure("Invalid credentials"));
@@ -77,7 +77,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetLogInAccount_ShouldReturnSuccess_WhenDataIsComplete()
+        public void Test_GetLogInAccount_ShouldReturnSuccess_WhenDataIsComplete()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 1, IdLabel = 1, AccountId = 1 };
             var picture = new Pictures { IdPicture = 1, path = "picturePath" };
@@ -93,7 +93,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetLogInAccount_ShouldReturnCorrectPlayerName_WhenDataIsComplete()
+        public void Test_GetLogInAccount_ShouldReturnCorrectPlayerName_WhenDataIsComplete()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 1, IdLabel = 1, AccountId = 1 };
             var picture = new Pictures { IdPicture = 1, path = "picturePath" };
@@ -109,7 +109,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetLogInAccount_ShouldReturnCorrectPicturePath_WhenDataIsComplete()
+        public void Test_GetLogInAccount_ShouldReturnCorrectPicturePath_WhenDataIsComplete()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 1, IdLabel = 1, AccountId = 1 };
             var picture = new Pictures { IdPicture = 1, path = "picturePath" };
@@ -125,7 +125,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetLogInAccount_ShouldReturnCorrectLabelPath_WhenDataIsComplete()
+        public void Test_GetLogInAccount_ShouldReturnCorrectLabelPath_WhenDataIsComplete()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 1, IdLabel = 1, AccountId = 1 };
             var picture = new Pictures { IdPicture = 1, path = "picturePath" };
@@ -141,7 +141,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetLogInAccount_ShouldReturnFailure_WhenPlayerNotFound()
+        public void Test_GetLogInAccount_ShouldReturnFailure_WhenPlayerNotFound()
         {
             _mockPlayerRepository.Setup(repo => repo.GetPlayerByAccountId(1))
                 .Returns(Result<Player>.Failure("Player not found"));
@@ -152,7 +152,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetLogInAccount_ShouldReturnFailure_WhenPictureNotFound()
+        public void Test_GetLogInAccount_ShouldReturnFailure_WhenPictureNotFound()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 1, IdLabel = 1, AccountId = 1 };
 
@@ -165,7 +165,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetLogInAccount_ShouldReturnFailure_WhenLabelNotFound()
+        public void Test_GetLogInAccount_ShouldReturnFailure_WhenLabelNotFound()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 1, IdLabel = 1, AccountId = 1 };
             var picture = new Pictures { IdPicture = 1, path = "picturePath" };

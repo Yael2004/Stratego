@@ -21,7 +21,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void AlreadyExistentAccount_ShouldReturnSuccess_WhenAccountExists()
+        public void Test_AlreadyExistentAccount_ShouldReturnSuccess_WhenAccountExists()
         {
             _mockAccountRepository.Setup(repo => repo.AlreadyExistentAccount("test@example.com"))
                 .Returns(Result<bool>.Success(true));
@@ -32,7 +32,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void AlreadyExistentAccount_ShouldReturnFailure_WhenAccountDoesNotExist()
+        public void Test_AlreadyExistentAccount_ShouldReturnFailure_WhenAccountDoesNotExist()
         {
             _mockAccountRepository.Setup(repo => repo.AlreadyExistentAccount("test@example.com"))
                 .Returns(Result<bool>.Success(false));
@@ -43,7 +43,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void ChangePassword_ShouldReturnSuccess_WhenPasswordIsChanged()
+        public void Test_ChangePassword_ShouldReturnSuccess_WhenPasswordIsChanged()
         {
             _mockAccountRepository.Setup(repo => repo.ChangePassword("test@example.com", "newHashedPassword"))
                 .Returns(Result<string>.Success("Password changed successfully"));
@@ -54,7 +54,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void ChangePassword_ShouldReturnFailure_WhenChangeFails()
+        public void Test_ChangePassword_ShouldReturnFailure_WhenChangeFails()
         {
             _mockAccountRepository.Setup(repo => repo.ChangePassword("test@example.com", "newHashedPassword"))
                 .Returns(Result<string>.Failure("Change failed"));
@@ -65,7 +65,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GenerateVerificationCode_ShouldStoreCodeForEmail()
+        public void Test_GenerateVerificationCode_ShouldStoreCodeForEmail()
         {
             var email = "test@example.com";
             var code = _passwordManager.GenerateVerificationCode(email);
@@ -74,7 +74,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void ValidateVerificationCode_ShouldReturnSuccess_WhenCodeIsCorrect()
+        public void Test_ValidateVerificationCode_ShouldReturnSuccess_WhenCodeIsCorrect()
         {
             var email = "test@example.com";
             var code = _passwordManager.GenerateVerificationCode(email);
@@ -85,7 +85,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void ValidateVerificationCode_ShouldReturnFailure_WhenCodeIsIncorrect()
+        public void Test_ValidateVerificationCode_ShouldReturnFailure_WhenCodeIsIncorrect()
         {
             var email = "test@example.com";
             _passwordManager.GenerateVerificationCode(email);
@@ -96,7 +96,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void ValidateVerificationCode_ShouldReturnFailure_WhenCodeDoesNotExist()
+        public void Test_ValidateVerificationCode_ShouldReturnFailure_WhenCodeDoesNotExist()
         {
             var result = _passwordManager.ValidateVerificationCode("test@example.com", "123456");
 

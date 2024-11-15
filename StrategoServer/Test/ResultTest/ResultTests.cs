@@ -12,7 +12,7 @@ namespace Test.ResultTest
     public class ResultTests
     {
         [TestMethod]
-        public void Success_ShouldSetIsSuccessToTrueAndSetValue()
+        public void Test_Success_ShouldSetIsSuccessToTrueAndSetValue()
         {
             var expectedValue = 42;
 
@@ -22,7 +22,7 @@ namespace Test.ResultTest
         }
 
         [TestMethod]
-        public void Failure_ShouldSetIsSuccessToFalseAndSetError()
+        public void Test_Failure_ShouldSetIsSuccessToFalseAndSetError()
         {
             var expectedError = "An error occurred";
 
@@ -32,7 +32,7 @@ namespace Test.ResultTest
         }
 
         [TestMethod]
-        public void Constructor_ShouldSetPropertiesCorrectly()
+        public void Test_Constructor_ShouldSetPropertiesCorrectly()
         {
             var expectedValue = "Test";
             var expectedError = "Error";
@@ -47,7 +47,7 @@ namespace Test.ResultTest
         }
 
         [TestMethod]
-        public void Failure_ShouldReturnDefaultForReferenceType()
+        public void Test_Failure_ShouldReturnDefaultForReferenceType()
         {
             var expectedError = "An error occurred";
 
@@ -57,7 +57,7 @@ namespace Test.ResultTest
         }
 
         [TestMethod]
-        public void Failure_ShouldReturnDefaultForValueType()
+        public void Test_Failure_ShouldReturnDefaultForValueType()
         {
             var expectedError = "An error occurred";
 
@@ -67,7 +67,7 @@ namespace Test.ResultTest
         }
 
         [TestMethod]
-        public void Success_ShouldAllowNullOrEmptyValue()
+        public void Test_Success_ShouldAllowNullOrEmptyValue()
         {
             string nullValue = null;
             string emptyValue = string.Empty;
@@ -82,7 +82,7 @@ namespace Test.ResultTest
         }
 
         [TestMethod]
-        public void Constructor_ShouldCorrectlyInitializeValueAndError()
+        public void Test_Constructor_ShouldCorrectlyInitializeValueAndError()
         {
             var expectedValue = 99;
             var expectedError = "Custom error";
@@ -97,7 +97,7 @@ namespace Test.ResultTest
         }
 
         [TestMethod]
-        public void Constructor_WithValueAndSuccess_ShouldIgnoreErrorIfSuccessIsTrue()
+        public void Test_Constructor_WithValueAndSuccess_ShouldIgnoreErrorIfSuccessIsTrue()
         {
             var expectedValue = 50;
             var unexpectedError = "This error should be ignored";
@@ -108,7 +108,7 @@ namespace Test.ResultTest
         }
 
         [TestMethod]
-        public void Constructor_WithOnlyIsSuccessAndError_ShouldSetDefaultValueForT()
+        public void Test_Constructor_WithOnlyIsSuccessAndError_ShouldSetDefaultValueForT()
         {
             var expectedError = "Some failure occurred";
 
@@ -118,7 +118,7 @@ namespace Test.ResultTest
         }
 
         [TestMethod]
-        public void Success_WithNullValue_ShouldAllowNullValueForReferenceTypes()
+        public void Test_Success_WithNullValue_ShouldAllowNullValueForReferenceTypes()
         {
             string nullValue = null;
 

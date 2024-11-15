@@ -25,14 +25,14 @@ namespace Test.Logic
         }
 
         [TestMethod]
-        public void SendFriendRequest_ShouldReturnFailure_WhenRequestingSelf()
+        public void Test_SendFriendRequest_ShouldReturnFailure_WhenRequestingSelf()
         {
             var result = _friendsManager.SendFriendRequest(1, 1);
             Assert.AreEqual("Cannot send a friend request to yourself.", result.Error);
         }
 
         [TestMethod]
-        public void SendFriendRequest_ShouldReturnSuccess_WhenRequestIsSent()
+        public void Test_SendFriendRequest_ShouldReturnSuccess_WhenRequestIsSent()
         {
             _mockFriendsRepository.Setup(repo => repo.SendFriendRequest(2, 1))
                 .Returns(Result<string>.Success("Friend request sent successfully."));
@@ -42,7 +42,7 @@ namespace Test.Logic
         }
 
         [TestMethod]
-        public void SendFriendRequest_ShouldReturnFailure_WhenRequestAlreadyExists()
+        public void Test_SendFriendRequest_ShouldReturnFailure_WhenRequestAlreadyExists()
         {
             _mockFriendsRepository.Setup(repo => repo.SendFriendRequest(2, 1))
                 .Returns(Result<string>.Failure("Friend request already exists or players are already friends."));
@@ -52,7 +52,7 @@ namespace Test.Logic
         }
 
         [TestMethod]
-        public void AcceptFriendRequest_ShouldReturnSuccess_WhenRequestIsAccepted()
+        public void Test_AcceptFriendRequest_ShouldReturnSuccess_WhenRequestIsAccepted()
         {
             _mockFriendsRepository.Setup(repo => repo.AcceptFriendRequest(2, 1))
                 .Returns(Result<string>.Success("Friend request accepted successfully."));
@@ -62,7 +62,7 @@ namespace Test.Logic
         }
 
         [TestMethod]
-        public void AcceptFriendRequest_ShouldReturnFailure_WhenRequestNotFound()
+        public void Test_AcceptFriendRequest_ShouldReturnFailure_WhenRequestNotFound()
         {
             _mockFriendsRepository.Setup(repo => repo.AcceptFriendRequest(2, 1))
                 .Returns(Result<string>.Failure("Friend request not found."));
@@ -72,7 +72,7 @@ namespace Test.Logic
         }
 
         [TestMethod]
-        public void DeclineFriendRequest_ShouldReturnSuccess_WhenRequestIsDeclined()
+        public void Test_DeclineFriendRequest_ShouldReturnSuccess_WhenRequestIsDeclined()
         {
             _mockFriendsRepository.Setup(repo => repo.DeclineFriendRequest(2, 1))
                 .Returns(Result<string>.Success("Friend request declined successfully."));
@@ -82,7 +82,7 @@ namespace Test.Logic
         }
 
         [TestMethod]
-        public void DeclineFriendRequest_ShouldReturnFailure_WhenRequestNotFound()
+        public void Test_DeclineFriendRequest_ShouldReturnFailure_WhenRequestNotFound()
         {
             _mockFriendsRepository.Setup(repo => repo.DeclineFriendRequest(2, 1))
                 .Returns(Result<string>.Failure("Friend request not found."));
@@ -92,7 +92,7 @@ namespace Test.Logic
         }
 
         [TestMethod]
-        public void RemoveFriend_ShouldReturnSuccess_WhenFriendIsRemoved()
+        public void Test_RemoveFriend_ShouldReturnSuccess_WhenFriendIsRemoved()
         {
             _mockFriendsRepository.Setup(repo => repo.RemoveFriend(2, 1))
                 .Returns(Result<string>.Success("Friend removed successfully."));
@@ -102,7 +102,7 @@ namespace Test.Logic
         }
 
         [TestMethod]
-        public void RemoveFriend_ShouldReturnFailure_WhenFriendshipNotFound()
+        public void Test_RemoveFriend_ShouldReturnFailure_WhenFriendshipNotFound()
         {
             _mockFriendsRepository.Setup(repo => repo.RemoveFriend(2, 1))
                 .Returns(Result<string>.Failure("Friendship not found."));
@@ -112,7 +112,7 @@ namespace Test.Logic
         }
 
         [TestMethod]
-        public void GetFriendRequestsFromRepository_ShouldReturnSuccess_WhenRequestsExist()
+        public void Test_GetFriendRequestsFromRepository_ShouldReturnSuccess_WhenRequestsExist()
         {
             var pendingRequests = new List<Player> { new Player { Id = 2, Name = "FriendPlayer" } };
             _mockFriendsRepository.Setup(repo => repo.GetPendingFriendRequests(1))
@@ -123,7 +123,7 @@ namespace Test.Logic
         }
 
         [TestMethod]
-        public void GetFriendRequestsFromRepository_ShouldReturnFailure_WhenNoRequestsExist()
+        public void Test_GetFriendRequestsFromRepository_ShouldReturnFailure_WhenNoRequestsExist()
         {
             _mockFriendsRepository.Setup(repo => repo.GetPendingFriendRequests(1))
                 .Returns(Result<IEnumerable<Player>>.Failure("No pending friend requests found."));
@@ -133,7 +133,7 @@ namespace Test.Logic
         }
 
         [TestMethod]
-        public void GetFriendRequestIdsList_ShouldReturnIdsList_WhenRequestsExist()
+        public void Test_GetFriendRequestIdsList_ShouldReturnIdsList_WhenRequestsExist()
         {
             var pendingRequests = new List<Player> { new Player { Id = 2 }, new Player { Id = 3 } };
             _mockFriendsRepository.Setup(repo => repo.GetPendingFriendRequests(1))
@@ -144,7 +144,7 @@ namespace Test.Logic
         }
 
         [TestMethod]
-        public void GetFriendRequestIdsList_ShouldReturnFailure_WhenNoRequestsExist()
+        public void Test_GetFriendRequestIdsList_ShouldReturnFailure_WhenNoRequestsExist()
         {
             _mockFriendsRepository.Setup(repo => repo.GetPendingFriendRequests(1))
                 .Returns(Result<IEnumerable<Player>>.Failure("No pending friend requests found."));

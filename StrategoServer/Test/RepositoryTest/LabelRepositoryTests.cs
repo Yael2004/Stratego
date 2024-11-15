@@ -34,7 +34,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetLabelById_ShouldReturnLabel_WhenLabelExists()
+        public void Test_GetLabelById_ShouldReturnLabel_WhenLabelExists()
         {
             var labelId = 1;
 
@@ -44,7 +44,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetLabelById_ShouldReturnFailure_WhenLabelDoesNotExist()
+        public void Test_GetLabelById_ShouldReturnFailure_WhenLabelDoesNotExist()
         {
             var labelId = 2;
 
@@ -54,7 +54,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetLabelById_ShouldHandleSqlException()
+        public void Test_GetLabelById_ShouldHandleSqlException()
         {
             var labelId = 1;
             _mockContext.Setup(c => c.Label).Throws(new InvalidOperationException("Simulated database error"));
@@ -65,7 +65,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetLabelById_ShouldHandleUnexpectedException()
+        public void Test_GetLabelById_ShouldHandleUnexpectedException()
         {
             var labelId = 1;
             _mockContext.Setup(c => c.Label).Throws(new Exception("Unexpected error"));

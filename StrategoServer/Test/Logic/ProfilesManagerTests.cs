@@ -40,7 +40,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetPlayerGameStatistics_ShouldReturnSuccess_WhenStatisticsExist()
+        public void Test_GetPlayerGameStatistics_ShouldReturnSuccess_WhenStatisticsExist()
         {
             _mockGamesRepository.Setup(repo => repo.GetGameStatisticsByAccountId(1))
                 .Returns(Result<Games>.Success(new Games { WonGames = 5, DeafeatGames = 3 }));
@@ -52,7 +52,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetPlayerGameStatistics_ShouldReturnFailure_WhenStatisticsNotFound()
+        public void Test_GetPlayerGameStatistics_ShouldReturnFailure_WhenStatisticsNotFound()
         {
             _mockGamesRepository.Setup(repo => repo.GetGameStatisticsByAccountId(1))
                 .Returns(Result<Games>.Failure("Statistics not found"));
@@ -64,7 +64,7 @@ namespace Tests.Logic
 
 
         [TestMethod]
-        public void GetPlayerInfo_ShouldReturnSuccessResult_WhenPlayerInfoIsComplete()
+        public void Test_GetPlayerInfo_ShouldReturnSuccessResult_WhenPlayerInfoIsComplete()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
             SetupCompletePlayerInfoMocks(player);
@@ -75,7 +75,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetPlayerInfo_ShouldReturnNotNullPlayerInfo_WhenPlayerInfoIsComplete()
+        public void Test_GetPlayerInfo_ShouldReturnNotNullPlayerInfo_WhenPlayerInfoIsComplete()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
             SetupCompletePlayerInfoMocks(player);
@@ -86,7 +86,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetPlayerInfo_ShouldReturnCorrectPlayerName_WhenPlayerInfoIsComplete()
+        public void Test_GetPlayerInfo_ShouldReturnCorrectPlayerName_WhenPlayerInfoIsComplete()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
             SetupCompletePlayerInfoMocks(player);
@@ -97,7 +97,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetPlayerInfo_ShouldReturnCorrectPicturePath_WhenPlayerInfoIsComplete()
+        public void Test_GetPlayerInfo_ShouldReturnCorrectPicturePath_WhenPlayerInfoIsComplete()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
             SetupCompletePlayerInfoMocks(player);
@@ -108,7 +108,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetPlayerInfo_ShouldReturnCorrectLabelPath_WhenPlayerInfoIsComplete()
+        public void Test_GetPlayerInfo_ShouldReturnCorrectLabelPath_WhenPlayerInfoIsComplete()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
             SetupCompletePlayerInfoMocks(player);
@@ -119,7 +119,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetPlayerInfo_ShouldReturnNotNullPlayerStatistics_WhenPlayerInfoIsComplete()
+        public void Test_GetPlayerInfo_ShouldReturnNotNullPlayerStatistics_WhenPlayerInfoIsComplete()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
             SetupCompletePlayerInfoMocks(player);
@@ -130,7 +130,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetPlayerInfo_ShouldReturnCorrectWonGamesCount_WhenPlayerInfoIsComplete()
+        public void Test_GetPlayerInfo_ShouldReturnCorrectWonGamesCount_WhenPlayerInfoIsComplete()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
             SetupCompletePlayerInfoMocks(player);
@@ -141,7 +141,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetPlayerInfo_ShouldReturnCorrectLostGamesCount_WhenPlayerInfoIsComplete()
+        public void Test_GetPlayerInfo_ShouldReturnCorrectLostGamesCount_WhenPlayerInfoIsComplete()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
             SetupCompletePlayerInfoMocks(player);
@@ -152,7 +152,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetPlayerInfo_ShouldReturnIsFriendTrue_WhenPlayerInfoIsComplete()
+        public void Test_GetPlayerInfo_ShouldReturnIsFriendTrue_WhenPlayerInfoIsComplete()
         {
             var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
             SetupCompletePlayerInfoMocks(player);
@@ -163,7 +163,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetPlayerInfo_ShouldReturnFailure_WhenPlayerNotFound()
+        public void Test_GetPlayerInfo_ShouldReturnFailure_WhenPlayerNotFound()
         {
             _mockPlayerRepository.Setup(repo => repo.GetOtherPlayerById(1))
                 .Returns(Result<Player>.Failure("Player not found"));
@@ -174,7 +174,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void UpdatePlayerProfile_ShouldReturnSuccess_WhenUpdateIsSuccessful()
+        public void Test_UpdatePlayerProfile_ShouldReturnSuccess_WhenUpdateIsSuccessful()
         {
             var playerDto = new PlayerInfoShownDTO { Id = 1, Name = "UpdatedPlayer", LabelPath = "new/label", PicturePath = "new/picture" };
             var updatedPlayer = new Player { Id = 1, Name = "UpdatedPlayer" };
@@ -190,7 +190,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void UpdatePlayerProfile_ShouldReturnFailure_WhenUpdateFails()
+        public void Test_UpdatePlayerProfile_ShouldReturnFailure_WhenUpdateFails()
         {
             var playerDto = new PlayerInfoShownDTO { Id = 1, Name = "UpdatedPlayer", LabelPath = "new/label", PicturePath = "new/picture" };
 
@@ -204,7 +204,7 @@ namespace Tests.Logic
 
 
         [TestMethod]
-        public void GetFriendIdsList_ShouldReturnFriendIds_WhenFriendsExist()
+        public void Test_GetFriendIdsList_ShouldReturnFriendIds_WhenFriendsExist()
         {
             var friends = new List<Player> { new Player { Id = 2 }, new Player { Id = 3 } };
             _mockPlayerRepository.Setup(repo => repo.GetPlayerFriendsList(1)).Returns(Result<IEnumerable<Player>>.Success(friends));
@@ -215,7 +215,7 @@ namespace Tests.Logic
         }
 
         [TestMethod]
-        public void GetFriendIdsList_ShouldReturnFailure_WhenNoFriendsExist()
+        public void Test_GetFriendIdsList_ShouldReturnFailure_WhenNoFriendsExist()
         {
             _mockPlayerRepository.Setup(repo => repo.GetPlayerFriendsList(1))
                 .Returns(Result<IEnumerable<Player>>.Failure("No friends found"));
