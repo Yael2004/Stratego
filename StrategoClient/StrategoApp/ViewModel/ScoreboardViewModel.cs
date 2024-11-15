@@ -7,6 +7,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace StrategoApp.ViewModel
@@ -23,6 +24,7 @@ namespace StrategoApp.ViewModel
         public ObservableCollection<PlayerScore> PlayerScores { get; set; }
 
         public ICommand BackToLobbyCommand { get; }
+        public ICommand ViewProfileCommand { get; }
 
         public ScoreboardViewModel(MainWindowViewModel mainWindowViewModel)
         {
@@ -31,6 +33,7 @@ namespace StrategoApp.ViewModel
             _mainWindowViewModel = mainWindowViewModel;
 
             BackToLobbyCommand = new ViewModelCommand(BackToLobby);
+            ViewProfileCommand = new ViewModelCommand(ViewProfile);
             LoadTopPlayers();
             _userId = PlayerSingleton.Instance.Player.Id;
         }
@@ -38,6 +41,24 @@ namespace StrategoApp.ViewModel
         public void BackToLobby(object obj)
         {
             _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+        }
+
+        public void ViewProfile(object obj)
+        {
+            if (obj is PlayerScore playerScore)
+            {
+                try
+                {
+                    var playerProfileNotOwnViewModel = new PlayerProfileNotOwnViewModel(_mainWindowViewModel);
+
+                    playerProfileNotOwnViewModel.LoadPlayerInfo(playerScore.PlayerId ,_userId);
+                    _mainWindowViewModel.ChangeViewModel(playerProfileNotOwnViewModel);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cargar perfil de jugador: " + ex.Message);
+                }
+            }
         }
 
         private void LoadTopPlayers()
@@ -63,6 +84,7 @@ namespace StrategoApp.ViewModel
             {
                 var playerScore = new PlayerScore
                 {
+                    PlayerId = response.PlayerInfo.PlayerInfo.Id,
                     PlayerName = response.PlayerInfo.PlayerInfo.Name,
                     Position = response.PlayerInfo.PlayerStatistics.WonGames
                 };

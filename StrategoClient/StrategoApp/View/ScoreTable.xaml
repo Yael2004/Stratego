@@ -11,7 +11,6 @@
         <Grid Height="440" Width="800" 
               Background="{StaticResource InitialBackground}">
 
-            <!-- Título del Scoreboard -->
             <Label Content="{x:Static res:Resources.Scoreboard_Title}" 
                    FontSize="40" 
                    FontWeight="Bold"
@@ -21,7 +20,7 @@
                    HorizontalAlignment="Center"/>
 
             <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                          VerticalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Disabled"
                           Height="300" Width="600" 
                           Margin="100,70,100,70">
                 <ListView ItemsSource="{Binding PlayerScores}"
@@ -32,11 +31,11 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="50"/>
-                                    <ColumnDefinition Width="100"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="100"/>
                                 </Grid.ColumnDefinitions>
 
+                                <!-- Puntuación -->
                                 <TextBlock Text="{Binding Position}"
                                            FontFamily="{StaticResource AugustaFont}" 
                                            FontSize="20"
@@ -45,23 +44,27 @@
                                            HorizontalAlignment="Center"
                                            Grid.Column="0" />
 
-                                <TextBlock Text="{Binding PlayerName}"
-                                           FontFamily="{StaticResource AugustaFont}" 
-                                           FontSize="20"
-                                           Foreground="White" 
-                                           VerticalAlignment="Center"
-                                           Grid.Column="2" />
+                                <!-- Nombre del jugador en un StackPanel -->
+                                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                    <TextBlock Text="{Binding PlayerName}"
+                                               FontFamily="{StaticResource AugustaFont}" 
+                                               FontSize="20"
+                                               Foreground="White" 
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
 
+                                <!-- Botón "Ver Perfil" fijo a la derecha -->
                                 <Button Content="Ver Perfil"
                                         Command="{Binding DataContext.ViewProfileCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
                                         CommandParameter="{Binding}"
                                         FontSize="16"
                                         Background="DarkRed"
                                         Foreground="White"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Right"
                                         Width="80"
-                                        Grid.Column="3" />
+                                        Margin="0,0,10,0"
+                                        Grid.Column="2"/>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>

@@ -8,6 +8,7 @@ namespace StrategoApp.Model
 {
     public class PlayerScore
     {
+        public int PlayerId { get; set; }
         public int Position { get; set; }
         public string PlayerName { get; set; }
     }

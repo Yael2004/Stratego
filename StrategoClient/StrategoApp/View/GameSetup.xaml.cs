@@ -1,7 +1,7 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using StrategoApp.Model;
 using StrategoApp.ViewModel;
 
@@ -19,7 +19,7 @@ namespace StrategoApp.View
             if (sender is Image image && DataContext is GameSetupViewModel viewModel)
             {
                 var piece = image.DataContext as Piece;
-                if (piece != null)
+                if (piece != null && piece.RemainingQuantity > 0)
                 {
                     DragDrop.DoDragDrop(image, piece, DragDropEffects.Move);
                 }
@@ -34,13 +34,26 @@ namespace StrategoApp.View
                 if (piece != null && DataContext is GameSetupViewModel viewModel)
                 {
                     var cell = targetButton.DataContext as Cell;
-                    if (cell != null && !cell.IsOccupied)
+                    if (cell != null && !cell.IsOccupied && piece.RemainingQuantity > 0)
                     {
                         cell.OccupiedPieceImage = piece.PieceImage;
                         cell.IsOccupied = true;
                         cell.OccupyingPiece = piece;
+
+                        piece.RemainingQuantity--;
                     }
                 }
+            }
+        }
+
+        private void OnPieceRemoved(Cell cell)
+        {
+            if (cell.IsOccupied && cell.OccupyingPiece != null)
+            {
+                cell.OccupyingPiece.RemainingQuantity--;
+                cell.OccupiedPieceImage = null;
+                cell.IsOccupied = false;
+                cell.OccupyingPiece = null;
             }
         }
     }

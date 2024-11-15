@@ -116,10 +116,11 @@
                 </Ellipse>
             </Button>
 
-            <Button Content="{x:Static res:Resources.Remove_Button}"
-                Visibility="Visible"
-                Margin="666,20,10,380"
-                Style="{StaticResource ButtonGoldenStyle}"/>
+            <Button Content="Remover"
+                    Visibility="{Binding IsFriend, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Margin="666,20,10,380"
+                    Style="{StaticResource ButtonGoldenStyle}"
+                    Command="{Binding RemoveFriendCommand}"/>
 
             <Button Height="40" Width="40" 
                 Margin="20,20,740,380"

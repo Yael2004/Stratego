@@ -36,21 +36,27 @@
             </TextBlock>
         </Border>
 
-        <ItemsControl ItemsSource="{Binding Board}" Grid.Column="2">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Rows="10" Columns="10"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Button Background="LightGray" BorderThickness="1" BorderBrush="Black">
-                        <Image Source="{Binding OccupiedPieceImage, Converter={StaticResource NullToDefaultImageConverter}}" 
-                       Visibility="{Binding IsOccupied, Converter={StaticResource BoolToVisibilityConverter}}" />
-                    </Button>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <Grid Grid.Column="2">
+            <Image Source="/StrategoApp;component/Assets/Images/Board4.png" Stretch="Fill" />
+            <ItemsControl ItemsSource="{Binding Board}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="12" Columns="12"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Background="Transparent" BorderThickness="1" BorderBrush="Black" 
+                                Click="OnCellClicked">
+                            <Image Source="{Binding OccupiedPieceImage, Converter={StaticResource NullToDefaultImageConverter}}" 
+                                    Visibility="{Binding IsOccupied, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        </Button>
+
+                    </DataTemplate>
+
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
 
         <Border Grid.Column="3" Background="LightGray" Width="100">
             <TextBlock Text="Información de personajes" RenderTransformOrigin="0.5,0.5" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">
