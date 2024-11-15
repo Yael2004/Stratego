@@ -1,29 +1,128 @@
-﻿using StrategoApp.Model;
+﻿using StrategoApp.GameService;
+using StrategoApp.Model;
+using StrategoApp.ProfileService;
+using StrategoApp.View;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace StrategoApp.ViewModel
 {
-    public class GameViewModel : ViewModelBase
+    public class GameViewModel : ViewModelBase, GameService.IGameServiceCallback, ProfileService.IOtherProfileDataServiceCallback
     {
+        private string _username;
+        private int _userId;
+        private string _profilePicture;
+        private string _opponentUsername;
+        private int _opponentId;
+        private string _opponentProfilePicture;
+        private int _selectedPieceId;
+        private bool _isInitialSetupPhase = true;
+        private int _gameId;
+
         private MainWindowViewModel _mainWindowViewModel;
-        public ObservableCollection<Cell> Board { get; set; }
+        private GameServiceClient _gameServiceClient;
         public ObservableCollection<Piece> PlayerPieces { get; set; }
+        public ObservableCollection<Cell> Board { get; set; }
+
+        public ICommand SendPositionCommand { get; }
 
         public GameViewModel(MainWindowViewModel mainWindowViewModel)
         {
-            Board = new ObservableCollection<Cell>();
+            _mainWindowViewModel = mainWindowViewModel;
+            _gameServiceClient = new GameServiceClient(new System.ServiceModel.InstanceContext(this));
+
             PlayerPieces = new ObservableCollection<Piece>();
+            Board = new ObservableCollection<Cell>();
+            LoadPlayerData();
             InitializeBoard();
             InitializePlayerPieces();
         }
 
+        public string Username
+        {
+            get => _username;
+            set
+            {
+                _username = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int UserId
+        {
+            get => _userId;
+            set
+            {
+                _userId = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ProfilePicture
+        {
+            get => _profilePicture;
+            set
+            {
+                _profilePicture = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string OpponentUsername
+        {
+            get => _opponentUsername;
+            set
+            {
+                _opponentUsername = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int OpponentId
+        {
+            get => _opponentId;
+            set
+            {
+                _opponentId = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string OpponentProfilePicture
+        {
+            get => _opponentProfilePicture;
+            set
+            {
+                _opponentProfilePicture = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int SelectedPieceId
+        {
+            get => _selectedPieceId;
+            set
+            {
+                _selectedPieceId = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void InitializeBoard()
         {
-            for (int i = 0; i < 144; i++)
+            for (int row = 0; row < 10; row++)
             {
-                Board.Add(new Cell());
+                for (int col = 0; col < 10; col++)
+                {
+                    Board.Add(new Cell { Row = row, Column = col });
+                }
             }
         }
 
@@ -33,10 +132,153 @@ namespace StrategoApp.ViewModel
             {
                 PlayerPieces.Add(new Piece
                 {
+                    Id = i + 1,
                     Name = $"Piece {i + 1}",
                     PieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"))
-                    //PieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Piece{i + 1}.png"))
                 });
+            }
+        }
+
+        private void LoadPlayerData()
+        {
+            if (PlayerSingleton.Instance.IsLoggedIn())
+            {
+                Username = PlayerSingleton.Instance.Player.Name;
+                UserId = PlayerSingleton.Instance.Player.Id;
+                ProfilePicture = PlayerSingleton.Instance.Player.PicturePath;
+            }
+        }
+
+        public async void ConfirmInitialPositions(List<PositionDTO> initialPositions)
+        {
+            foreach (var position in initialPositions)
+            {
+                try
+                {
+                    await _gameServiceClient.SendPositionAsync(_gameId, UserId, position);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al enviar la posición inicial: {ex.Message}");
+                }
+            }
+        }
+
+        private async void SendPosition(object parameter)
+        {
+            if (parameter is Tuple<int, int> cellPosition)
+            {
+                int row = cellPosition.Item1;
+                int column = cellPosition.Item2;
+
+                PositionDTO position = new PositionDTO
+                {
+                    InitialX = row,
+                    InitialY = column,
+                    FinalX = row,
+                    FinalY = column,
+                    PieceId = SelectedPieceId,
+                    MoveType = "move"
+                };
+
+                try
+                {
+                    await _gameServiceClient.SendPositionAsync(_gameId, UserId, position);
+                    Console.WriteLine($"Posición enviada: Inicial Fila {row}, Columna {column}");
+
+                    var selectedCell = Board.FirstOrDefault(cell => cell.Row == row && cell.Column == column);
+                    if (selectedCell != null)
+                    {
+                        selectedCell.OccupiedPieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/PlayerPiece.png"));
+                        selectedCell.IsOccupied = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al enviar la posición: {ex.Message}");
+                }
+            }
+        }
+
+
+        public async void SubscribeToGame(int oponentId)
+        {
+            try
+            {
+                OpponentId = oponentId;
+                MessageBox.Show("oponentId: " + oponentId);
+                var result = await _gameServiceClient.StartGameAsync(UserId, OpponentId);
+
+                if (result.IsSuccess)
+                {
+                    Console.WriteLine("Conectado al servicio de juego.");
+                }
+                else
+                {
+                    Console.WriteLine("Error al conectarse al servicio: ");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al conectarse al servicio: " + ex.Message);
+            }
+        }
+
+        public void OnGameStarted(int gameId)
+        {
+            _gameId = gameId;
+            _mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel, gameId));
+        }
+
+
+        public void OnReceiveOpponentPosition(PositionDTO position)
+        {
+            var targetCell = Board.FirstOrDefault(cell => cell.Row == position.FinalX && cell.Column == position.FinalY);
+
+            if (targetCell != null)
+            {
+                targetCell.OccupiedPieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
+                targetCell.IsOccupied = true;
+            }
+
+            Console.WriteLine($"Posición del oponente recibida: Fila {position.FinalX}, Columna {position.FinalY}");
+        }
+
+
+        public void OnOpponentAbandonedGame()
+        {
+            MessageBox.Show("El oponente ha abandonado el juego.", "Juego terminado", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            foreach (var cell in Board)
+            {
+                cell.IsOccupied = false;
+                cell.OccupiedPieceImage = null;
+            }
+
+            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+        }
+
+
+        public void OnGameEnded(string result)
+        {
+            MessageBox.Show($"El juego ha terminado: {result}", "Resultado del juego", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            foreach (var cell in Board)
+            {
+                cell.IsOccupied = false;
+                cell.OccupiedPieceImage = null;
+            }
+
+            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+        }
+
+        public void ReceiveOtherPlayerInfo(OtherPlayerInfoResponse response)
+        {
+            if (response.Result.IsSuccess)
+            {
+                Username = response.PlayerInfo.PlayerInfo.Name;
+                UserId = response.PlayerInfo.PlayerInfo.Id;
+                ProfilePicture = response.PlayerInfo.PlayerInfo.PicturePath;
             }
         }
     }

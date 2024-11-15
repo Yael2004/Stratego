@@ -1,45 +1,68 @@
-﻿using System.Windows;
+﻿using StrategoApp.ViewModel;
+using System;
+using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using StrategoApp.ViewModel;
 
 namespace StrategoApp.View
 {
     public partial class Game : UserControl
     {
+        private Button[,] _boardButtons;
         public Game()
         {
             InitializeComponent();
+            //InitializeBoard();
         }
 
-        private void OnPieceDragStart(object sender, MouseEventArgs e)
+        //private void InitializeBoard()
+        //{
+        //    _boardButtons = new Button[10, 10];
+        //    var uniformGrid = new UniformGrid { Rows = 10, Columns = 10 };
+
+        //    for (int row = 0; row < 10; row++)
+        //    {
+        //        for (int column = 0; column < 10; column++)
+        //        {
+        //            var cellButton = new Button
+        //            {
+        //                Background = Brushes.Transparent,
+        //                BorderBrush = Brushes.Black,
+        //                BorderThickness = new Thickness(1),
+        //                Tag = new Tuple<int, int>(row, column)
+        //            };
+
+        //            cellButton.Click += CellButton_Click;
+        //            uniformGrid.Children.Add(cellButton);
+        //            _boardButtons[row, column] = cellButton;
+        //        }
+        //    }
+
+        //    BoardGrid.Children.Add(uniformGrid);
+        //}
+
+        public void SetInitialPositions(IEnumerable<(int Row, int Column, BitmapImage PieceImage)> initialPositions)
         {
-            if (e.LeftButton == MouseButtonState.Pressed && sender is Image draggedImage)
+            foreach (var (row, column, pieceImage) in initialPositions)
             {
-                DragDrop.DoDragDrop(draggedImage, draggedImage.Source, DragDropEffects.Move);
+                var cellButton = _boardButtons[row, column];
+                cellButton.Background = new ImageBrush(pieceImage);
+                cellButton.IsEnabled = false;
             }
         }
-
-        private void OnPieceDropped(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.Bitmap) && sender is Button targetCell)
-            {
-                var droppedImage = e.Data.GetData(DataFormats.Bitmap) as BitmapImage;
-                targetCell.Background = new ImageBrush(droppedImage);
-                targetCell.IsEnabled = false; // Impide colocar otra ficha en la misma celda
-            }
-        }
-
         private void CellButton_Click(object sender, RoutedEventArgs e)
         {
-            // Aquí puedes implementar la lógica que deseas al hacer clic en las celdas
-            Button clickedButton = sender as Button;
-            if (clickedButton != null)
+            if (sender is Button clickedButton)
             {
-                // Ejemplo de cómo manejar el clic en una celda
-                MessageBox.Show("Celda seleccionada: " + clickedButton.Tag);
+                var row = Grid.GetRow(clickedButton);
+                var column = Grid.GetColumn(clickedButton);
+                var cellPosition = Tuple.Create(row, column);
+
+                var viewModel = DataContext as GameViewModel;
+                viewModel?.SendPositionCommand.Execute(cellPosition);
             }
         }
 

@@ -4,8 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:StrategoApp.ViewModel"
+             xmlns:helpers="clr-namespace:StrategoApp.Helpers" 
+             d:DataContext="{d:DesignInstance Type=viewModel:GameViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <helpers:NullToDefaultImageConverter x:Key="NullToDefaultImageConverter"/>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -28,27 +36,21 @@
             </TextBlock>
         </Border>
 
-        <Grid Grid.Column="2">
-            <Image Source="pack://application:,,,/StrategoApp;component/Assets/Images/Board4.png" Stretch="Fill" />
-
-            <ItemsControl ItemsSource="{Binding Board}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="10" Columns="10" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type viewModel:Cell}">
-                        <Button Background="{Binding Background}"
-                                Tag="{Binding}"
-                                BorderThickness="0"
-                                Margin="1">
-                            <TextBlock Text="{Binding Piece.Name}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Grid>
+        <ItemsControl ItemsSource="{Binding Board}" Grid.Column="2">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="10" Columns="10"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Background="LightGray" BorderThickness="1" BorderBrush="Black">
+                        <Image Source="{Binding OccupiedPieceImage, Converter={StaticResource NullToDefaultImageConverter}}" 
+                       Visibility="{Binding IsOccupied, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
         <Border Grid.Column="3" Background="LightGray" Width="100">
             <TextBlock Text="Información de personajes" RenderTransformOrigin="0.5,0.5" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">

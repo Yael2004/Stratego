@@ -55,7 +55,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Barra de piezas disponibles -->
         <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center" Margin="10">
             <Border Background="#333333" Padding="5" CornerRadius="10" BorderBrush="#555555" BorderThickness="2">
                 <ItemsControl ItemsSource="{Binding AvailablePieces}">

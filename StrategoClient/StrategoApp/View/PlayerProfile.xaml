@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StrategoApp.View"
              xmlns:res="clr-namespace:StrategoApp.Properties"
-             xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" xmlns:helpers="clr-namespace:StrategoApp.Helpers" d:DataContext="{d:DesignInstance Type=viewModel:PlayerProfileViewModel}"
+             xmlns:viewModel="clr-namespace:StrategoApp.ViewModel" 
+             xmlns:helpers="clr-namespace:StrategoApp.Helpers" 
+             d:DataContext="{d:DesignInstance Type=viewModel:PlayerProfileViewModel}"
     mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 

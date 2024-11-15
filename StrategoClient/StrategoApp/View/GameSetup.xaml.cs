@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using StrategoApp.Model;
 using StrategoApp.ViewModel;
 
 namespace StrategoApp.View
@@ -37,6 +38,7 @@ namespace StrategoApp.View
                     {
                         cell.OccupiedPieceImage = piece.PieceImage;
                         cell.IsOccupied = true;
+                        cell.OccupyingPiece = piece;
                     }
                 }
             }

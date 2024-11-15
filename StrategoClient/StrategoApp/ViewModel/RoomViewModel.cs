@@ -209,6 +209,7 @@ namespace StrategoApp.ViewModel
             try
             {
                 canJoin = await _roomServiceClient.JoinRoomAsync(RoomCode, playerId);
+
                 if (canJoin)
                 {
                     await _roomServiceClient.NotifyPlayersOfNewConnectionAsync(RoomCode, UserId);
@@ -270,7 +271,8 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                _mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel));
+                var gameViewModel = new GameViewModel(_mainWindowViewModel);
+                gameViewModel.SubscribeToGame(UserIdOponent);
             }
             catch (Exception e)
             {
@@ -351,13 +353,21 @@ namespace StrategoApp.ViewModel
         {
             if (connectedPlayerId > 0)
             {
-                _otherProfileDataService = new OtherProfileDataServiceClient(new InstanceContext(this));
-                _otherProfileDataService.GetOtherPlayerInfoAsync(connectedPlayerId, UserId);
+                UserIdOponent = connectedPlayerId;
+                CallOponentPlayerInfo(connectedPlayerId);
             }
             else
             {
-                PlayerSingleton.Instance.Player.Id = connectedPlayerId;
+                UserIdOponent = connectedPlayerId;
+                UsernameOponent = "Guest";
+                ProfilePictureOponent = "pack://application:,,,/StrategoApp;component/Assets/Images/ProfilePictures/Picture1.png";
             }
+        }
+
+        private void CallOponentPlayerInfo(int connectedPlayerId)
+        {
+            _otherProfileDataService = new OtherProfileDataServiceClient(new InstanceContext(this));
+            _otherProfileDataService.GetOtherPlayerInfoAsync(connectedPlayerId, UserId);
         }
     }
 }

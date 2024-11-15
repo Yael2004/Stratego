@@ -1,6 +1,9 @@
-﻿using StrategoApp.Model;
+﻿using StrategoApp.GameService;
+using StrategoApp.Model;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -9,14 +12,17 @@ namespace StrategoApp.ViewModel
 {
     public class GameSetupViewModel : ViewModelBase
     {
+        private Room _room;
+        private int _gameId;
         private MainWindowViewModel _mainWindowViewModel;
         public ObservableCollection<Piece> AvailablePieces { get; set; }
         public ObservableCollection<Cell> PlayerBoard { get; set; }
         public ICommand ConfirmCommand { get; }
 
-        public GameSetupViewModel(MainWindowViewModel mainWindowViewModel)
+        public GameSetupViewModel(MainWindowViewModel mainWindowViewModel, int gameId)
         {
             _mainWindowViewModel = mainWindowViewModel;
+            _gameId = gameId;
 
             AvailablePieces = new ObservableCollection<Piece>
             {
@@ -45,20 +51,23 @@ namespace StrategoApp.ViewModel
 
         private void ConfirmPlacement(object obj)
         {
-            try
-            {
-                _mainWindowViewModel.ChangeViewModel(new GameViewModel(_mainWindowViewModel));
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
-    }
+            var initialPositions = PlayerBoard
+                .Where(cell => cell.IsOccupied)
+                .Select(cell => new PositionDTO
+                {
+                    InitialX = cell.Row,
+                    InitialY = cell.Column,
+                    FinalX = cell.Row,
+                    FinalY = cell.Column,
+                    PieceId = cell.OccupyingPiece.Id,
+                    MoveType = "initial"
+                })
+                .ToList();
 
-    public class Piece : ViewModelBase
-    {
-        public string Name { get; set; }
-        public BitmapImage PieceImage { get; set; }
+            var gameViewModel = new GameViewModel(_mainWindowViewModel);
+            gameViewModel.ConfirmInitialPositions(initialPositions);
+
+            _mainWindowViewModel.ChangeViewModel(gameViewModel);
+        }
     }
 }

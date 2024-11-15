@@ -6,6 +6,9 @@ namespace StrategoApp.ViewModel
 {
     public class Cell : ViewModelBase
     {
+        public int Row { get; set; }
+        public int Column { get; set; }
+
         private bool _isOccupied;
         public bool IsOccupied
         {

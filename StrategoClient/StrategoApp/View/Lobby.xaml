@@ -146,13 +146,16 @@
                              BorderThickness="1" 
                              Foreground="{StaticResource IntenseGreen}" 
                              Margin="10, 0, 0, 0"/>
-                    
-                    <Button Content="{x:Static res:Resources.Send_Button}" 
-                            Style="{StaticResource ButtonGreenStyle}" 
-                            Width="80" 
+
+                    <Button Width="40" Height="40" 
                             Margin="5,0,0,0" 
-                            Command="{Binding SendMessageCommand}"/>
-                    
+                            Command="{Binding SendMessageCommand}" 
+                            Background="Transparent" 
+                            BorderBrush="Transparent">
+                        
+                        <Image Source="pack://application:,,,/Assets/Images/Icons/Send_Icon.png"/>
+                    </Button>
+
                 </StackPanel>
 
                 <Button Grid.Column="1" Grid.Row="2" 
