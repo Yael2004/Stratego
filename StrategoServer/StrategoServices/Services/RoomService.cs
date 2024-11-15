@@ -204,5 +204,27 @@ namespace StrategoServices.Services
             }
         }
 
+        public async Task<OperationResult> NotifyJoinGameAsync(string roomCode, int gameId)
+        {
+            if (!_rooms.TryGetValue(roomCode, out var room))
+            {
+                return new OperationResult(false, "Room not found.");
+            }
+
+            if (!room.IsFull)
+            {
+                return new OperationResult(false, "Room is not ready to start the game.");
+            }
+
+            var player2Callback = room.PlayerCallbacks[1];
+            if (player2Callback == null)
+            {
+                return new OperationResult(false, "Player 2 is not connected.");
+            }
+
+            await Task.Run(() => player2Callback.OnJoinGameRequired(gameId));
+            return new OperationResult(true, "Player 2 notified to join the game.");
+        }
+
     }
 }
