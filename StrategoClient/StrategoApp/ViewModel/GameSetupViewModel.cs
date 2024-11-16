@@ -68,7 +68,7 @@ namespace StrategoApp.ViewModel
 
             var gameViewModel = new GameViewModel(_mainWindowViewModel, AvailablePieces);
             gameViewModel.LoadInitialPositions(initialPositions);
-            gameViewModel.ConfirmInitialPositions(initialPositions, _gameId);
+            //gameViewModel.ConfirmInitialPositions(initialPositions, _gameId);
 
             _mainWindowViewModel.ChangeViewModel(gameViewModel);
         }

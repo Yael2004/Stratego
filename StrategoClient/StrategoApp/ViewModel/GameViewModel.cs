@@ -239,7 +239,7 @@ namespace StrategoApp.ViewModel
             }
         }
 
-
+        /*
         public async void ConfirmInitialPositions(List<PositionDTO> initialPositions, int gameId)
         {
             _gameId = gameId;
@@ -255,6 +255,7 @@ namespace StrategoApp.ViewModel
                 }
             }
         }
+         */
 
         private async void SendPosition(object parameter)
         {
@@ -292,7 +293,7 @@ namespace StrategoApp.ViewModel
             }
         }
 
-
+        /*
         public async void SubscribeToGame(int oponentId)
         {
             try
@@ -315,6 +316,7 @@ namespace StrategoApp.ViewModel
                 Console.WriteLine("Error al conectarse al servicio: " + ex.Message);
             }
         }
+        */
 
         public void OnGameStarted(int gameId)
         {
@@ -372,6 +374,26 @@ namespace StrategoApp.ViewModel
                 UserId = response.PlayerInfo.PlayerInfo.Id;
                 ProfilePicture = response.PlayerInfo.PlayerInfo.PicturePath;
             }
+        }
+
+        public void OnGameStarted(int gameId, GameService.OperationResult operationResult)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnReceiveOpponentPosition(PositionDTO position, GameService.OperationResult operationResult)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnOpponentAbandonedGame(GameService.OperationResult operationResult)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnGameEnded(string resultString, GameService.OperationResult operationResult)
+        {
+            throw new NotImplementedException();
         }
     }
 }

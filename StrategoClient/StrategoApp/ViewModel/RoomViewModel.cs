@@ -1,4 +1,5 @@
-﻿using StrategoApp.Model;
+﻿using StrategoApp.GameService;
+using StrategoApp.Model;
 using StrategoApp.ProfileService;
 using StrategoApp.RoomService;
 using StrategoApp.Service;
@@ -15,10 +16,12 @@ using System.Windows.Input;
 
 namespace StrategoApp.ViewModel
 {
-    public class RoomViewModel : ViewModelBase, RoomService.IRoomServiceCallback, ProfileService.IOtherProfileDataServiceCallback
+    public class RoomViewModel : ViewModelBase, RoomService.IRoomServiceCallback, ProfileService.IOtherProfileDataServiceCallback, 
+        GameService.IGameServiceCallback
     {
         private RoomServiceClient _roomServiceClient;
         private OtherProfileDataServiceClient _otherProfileDataService;
+        private GameServiceClient _gameServiceClient;
 
         private string _username;
         private int _userId;
@@ -29,6 +32,7 @@ namespace StrategoApp.ViewModel
         private string _messageToSend;
         private bool _isReportVisible;
         private bool _isPlayAvalible;
+        private int _gameId;
 
         private ObservableCollection<string> _messages;
 
@@ -65,6 +69,7 @@ namespace StrategoApp.ViewModel
             {
                 InstanceContext context = new InstanceContext(this);
                 _roomServiceClient = new RoomServiceClient(context);
+                _gameServiceClient = new GameServiceClient(context);
             }
             catch (Exception ex)
             {
@@ -272,11 +277,27 @@ namespace StrategoApp.ViewModel
             try
             {
                 var gameViewModel = new GameViewModel(_mainWindowViewModel);
-                gameViewModel.SubscribeToGame(UserIdOponent);
+                CreateGameCode();
+                //gameViewModel.SubscribeToGame(UserIdOponent);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+            }
+        }
+
+        private async void CreateGameCode()
+        {
+            var response = await _gameServiceClient.CreateGameSessionAsync();
+
+            if (response.OperationResult.IsSuccess)
+            {
+                _gameId = response.GameId;
+                await _roomServiceClient.NotifyOpponentToJoinGameAsync(RoomCode, _gameId);
+            }
+            else
+            {
+                MessageBox.Show("Error creating game: " + response.OperationResult.Message);
             }
         }
 
@@ -368,6 +389,53 @@ namespace StrategoApp.ViewModel
         {
             _otherProfileDataService = new OtherProfileDataServiceClient(new InstanceContext(this));
             _otherProfileDataService.GetOtherPlayerInfoAsync(connectedPlayerId, UserId);
+        }
+
+        public void NotifyToJoinGame(int gameId, RoomService.OperationResult result)
+        {
+            if (result.IsSuccess)
+            {
+                _gameId = gameId;
+                SuscribeToGame(gameId);
+                //_mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel, _gameId));
+            }
+            else
+            {
+                MessageBox.Show("Error joining game: " + result.Message);
+            }
+        }
+
+        public void OnGameStarted(int gameId, GameService.OperationResult operationResult)
+        {
+            if (operationResult.IsSuccess)
+            {
+                MessageBox.Show("Game started successfully" + "\nGame: " + gameId + "\nMyId: " + UserId);
+                _mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel, _gameId));
+            }
+            else
+            {
+                MessageBox.Show("Error starting game: " + operationResult.Message);
+            }
+        }
+
+        private async void SuscribeToGame(int gameId)
+        {
+            await _gameServiceClient.JoinGameSessionAsync(gameId, UserId);
+        }
+
+        public void OnReceiveOpponentPosition(PositionDTO position, GameService.OperationResult operationResult)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnOpponentAbandonedGame(GameService.OperationResult operationResult)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnGameEnded(string resultString, GameService.OperationResult operationResult)
+        {
+            throw new NotImplementedException();
         }
     }
 }

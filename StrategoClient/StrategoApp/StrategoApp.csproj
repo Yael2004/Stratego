@@ -263,7 +263,7 @@
     <None Include="Connected Services\GameService\GameService3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\GameService\StrategoApp.GameService.OperationResult.datasource">
+    <None Include="Connected Services\GameService\StrategoApp.GameService.GameSessionCreatedResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\LogInService\LogInService.wsdl" />

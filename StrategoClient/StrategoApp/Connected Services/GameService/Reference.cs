@@ -15,6 +15,67 @@ namespace StrategoApp.GameService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="GameSessionCreatedResponse", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
+    [System.SerializableAttribute()]
+    public partial class GameSessionCreatedResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int GameIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategoApp.GameService.OperationResult OperationResultField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int GameId {
+            get {
+                return this.GameIdField;
+            }
+            set {
+                if ((this.GameIdField.Equals(value) != true)) {
+                    this.GameIdField = value;
+                    this.RaisePropertyChanged("GameId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategoApp.GameService.OperationResult OperationResult {
+            get {
+                return this.OperationResultField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OperationResultField, value) != true)) {
+                    this.OperationResultField = value;
+                    this.RaisePropertyChanged("OperationResult");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="OperationResult", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data")]
     [System.SerializableAttribute()]
     public partial class OperationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -203,45 +264,51 @@ namespace StrategoApp.GameService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="GameService.IGameService", CallbackContract=typeof(StrategoApp.GameService.IGameServiceCallback))]
     public interface IGameService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/StartGame", ReplyAction="http://tempuri.org/IGameService/StartGameResponse")]
-        StrategoApp.GameService.OperationResult StartGame(int player1Id, int player2Id);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/CreateGameSession", ReplyAction="http://tempuri.org/IGameService/CreateGameSessionResponse")]
+        StrategoApp.GameService.GameSessionCreatedResponse CreateGameSession();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/StartGame", ReplyAction="http://tempuri.org/IGameService/StartGameResponse")]
-        System.Threading.Tasks.Task<StrategoApp.GameService.OperationResult> StartGameAsync(int player1Id, int player2Id);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/CreateGameSession", ReplyAction="http://tempuri.org/IGameService/CreateGameSessionResponse")]
+        System.Threading.Tasks.Task<StrategoApp.GameService.GameSessionCreatedResponse> CreateGameSessionAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/JoinGameSession", ReplyAction="http://tempuri.org/IGameService/JoinGameSessionResponse")]
+        void JoinGameSession(int gameId, int player2Id);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/JoinGameSession", ReplyAction="http://tempuri.org/IGameService/JoinGameSessionResponse")]
+        System.Threading.Tasks.Task JoinGameSessionAsync(int gameId, int player2Id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/SendPosition", ReplyAction="http://tempuri.org/IGameService/SendPositionResponse")]
-        StrategoApp.GameService.OperationResult SendPosition(int gameId, int playerId, StrategoApp.GameService.PositionDTO position);
+        void SendPosition(int gameId, int playerId, StrategoApp.GameService.PositionDTO position);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/SendPosition", ReplyAction="http://tempuri.org/IGameService/SendPositionResponse")]
-        System.Threading.Tasks.Task<StrategoApp.GameService.OperationResult> SendPositionAsync(int gameId, int playerId, StrategoApp.GameService.PositionDTO position);
+        System.Threading.Tasks.Task SendPositionAsync(int gameId, int playerId, StrategoApp.GameService.PositionDTO position);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/EndGame", ReplyAction="http://tempuri.org/IGameService/EndGameResponse")]
-        StrategoApp.GameService.OperationResult EndGame(int gameId, int playerId);
+        void EndGame(int gameId, int playerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/EndGame", ReplyAction="http://tempuri.org/IGameService/EndGameResponse")]
-        System.Threading.Tasks.Task<StrategoApp.GameService.OperationResult> EndGameAsync(int gameId, int playerId);
+        System.Threading.Tasks.Task EndGameAsync(int gameId, int playerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/AbandonGame", ReplyAction="http://tempuri.org/IGameService/AbandonGameResponse")]
-        StrategoApp.GameService.OperationResult AbandonGame(int gameId, int playerId);
+        void AbandonGame(int gameId, int playerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/AbandonGame", ReplyAction="http://tempuri.org/IGameService/AbandonGameResponse")]
-        System.Threading.Tasks.Task<StrategoApp.GameService.OperationResult> AbandonGameAsync(int gameId, int playerId);
+        System.Threading.Tasks.Task AbandonGameAsync(int gameId, int playerId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IGameServiceCallback {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameService/OnGameStarted")]
-        void OnGameStarted(int gameId);
+        void OnGameStarted(int gameId, StrategoApp.GameService.OperationResult operationResult);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameService/OnReceiveOpponentPosition")]
-        void OnReceiveOpponentPosition(StrategoApp.GameService.PositionDTO position);
+        void OnReceiveOpponentPosition(StrategoApp.GameService.PositionDTO position, StrategoApp.GameService.OperationResult operationResult);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameService/OnOpponentAbandonedGame")]
-        void OnOpponentAbandonedGame();
+        void OnOpponentAbandonedGame(StrategoApp.GameService.OperationResult operationResult);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameService/OnGameEnded")]
-        void OnGameEnded(string result);
+        void OnGameEnded(string resultString, StrategoApp.GameService.OperationResult operationResult);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -272,35 +339,43 @@ namespace StrategoApp.GameService {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public StrategoApp.GameService.OperationResult StartGame(int player1Id, int player2Id) {
-            return base.Channel.StartGame(player1Id, player2Id);
+        public StrategoApp.GameService.GameSessionCreatedResponse CreateGameSession() {
+            return base.Channel.CreateGameSession();
         }
         
-        public System.Threading.Tasks.Task<StrategoApp.GameService.OperationResult> StartGameAsync(int player1Id, int player2Id) {
-            return base.Channel.StartGameAsync(player1Id, player2Id);
+        public System.Threading.Tasks.Task<StrategoApp.GameService.GameSessionCreatedResponse> CreateGameSessionAsync() {
+            return base.Channel.CreateGameSessionAsync();
         }
         
-        public StrategoApp.GameService.OperationResult SendPosition(int gameId, int playerId, StrategoApp.GameService.PositionDTO position) {
-            return base.Channel.SendPosition(gameId, playerId, position);
+        public void JoinGameSession(int gameId, int player2Id) {
+            base.Channel.JoinGameSession(gameId, player2Id);
         }
         
-        public System.Threading.Tasks.Task<StrategoApp.GameService.OperationResult> SendPositionAsync(int gameId, int playerId, StrategoApp.GameService.PositionDTO position) {
+        public System.Threading.Tasks.Task JoinGameSessionAsync(int gameId, int player2Id) {
+            return base.Channel.JoinGameSessionAsync(gameId, player2Id);
+        }
+        
+        public void SendPosition(int gameId, int playerId, StrategoApp.GameService.PositionDTO position) {
+            base.Channel.SendPosition(gameId, playerId, position);
+        }
+        
+        public System.Threading.Tasks.Task SendPositionAsync(int gameId, int playerId, StrategoApp.GameService.PositionDTO position) {
             return base.Channel.SendPositionAsync(gameId, playerId, position);
         }
         
-        public StrategoApp.GameService.OperationResult EndGame(int gameId, int playerId) {
-            return base.Channel.EndGame(gameId, playerId);
+        public void EndGame(int gameId, int playerId) {
+            base.Channel.EndGame(gameId, playerId);
         }
         
-        public System.Threading.Tasks.Task<StrategoApp.GameService.OperationResult> EndGameAsync(int gameId, int playerId) {
+        public System.Threading.Tasks.Task EndGameAsync(int gameId, int playerId) {
             return base.Channel.EndGameAsync(gameId, playerId);
         }
         
-        public StrategoApp.GameService.OperationResult AbandonGame(int gameId, int playerId) {
-            return base.Channel.AbandonGame(gameId, playerId);
+        public void AbandonGame(int gameId, int playerId) {
+            base.Channel.AbandonGame(gameId, playerId);
         }
         
-        public System.Threading.Tasks.Task<StrategoApp.GameService.OperationResult> AbandonGameAsync(int gameId, int playerId) {
+        public System.Threading.Tasks.Task AbandonGameAsync(int gameId, int playerId) {
             return base.Channel.AbandonGameAsync(gameId, playerId);
         }
     }

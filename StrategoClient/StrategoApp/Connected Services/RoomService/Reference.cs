@@ -168,6 +168,12 @@ namespace StrategoApp.RoomService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnection", ReplyAction="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnectionResponse")]
         System.Threading.Tasks.Task NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/NotifyOpponentToJoinGame", ReplyAction="http://tempuri.org/IRoomService/NotifyOpponentToJoinGameResponse")]
+        void NotifyOpponentToJoinGame(string roomCode, int gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/NotifyOpponentToJoinGame", ReplyAction="http://tempuri.org/IRoomService/NotifyOpponentToJoinGameResponse")]
+        System.Threading.Tasks.Task NotifyOpponentToJoinGameAsync(string roomCode, int gameId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -184,6 +190,9 @@ namespace StrategoApp.RoomService {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IRoomService/GetConnectedPlayerId")]
         void GetConnectedPlayerId(int connectedPlayerId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IRoomService/NotifyToJoinGame")]
+        void NotifyToJoinGame(int gameId, StrategoApp.RoomService.OperationResult result);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -252,6 +261,14 @@ namespace StrategoApp.RoomService {
         
         public System.Threading.Tasks.Task NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId) {
             return base.Channel.NotifyPlayersOfNewConnectionAsync(roomCode, connectedPlayerId);
+        }
+        
+        public void NotifyOpponentToJoinGame(string roomCode, int gameId) {
+            base.Channel.NotifyOpponentToJoinGame(roomCode, gameId);
+        }
+        
+        public System.Threading.Tasks.Task NotifyOpponentToJoinGameAsync(string roomCode, int gameId) {
+            return base.Channel.NotifyOpponentToJoinGameAsync(roomCode, gameId);
         }
     }
 }
