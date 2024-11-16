@@ -1,4 +1,5 @@
-﻿using StrategoServices.Data.DTO;
+﻿using StrategoServices.Data;
+using StrategoServices.Data.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +13,15 @@ namespace StrategoServices.Services.Interfaces.Callbacks
     public interface IGameServiceCallback
     {
         [OperationContract(IsOneWay = true)]
-        void OnGameStarted(int gameId);
+        void OnGameStarted(int gameId, OperationResult operationResult);
 
         [OperationContract(IsOneWay = true)]
-        void OnReceiveOpponentPosition(PositionDTO position);
+        void OnReceiveOpponentPosition(PositionDTO position, OperationResult operationResult);
 
         [OperationContract(IsOneWay = true)]
-        void OnOpponentAbandonedGame();
+        void OnOpponentAbandonedGame(OperationResult operationResult);
 
         [OperationContract(IsOneWay = true)]
-        void OnGameEnded(string result);
+        void OnGameEnded(string resultString, OperationResult operationResult);
     }
 }

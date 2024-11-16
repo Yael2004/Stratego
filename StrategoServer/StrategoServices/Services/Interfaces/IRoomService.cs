@@ -25,5 +25,8 @@ namespace StrategoServices.Services.Interfaces
 
         [OperationContract]
         Task NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId);
+
+        [OperationContract]
+        Task NotifyOpponentToJoinGameAsync(string roomCode, int gameId);
     }
 }
