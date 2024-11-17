@@ -2,7 +2,9 @@
 using StrategoApp.Model;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
@@ -11,10 +13,11 @@ namespace StrategoApp.ViewModel
     public class GameSetupViewModel : ViewModelBase
     {
         private int _gameId;
+        private string _counter;
         private MainWindowViewModel _mainWindowViewModel;
         public ObservableCollection<Piece> AvailablePieces { get; set; }
         public ObservableCollection<Cell> PlayerBoard { get; set; }
-        public ICommand ConfirmCommand { get; }
+        //public ICommand ConfirmCommand { get; }
 
         public GameSetupViewModel(MainWindowViewModel mainWindowViewModel, int gameId)
         {
@@ -48,10 +51,32 @@ namespace StrategoApp.ViewModel
                 }
             }
 
-            ConfirmCommand = new ViewModelCommand(ConfirmPlacement);
+            //ConfirmCommand = new ViewModelCommand(ConfirmPlacement);
+            Task.Run(() => ShowCountDown());
         }
 
-        private void ConfirmPlacement(object obj)
+        public string Counter
+        {
+            get { return _counter; }
+            set
+            {
+                _counter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private async Task ShowCountDown()
+        {
+            for (int i = 60; i >= 1; i--)
+            {
+                Counter = i.ToString();
+                await Task.Delay(1000);
+            }
+
+            ConfirmPlacement();
+        }
+
+        private void ConfirmPlacement()
         {
             var initialPositions = PlayerBoard
                 .Where(cell => cell.IsOccupied)

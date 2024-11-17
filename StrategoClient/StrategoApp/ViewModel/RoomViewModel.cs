@@ -409,7 +409,7 @@ namespace StrategoApp.ViewModel
         {
             if (operationResult.IsSuccess)
             {
-                MessageBox.Show("Game started successfully" + "\nGame: " + gameId + "\nMyId: " + UserId);
+                //MessageBox.Show("Game started successfully" + "\nGame: " + gameId + "\nMyId: " + UserId);
                 _mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel, _gameId));
             }
             else

@@ -104,7 +104,9 @@
             </ItemsControl>
         </Border>
 
-        <Button Grid.Row="3" Content="Confirmar Colocación" HorizontalAlignment="Center" Margin="10" 
-                Command="{Binding ConfirmCommand}" Style="{StaticResource DarkButtonStyle}"/>
+        <TextBlock Grid.Row="3" 
+               Text="{Binding Counter, UpdateSourceTrigger=Default}" 
+               Foreground="White"
+               HorizontalAlignment="Center" Margin="10"/>
     </Grid>
 </UserControl>
