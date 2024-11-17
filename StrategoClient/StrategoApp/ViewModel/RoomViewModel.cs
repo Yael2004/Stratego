@@ -16,12 +16,12 @@ using System.Windows.Input;
 
 namespace StrategoApp.ViewModel
 {
-    public class RoomViewModel : ViewModelBase, RoomService.IRoomServiceCallback, ProfileService.IOtherProfileDataServiceCallback, 
-        GameService.IGameServiceCallback
+    public class RoomViewModel : ViewModelBase, RoomService.IRoomServiceCallback, ProfileService.IOtherProfileDataServiceCallback
     {
         private RoomServiceClient _roomServiceClient;
         private OtherProfileDataServiceClient _otherProfileDataService;
-        private GameServiceClient _gameServiceClient;
+        private CreateGameServiceClient _gameServiceClient;
+        private GameViewModel _gameViewModel;
 
         private string _username;
         private int _userId;
@@ -55,6 +55,7 @@ namespace StrategoApp.ViewModel
 
             _messages = new ObservableCollection<string>();
             _mainWindowViewModel = mainWindowViewModel;
+            _gameViewModel = new GameViewModel(_mainWindowViewModel);
             IsReportVisible = false;
 
             InitializeService();
@@ -69,7 +70,7 @@ namespace StrategoApp.ViewModel
             {
                 InstanceContext context = new InstanceContext(this);
                 _roomServiceClient = new RoomServiceClient(context);
-                _gameServiceClient = new GameServiceClient(context);
+                _gameServiceClient = new CreateGameServiceClient();
             }
             catch (Exception ex)
             {
@@ -276,9 +277,7 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                var gameViewModel = new GameViewModel(_mainWindowViewModel);
                 CreateGameCode();
-                //gameViewModel.SubscribeToGame(UserIdOponent);
             }
             catch (Exception e)
             {
@@ -396,8 +395,7 @@ namespace StrategoApp.ViewModel
             if (result.IsSuccess)
             {
                 _gameId = gameId;
-                SuscribeToGame(gameId);
-                //_mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel, _gameId));
+                _gameViewModel.SuscribeToGame(gameId);
             }
             else
             {
@@ -405,37 +403,5 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public void OnGameStarted(int gameId, GameService.OperationResult operationResult)
-        {
-            if (operationResult.IsSuccess)
-            {
-                //MessageBox.Show("Game started successfully" + "\nGame: " + gameId + "\nMyId: " + UserId);
-                _mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel, _gameId));
-            }
-            else
-            {
-                MessageBox.Show("Error starting game: " + operationResult.Message);
-            }
-        }
-
-        private async void SuscribeToGame(int gameId)
-        {
-            await _gameServiceClient.JoinGameSessionAsync(gameId, UserId);
-        }
-
-        public void OnReceiveOpponentPosition(PositionDTO position, GameService.OperationResult operationResult)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnOpponentAbandonedGame(GameService.OperationResult operationResult)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnGameEnded(string resultString, GameService.OperationResult operationResult)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

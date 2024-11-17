@@ -15,128 +15,6 @@ namespace StrategoApp.GameService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="GameSessionCreatedResponse", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
-    [System.SerializableAttribute()]
-    public partial class GameSessionCreatedResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int GameIdField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private StrategoApp.GameService.OperationResult OperationResultField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int GameId {
-            get {
-                return this.GameIdField;
-            }
-            set {
-                if ((this.GameIdField.Equals(value) != true)) {
-                    this.GameIdField = value;
-                    this.RaisePropertyChanged("GameId");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public StrategoApp.GameService.OperationResult OperationResult {
-            get {
-                return this.OperationResultField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.OperationResultField, value) != true)) {
-                    this.OperationResultField = value;
-                    this.RaisePropertyChanged("OperationResult");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="OperationResult", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data")]
-    [System.SerializableAttribute()]
-    public partial class OperationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsSuccessField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MessageField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsSuccess {
-            get {
-                return this.IsSuccessField;
-            }
-            set {
-                if ((this.IsSuccessField.Equals(value) != true)) {
-                    this.IsSuccessField = value;
-                    this.RaisePropertyChanged("IsSuccess");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Message {
-            get {
-                return this.MessageField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
-                    this.MessageField = value;
-                    this.RaisePropertyChanged("Message");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PositionDTO", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
     [System.SerializableAttribute()]
     public partial class PositionDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -260,15 +138,131 @@ namespace StrategoApp.GameService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="OperationResult", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data")]
+    [System.SerializableAttribute()]
+    public partial class OperationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsSuccessField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MessageField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsSuccess {
+            get {
+                return this.IsSuccessField;
+            }
+            set {
+                if ((this.IsSuccessField.Equals(value) != true)) {
+                    this.IsSuccessField = value;
+                    this.RaisePropertyChanged("IsSuccess");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Message {
+            get {
+                return this.MessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
+                    this.MessageField = value;
+                    this.RaisePropertyChanged("Message");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="GameSessionCreatedResponse", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
+    [System.SerializableAttribute()]
+    public partial class GameSessionCreatedResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int GameIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategoApp.GameService.OperationResult OperationResultField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int GameId {
+            get {
+                return this.GameIdField;
+            }
+            set {
+                if ((this.GameIdField.Equals(value) != true)) {
+                    this.GameIdField = value;
+                    this.RaisePropertyChanged("GameId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategoApp.GameService.OperationResult OperationResult {
+            get {
+                return this.OperationResultField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OperationResultField, value) != true)) {
+                    this.OperationResultField = value;
+                    this.RaisePropertyChanged("OperationResult");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="GameService.IGameService", CallbackContract=typeof(StrategoApp.GameService.IGameServiceCallback))]
     public interface IGameService {
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/CreateGameSession", ReplyAction="http://tempuri.org/IGameService/CreateGameSessionResponse")]
-        StrategoApp.GameService.GameSessionCreatedResponse CreateGameSession();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/CreateGameSession", ReplyAction="http://tempuri.org/IGameService/CreateGameSessionResponse")]
-        System.Threading.Tasks.Task<StrategoApp.GameService.GameSessionCreatedResponse> CreateGameSessionAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/JoinGameSession", ReplyAction="http://tempuri.org/IGameService/JoinGameSessionResponse")]
         void JoinGameSession(int gameId, int player2Id);
@@ -339,14 +333,6 @@ namespace StrategoApp.GameService {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public StrategoApp.GameService.GameSessionCreatedResponse CreateGameSession() {
-            return base.Channel.CreateGameSession();
-        }
-        
-        public System.Threading.Tasks.Task<StrategoApp.GameService.GameSessionCreatedResponse> CreateGameSessionAsync() {
-            return base.Channel.CreateGameSessionAsync();
-        }
-        
         public void JoinGameSession(int gameId, int player2Id) {
             base.Channel.JoinGameSession(gameId, player2Id);
         }
@@ -377,6 +363,53 @@ namespace StrategoApp.GameService {
         
         public System.Threading.Tasks.Task AbandonGameAsync(int gameId, int playerId) {
             return base.Channel.AbandonGameAsync(gameId, playerId);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="GameService.ICreateGameService")]
+    public interface ICreateGameService {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICreateGameService/CreateGameSession", ReplyAction="http://tempuri.org/ICreateGameService/CreateGameSessionResponse")]
+        StrategoApp.GameService.GameSessionCreatedResponse CreateGameSession();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICreateGameService/CreateGameSession", ReplyAction="http://tempuri.org/ICreateGameService/CreateGameSessionResponse")]
+        System.Threading.Tasks.Task<StrategoApp.GameService.GameSessionCreatedResponse> CreateGameSessionAsync();
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface ICreateGameServiceChannel : StrategoApp.GameService.ICreateGameService, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class CreateGameServiceClient : System.ServiceModel.ClientBase<StrategoApp.GameService.ICreateGameService>, StrategoApp.GameService.ICreateGameService {
+        
+        public CreateGameServiceClient() {
+        }
+        
+        public CreateGameServiceClient(string endpointConfigurationName) : 
+                base(endpointConfigurationName) {
+        }
+        
+        public CreateGameServiceClient(string endpointConfigurationName, string remoteAddress) : 
+                base(endpointConfigurationName, remoteAddress) {
+        }
+        
+        public CreateGameServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(endpointConfigurationName, remoteAddress) {
+        }
+        
+        public CreateGameServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(binding, remoteAddress) {
+        }
+        
+        public StrategoApp.GameService.GameSessionCreatedResponse CreateGameSession() {
+            return base.Channel.CreateGameSession();
+        }
+        
+        public System.Threading.Tasks.Task<StrategoApp.GameService.GameSessionCreatedResponse> CreateGameSessionAsync() {
+            return base.Channel.CreateGameSessionAsync();
         }
     }
 }

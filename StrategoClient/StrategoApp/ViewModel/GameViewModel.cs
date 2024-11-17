@@ -80,6 +80,11 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public void TemporalSendPosition()
+        {
+
+        }
+
         public int UserId
         {
             get => _userId;
@@ -378,7 +383,14 @@ namespace StrategoApp.ViewModel
 
         public void OnGameStarted(int gameId, GameService.OperationResult operationResult)
         {
-            throw new NotImplementedException();
+            if (operationResult.IsSuccess)
+            {
+                _mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel, _gameId));
+            }
+            else
+            {
+                MessageBox.Show("Error starting game: " + operationResult.Message);
+            }
         }
 
         public void OnReceiveOpponentPosition(PositionDTO position, GameService.OperationResult operationResult)
@@ -394,6 +406,11 @@ namespace StrategoApp.ViewModel
         public void OnGameEnded(string resultString, GameService.OperationResult operationResult)
         {
             throw new NotImplementedException();
+        }
+
+        public async void SuscribeToGame(int gameId)
+        {
+            await _gameServiceClient.JoinGameSessionAsync(gameId, UserId);
         }
     }
 }

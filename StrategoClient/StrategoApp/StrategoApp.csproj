@@ -518,6 +518,9 @@
     <Resource Include="Assets\Images\Icons\ArrowBackOnFriends_Icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\Images\Board.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Connected Services\GameService\GameService.disco" />
   </ItemGroup>
   <ItemGroup>
@@ -531,9 +534,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Images\Board.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

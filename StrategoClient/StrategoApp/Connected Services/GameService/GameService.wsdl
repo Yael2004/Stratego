@@ -29,6 +29,35 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_ICreateGameService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:WindowsTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+                  <msf:ProtectionLevel>EncryptAndSign</msf:ProtectionLevel>
+                </msf:WindowsTransportSecurity>
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://localhost:2025/GameService?xsd=xsd0" namespace="http://tempuri.org/" />
@@ -37,12 +66,6 @@
       <xsd:import schemaLocation="http://localhost:2025/GameService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IGameService_CreateGameSession_InputMessage">
-    <wsdl:part name="parameters" element="tns:CreateGameSession" />
-  </wsdl:message>
-  <wsdl:message name="IGameService_CreateGameSession_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CreateGameSessionResponse" />
-  </wsdl:message>
   <wsdl:message name="IGameService_JoinGameSession_InputMessage">
     <wsdl:part name="parameters" element="tns:JoinGameSession" />
   </wsdl:message>
@@ -79,11 +102,13 @@
   <wsdl:message name="IGameService_OnGameEnded_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OnGameEnded" />
   </wsdl:message>
+  <wsdl:message name="ICreateGameService_CreateGameSession_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateGameSession" />
+  </wsdl:message>
+  <wsdl:message name="ICreateGameService_CreateGameSession_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateGameSessionResponse" />
+  </wsdl:message>
   <wsdl:portType name="IGameService">
-    <wsdl:operation name="CreateGameSession">
-      <wsdl:input wsaw:Action="http://tempuri.org/IGameService/CreateGameSession" message="tns:IGameService_CreateGameSession_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IGameService/CreateGameSessionResponse" message="tns:IGameService_CreateGameSession_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="JoinGameSession">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameService/JoinGameSession" message="tns:IGameService_JoinGameSession_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IGameService/JoinGameSessionResponse" message="tns:IGameService_JoinGameSession_OutputMessage" />
@@ -113,18 +138,15 @@
       <wsdl:output wsaw:Action="http://tempuri.org/IGameService/OnGameEnded" message="tns:IGameService_OnGameEnded_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
+  <wsdl:portType name="ICreateGameService">
+    <wsdl:operation name="CreateGameSession">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICreateGameService/CreateGameSession" message="tns:ICreateGameService_CreateGameSession_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICreateGameService/CreateGameSessionResponse" message="tns:ICreateGameService_CreateGameSession_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IGameService" type="tns:IGameService">
     <wsp:PolicyReference URI="#NetTcpBinding_IGameService_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="CreateGameSession">
-      <soap12:operation soapAction="http://tempuri.org/IGameService/CreateGameSession" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="JoinGameSession">
       <soap12:operation soapAction="http://tempuri.org/IGameService/JoinGameSession" style="document" />
       <wsdl:input>
@@ -186,11 +208,33 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_ICreateGameService" type="tns:ICreateGameService">
+    <wsp:PolicyReference URI="#NetTcpBinding_ICreateGameService_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="CreateGameSession">
+      <soap12:operation soapAction="http://tempuri.org/ICreateGameService/CreateGameSession" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
   <wsdl:service name="GameService">
     <wsdl:port name="NetTcpBinding_IGameService" binding="tns:NetTcpBinding_IGameService">
       <soap12:address location="net.tcp://localhost:1015/GameService/GameService" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:1015/GameService/GameService</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>LAPTOP-1UFSE68T\armas</Upn>
+        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_ICreateGameService" binding="tns:NetTcpBinding_ICreateGameService">
+      <soap12:address location="net.tcp://localhost:1015/GameService/CreateGameService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:1015/GameService/CreateGameService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Upn>LAPTOP-1UFSE68T\armas</Upn>
         </Identity>
