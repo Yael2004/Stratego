@@ -11,13 +11,12 @@ using StrategoServices.Services.Interfaces.Callbacks;
 namespace StrategoServices.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class GameService : IGameService
+    public class GameService : IGameService, ICreateGameService
     {
         private readonly ConcurrentDictionary<int, GameSession> _activeGames = new ConcurrentDictionary<int, GameSession>();
 
         public GameSessionCreatedResponse CreateGameSession()
         {
-            var callback = OperationContext.Current.GetCallbackChannel<IGameServiceCallback>();
             OperationResult result;
             int gameId = 0;
 

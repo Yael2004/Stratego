@@ -14,9 +14,6 @@ namespace StrategoServices.Services.Interfaces
     public interface IGameService
     {
         [OperationContract]
-        GameSessionCreatedResponse CreateGameSession();
-
-        [OperationContract]
         Task JoinGameSessionAsync(int gameId, int player2Id);
 
         [OperationContract]

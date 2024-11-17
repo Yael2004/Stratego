@@ -125,6 +125,7 @@
     <Compile Include="Services\Interfaces\Callbacks\ISendRoomInvitationServiceCallback.cs" />
     <Compile Include="Services\Interfaces\Callbacks\ITopPlayersListCallback.cs" />
     <Compile Include="Services\Interfaces\IChangePasswordService.cs" />
+    <Compile Include="Services\Interfaces\ICreateGameService.cs" />
     <Compile Include="Services\Interfaces\IFriendOperationsService.cs" />
     <Compile Include="Services\Interfaces\IGameService.cs" />
     <Compile Include="Services\Interfaces\ILogInService.cs" />
