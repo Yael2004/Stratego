@@ -10,7 +10,6 @@ namespace StrategoServices.Logic
         private int _player2Id;
         private IGameServiceCallback _player1Callback;
         private IGameServiceCallback _player2Callback;
-        private int _currentTurnPlayerId;
 
         public int GameId { get; }
 
@@ -21,7 +20,6 @@ namespace StrategoServices.Logic
         {
             _player1Id = 0;
             _player2Id = 0;
-            _currentTurnPlayerId = 0; 
             GameId = new Random().Next(1, 100000);
         }
 
@@ -32,7 +30,6 @@ namespace StrategoServices.Logic
 
             _player1Id = player1Id;
             _player1Callback = player1Callback;
-            _currentTurnPlayerId = _player1Id; 
         }
 
         public void SetPlayer2(int player2Id, IGameServiceCallback player2Callback)
@@ -51,24 +48,17 @@ namespace StrategoServices.Logic
             return null;
         }
 
-        public bool IsTurn(int playerId)
-        {
-            return _currentTurnPlayerId == playerId;
-        }
-
-        public void ToggleTurn()
-        {
-            if (_player1Id == 0 || _player2Id == 0)
-                throw new InvalidOperationException("Cannot toggle turn until both players are set.");
-
-            _currentTurnPlayerId = _currentTurnPlayerId == _player1Id ? _player2Id : _player1Id;
-        }
-
         public int GetOpponentId(int playerId)
         {
-            if (playerId == _player1Id) return _player2Id;
-            if (playerId == _player2Id) return _player1Id;
-            throw new InvalidOperationException("Player ID does not exist in this game session.");
+            if (playerId == _player1Id)
+            {
+                return _player2Id;
+            }
+            if (playerId == _player2Id)
+            {
+                return _player1Id;
+            }
+            return 0;
         }
 
         public bool IsGameReady()

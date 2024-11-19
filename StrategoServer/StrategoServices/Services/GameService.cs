@@ -101,18 +101,9 @@ namespace StrategoServices.Services
                 return;
             }
 
-            if (!gameSession.IsTurn(playerId))
-            {
-                result = new OperationResult(false, "Not your turn.");
-                await NotifyCallbackAsync(() => playerCallback.OnReceiveOpponentPosition(position, result));
-                return;
-            }
-
             var opponentCallback = gameSession.GetCallbackForPlayer(gameSession.GetOpponentId(playerId));
             result = new OperationResult(true, "Position sent successfully.");
             await NotifyCallbackAsync(() => opponentCallback.OnReceiveOpponentPosition(position, result));
-
-            gameSession.ToggleTurn();
         }
 
         public async Task EndGameAsync(int gameId, int winnerId)
