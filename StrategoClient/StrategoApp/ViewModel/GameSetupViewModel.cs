@@ -12,17 +12,17 @@ namespace StrategoApp.ViewModel
 {
     public class GameSetupViewModel : ViewModelBase
     {
-        private int _gameId;
+        private readonly GameViewModel _gameViewModel;
         private string _counter;
         private MainWindowViewModel _mainWindowViewModel;
         public ObservableCollection<Piece> AvailablePieces { get; set; }
         public ObservableCollection<Cell> PlayerBoard { get; set; }
         //public ICommand ConfirmCommand { get; }
 
-        public GameSetupViewModel(MainWindowViewModel mainWindowViewModel, int gameId)
+        public GameSetupViewModel(MainWindowViewModel mainWindowViewModel, GameViewModel gameViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
-            _gameId = gameId;
+            _gameViewModel = gameViewModel;
 
             AvailablePieces = new ObservableCollection<Piece>
             {
@@ -51,7 +51,6 @@ namespace StrategoApp.ViewModel
                 }
             }
 
-            //ConfirmCommand = new ViewModelCommand(ConfirmPlacement);
             Task.Run(() => ShowCountDown());
         }
 
@@ -91,11 +90,9 @@ namespace StrategoApp.ViewModel
                 })
                 .ToList();
 
-            var gameViewModel = new GameViewModel(_mainWindowViewModel, AvailablePieces);
-            gameViewModel.LoadInitialPositions(initialPositions);
-            //gameViewModel.ConfirmInitialPositions(initialPositions, _gameId);
-
-            _mainWindowViewModel.ChangeViewModel(gameViewModel);
+            _gameViewModel.AvailablePices = AvailablePieces;
+            _gameViewModel.LoadInitialPositions(initialPositions);
+            _mainWindowViewModel.ChangeViewModel(_gameViewModel);
         }
 
         public void DecrementPieceQuantity(Piece piece)

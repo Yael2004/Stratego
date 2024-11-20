@@ -28,11 +28,12 @@ namespace StrategoApp.ViewModel
 
         private MainWindowViewModel _mainWindowViewModel;
         private GameServiceClient _gameServiceClient;
-        private ObservableCollection<Piece> _availablePieces;
         public ObservableCollection<Piece> PlayerPieces { get; set; }
         public ObservableCollection<Cell> Board { get; set; }
 
         public readonly List<(int Row, int Column)> invalidPositions = new List<(int Row, int Column)> { };
+
+        public ObservableCollection<Piece> AvailablePices { get; set; }
 
 
         public ICommand SendPositionCommand { get; }
@@ -49,7 +50,7 @@ namespace StrategoApp.ViewModel
             invalidPositions.Add((6, 8));
 
             _mainWindowViewModel = mainWindowViewModel;
-            _availablePieces = availablePieces;
+            AvailablePices = availablePieces;
             _gameServiceClient = new GameServiceClient(new System.ServiceModel.InstanceContext(this));
 
             PlayerPieces = new ObservableCollection<Piece>();
@@ -203,7 +204,7 @@ namespace StrategoApp.ViewModel
 
                     if (cell != null)
                     {
-                        var piece = _availablePieces.FirstOrDefault(p => p.Id == position.PieceId);
+                        var piece = AvailablePices.FirstOrDefault(p => p.Id == position.PieceId);
                         if (piece != null)
                         {
                             cell.OccupiedPieceImage = piece.PieceImage;
@@ -244,133 +245,6 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        /*
-        public async void ConfirmInitialPositions(List<PositionDTO> initialPositions, int gameId)
-        {
-            _gameId = gameId;
-            foreach (var position in initialPositions)
-            {
-                try
-                {
-                    await _gameServiceClient.SendPositionAsync(_gameId, UserId, position);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al enviar la posición inicial: {ex.Message}");
-                }
-            }
-        }
-         */
-
-        private async void SendPosition(object parameter)
-        {
-            if (parameter is Tuple<int, int> cellPosition)
-            {
-                int row = cellPosition.Item1;
-                int column = cellPosition.Item2;
-
-                PositionDTO position = new PositionDTO
-                {
-                    InitialX = row,
-                    InitialY = column,
-                    FinalX = row,
-                    FinalY = column,
-                    PieceId = SelectedPieceId,
-                    MoveType = "move"
-                };
-
-                try
-                {
-                    await _gameServiceClient.SendPositionAsync(_gameId, UserId, position);
-                    Console.WriteLine($"Posición enviada: Inicial Fila {row}, Columna {column}");
-
-                    var selectedCell = Board.FirstOrDefault(cell => cell.Row == row && cell.Column == column);
-                    if (selectedCell != null)
-                    {
-                        selectedCell.OccupiedPieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
-                        selectedCell.IsOccupied = true;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al enviar la posición: {ex.Message}");
-                }
-            }
-        }
-
-        /*
-        public async void SubscribeToGame(int oponentId)
-        {
-            try
-            {
-                OpponentId = oponentId;
-                MessageBox.Show("oponentId: " + oponentId);
-                var result = await _gameServiceClient.StartGameAsync(UserId, OpponentId);
-
-                if (result.IsSuccess)
-                {
-                    Console.WriteLine("Conectado al servicio de juego.");
-                }
-                else
-                {
-                    Console.WriteLine("Error al conectarse al servicio: ");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error al conectarse al servicio: " + ex.Message);
-            }
-        }
-        */
-
-        public void OnGameStarted(int gameId)
-        {
-            _gameId = gameId;
-            _mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel, gameId));
-        }
-
-
-        public void OnReceiveOpponentPosition(PositionDTO position)
-        {
-            var targetCell = Board.FirstOrDefault(cell => cell.Row == position.FinalX && cell.Column == position.FinalY);
-
-            if (targetCell != null)
-            {
-                targetCell.OccupiedPieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
-                targetCell.IsOccupied = true;
-            }
-
-            Console.WriteLine($"Posición del oponente recibida: Fila {position.FinalX}, Columna {position.FinalY}");
-        }
-
-
-        public void OnOpponentAbandonedGame()
-        {
-            MessageBox.Show("El oponente ha abandonado el juego.", "Juego terminado", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            foreach (var cell in Board)
-            {
-                cell.IsOccupied = false;
-                cell.OccupiedPieceImage = null;
-            }
-
-            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
-        }
-
-
-        public void OnGameEnded(string result)
-        {
-            MessageBox.Show($"El juego ha terminado: {result}", "Resultado del juego", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            foreach (var cell in Board)
-            {
-                cell.IsOccupied = false;
-                cell.OccupiedPieceImage = null;
-            }
-
-            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
-        }
-
         public void ReceiveOtherPlayerInfo(OtherPlayerInfoResponse response)
         {
             if (response.Result.IsSuccess)
@@ -383,9 +257,10 @@ namespace StrategoApp.ViewModel
 
         public void OnGameStarted(int gameId, GameService.OperationResult operationResult)
         {
+            _gameId = gameId;
             if (operationResult.IsSuccess)
             {
-                _mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel, _gameId));
+                _mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel, this));
             }
             else
             {
@@ -395,7 +270,10 @@ namespace StrategoApp.ViewModel
 
         public void OnReceiveOpponentPosition(PositionDTO position, GameService.OperationResult operationResult)
         {
-            throw new NotImplementedException();
+            if (operationResult.IsSuccess)
+            {
+                MessageBox.Show(position.FinalX.ToString() + "\n" + position.FinalY.ToString());
+            }
         }
 
         public void OnOpponentAbandonedGame(GameService.OperationResult operationResult)
