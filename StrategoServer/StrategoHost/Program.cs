@@ -6,8 +6,8 @@ using StrategoServices.Services;
 using System;
 using System.ServiceModel;
 using log4net;
-using StrategoHost.Helpers;
 using StrategoServices.Services.Interfaces;
+using Utilities;
 
 namespace StrategoHost
 {
@@ -16,6 +16,7 @@ namespace StrategoHost
         private static readonly ILog log = Log<Program>.GetLogger();
         static void Main(string[] args)
         {
+
             try
             {
                 var builder = new ContainerBuilder();
