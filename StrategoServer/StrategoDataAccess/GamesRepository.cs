@@ -44,5 +44,57 @@ namespace StrategoDataAccess
             }
         }
 
+        public virtual Result<string> IncrementWonGames(int accountId)
+        {
+            try
+            {
+                var game = _context.Value.Games.FirstOrDefault(g => g.AccountId == accountId);
+
+                if (game == null)
+                {
+                    return Result<string>.Failure("Game record not found for the specified AccountId.");
+                }
+
+                game.WonGames += 1;
+                _context.Value.SaveChanges();
+
+                return Result<string>.Success("Won saved succesfully");
+            }
+            catch (SqlException sqlEx)
+            {
+                return Result<string>.Failure($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Result<string>.Failure($"Unexpected error: {ex.Message}");
+            }
+        }
+
+        public virtual Result<string> IncrementDeafeatGames(int accountId)
+        {
+            try
+            {
+                var game = _context.Value.Games.FirstOrDefault(g => g.AccountId == accountId);
+
+                if (game == null)
+                {
+                    return Result<string>.Failure("Game record not found for the specified AccountId.");
+                }
+
+                game.DeafeatGames += 1;
+                _context.Value.SaveChanges();
+
+                return Result<string>.Success("Defeat saved succesfully");
+            }
+            catch (SqlException sqlEx)
+            {
+                return Result<string>.Failure($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Result<string>.Failure($"Unexpected error: {ex.Message}");
+            }
+        }
+
     }
 }

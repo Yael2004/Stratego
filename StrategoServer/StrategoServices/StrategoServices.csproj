@@ -107,6 +107,7 @@
     <Compile Include="Logic\PasswordManager.cs" />
     <Compile Include="Logic\ProfilesManager.cs" />
     <Compile Include="Logic\Room.cs" />
+    <Compile Include="Logic\WinsManager.cs" />
     <Compile Include="ServiceModule.cs" />
     <Compile Include="Services\ChatService.cs" />
     <Compile Include="Data\DTO\PlayerDTO.cs" />

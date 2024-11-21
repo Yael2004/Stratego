@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using StrategoDataAccess;
 using StrategoServices.Data;
 using StrategoServices.Data.DTO;
 using StrategoServices.Logic;
@@ -14,6 +15,12 @@ namespace StrategoServices.Services
     public class GameService : IGameService, ICreateGameService
     {
         private readonly ConcurrentDictionary<int, GameSession> _activeGames = new ConcurrentDictionary<int, GameSession>();
+        private readonly Lazy<WinsManager> _winsManager;
+
+        public GameService(Lazy<WinsManager> winsManager)
+        {
+            _winsManager = winsManager;
+        }
 
         public GameSessionCreatedResponse CreateGameSession()
         {
@@ -106,7 +113,7 @@ namespace StrategoServices.Services
             await NotifyCallbackAsync(() => opponentCallback.OnReceiveOpponentPosition(position, result));
         }
 
-        public async Task EndGameAsync(int gameId, int winnerId)
+        public async Task EndGameAsync(int gameId, int playerId, bool hasWon)
         {
             var result = GetGameSession(gameId, out var gameSession);
             if (!result.IsSuccess)
@@ -116,16 +123,39 @@ namespace StrategoServices.Services
                 return;
             }
 
-            var winnerCallback = gameSession.GetCallbackForPlayer(winnerId);
-            var loserCallback = gameSession.GetCallbackForPlayer(gameSession.GetOpponentId(winnerId));
-            result = new OperationResult(true, "Game ended successfully.");
+            var playerCallback = gameSession.GetCallbackForPlayer(playerId);
+            OperationResult statsUpdateResult;
 
-            await Task.WhenAll(
-                NotifyCallbackAsync(() => winnerCallback.OnGameEnded("You won!", result)),
-                NotifyCallbackAsync(() => loserCallback.OnGameEnded("You lost!", result))
-            );
+            try
+            {
+                if (hasWon)
+                {
+                    var resultIncrementWins = _winsManager.Value.IncrementWins(playerId);
+                    statsUpdateResult = new OperationResult(resultIncrementWins.IsSuccess, resultIncrementWins.Error);
+                }
+                else
+                {
+                    var resultIncrementWins = _winsManager.Value.IncrementDefeats(playerId);
+                    statsUpdateResult = new OperationResult(resultIncrementWins.IsSuccess, resultIncrementWins.Error);
+                }
 
-            _activeGames.TryRemove(gameId, out _);
+                if (!statsUpdateResult.IsSuccess)
+                {
+                    await NotifyCallbackAsync(() => playerCallback.OnGameEnded("Error updating stats", statsUpdateResult));
+                    return;
+                }
+                else
+                {
+                    var message = hasWon ? "You won!" : "You lost!";
+                    await NotifyCallbackAsync(() => playerCallback.OnGameEnded(message, statsUpdateResult));
+                }
+            }
+            catch (Exception ex)
+            {
+                statsUpdateResult = new OperationResult(false, $"An unexpected error occurred: {ex.Message}");
+                await NotifyCallbackAsync(() => playerCallback.OnGameEnded("Error", statsUpdateResult));
+            }
+
         }
 
         public async Task AbandonGameAsync(int gameId, int playerId)
