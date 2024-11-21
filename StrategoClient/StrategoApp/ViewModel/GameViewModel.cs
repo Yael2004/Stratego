@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -34,7 +35,6 @@ namespace StrategoApp.ViewModel
         public readonly List<(int Row, int Column)> invalidPositions = new List<(int Row, int Column)> { };
 
         public ObservableCollection<Piece> AvailablePices { get; set; }
-
 
         public ICommand SendPositionCommand { get; }
 
@@ -162,7 +162,28 @@ namespace StrategoApp.ViewModel
             {
                 for (int col = 0; col < 10; col++)
                 {
-                    Board.Add(new Cell { Row = row, Column = col });
+                    var cell = new Cell
+                    {
+                        Row = row,
+                        Column = col,
+                        IsOccupied = false,
+                        OccupiedPieceImage = null,
+                        OccupyingPiece = null
+                    };
+                
+                    if (row >= 0 && row < 4)
+                    {
+                        cell.IsOccupied = true;
+                        cell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
+                        cell.OccupyingPiece = new Piece
+                        {
+                            Id = 0,
+                            Name = "Dragon",
+                            Color = "Red"
+                        };
+                    }
+
+                    Board.Add(cell);
                 }
             }
         }
@@ -176,7 +197,8 @@ namespace StrategoApp.ViewModel
                 {
                     Id = i + 1,
                     Name = $"Piece {i + 1}",
-                    PieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"))
+                    PieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png")),
+                    Color = "Red"
                 });
             }
         }
@@ -205,6 +227,7 @@ namespace StrategoApp.ViewModel
                     if (cell != null)
                     {
                         var piece = AvailablePices.FirstOrDefault(p => p.Id == position.PieceId);
+
                         if (piece != null)
                         {
                             cell.OccupiedPieceImage = piece.PieceImage;
@@ -272,7 +295,24 @@ namespace StrategoApp.ViewModel
         {
             if (operationResult.IsSuccess)
             {
-                MessageBox.Show(position.FinalX.ToString() + "\n" + position.FinalY.ToString());
+                var originCell = Board.FirstOrDefault(c => c.Row == position.InitialX && c.Column == position.InitialY);
+                var destinationCell = Board.FirstOrDefault(c => c.Row == position.FinalX && c.Column == position.FinalY);
+
+                if (originCell != null && destinationCell != null)
+                {
+                    destinationCell.OccupiedPieceImage = originCell.OccupiedPieceImage;
+                    destinationCell.IsOccupied = true;
+                    destinationCell.OccupyingPiece = new Piece
+                    {
+                        Id = 0,
+                        Name = "Dragon",
+                        Color = "Red"
+                    };
+
+                    originCell.OccupiedPieceImage = null;
+                    originCell.IsOccupied = false;
+                    originCell.OccupyingPiece = null;
+                }
             }
         }
 

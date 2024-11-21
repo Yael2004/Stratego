@@ -6,6 +6,7 @@ namespace StrategoApp.Model
     public class Piece : INotifyPropertyChanged
     {
         private int _remainingQuantity;
+        public string Color { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public BitmapImage PieceImage { get; set; }

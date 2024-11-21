@@ -48,6 +48,7 @@ namespace StrategoApp.View
         public bool IsPathClear(Cell originCell, Cell destinationCell)
         {
             var viewModel = DataContext as GameViewModel;
+
             if (originCell.Row == destinationCell.Row)
             {
                 int minCol = Math.Min(originCell.Column, destinationCell.Column);
@@ -124,7 +125,7 @@ namespace StrategoApp.View
             {
                 Piece movingPiece = selectedCell.OccupyingPiece;
 
-                if (cell.IsOccupied && cell.OccupyingPiece != null && cell.OccupyingPiece.Id == movingPiece.Id)
+                if (cell.IsOccupied && cell.OccupyingPiece != null && cell.OccupyingPiece.Color == movingPiece.Color)
                 {
                     MessageBox.Show("No puedes moverte a una celda ocupada por otra de tus propias piezas.");
                     selectedCell = null;
