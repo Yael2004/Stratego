@@ -151,8 +151,8 @@ namespace StrategoDataAccess
                     .Join
                     (
                         _context.Value.Player,
-                        friend => friend.FriendId,
-                        player => player.Id,
+                        friend => friend.PlayerId, 
+                        player => player.Id,      
                         (friend, player) => player
                     )
                     .ToList();

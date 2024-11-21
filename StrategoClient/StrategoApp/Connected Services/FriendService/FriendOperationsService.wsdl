@@ -120,11 +120,29 @@
   <wsdl:message name="IFriendOperationsService_RemoveFriend_OutputMessage">
     <wsdl:part name="parameters" element="tns:RemoveFriendResponse" />
   </wsdl:message>
-  <wsdl:message name="IFriendOperationsService_GetFriendOperation_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:GetFriendOperation" />
+  <wsdl:message name="IFriendOperationsService_GetFriendOperationSend_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendOperationSend" />
   </wsdl:message>
-  <wsdl:message name="IFriendOperationsService_GetFriendOperation_InputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:GetFriendOperationResponse" />
+  <wsdl:message name="IFriendOperationsService_GetFriendOperationSend_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendOperationSendResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendOperationsService_GetFriendOperationAccept_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendOperationAccept" />
+  </wsdl:message>
+  <wsdl:message name="IFriendOperationsService_GetFriendOperationAccept_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendOperationAcceptResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendOperationsService_GetFriendOperationDecline_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendOperationDecline" />
+  </wsdl:message>
+  <wsdl:message name="IFriendOperationsService_GetFriendOperationDecline_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendOperationDeclineResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendOperationsService_GetFriendOperationRemove_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendOperationRemove" />
+  </wsdl:message>
+  <wsdl:message name="IFriendOperationsService_GetFriendOperationRemove_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendOperationRemoveResponse" />
   </wsdl:message>
   <wsdl:message name="ISendRoomInvitationService_SendRoomInvitation_InputMessage">
     <wsdl:part name="parameters" element="tns:SendRoomInvitation" />
@@ -164,9 +182,21 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendOperationsService/RemoveFriend" message="tns:IFriendOperationsService_RemoveFriend_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendOperationsService/RemoveFriendResponse" message="tns:IFriendOperationsService_RemoveFriend_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetFriendOperation">
-      <wsdl:output wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperation" message="tns:IFriendOperationsService_GetFriendOperation_OutputCallbackMessage" />
-      <wsdl:input wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationResponse" message="tns:IFriendOperationsService_GetFriendOperation_InputCallbackMessage" />
+    <wsdl:operation name="GetFriendOperationSend">
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationSend" message="tns:IFriendOperationsService_GetFriendOperationSend_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationSendResponse" message="tns:IFriendOperationsService_GetFriendOperationSend_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFriendOperationAccept">
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationAccept" message="tns:IFriendOperationsService_GetFriendOperationAccept_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationAcceptResponse" message="tns:IFriendOperationsService_GetFriendOperationAccept_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFriendOperationDecline">
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationDecline" message="tns:IFriendOperationsService_GetFriendOperationDecline_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationDeclineResponse" message="tns:IFriendOperationsService_GetFriendOperationDecline_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFriendOperationRemove">
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationRemove" message="tns:IFriendOperationsService_GetFriendOperationRemove_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationRemoveResponse" message="tns:IFriendOperationsService_GetFriendOperationRemove_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="ISendRoomInvitationService">
@@ -227,8 +257,35 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetFriendOperation">
-      <soap12:operation soapAction="http://tempuri.org/IFriendOperationsService/GetFriendOperation" style="document" />
+    <wsdl:operation name="GetFriendOperationSend">
+      <soap12:operation soapAction="http://tempuri.org/IFriendOperationsService/GetFriendOperationSend" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFriendOperationAccept">
+      <soap12:operation soapAction="http://tempuri.org/IFriendOperationsService/GetFriendOperationAccept" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFriendOperationDecline">
+      <soap12:operation soapAction="http://tempuri.org/IFriendOperationsService/GetFriendOperationDecline" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFriendOperationRemove">
+      <soap12:operation soapAction="http://tempuri.org/IFriendOperationsService/GetFriendOperationRemove" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -284,7 +341,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:1014/FriendsService/FriendsService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-4SRV2TJ2\yaela</Upn>
+          <Upn>LAPTOP-1UFSE68T\armas</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -293,7 +350,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:1014/FriendsService/RoomInvitationService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-4SRV2TJ2\yaela</Upn>
+          <Upn>LAPTOP-1UFSE68T\armas</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -302,7 +359,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:1014/FriendsService/FriendRequestService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-4SRV2TJ2\yaela</Upn>
+          <Upn>LAPTOP-1UFSE68T\armas</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

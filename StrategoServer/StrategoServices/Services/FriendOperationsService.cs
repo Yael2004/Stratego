@@ -41,7 +41,7 @@ namespace StrategoServices.Services
                 operationResult = new OperationResult(false, "Unexpected error");
             }
 
-            await Task.Run(() => callback.GetFriendOperation(operationResult));
+            await Task.Run(() => callback.GetFriendOperationSend(operationResult));
         }
 
         public async Task AcceptFriendRequest(int destinationId, int requesterId)
@@ -63,7 +63,7 @@ namespace StrategoServices.Services
                 operationResult = new OperationResult(false, "Unexpected error");
             }
 
-            await Task.Run(() => callback.GetFriendOperation(operationResult));
+            await Task.Run(() => callback.GetFriendOperationAccept(operationResult));
         }
 
         public async Task DeclineFriendRequest(int destinationId, int requesterId)
@@ -85,7 +85,7 @@ namespace StrategoServices.Services
                 operationResult = new OperationResult(false, "Unexpected error");
             }
 
-            await Task.Run(() => callback.GetFriendOperation(operationResult));
+            await Task.Run(() => callback.GetFriendOperationDecline(operationResult));
         }
 
         public async Task RemoveFriend(int destinationId, int requesterId)
@@ -107,7 +107,7 @@ namespace StrategoServices.Services
                 operationResult = new OperationResult(false, "Unexpected error");
             }
 
-            await Task.Run(() => callback.GetFriendOperation(operationResult));
+            await Task.Run(() => callback.GetFriendOperationRemove(operationResult));
         }
 
         public async Task<bool> SendRoomInvitation(int playerId, string roomCode)

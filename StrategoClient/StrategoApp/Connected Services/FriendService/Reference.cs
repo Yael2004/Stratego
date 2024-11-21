@@ -167,8 +167,17 @@ namespace StrategoApp.FriendService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IFriendOperationsServiceCallback {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendOperationsService/GetFriendOperation", ReplyAction="http://tempuri.org/IFriendOperationsService/GetFriendOperationResponse")]
-        void GetFriendOperation(StrategoApp.FriendService.OperationResult result);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationSend", ReplyAction="http://tempuri.org/IFriendOperationsService/GetFriendOperationSendResponse")]
+        void GetFriendOperationSend(StrategoApp.FriendService.OperationResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationAccept", ReplyAction="http://tempuri.org/IFriendOperationsService/GetFriendOperationAcceptResponse")]
+        void GetFriendOperationAccept(StrategoApp.FriendService.OperationResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationDecline", ReplyAction="http://tempuri.org/IFriendOperationsService/GetFriendOperationDeclineResponse")]
+        void GetFriendOperationDecline(StrategoApp.FriendService.OperationResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationRemove", ReplyAction="http://tempuri.org/IFriendOperationsService/GetFriendOperationRemoveResponse")]
+        void GetFriendOperationRemove(StrategoApp.FriendService.OperationResult result);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

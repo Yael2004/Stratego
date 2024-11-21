@@ -54,14 +54,50 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetFriendOperation">
+  <xs:element name="GetFriendOperationSend">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="result" nillable="true" type="q1:OperationResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetFriendOperationResponse">
+  <xs:element name="GetFriendOperationSendResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFriendOperationAccept">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="result" nillable="true" type="q2:OperationResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFriendOperationAcceptResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFriendOperationDecline">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="result" nillable="true" type="q3:OperationResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFriendOperationDeclineResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFriendOperationRemove">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="result" nillable="true" type="q4:OperationResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFriendOperationRemoveResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
@@ -84,7 +120,7 @@
   <xs:element name="SendRoomInvitationResponseCall">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="result" nillable="true" type="q2:OperationResult" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="result" nillable="true" type="q5:OperationResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -108,7 +144,7 @@
   <xs:element name="ReceiveFriendRequestIds">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="response" nillable="true" type="q3:PlayerFriendRequestResponse" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="response" nillable="true" type="q6:PlayerFriendRequestResponse" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

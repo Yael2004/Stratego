@@ -12,6 +12,15 @@ namespace StrategoServices.Services.Interfaces.Callbacks
     public interface IFriendOperationCallback
     {
         [OperationContract]
-        void GetFriendOperation(OperationResult result);
+        void GetFriendOperationSend(OperationResult result);
+
+        [OperationContract]
+        void GetFriendOperationAccept(OperationResult result);
+
+        [OperationContract]
+        void GetFriendOperationDecline(OperationResult result);
+
+        [OperationContract]
+        void GetFriendOperationRemove(OperationResult result);
     }
 }

@@ -314,7 +314,7 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public void GetFriendOperation(FriendService.OperationResult result)
+        public void GetFriendOperationSend(FriendService.OperationResult result)
         {
             if (result.IsSuccess)
             {
@@ -325,5 +325,42 @@ namespace StrategoApp.ViewModel
                 MessageBox.Show("Error al enviar solicitud de amistad: " + result.Message);
             }
         }
+
+        public void GetFriendOperationAccept(FriendService.OperationResult result)
+        {
+            if (result.IsSuccess)
+            {
+                MessageBox.Show("Solicitud de amistad acceptada.");
+            }
+            else
+            {
+                MessageBox.Show("Error al aceptar solicitud de amistad: " + result.Message);
+            }
+        }
+
+        public void GetFriendOperationDecline(FriendService.OperationResult result)
+        {
+            if (result.IsSuccess)
+            {
+                MessageBox.Show("Solicitud de amistad rechazada");
+            }
+            else
+            {
+                MessageBox.Show("Error al rechazar solicitud de amistad: " + result.Message);
+            }
+        }
+
+        public void GetFriendOperationRemove(FriendService.OperationResult result)
+        {
+            if (result.IsSuccess)
+            {
+                MessageBox.Show("Amigo removido");
+            }
+            else
+            {
+                MessageBox.Show("Error al eliminar amistad: " + result.Message);
+            }
+        }
+
     }
 }

@@ -70,14 +70,16 @@ namespace StrategoDataAccess
             try
             {
                 var result = _context.Value.Friend
-                    .Where(f => f.PlayerId == playerId && f.Status == "accepted")
-                    .Join
-                    (
+                    .Where(f =>
+                        (f.PlayerId == playerId || f.FriendId == playerId) &&
+                        f.Status == "accepted")
+                    .Join(
                         _context.Value.Player,
-                        friend => friend.FriendId,
+                        friend => friend.PlayerId == playerId ? friend.FriendId : friend.PlayerId,
                         player => player.Id,
                         (friend, player) => player
                     )
+                    .Distinct()
                     .ToList();
 
                 if (result.Count == 0)
