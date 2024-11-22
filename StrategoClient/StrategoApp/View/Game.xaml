@@ -48,7 +48,8 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Background="Transparent" BorderThickness="1" BorderBrush="Black" 
-                                Click="OnCellClicked">
+                                Command="{Binding DataContext.CellClickedCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                CommandParameter="{Binding}">
                             <Image Source="{Binding OccupiedPieceImage, Converter={StaticResource NullToDefaultImageConverter}}" 
                                    Visibility="{Binding IsOccupied, Converter={StaticResource BoolToVisibilityConverter}}" />
                         </Button>

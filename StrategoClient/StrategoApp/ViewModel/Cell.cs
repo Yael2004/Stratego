@@ -8,9 +8,9 @@ namespace StrategoApp.ViewModel
     {
         public int Row { get; set; }
         public int Column { get; set; }
+        public Piece OccupyingPiece { get; set; }
 
         private bool _isOccupied;
-        public bool IsSelectable { get; set; }
         public bool IsOccupied
         {
             get => _isOccupied;
@@ -39,17 +39,6 @@ namespace StrategoApp.ViewModel
             set
             {
                 _occupiedPieceImage = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private Piece _occupyingPiece;
-        public Piece OccupyingPiece
-        {
-            get => _occupyingPiece;
-            set
-            {
-                _occupyingPiece = value;
                 OnPropertyChanged();
             }
         }

@@ -31,12 +31,15 @@ namespace StrategoApp.ViewModel
         private GameServiceClient _gameServiceClient;
         public ObservableCollection<Piece> PlayerPieces { get; set; }
         public ObservableCollection<Cell> Board { get; set; }
+        private Button[,] _boardButtons;
+        private Dictionary<Piece, Queue<(int row, int column)>> pieceMovementHistory = new Dictionary<Piece, Queue<(int, int)>>();
 
         public readonly List<(int Row, int Column)> invalidPositions = new List<(int Row, int Column)> { };
 
         public ObservableCollection<Piece> AvailablePices { get; set; }
 
         public ICommand SendPositionCommand { get; }
+        public ICommand CellClickedCommand { get; }
 
         public GameViewModel(MainWindowViewModel mainWindowViewModel, ObservableCollection<Piece> availablePieces)
         {
@@ -55,9 +58,9 @@ namespace StrategoApp.ViewModel
 
             PlayerPieces = new ObservableCollection<Piece>();
             Board = new ObservableCollection<Cell>();
+            CellClickedCommand = new ViewModelCommandGeneric<Cell>(OnCellClicked);
             LoadPlayerData();
             InitializeBoard();
-            InitializePlayerPieces();
         }
 
         public GameViewModel(MainWindowViewModel mainWindowViewModel)
@@ -66,9 +69,9 @@ namespace StrategoApp.ViewModel
             _mainWindowViewModel = mainWindowViewModel;
             PlayerPieces = new ObservableCollection<Piece>();
             Board = new ObservableCollection<Cell>();
+            CellClickedCommand = new ViewModelCommandGeneric<Cell>(OnCellClicked);
             LoadPlayerData();
             InitializeBoard();
-            InitializePlayerPieces();
         }
 
         public string Username
@@ -79,11 +82,6 @@ namespace StrategoApp.ViewModel
                 _username = value;
                 OnPropertyChanged();
             }
-        }
-
-        public void TemporalSendPosition()
-        {
-
         }
 
         public int UserId
@@ -179,7 +177,6 @@ namespace StrategoApp.ViewModel
                             cell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
                             cell.OccupyingPiece = new Piece
                             {
-                                Id = 0,
                                 Name = "Dragon",
                                 Color = "Red"
                             };
@@ -188,21 +185,6 @@ namespace StrategoApp.ViewModel
 
                     Board.Add(cell);
                 }
-            }
-        }
-
-        private void InitializePlayerPieces()
-        {
-            for (int i = 0; i < 10; i++)
-            {
-
-                PlayerPieces.Add(new Piece
-                {
-                    Id = i + 1,
-                    Name = $"Piece {i + 1}",
-                    PieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png")),
-                    Color = "Red"
-                });
             }
         }
 
@@ -229,7 +211,7 @@ namespace StrategoApp.ViewModel
 
                     if (cell != null)
                     {
-                        var piece = AvailablePices.FirstOrDefault(p => p.Id == position.PieceId);
+                        var piece = AvailablePices.FirstOrDefault(p => p.PowerLevel == position.PieceId);
 
                         if (piece != null)
                         {
@@ -243,6 +225,172 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public bool IsValidMove(Cell originCell, Cell destinationCell, Piece movingPiece)
+        {
+            if (invalidPositions.Contains((destinationCell.Row, destinationCell.Column)))
+            {
+                MessageBox.Show("Movimiento no permitido en el área central.");
+                return false;
+            }
+
+            if (movingPiece.Name == "PotionTrap" || movingPiece.Name == "Necronomicon")
+            {
+                SelectedCell = null;
+                return false;
+            }
+
+            bool isAdjacent = Math.Abs(destinationCell.Row - originCell.Row) + Math.Abs(destinationCell.Column - originCell.Column) == 1;
+
+            if (movingPiece.PowerLevel == 0)
+            {
+                bool isClearPath = IsPathClear(originCell, destinationCell);
+                return isClearPath;
+            }
+
+            if (destinationCell.IsOccupied && destinationCell.OccupyingPiece != null && destinationCell.OccupyingPiece.Color == movingPiece.Color)
+            {
+                MessageBox.Show("No puedes moverte a una celda ocupada por otra de tus propias piezas.");
+                SelectedCell = null;
+                return false;
+            }
+
+            return isAdjacent;
+        }
+
+
+        public bool IsPathClear(Cell originCell, Cell destinationCell)
+        {
+            if (originCell.Row == destinationCell.Row)
+            {
+                int minCol = Math.Min(originCell.Column, destinationCell.Column);
+                int maxCol = Math.Max(originCell.Column, destinationCell.Column);
+                for (int col = minCol + 1; col < maxCol; col++)
+                {
+                    var cell = Board.FirstOrDefault(c => c.Row == originCell.Row && c.Column == col);
+                    if (cell != null && cell.IsOccupied)
+                        return false;
+                }
+            }
+            else if (originCell.Column == destinationCell.Column)
+            {
+                int minRow = Math.Min(originCell.Row, destinationCell.Row);
+                int maxRow = Math.Max(originCell.Row, destinationCell.Row);
+                for (int row = minRow + 1; row < maxRow; row++)
+                {
+                    var cell = Board.FirstOrDefault(c => c.Row == row && c.Column == originCell.Column);
+                    if (cell != null && cell.IsOccupied)
+                        return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool IsValidRepeatedMove(Piece piece, Cell destinationCell)
+        {
+            if (!pieceMovementHistory.ContainsKey(piece))
+                pieceMovementHistory[piece] = new Queue<(int, int)>();
+
+            var history = pieceMovementHistory[piece];
+
+            history.Enqueue((destinationCell.Row, destinationCell.Column));
+
+            if (history.Count > 3)
+                history.Dequeue();
+
+            if (history.Count == 3)
+            {
+                var moves = history.ToArray();
+                if ((moves[0].Item1 == moves[2].Item1 && moves[0].Item2 == moves[2].Item2) &&
+                    (moves[1].Item1 == destinationCell.Row && moves[1].Item2 == destinationCell.Column))
+                {
+                    MessageBox.Show("Movimiento repetitivo no permitido.");
+                    return false;
+                }
+
+            }
+
+            return true;
+        }
+
+        public void OnCellClicked(Cell clickedCell)
+        {
+            if (clickedCell == null) return;
+
+            if (SelectedCell == null && clickedCell.IsOccupied && clickedCell.OccupyingPiece?.OwnerId == UserId)
+            {
+                SelectedCell = clickedCell;
+            }
+            else if (SelectedCell != null)
+            {
+                Piece movingPiece = SelectedCell.OccupyingPiece;
+
+                bool isValidMove = IsValidMove(SelectedCell, clickedCell, movingPiece) && IsValidRepeatedMove(movingPiece, clickedCell);
+
+                if (isValidMove)
+                {
+                    HandleMove(SelectedCell, clickedCell, movingPiece);
+                }
+                else
+                {
+                    MessageBox.Show("Movimiento inválido.");
+                }
+
+                SelectedCell = null;
+            }
+        }
+
+
+        private void HandleMove(Cell originCell, Cell destinationCell, Piece movingPiece)
+        {
+            if (destinationCell.IsOccupied && destinationCell.OccupyingPiece?.OwnerId != UserId)
+            {
+                var defenderPiece = destinationCell.OccupyingPiece;
+
+                if (movingPiece.PowerLevel > defenderPiece.PowerLevel)
+                {
+                    MessageBox.Show("¡Destruiste la pieza del oponente!");
+                    destinationCell.OccupiedPieceImage = originCell.OccupiedPieceImage;
+                    destinationCell.IsOccupied = true;
+                    destinationCell.OccupyingPiece = movingPiece;
+
+                    originCell.OccupiedPieceImage = null;
+                    originCell.IsOccupied = false;
+                    originCell.OccupyingPiece = null;
+                }
+                else if (movingPiece.PowerLevel < defenderPiece.PowerLevel)
+                {
+                    MessageBox.Show("¡Tu pieza fue destruida!");
+                    originCell.OccupiedPieceImage = null;
+                    originCell.IsOccupied = false;
+                    originCell.OccupyingPiece = null;
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show("¡Empate! Ninguna pieza fue destruida.");
+                    return;
+                }
+            }
+            else
+            {
+                destinationCell.OccupiedPieceImage = originCell.OccupiedPieceImage;
+                destinationCell.IsOccupied = true;
+                destinationCell.OccupyingPiece = movingPiece;
+
+                originCell.OccupiedPieceImage = null;
+                originCell.IsOccupied = false;
+                originCell.OccupyingPiece = null;
+            }
+
+            SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column);
+        }
+
+
         public void SendUpdatedPositionToServer(int initialRow, int initialColumn, int targetRow, int targetColumn)
         {
             var position = new PositionDTO
@@ -251,7 +399,7 @@ namespace StrategoApp.ViewModel
                 InitialY = initialColumn,
                 FinalX = targetRow,
                 FinalY = targetColumn,
-                PieceId = Board.FirstOrDefault(cell => cell.Row == targetRow && cell.Column == targetColumn)?.OccupyingPiece?.Id ?? 0,
+                PieceId = Board.FirstOrDefault(cell => cell.Row == targetRow && cell.Column == targetColumn)?.OccupyingPiece?.PowerLevel ?? 0,
                 MoveType = "move"
             };
 
@@ -307,29 +455,43 @@ namespace StrategoApp.ViewModel
 
                 if (originCell != null && destinationCell != null)
                 {
-                    originCell.OccupiedPieceImage = null;
-                    originCell.IsOccupied = false;
-                    originCell.OccupyingPiece = null;
+                    var attackerPowerLevel = position.PieceId;
+                    var defenderPiece = destinationCell.OccupyingPiece;
 
-                    if (destinationCell.IsOccupied && destinationCell.OccupyingPiece != null && destinationCell.OccupyingPiece.OwnerId == UserId)
+                    if (destinationCell.IsOccupied && defenderPiece != null && defenderPiece.OwnerId == UserId)
                     {
-                        MessageBox.Show("¡El oponente atacó una de tus piezas!");
-
-                        destinationCell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
-                        destinationCell.IsOccupied = true;
-                        destinationCell.OccupyingPiece = new Piece
+                        if (attackerPowerLevel > defenderPiece.PowerLevel)
                         {
-                            Name = "Dragon",
-                            Color = "Red"
-                        };
-                        return;
-                    }
+                            MessageBox.Show("¡El oponente destruyó tu pieza!");
 
-                    if (!destinationCell.IsOccupied || destinationCell.OccupyingPiece.OwnerId != UserId)
+                            destinationCell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
+                            destinationCell.OccupyingPiece = new Piece
+                            {
+                                Name = "Dragon",
+                                Color = "Red"
+                            };
+                        }
+                        else if (attackerPowerLevel < defenderPiece.PowerLevel)
+                        {
+                            MessageBox.Show("¡Tu pieza resistió el ataque!");
+
+                            originCell.OccupiedPieceImage = null;
+                            originCell.IsOccupied = false;
+                            originCell.OccupyingPiece = null;
+                        }
+                        else
+                        {
+                            MessageBox.Show("¡Empate! Ninguna pieza se movió.");
+                        }
+                    }
+                    else
                     {
+                        originCell.OccupiedPieceImage = null;
+                        originCell.IsOccupied = false;
+                        originCell.OccupyingPiece = null;
+
                         destinationCell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
                         destinationCell.IsOccupied = true;
-
                         destinationCell.OccupyingPiece = new Piece
                         {
                             Name = "Dragon",
@@ -339,7 +501,6 @@ namespace StrategoApp.ViewModel
                 }
             }
         }
-
 
         public void OnOpponentAbandonedGame(GameService.OperationResult operationResult)
         {

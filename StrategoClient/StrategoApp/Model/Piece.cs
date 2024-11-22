@@ -8,7 +8,7 @@ namespace StrategoApp.Model
         private int _remainingQuantity;
         public int OwnerId { get; set; }
         public string Color { get; set; }
-        public int Id { get; set; }
+        public int PowerLevel { get; set; }
         public string Name { get; set; }
         public BitmapImage PieceImage { get; set; }
         public bool IsPlaced { get; set; } = false;

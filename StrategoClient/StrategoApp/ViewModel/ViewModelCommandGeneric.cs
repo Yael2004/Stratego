@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace StrategoApp.ViewModel
 {
-    public class ViewModelCommandGeneric<T>
+    public class ViewModelCommandGeneric<T> : ICommand
     {
         private readonly Action<T> _execute;
         private readonly Predicate<T> _canExecute;
