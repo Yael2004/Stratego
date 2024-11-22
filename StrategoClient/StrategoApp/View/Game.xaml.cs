@@ -16,7 +16,6 @@ namespace StrategoApp.View
     public partial class Game : UserControl
     {
         private Button[,] _boardButtons;
-        private Cell selectedCell = null;
         private Dictionary<Piece, Queue<(int row, int column)>> pieceMovementHistory = new Dictionary<Piece, Queue<(int, int)>>();
         public Game()
         {
@@ -33,12 +32,25 @@ namespace StrategoApp.View
                 return false;
             }
 
+            if (movingPiece.Name == "PotionTrap" || movingPiece.Name == "Necronomicon")
+            {
+                viewModel.SelectedCell = null;
+                return false;
+            }
+
             bool isAdjacent = Math.Abs(destinationCell.Row - originCell.Row) + Math.Abs(destinationCell.Column - originCell.Column) == 1;
 
             if (movingPiece.Id == 0)
             {
                 bool isClearPath = IsPathClear(originCell, destinationCell);
                 return isClearPath;
+            }
+
+            if (destinationCell.IsOccupied && destinationCell.OccupyingPiece != null && destinationCell.OccupyingPiece.Color == movingPiece.Color)
+            {
+                MessageBox.Show("No puedes moverte a una celda ocupada por otra de tus propias piezas.");
+                viewModel.SelectedCell = null;
+                return false;
             }
 
             return isAdjacent;
@@ -115,43 +127,42 @@ namespace StrategoApp.View
             if (button == null) return;
 
             var cell = button.DataContext as Cell;
+
             if (cell == null) return;
 
-            if (selectedCell == null && cell.IsOccupied)
+            if (viewModel.SelectedCell == null && cell.IsOccupied && cell.OccupyingPiece?.OwnerId == viewModel.UserId)
             {
-                selectedCell = cell;
+                viewModel.SelectedCell = cell;
             }
-            else if (selectedCell != null)
+
+            else if (viewModel.SelectedCell != null)
             {
-                Piece movingPiece = selectedCell.OccupyingPiece;
+                Piece movingPiece = viewModel.SelectedCell.OccupyingPiece;
 
-                if (cell.IsOccupied && cell.OccupyingPiece != null && cell.OccupyingPiece.Color == movingPiece.Color)
-                {
-                    MessageBox.Show("No puedes moverte a una celda ocupada por otra de tus propias piezas.");
-                    selectedCell = null;
-                    return;
-                }
-
-                bool isValidMove = IsValidMove(selectedCell, cell, movingPiece)
-                                   && IsValidRepeatedMove(movingPiece, cell);
+                bool isValidMove = IsValidMove(viewModel.SelectedCell, cell, movingPiece) && IsValidRepeatedMove(movingPiece, cell);
 
                 if (isValidMove)
                 {
-                    cell.OccupiedPieceImage = selectedCell.OccupiedPieceImage;
+                    if (cell.IsOccupied && cell.OccupyingPiece?.Color == "Red")
+                    {
+                        MessageBox.Show("¡Atacaste al oponente!");
+                    }
+
+                    cell.OccupiedPieceImage = viewModel.SelectedCell.OccupiedPieceImage;
                     cell.IsOccupied = true;
-                    cell.OccupyingPiece = selectedCell.OccupyingPiece;
+                    cell.OccupyingPiece = viewModel.SelectedCell.OccupyingPiece;
 
-                    selectedCell.OccupiedPieceImage = null;
-                    selectedCell.IsOccupied = false;
-                    selectedCell.OccupyingPiece = null;
+                    viewModel.SelectedCell.OccupiedPieceImage = null;
+                    viewModel.SelectedCell.IsOccupied = false;
+                    viewModel.SelectedCell.OccupyingPiece = null;
 
-                    viewModel.SendUpdatedPositionToServer(selectedCell.Row, selectedCell.Column, cell.Row, cell.Column);
+                    viewModel.SendUpdatedPositionToServer(viewModel.SelectedCell.Row, viewModel.SelectedCell.Column, cell.Row, cell.Column);
 
-                    selectedCell = null;
+                    viewModel.SelectedCell = null;
                 }
                 else
                 {
-                    selectedCell = null;
+                    viewModel.SelectedCell = null;
                     MessageBox.Show("Movimiento inválido.");
                 }
             }

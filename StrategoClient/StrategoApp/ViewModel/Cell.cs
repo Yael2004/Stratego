@@ -10,7 +10,7 @@ namespace StrategoApp.ViewModel
         public int Column { get; set; }
 
         private bool _isOccupied;
-        public bool IsSelectable => OccupyingPiece?.Color == "Blue";
+        public bool IsSelectable { get; set; }
         public bool IsOccupied
         {
             get => _isOccupied;

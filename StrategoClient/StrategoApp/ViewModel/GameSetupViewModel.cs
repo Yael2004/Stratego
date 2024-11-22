@@ -26,18 +26,18 @@ namespace StrategoApp.ViewModel
 
             AvailablePieces = new ObservableCollection<Piece>
             {
-                new Piece {Id = 0,  Name = "Dragon", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/DarkKnight.png")), RemainingQuantity = 3, MaxQuantity = 3 },
-                new Piece {Id = 1, Name = "Dragon", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Abysswatcher.png")), RemainingQuantity = 1, MaxQuantity = 1 },
-                new Piece {Id = 2, Name = "Dragon", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Darkwraith.png")), RemainingQuantity = 2, MaxQuantity = 2 },
-                new Piece {Id = 3, Name = "Dragon", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/GrimReaper.png")), RemainingQuantity = 4, MaxQuantity = 4 },
-                new Piece {Id = 4, Name = "Dragon", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Hellhound.png")), RemainingQuantity = 4, MaxQuantity = 4 },
-                new Piece {Id = 5, Name = "Dragon", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Necrofiend.png")), RemainingQuantity = 1, MaxQuantity = 1 },
-                new Piece {Id = 6, Name = "Dragon", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Nightmare.png")), RemainingQuantity = 7, MaxQuantity = 7 },
-                new Piece {Id = 7, Name = "Dragon", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/PotionTrap.png")), RemainingQuantity = 8, MaxQuantity = 8 },
-                new Piece {Id = 8, Name = "Dragon", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Soulhunter.png")), RemainingQuantity = 4, MaxQuantity = 4 },
-                new Piece {Id = 9, Name = "Dragon", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Archfiend.png")), RemainingQuantity = 1, MaxQuantity = 1 },
-                new Piece {Id = 10, Name = "Dragon", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Trapbreaker.png")), RemainingQuantity = 4, MaxQuantity = 4 },
-                new Piece {Id = 11, Name = "Dragon", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Necronomicon.png")), RemainingQuantity = 1, MaxQuantity = 1 }
+                new Piece {Id = 0,  Name = "DarkKnight", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/DarkKnight.png")), RemainingQuantity = 3, MaxQuantity = 3 },
+                new Piece {Id = 1, Name = "Abysswatcher", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Abysswatcher.png")), RemainingQuantity = 1, MaxQuantity = 1 },
+                new Piece {Id = 2, Name = "Darkwraith", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Darkwraith.png")), RemainingQuantity = 2, MaxQuantity = 2 },
+                new Piece {Id = 3, Name = "GrimReaper", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/GrimReaper.png")), RemainingQuantity = 4, MaxQuantity = 4 },
+                new Piece {Id = 4, Name = "Hellhound", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Hellhound.png")), RemainingQuantity = 4, MaxQuantity = 4 },
+                new Piece {Id = 5, Name = "Necrofiend", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Necrofiend.png")), RemainingQuantity = 1, MaxQuantity = 1 },
+                new Piece {Id = 6, Name = "Nightmare", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Nightmare.png")), RemainingQuantity = 7, MaxQuantity = 7 },
+                new Piece {Id = 7, Name = "PotionTrap", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/PotionTrap.png")), RemainingQuantity = 8, MaxQuantity = 8 },
+                new Piece {Id = 8, Name = "Soulhunter", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Soulhunter.png")), RemainingQuantity = 4, MaxQuantity = 4 },
+                new Piece {Id = 9, Name = "Archfiend", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Archfiend.png")), RemainingQuantity = 1, MaxQuantity = 1 },
+                new Piece {Id = 10, Name = "Trapbreaker", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Trapbreaker.png")), RemainingQuantity = 4, MaxQuantity = 4 },
+                new Piece {Id = 11, Name = "Necronomicon", PieceImage = new BitmapImage(new Uri("pack://application:,,,/StrategoApp;component/Assets/Game/Necronomicon.png")), RemainingQuantity = 1, MaxQuantity = 1 }
             };
 
             PlayerBoard = new ObservableCollection<Cell>();

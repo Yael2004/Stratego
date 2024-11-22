@@ -173,14 +173,17 @@ namespace StrategoApp.ViewModel
                 
                     if (row >= 0 && row < 4)
                     {
-                        cell.IsOccupied = true;
-                        cell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
-                        cell.OccupyingPiece = new Piece
+                        if (cell.OccupyingPiece == null)
                         {
-                            Id = 0,
-                            Name = "Dragon",
-                            Color = "Red"
-                        };
+                            cell.IsOccupied = true;
+                            cell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
+                            cell.OccupyingPiece = new Piece
+                            {
+                                Id = 0,
+                                Name = "Dragon",
+                                Color = "Red"
+                            };
+                        }
                     }
 
                     Board.Add(cell);
@@ -233,6 +236,7 @@ namespace StrategoApp.ViewModel
                             cell.OccupiedPieceImage = piece.PieceImage;
                             cell.IsOccupied = true;
                             cell.OccupyingPiece = piece;
+                            piece.OwnerId = UserId;
                         }
                     }
                 }
@@ -295,26 +299,47 @@ namespace StrategoApp.ViewModel
         {
             if (operationResult.IsSuccess)
             {
-                var originCell = Board.FirstOrDefault(c => c.Row == position.InitialX && c.Column == position.InitialY);
-                var destinationCell = Board.FirstOrDefault(c => c.Row == position.FinalX && c.Column == position.FinalY);
+                int invertedInitialRow = Math.Abs(9 - position.InitialX);
+                int invertedFinalRow = Math.Abs(9 - position.FinalX);
+
+                var originCell = Board.FirstOrDefault(c => c.Row == invertedInitialRow && c.Column == position.InitialY);
+                var destinationCell = Board.FirstOrDefault(c => c.Row == invertedFinalRow && c.Column == position.FinalY);
 
                 if (originCell != null && destinationCell != null)
                 {
-                    destinationCell.OccupiedPieceImage = originCell.OccupiedPieceImage;
-                    destinationCell.IsOccupied = true;
-                    destinationCell.OccupyingPiece = new Piece
-                    {
-                        Id = 0,
-                        Name = "Dragon",
-                        Color = "Red"
-                    };
-
                     originCell.OccupiedPieceImage = null;
                     originCell.IsOccupied = false;
                     originCell.OccupyingPiece = null;
+
+                    if (destinationCell.IsOccupied && destinationCell.OccupyingPiece != null && destinationCell.OccupyingPiece.OwnerId == UserId)
+                    {
+                        MessageBox.Show("¡El oponente atacó una de tus piezas!");
+
+                        destinationCell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
+                        destinationCell.IsOccupied = true;
+                        destinationCell.OccupyingPiece = new Piece
+                        {
+                            Name = "Dragon",
+                            Color = "Red"
+                        };
+                        return;
+                    }
+
+                    if (!destinationCell.IsOccupied || destinationCell.OccupyingPiece.OwnerId != UserId)
+                    {
+                        destinationCell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
+                        destinationCell.IsOccupied = true;
+
+                        destinationCell.OccupyingPiece = new Piece
+                        {
+                            Name = "Dragon",
+                            Color = "Red"
+                        };
+                    }
                 }
             }
         }
+
 
         public void OnOpponentAbandonedGame(GameService.OperationResult operationResult)
         {
