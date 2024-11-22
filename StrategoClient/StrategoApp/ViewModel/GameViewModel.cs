@@ -368,12 +368,10 @@ namespace StrategoApp.ViewModel
                     originCell.OccupiedPieceImage = null;
                     originCell.IsOccupied = false;
                     originCell.OccupyingPiece = null;
-                    return;
                 }
                 else
                 {
                     MessageBox.Show("¡Empate! Ninguna pieza fue destruida.");
-                    return;
                 }
             }
             else
@@ -388,6 +386,42 @@ namespace StrategoApp.ViewModel
             }
 
             SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column);
+        }
+
+        private void HandleTrapbreakerRule(Cell originCell, Cell destinationCell, Piece movingPiece)
+        {
+            if (destinationCell.OccupyingPiece?.Name == "PotionTrap" && movingPiece.Name == "Trapbreaker")
+            {
+                MessageBox.Show("¡El Trapbreaker desactivó una poción!");
+                destinationCell.OccupiedPieceImage = originCell.OccupiedPieceImage;
+                destinationCell.IsOccupied = true;
+                destinationCell.OccupyingPiece = movingPiece;
+
+                originCell.OccupiedPieceImage = null;
+                originCell.IsOccupied = false;
+                originCell.OccupyingPiece = null;
+
+                SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column);
+            }
+        }
+
+        private void HandleAbysswatcherRule(Cell originCell, Cell destinationCell, Piece movingPiece)
+        {
+            var defenderPiece = destinationCell.OccupyingPiece;
+
+            if (movingPiece.Name == "Abysswatcher" && defenderPiece?.Name == "Archfiend")
+            {
+                MessageBox.Show("¡El Abysswatcher eliminó al Archfiend!");
+                destinationCell.OccupiedPieceImage = originCell.OccupiedPieceImage;
+                destinationCell.IsOccupied = true;
+                destinationCell.OccupyingPiece = movingPiece;
+
+                originCell.OccupiedPieceImage = null;
+                originCell.IsOccupied = false;
+                originCell.OccupyingPiece = null;
+
+                SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column);
+            }
         }
 
 
@@ -463,6 +497,10 @@ namespace StrategoApp.ViewModel
                         if (attackerPowerLevel > defenderPiece.PowerLevel)
                         {
                             MessageBox.Show("¡El oponente destruyó tu pieza!");
+
+                            originCell.OccupiedPieceImage = null;
+                            originCell.IsOccupied = false;
+                            originCell.OccupyingPiece = null;
 
                             destinationCell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
                             destinationCell.OccupyingPiece = new Piece
