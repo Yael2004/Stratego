@@ -18,21 +18,34 @@ namespace StrategoServices.Data.DTO
         public int FinalY { get; set; }
 
         [DataMember]
-        public int PieceId { get; set; }
+        public int PowerLevel { get; set; }
+
+        [DataMember]
+        public string PieceName { get; set; }
 
         [DataMember]
         public string MoveType { get; set; }
 
-        public PositionDTO(int initialX, int initialY, int finalX, int finalY, int pieceId, string moveType)
+        public PositionDTO(int initialX, int initialY, int finalX, int finalY, int powerLevel, string pieceName, string moveType)
         {
             InitialX = initialX;
             InitialY = initialY;
             FinalX = finalX;
             FinalY = finalY;
-            PieceId = pieceId;
+            PowerLevel = powerLevel;
+            PieceName = pieceName;
             MoveType = moveType;
         }
 
-        public PositionDTO() { }
+        public PositionDTO()
+        {
+            InitialX = -1;
+            InitialY = -1;
+            FinalX = -1;
+            FinalY = -1;
+            PowerLevel = -1;
+            PieceName = string.Empty;
+            MoveType = string.Empty;
+        }
     }
 }
