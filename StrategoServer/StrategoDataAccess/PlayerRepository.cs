@@ -356,5 +356,24 @@ namespace StrategoDataAccess
             }
         }
 
+        public virtual Result<int> GetReportCount(int playerId)
+        {
+            try
+            {
+                var reportCount = _context.Value.Report
+                    .Count(r => r.IdReported == playerId);
+
+                return Result<int>.Success(reportCount);
+            }
+            catch (SqlException sqlEx)
+            {
+                return Result<int>.Failure($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Result<int>.Failure($"Unexpected error: {ex.Message}");
+            }
+        }
+
     }
 }

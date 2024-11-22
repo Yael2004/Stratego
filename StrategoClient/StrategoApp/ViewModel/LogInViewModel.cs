@@ -403,6 +403,10 @@ namespace StrategoApp.ViewModel
                 {
                     _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
                 }
+                else if (result.Message == "Access denied: This account has been reported too many times.")
+                {
+                    //ErrorMessage = Properties.Resources.BannedAccount_Label;
+                }
                 else
                 {
                     ErrorMessage = Properties.Resources.NonexistentAccount_Label;

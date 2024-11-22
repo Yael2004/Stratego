@@ -174,6 +174,12 @@ namespace StrategoApp.RoomService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/NotifyOpponentToJoinGame", ReplyAction="http://tempuri.org/IRoomService/NotifyOpponentToJoinGameResponse")]
         System.Threading.Tasks.Task NotifyOpponentToJoinGameAsync(string roomCode, int gameId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/ReportPlayerAccount", ReplyAction="http://tempuri.org/IRoomService/ReportPlayerAccountResponse")]
+        void ReportPlayerAccount(int reporterId, int reportedId, string reason);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/ReportPlayerAccount", ReplyAction="http://tempuri.org/IRoomService/ReportPlayerAccountResponse")]
+        System.Threading.Tasks.Task ReportPlayerAccountAsync(int reporterId, int reportedId, string reason);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -193,6 +199,9 @@ namespace StrategoApp.RoomService {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IRoomService/NotifyToJoinGame")]
         void NotifyToJoinGame(int gameId, StrategoApp.RoomService.OperationResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IRoomService/NotifyPlayerReported")]
+        void NotifyPlayerReported(StrategoApp.RoomService.OperationResult result);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -269,6 +278,14 @@ namespace StrategoApp.RoomService {
         
         public System.Threading.Tasks.Task NotifyOpponentToJoinGameAsync(string roomCode, int gameId) {
             return base.Channel.NotifyOpponentToJoinGameAsync(roomCode, gameId);
+        }
+        
+        public void ReportPlayerAccount(int reporterId, int reportedId, string reason) {
+            base.Channel.ReportPlayerAccount(reporterId, reportedId, reason);
+        }
+        
+        public System.Threading.Tasks.Task ReportPlayerAccountAsync(int reporterId, int reportedId, string reason) {
+            return base.Channel.ReportPlayerAccountAsync(reporterId, reportedId, reason);
         }
     }
 }

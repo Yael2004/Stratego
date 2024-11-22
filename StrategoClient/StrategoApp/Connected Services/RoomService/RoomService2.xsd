@@ -78,6 +78,20 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="ReportPlayerAccount">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="reporterId" type="xs:int" />
+        <xs:element minOccurs="0" name="reportedId" type="xs:int" />
+        <xs:element minOccurs="0" name="reason" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReportPlayerAccountResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="RoomCreatedAsync">
     <xs:complexType>
       <xs:sequence>
@@ -112,6 +126,13 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="gameId" type="xs:int" />
         <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="result" nillable="true" type="q3:OperationResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NotifyPlayerReported">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="result" nillable="true" type="q4:OperationResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

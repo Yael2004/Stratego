@@ -34,8 +34,38 @@ namespace StrategoServices.Logic
         public Result<int> LogInAccount(string email, string password)
         {
             var result = _accountRepository.Value.ValidateCredentials(email, password);
-            return result;
+
+            if (!result.IsSuccess)
+            {
+                return Result<int>.Failure(result.Error);
+            }
+
+            var accountId = result.Value;
+
+            var playerResult = _playerRepository.Value.GetPlayerByAccountId(accountId);
+
+            if (!playerResult.IsSuccess)
+            {
+                return Result<int>.Failure("Player not found for the provided account.");
+            }
+
+            var playerId = playerResult.Value.Id;
+
+            var reportCountResult = _playerRepository.Value.GetReportCount(playerId);
+
+            if (!reportCountResult.IsSuccess)
+            {
+                return Result<int>.Failure("Failed to retrieve report count: " + reportCountResult.Error);
+            }
+
+            if (reportCountResult.Value >= 3)
+            {
+                return Result<int>.Failure("Access denied: This account has been reported too many times.");
+            }
+
+            return Result<int>.Success(accountId);
         }
+
 
         public Result<PlayerDTO> GetLogInAccount(int accountId)
         {

@@ -31,8 +31,10 @@ namespace StrategoApp.ViewModel
         private string _profilePictureOponent;
         private string _messageToSend;
         private bool _isReportVisible;
+        private bool _isReportButtonVisible;
         private bool _isPlayAvalible;
         private int _gameId;
+        private string _reportMessage;
 
         private ObservableCollection<string> _messages;
 
@@ -40,8 +42,9 @@ namespace StrategoApp.ViewModel
         public ICommand ExecuteBackToLobbyCommand { get; }
         public ICommand SendMessageCommand { get; }
         public ICommand ToggleReportVisibilityCommand { get; }
-        public ICommand CancelReportCommand { get; }
+        public ICommand SendReportCommand { get; }
         public ICommand PlayCommand { get; }
+        public ICommand SetReportMessageCommand { get; }
 
         public string RoomCode { get; set; }
 
@@ -50,8 +53,9 @@ namespace StrategoApp.ViewModel
             ExecuteBackToLobbyCommand = new ViewModelCommand(ExecuteBackToLobby);
             SendMessageCommand = new ViewModelCommand(SendMessageAsync);
             ToggleReportVisibilityCommand = new ViewModelCommand(ToggleReportVisibility);
-            CancelReportCommand = new ViewModelCommand(CancelReport);
+            SendReportCommand = new ViewModelCommand(SendReport);
             PlayCommand = new ViewModelCommand(ExecutePlay, CanExecutePlay);
+            SetReportMessageCommand = new ViewModelCommand(SetReportMessage);
 
             _messages = new ObservableCollection<string>();
             _mainWindowViewModel = mainWindowViewModel;
@@ -154,6 +158,16 @@ namespace StrategoApp.ViewModel
             set
             {
                 _isReportVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsReportButtonVisible
+        {
+            get { return _isReportButtonVisible; }
+            set
+            {
+                _isReportButtonVisible = value;
                 OnPropertyChanged();
             }
         }
@@ -265,12 +279,27 @@ namespace StrategoApp.ViewModel
 
         public void ToggleReportVisibility(object obj)
         {
+            _reportMessage = string.Empty;
             IsReportVisible = !IsReportVisible;
         }
 
-        public void CancelReport(object obj)
+        public void SendReport(object obj)
         {
-            IsReportVisible = false;
+            if (_reportMessage != string.Empty)
+            {
+                ReportPlayer();
+                _reportMessage = string.Empty;
+            }
+        }
+
+        private async void ReportPlayer()
+        {
+            await _roomServiceClient.ReportPlayerAccountAsync(UserId, UserIdOponent, _reportMessage);
+        }
+
+        public void SetReportMessage(object obj)
+        {
+            _reportMessage = obj.ToString();
         }
 
         public void ExecutePlay(object obj)
@@ -362,6 +391,7 @@ namespace StrategoApp.ViewModel
                 UsernameOponent = response.PlayerInfo.PlayerInfo.Name;
                 UserIdOponent = response.PlayerInfo.PlayerInfo.Id;
                 ProfilePictureOponent = response.PlayerInfo.PlayerInfo.PicturePath;
+                IsReportButtonVisible = true;
             }
             else
             {
@@ -400,6 +430,18 @@ namespace StrategoApp.ViewModel
             else
             {
                 MessageBox.Show("Error joining game: " + result.Message);
+            }
+        }
+
+        public void NotifyPlayerReported(RoomService.OperationResult result)
+        {
+            if (result.IsSuccess)
+            {
+                MessageBox.Show("Player reported successfully.");
+            }
+            else
+            {
+                MessageBox.Show("Error reporting player: " + result.Message);
             }
         }
 
