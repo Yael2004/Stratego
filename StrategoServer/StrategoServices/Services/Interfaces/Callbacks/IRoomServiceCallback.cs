@@ -26,5 +26,8 @@ namespace StrategoServices.Services.Interfaces.Callbacks
 
         [OperationContract(IsOneWay = true)]
         void NotifyToJoinGame(int gameId, OperationResult result);
+
+        [OperationContract(IsOneWay = true)]
+        void NotifyPlayerReported(OperationResult result);
     }
 }

@@ -18,6 +18,13 @@ namespace StrategoServices.Services
     {
         private readonly ConcurrentDictionary<string, Room> _rooms = new ConcurrentDictionary<string, Room>();
 
+        private readonly Lazy<ReportPlayerManager> _reportPlayerManager;
+
+        public RoomService(Lazy<ReportPlayerManager> reportPlayerManager)
+        {
+            _reportPlayerManager = reportPlayerManager;
+        }
+
         public async Task<bool> CreateRoomAsync(int playerId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IRoomServiceCallback>();
@@ -230,6 +237,39 @@ namespace StrategoServices.Services
                     await Task.Run(() => action(callback));
                 }
             }
+        }
+
+        public Task ReportPlayerAccountAsync(int reporterId, int reportedId, string reason)
+        {
+            OperationResult operationResult;
+            var callback = OperationContext.Current.GetCallbackChannel<IRoomServiceCallback>();
+
+            if (reporterId == reportedId)
+            {
+                operationResult = new OperationResult(false, "You cannot report yourself.");
+            }
+            else
+            {
+                try
+                {
+                    var result = _reportPlayerManager.Value.ReportPlayer(reporterId, reportedId, reason);
+
+                    if (!result.IsSuccess)
+                    {
+                        operationResult = new OperationResult(false, result.Error);
+                    }
+                    else
+                    {
+                        operationResult = new OperationResult(true, "Player reported successfully.");
+                    }
+                }
+                catch (Exception)
+                {
+                    operationResult = new OperationResult(false, "An unexpected error occurred while reporting the player.");
+                }
+            }
+
+            return Task.Run(() => callback.NotifyPlayerReported(operationResult));
         }
 
     }

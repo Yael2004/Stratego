@@ -324,5 +324,37 @@ namespace StrategoDataAccess
             }
         }
 
+        public virtual Result<string> ReportPlayer(int reporterId, int reportedId, string reason)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(reason))
+                {
+                    return Result<string>.Failure("Reason for report cannot be empty.");
+                }
+
+                var report = new Report
+                {
+                    IdReporter = reporterId,
+                    IdReported = reportedId,
+                    Reason = reason,
+                    Date = DateTime.Now 
+                };
+
+                _context.Value.Report.Add(report);
+                _context.Value.SaveChanges();
+
+                return Result<string>.Success("Player reported successfully.");
+            }
+            catch (SqlException sqlEx)
+            {
+                return Result<string>.Failure($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Result<string>.Failure($"Unexpected error: {ex.Message}");
+            }
+        }
+
     }
 }
