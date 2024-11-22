@@ -18,4 +18,6 @@
 *.snupkg
 packages/
 
-
+# SonarQube
+.sonarqube/
+**/.sonarqube/
