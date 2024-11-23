@@ -24,5 +24,8 @@ namespace StrategoServices.Services.Interfaces
 
         [OperationContract]
         Task AbandonGameAsync(int gameId, int playerId);
+
+        [OperationContract]
+        Task SendMovementInstructionsAsync(int gameId, MovementInstructionDTO movementInstruction);
     }
 }

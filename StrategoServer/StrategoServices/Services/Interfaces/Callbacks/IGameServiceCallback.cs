@@ -23,5 +23,8 @@ namespace StrategoServices.Services.Interfaces.Callbacks
 
         [OperationContract(IsOneWay = true)]
         void OnGameEnded(string resultString, OperationResult operationResult);
+
+        [OperationContract(IsOneWay = true)]
+        void OnReceiveMovementInstructions(MovementInstructionResponse movementInstructionResponse);
     }
 }

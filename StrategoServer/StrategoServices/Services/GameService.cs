@@ -197,5 +197,40 @@ namespace StrategoServices.Services
             }
         }
 
+        public async Task SendMovementInstructionsAsync(int gameId, MovementInstructionDTO instruction)
+        {
+            var result = GetGameSession(gameId, out var gameSession);
+
+            if (!result.IsSuccess)
+            {
+                Console.WriteLine($"Game session not found for GameId: {gameId}");
+                return;
+            }
+
+            var opponentId = gameSession.GetOpponentId(instruction.DefenderId);
+
+            var attackerCallback = gameSession.GetCallbackForPlayer(opponentId);
+            if (attackerCallback == null)
+            {
+                Console.WriteLine($"Attacker callback not found for OpponentId: {opponentId}");
+                return;
+            }
+
+            var response = new MovementInstructionResponse
+            {
+                MovementInstructionDTO = instruction,
+                OperationResult = new OperationResult(true, "Movement processed successfully")
+            };
+
+            try
+            {
+                await NotifyCallbackAsync(() => attackerCallback.OnReceiveMovementInstructions(response));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while sending movement instructions to OpponentId: {opponentId}. Exception: {ex.Message}");
+            }
+        }
+
     }
 }
