@@ -34,6 +34,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="gameId" type="xs:int" />
         <xs:element minOccurs="0" name="playerId" type="xs:int" />
+        <xs:element minOccurs="0" name="hasWon" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -55,26 +56,39 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="SendMovementInstructions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="gameId" type="xs:int" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="movementInstruction" nillable="true" type="q2:MovementInstructionDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendMovementInstructionsResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="OnGameStarted">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="gameId" type="xs:int" />
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="operationResult" nillable="true" type="q2:OperationResult" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="operationResult" nillable="true" type="q3:OperationResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="OnReceiveOpponentPosition">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="position" nillable="true" type="q3:PositionDTO" />
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="operationResult" nillable="true" type="q4:OperationResult" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="position" nillable="true" type="q4:PositionDTO" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="operationResult" nillable="true" type="q5:OperationResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="OnOpponentAbandonedGame">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="operationResult" nillable="true" type="q5:OperationResult" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="operationResult" nillable="true" type="q6:OperationResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -82,7 +96,14 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="resultString" nillable="true" type="xs:string" />
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="operationResult" nillable="true" type="q6:OperationResult" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="operationResult" nillable="true" type="q7:OperationResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnReceiveMovementInstructions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="movementInstructionResponse" nillable="true" type="q8:MovementInstructionResponse" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -94,7 +115,7 @@
   <xs:element name="CreateGameSessionResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="CreateGameSessionResult" nillable="true" type="q7:GameSessionCreatedResponse" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="CreateGameSessionResult" nillable="true" type="q9:GameSessionCreatedResponse" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

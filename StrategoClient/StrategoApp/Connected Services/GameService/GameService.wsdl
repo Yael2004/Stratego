@@ -90,6 +90,12 @@
   <wsdl:message name="IGameService_AbandonGame_OutputMessage">
     <wsdl:part name="parameters" element="tns:AbandonGameResponse" />
   </wsdl:message>
+  <wsdl:message name="IGameService_SendMovementInstructions_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendMovementInstructions" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_SendMovementInstructions_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendMovementInstructionsResponse" />
+  </wsdl:message>
   <wsdl:message name="IGameService_OnGameStarted_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OnGameStarted" />
   </wsdl:message>
@@ -101,6 +107,9 @@
   </wsdl:message>
   <wsdl:message name="IGameService_OnGameEnded_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OnGameEnded" />
+  </wsdl:message>
+  <wsdl:message name="IGameService_OnReceiveMovementInstructions_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnReceiveMovementInstructions" />
   </wsdl:message>
   <wsdl:message name="ICreateGameService_CreateGameSession_InputMessage">
     <wsdl:part name="parameters" element="tns:CreateGameSession" />
@@ -125,6 +134,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IGameService/AbandonGame" message="tns:IGameService_AbandonGame_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IGameService/AbandonGameResponse" message="tns:IGameService_AbandonGame_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SendMovementInstructions">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameService/SendMovementInstructions" message="tns:IGameService_SendMovementInstructions_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameService/SendMovementInstructionsResponse" message="tns:IGameService_SendMovementInstructions_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="OnGameStarted">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameService/OnGameStarted" message="tns:IGameService_OnGameStarted_OutputCallbackMessage" />
     </wsdl:operation>
@@ -136,6 +149,9 @@
     </wsdl:operation>
     <wsdl:operation name="OnGameEnded">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameService/OnGameEnded" message="tns:IGameService_OnGameEnded_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnReceiveMovementInstructions">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameService/OnReceiveMovementInstructions" message="tns:IGameService_OnReceiveMovementInstructions_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="ICreateGameService">
@@ -183,6 +199,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SendMovementInstructions">
+      <soap12:operation soapAction="http://tempuri.org/IGameService/SendMovementInstructions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="OnGameStarted">
       <soap12:operation soapAction="http://tempuri.org/IGameService/OnGameStarted" style="document" />
       <wsdl:output>
@@ -203,6 +228,12 @@
     </wsdl:operation>
     <wsdl:operation name="OnGameEnded">
       <soap12:operation soapAction="http://tempuri.org/IGameService/OnGameEnded" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnReceiveMovementInstructions">
+      <soap12:operation soapAction="http://tempuri.org/IGameService/OnReceiveMovementInstructions" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

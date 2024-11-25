@@ -554,5 +554,10 @@ namespace StrategoApp.ViewModel
         {
             await _gameServiceClient.JoinGameSessionAsync(gameId, UserId);
         }
+
+        public void OnReceiveMovementInstructions(MovementInstructionResponse movementInstructionResponse)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

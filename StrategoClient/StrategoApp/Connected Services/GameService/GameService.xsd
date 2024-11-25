@@ -8,14 +8,29 @@
       <xs:element minOccurs="0" name="InitialX" type="xs:int" />
       <xs:element minOccurs="0" name="InitialY" type="xs:int" />
       <xs:element minOccurs="0" name="MoveType" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PieceId" type="xs:int" />
+      <xs:element minOccurs="0" name="PieceName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PowerLevel" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PositionDTO" nillable="true" type="tns:PositionDTO" />
+  <xs:complexType name="MovementInstructionDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DefenderId" type="xs:int" />
+      <xs:element minOccurs="0" name="Result" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MovementInstructionDTO" nillable="true" type="tns:MovementInstructionDTO" />
+  <xs:complexType name="MovementInstructionResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="MovementInstructionDTO" nillable="true" type="tns:MovementInstructionDTO" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="OperationResult" nillable="true" type="q1:OperationResult" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MovementInstructionResponse" nillable="true" type="tns:MovementInstructionResponse" />
   <xs:complexType name="GameSessionCreatedResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="GameId" type="xs:int" />
-      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="OperationResult" nillable="true" type="q1:OperationResult" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="OperationResult" nillable="true" type="q2:OperationResult" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="GameSessionCreatedResponse" nillable="true" type="tns:GameSessionCreatedResponse" />
