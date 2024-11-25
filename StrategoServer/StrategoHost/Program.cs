@@ -8,14 +8,20 @@ using System.ServiceModel;
 using log4net;
 using StrategoServices.Services.Interfaces;
 using Utilities;
+using log4net.Config;
+using System.IO;
 
 namespace StrategoHost
 {
     class Program
     {
-        private static readonly ILog log = Log<Program>.GetLogger();
         static void Main(string[] args)
         {
+
+            var logConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log4net.config");
+            XmlConfigurator.ConfigureAndWatch(new FileInfo(logConfigPath));
+
+            var log = LogManager.GetLogger(typeof(Program));
 
             try
             {
