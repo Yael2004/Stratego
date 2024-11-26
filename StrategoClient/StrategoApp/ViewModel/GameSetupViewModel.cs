@@ -84,7 +84,8 @@ namespace StrategoApp.ViewModel
                     InitialY = cell.Column,
                     FinalX = cell.Row,
                     FinalY = cell.Column,
-                    PowerLevel = cell.OccupyingPiece.PowerLevel,
+                    PieceId = cell.OccupyingPiece.PowerLevel,
+                    MoveType = "initial"
                 })
                 .ToList();
 

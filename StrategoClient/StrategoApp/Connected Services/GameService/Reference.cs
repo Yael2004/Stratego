@@ -35,6 +35,9 @@ namespace StrategoApp.GameService {
         private int InitialYField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MoveTypeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PieceNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -103,6 +106,19 @@ namespace StrategoApp.GameService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public string MoveType {
+            get {
+                return this.MoveTypeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MoveTypeField, value) != true)) {
+                    this.MoveTypeField = value;
+                    this.RaisePropertyChanged("MoveType");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string PieceName {
             get {
                 return this.PieceNameField;
@@ -151,18 +167,6 @@ namespace StrategoApp.GameService {
         private int DefenderIdField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int FinalXField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int FinalYField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int InitialXField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int InitialYField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ResultField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
@@ -184,58 +188,6 @@ namespace StrategoApp.GameService {
                 if ((this.DefenderIdField.Equals(value) != true)) {
                     this.DefenderIdField = value;
                     this.RaisePropertyChanged("DefenderId");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int FinalX {
-            get {
-                return this.FinalXField;
-            }
-            set {
-                if ((this.FinalXField.Equals(value) != true)) {
-                    this.FinalXField = value;
-                    this.RaisePropertyChanged("FinalX");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int FinalY {
-            get {
-                return this.FinalYField;
-            }
-            set {
-                if ((this.FinalYField.Equals(value) != true)) {
-                    this.FinalYField = value;
-                    this.RaisePropertyChanged("FinalY");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int InitialX {
-            get {
-                return this.InitialXField;
-            }
-            set {
-                if ((this.InitialXField.Equals(value) != true)) {
-                    this.InitialXField = value;
-                    this.RaisePropertyChanged("InitialX");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int InitialY {
-            get {
-                return this.InitialYField;
-            }
-            set {
-                if ((this.InitialYField.Equals(value) != true)) {
-                    this.InitialYField = value;
-                    this.RaisePropertyChanged("InitialY");
                 }
             }
         }

@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -212,7 +211,7 @@ namespace StrategoApp.ViewModel
 
                     if (cell != null)
                     {
-                        var piece = AvailablePices.FirstOrDefault(p => p.PowerLevel == position.PowerLevel);
+                        var piece = AvailablePices.FirstOrDefault(p => p.PowerLevel == position.PieceId);
 
                         if (piece != null)
                         {
@@ -345,8 +344,47 @@ namespace StrategoApp.ViewModel
             }
         }
 
+
         private void HandleMove(Cell originCell, Cell destinationCell, Piece movingPiece)
         {
+            if (destinationCell.IsOccupied && destinationCell.OccupyingPiece?.OwnerId != UserId)
+            {
+                var defenderPiece = destinationCell.OccupyingPiece;
+
+                if (movingPiece.PowerLevel > defenderPiece.PowerLevel)
+                {
+                    MessageBox.Show("¡Destruiste la pieza del oponente!");
+                    destinationCell.OccupiedPieceImage = originCell.OccupiedPieceImage;
+                    destinationCell.IsOccupied = true;
+                    destinationCell.OccupyingPiece = movingPiece;
+
+                    originCell.OccupiedPieceImage = null;
+                    originCell.IsOccupied = false;
+                    originCell.OccupyingPiece = null;
+                }
+                else if (movingPiece.PowerLevel < defenderPiece.PowerLevel)
+                {
+                    MessageBox.Show("¡Tu pieza fue destruida!");
+                    originCell.OccupiedPieceImage = null;
+                    originCell.IsOccupied = false;
+                    originCell.OccupyingPiece = null;
+                }
+                else
+                {
+                    MessageBox.Show("¡Empate! Ninguna pieza fue destruida.");
+                }
+            }
+            else
+            {
+                destinationCell.OccupiedPieceImage = originCell.OccupiedPieceImage;
+                destinationCell.IsOccupied = true;
+                destinationCell.OccupyingPiece = movingPiece;
+
+                originCell.OccupiedPieceImage = null;
+                originCell.IsOccupied = false;
+                originCell.OccupyingPiece = null;
+            }
+
             SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column);
         }
 
@@ -386,6 +424,7 @@ namespace StrategoApp.ViewModel
             }
         }
 
+
         public void SendUpdatedPositionToServer(int initialRow, int initialColumn, int targetRow, int targetColumn)
         {
             var position = new PositionDTO
@@ -394,11 +433,13 @@ namespace StrategoApp.ViewModel
                 InitialY = initialColumn,
                 FinalX = targetRow,
                 FinalY = targetColumn,
-                PowerLevel = Board.FirstOrDefault(cell => cell.Row == targetRow && cell.Column == targetColumn)?.OccupyingPiece?.PowerLevel ?? 0,
+                PieceId = Board.FirstOrDefault(cell => cell.Row == targetRow && cell.Column == targetColumn)?.OccupyingPiece?.PowerLevel ?? 0,
+                MoveType = "move"
             };
 
             SendPositionToServer(position);
         }
+
 
         private async void SendPositionToServer(PositionDTO position)
         {
@@ -438,13 +479,7 @@ namespace StrategoApp.ViewModel
 
         public void OnReceiveOpponentPosition(PositionDTO position, GameService.OperationResult operationResult)
         {
-            if (!operationResult.IsSuccess)
-            {
-                MessageBox.Show($"Error del servidor: {operationResult.Message}");
-                return;
-            }
-
-            try
+            if (operationResult.IsSuccess)
             {
                 int invertedInitialRow = Math.Abs(9 - position.InitialX);
                 int invertedFinalRow = Math.Abs(9 - position.FinalX);
@@ -452,90 +487,58 @@ namespace StrategoApp.ViewModel
                 var originCell = Board.FirstOrDefault(c => c.Row == invertedInitialRow && c.Column == position.InitialY);
                 var destinationCell = Board.FirstOrDefault(c => c.Row == invertedFinalRow && c.Column == position.FinalY);
 
-                if (originCell == null || destinationCell == null)
+                if (originCell != null && destinationCell != null)
                 {
-                    MessageBox.Show("Error al procesar las celdas de origen o destino.");
-                    return;
-                }
+                    var attackerPowerLevel = position.PieceId;
+                    var defenderPiece = destinationCell.OccupyingPiece;
 
-                var movementInstruction = new MovementInstructionDTO
-                {
-                    DefenderId = UserId,
-                    Result = ProcessMove(originCell, destinationCell, position.PowerLevel)
-                };
-
-                _ = Task.Run(async () =>
-                {
-                    try
+                    if (destinationCell.IsOccupied && defenderPiece != null && defenderPiece.OwnerId == UserId)
                     {
-                        await _gameServiceClient.SendMovementInstructionsAsync(_gameId, movementInstruction);
+                        if (attackerPowerLevel > defenderPiece.PowerLevel)
+                        {
+                            MessageBox.Show("¡El oponente destruyó tu pieza!");
+
+                            originCell.OccupiedPieceImage = null;
+                            originCell.IsOccupied = false;
+                            originCell.OccupyingPiece = null;
+
+                            destinationCell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
+                            destinationCell.OccupyingPiece = new Piece
+                            {
+                                Name = "Dragon",
+                                Color = "Red"
+                            };
+                        }
+                        else if (attackerPowerLevel < defenderPiece.PowerLevel)
+                        {
+                            MessageBox.Show("¡Tu pieza resistió el ataque!");
+
+                            originCell.OccupiedPieceImage = null;
+                            originCell.IsOccupied = false;
+                            originCell.OccupyingPiece = null;
+                        }
+                        else
+                        {
+                            MessageBox.Show("¡Empate! Ninguna pieza se movió.");
+                        }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Console.WriteLine($"Error al enviar las instrucciones de movimiento: {ex.Message}");
+                        originCell.OccupiedPieceImage = null;
+                        originCell.IsOccupied = false;
+                        originCell.OccupyingPiece = null;
+
+                        destinationCell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
+                        destinationCell.IsOccupied = true;
+                        destinationCell.OccupyingPiece = new Piece
+                        {
+                            Name = "Dragon",
+                            Color = "Red"
+                        };
                     }
-                });
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error procesando la posición del oponente: {ex.Message}");
-            }
-        }
-
-
-        private string ProcessMove(Cell originCell, Cell destinationCell, int attackerPowerLevel)
-        {
-            var defenderPiece = destinationCell.OccupyingPiece;
-
-            if (destinationCell.IsOccupied && defenderPiece != null && defenderPiece.OwnerId == UserId)
-            {
-                if (attackerPowerLevel > defenderPiece.PowerLevel)
-                {
-                    MessageBox.Show("¡El oponente destruyó tu pieza!");
-
-                    UpdateCellState(originCell, null, false, null);
-                    UpdateCellState(destinationCell, new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png")), true, new Piece
-                    {
-                        Name = "Dragon",
-                        Color = "Red"
-                    });
-
-                    return "Kill";
-                }
-                else if (attackerPowerLevel < defenderPiece.PowerLevel)
-                {
-                    MessageBox.Show("¡Tu pieza resistió el ataque!");
-
-                    UpdateCellState(originCell, null, false, null);
-                    return "Fail";
-                }
-                else
-                {
-                    MessageBox.Show("¡Empate! Ninguna pieza se movió.");
-                    return "Draw";
                 }
             }
-            else
-            {
-                UpdateCellState(originCell, null, false, null);
-                UpdateCellState(destinationCell, new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png")), true, new Piece
-                {
-                    Name = "Dragon",
-                    Color = "Red"
-                });
-
-                return "Move";
-            }
         }
-
-        /*
-        private void UpdateCellState(Cell cell, BitmapImage pieceImage, bool isOccupied, Piece occupyingPiece)
-        {
-            cell.OccupiedPieceImage = pieceImage;
-            cell.IsOccupied = isOccupied;
-            cell.OccupyingPiece = occupyingPiece;
-        }
-        */
 
         public void OnOpponentAbandonedGame(GameService.OperationResult operationResult)
         {
@@ -554,79 +557,7 @@ namespace StrategoApp.ViewModel
 
         public void OnReceiveMovementInstructions(MovementInstructionResponse movementInstructionResponse)
         {
-            if (movementInstructionResponse == null || movementInstructionResponse.OperationResult == null)
-            {
-                MessageBox.Show("Error: La respuesta del movimiento es nula o inválida.");
-                return;
-            }
-
-            if (!movementInstructionResponse.OperationResult.IsSuccess)
-            {
-                MessageBox.Show($"Error en el movimiento: {movementInstructionResponse.OperationResult.Message}");
-                return;
-            }
-
-            var instruction = movementInstructionResponse.MovementInstructionDTO;
-            if (instruction == null)
-            {
-                MessageBox.Show("Error: Los datos de la instrucción de movimiento son nulos.");
-                return;
-            }
-
-            var originCell = Board.FirstOrDefault(c => c.Row == instruction.InitialX && c.Column == instruction.InitialY);
-            var destinationCell = Board.FirstOrDefault(c => c.Row == instruction.FinalX && c.Column == instruction.FinalY);
-
-            if (originCell == null || destinationCell == null)
-            {
-                MessageBox.Show("No se pudieron encontrar las celdas relevantes para este movimiento.");
-                return;
-            }
-
-            // Actualizamos tanto la celda de origen como la de destino independientemente del resultado.
-            switch (instruction.Result)
-            {
-                case "Kill":
-                    MessageBox.Show("¡Destruiste la pieza del oponente!");
-                    UpdateCellState(originCell, null, false, null); // Origen vacío
-                    UpdateCellState(destinationCell, originCell.OccupiedPieceImage, true, originCell.OccupyingPiece); // Destino con nueva pieza
-                    break;
-
-                case "Fail":
-                    MessageBox.Show("Tu movimiento no tuvo éxito.");
-                    UpdateCellState(originCell, originCell.OccupiedPieceImage, true, originCell.OccupyingPiece); // Origen no cambia
-                    UpdateCellState(destinationCell, destinationCell.OccupiedPieceImage, true, destinationCell.OccupyingPiece); // Destino no cambia
-                    break;
-
-                case "Draw":
-                    MessageBox.Show("¡Empate! Ninguna pieza fue destruida.");
-                    UpdateCellState(originCell, null, false, null); // Ambos vacíos
-                    UpdateCellState(destinationCell, null, false, null);
-                    break;
-
-                case "Move":
-                    MessageBox.Show("¡Movimiento exitoso!");
-                    UpdateCellState(originCell, null, false, null); // Origen vacío
-                    UpdateCellState(destinationCell, originCell.OccupiedPieceImage, true, originCell.OccupyingPiece); // Destino con nueva pieza
-                    break;
-
-                default:
-                    MessageBox.Show($"Resultado desconocido: {instruction.Result}");
-                    break;
-            }
-
-            OnPropertyChanged(nameof(Board));
+            throw new NotImplementedException();
         }
-
-        private void UpdateCellState(Cell cell, BitmapImage pieceImage, bool isOccupied, Piece occupyingPiece)
-        {
-            cell.OccupiedPieceImage = pieceImage;
-            cell.IsOccupied = isOccupied;
-            cell.OccupyingPiece = occupyingPiece;
-
-            OnPropertyChanged(nameof(cell.OccupiedPieceImage));
-            OnPropertyChanged(nameof(cell.IsOccupied));
-            OnPropertyChanged(nameof(cell.OccupyingPiece));
-        }
-
     }
 }
