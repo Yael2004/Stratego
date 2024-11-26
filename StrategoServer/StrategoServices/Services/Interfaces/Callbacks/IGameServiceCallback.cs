@@ -13,7 +13,7 @@ namespace StrategoServices.Services.Interfaces.Callbacks
     public interface IGameServiceCallback
     {
         [OperationContract(IsOneWay = true)]
-        void OnGameStarted(int gameId, OperationResult operationResult);
+        void OnGameStarted(int gameId, GameStartedResponse gameStartedResponse);
 
         [OperationContract(IsOneWay = true)]
         void OnReceiveOpponentPosition(PositionDTO position, OperationResult operationResult);

@@ -281,6 +281,67 @@ namespace StrategoApp.GameService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="GameStartedResponse", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
+    [System.SerializableAttribute()]
+    public partial class GameStartedResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsStarterField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategoApp.GameService.OperationResult OperationResultField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsStarter {
+            get {
+                return this.IsStarterField;
+            }
+            set {
+                if ((this.IsStarterField.Equals(value) != true)) {
+                    this.IsStarterField = value;
+                    this.RaisePropertyChanged("IsStarter");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategoApp.GameService.OperationResult OperationResult {
+            get {
+                return this.OperationResultField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OperationResultField, value) != true)) {
+                    this.OperationResultField = value;
+                    this.RaisePropertyChanged("OperationResult");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="OperationResult", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data")]
     [System.SerializableAttribute()]
     public partial class OperationResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -501,7 +562,7 @@ namespace StrategoApp.GameService {
     public interface IGameServiceCallback {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameService/OnGameStarted")]
-        void OnGameStarted(int gameId, StrategoApp.GameService.OperationResult operationResult);
+        void OnGameStarted(int gameId, StrategoApp.GameService.GameStartedResponse gameStartedResponse);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameService/OnReceiveOpponentPosition")]
         void OnReceiveOpponentPosition(StrategoApp.GameService.PositionDTO position, StrategoApp.GameService.OperationResult operationResult);

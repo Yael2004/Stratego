@@ -73,7 +73,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="gameId" type="xs:int" />
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="operationResult" nillable="true" type="q3:OperationResult" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" minOccurs="0" name="gameStartedResponse" nillable="true" type="q3:GameStartedResponse" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

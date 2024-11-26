@@ -60,12 +60,12 @@ namespace StrategoServices.Services
             var result = GetGameSession(gameId, out var gameSession);
             if (!result.IsSuccess)
             {
-                await NotifyCallbackAsync(() => playerCallback.OnGameStarted(0, result));
+                await NotifyCallbackAsync(() => playerCallback.OnGameStarted(0, new GameStartedResponse(false, result)));
                 return;
             }
 
             var joinResult = await AddPlayerToSessionAsync(gameSession, playerId, playerCallback);
-            await NotifyCallbackAsync(() => playerCallback.OnGameStarted(gameId, joinResult));
+            await NotifyCallbackAsync(() => playerCallback.OnGameStarted(gameId, new GameStartedResponse(false, joinResult)));
         }
 
         private async Task<OperationResult> AddPlayerToSessionAsync(GameSession gameSession, int playerId, IGameServiceCallback playerCallback)
@@ -85,8 +85,8 @@ namespace StrategoServices.Services
                     var player1Callback = gameSession.GetCallbackForPlayer(gameSession.Player1Id);
                     var readyResult = new OperationResult(true, "Game is ready.");
                     await Task.WhenAll(
-                        NotifyCallbackAsync(() => player1Callback.OnGameStarted(gameSession.GameId, readyResult)),
-                        NotifyCallbackAsync(() => playerCallback.OnGameStarted(gameSession.GameId, readyResult))
+                        NotifyCallbackAsync(() => player1Callback.OnGameStarted(gameSession.GameId, new GameStartedResponse(true, readyResult))),
+                        NotifyCallbackAsync(() => playerCallback.OnGameStarted(gameSession.GameId, new GameStartedResponse(false, readyResult)))
                     );
                     return readyResult;
                 }

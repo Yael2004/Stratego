@@ -26,6 +26,7 @@ namespace StrategoApp.ViewModel
         private string _opponentProfilePicture;
         private int _selectedPieceId;
         private int _gameId;
+        private bool _playerStartTurn;
         private Cell _selectedCell;
 
         private MainWindowViewModel _mainWindowViewModel;
@@ -427,16 +428,17 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public void OnGameStarted(int gameId, GameService.OperationResult operationResult)
+        public void OnGameStarted(int gameId, GameStartedResponse gameStartedResponse)
         {
             _gameId = gameId;
-            if (operationResult.IsSuccess)
+            if (gameStartedResponse.OperationResult.IsSuccess)
             {
+                _playerStartTurn = gameStartedResponse.IsStarter;
                 _mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel, this));
             }
             else
             {
-                MessageBox.Show("Error starting game: " + operationResult.Message);
+                MessageBox.Show("Error starting game: " + gameStartedResponse.OperationResult.Message);
             }
         }
 
