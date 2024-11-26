@@ -7,7 +7,6 @@
       <xs:element minOccurs="0" name="FinalY" type="xs:int" />
       <xs:element minOccurs="0" name="InitialX" type="xs:int" />
       <xs:element minOccurs="0" name="InitialY" type="xs:int" />
-      <xs:element minOccurs="0" name="MoveType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PieceName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PowerLevel" type="xs:int" />
     </xs:sequence>
@@ -16,6 +15,10 @@
   <xs:complexType name="MovementInstructionDTO">
     <xs:sequence>
       <xs:element minOccurs="0" name="DefenderId" type="xs:int" />
+      <xs:element minOccurs="0" name="FinalX" type="xs:int" />
+      <xs:element minOccurs="0" name="FinalY" type="xs:int" />
+      <xs:element minOccurs="0" name="InitialX" type="xs:int" />
+      <xs:element minOccurs="0" name="InitialY" type="xs:int" />
       <xs:element minOccurs="0" name="Result" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>

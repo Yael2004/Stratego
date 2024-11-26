@@ -11,7 +11,20 @@ namespace StrategoServices.Data.DTO
     public class MovementInstructionDTO
     {
         [DataMember]
+        public int InitialX { get; set; }
+
+        [DataMember]
+        public int InitialY { get; set; }
+
+        [DataMember]
+        public int FinalX { get; set; }
+
+        [DataMember]
+        public int FinalY { get; set; }
+
+        [DataMember]
         public int DefenderId { get; set; }
+
         [DataMember]
         public string Result { get; set; }
 
