@@ -198,6 +198,41 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.TopPlayersList(response));
         }
 
+        public async Task GetConnectedFriendsAsync(int playerId)
+        {
+            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IPlayerFriendsListServiceCallback>();
+            var response = new PlayerFriendsResponse();
+
+            try
+            {
+                var getFriendsResult = _profilesManager.Value.GetFriendIdsList(playerId);
+
+                if (!getFriendsResult.IsSuccess)
+                {
+                    response.Result = new OperationResult(false, getFriendsResult.Error);
+                }
+                else
+                {
+                    var connectedFriends = getFriendsResult.Value
+                        .Where(friendId => _connectedPlayersManager.IsPlayerConnected(friendId))
+                        .ToList();
+
+                    response.Result = new OperationResult(true, "Connected friends retrieved successfully");
+                    response.FriendsIds = connectedFriends;
+                }
+            }
+            catch (TimeoutException)
+            {
+                response.Result = new OperationResult(false, "Server error");
+            }
+            catch (Exception ex)
+            {
+                response.Result = new OperationResult(false, $"Unexpected error: {ex.Message}");
+            }
+
+            await Task.Run(() => callback.PlayerFriendsList(response));
+        }
+
         public void LogOut(int playerId)
         {
             if (_connectedPlayersManager.RemovePlayer(playerId))

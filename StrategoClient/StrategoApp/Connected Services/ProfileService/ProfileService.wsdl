@@ -187,6 +187,12 @@
   <wsdl:message name="IPlayerFriendsListService_GetPlayerFriendsList_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPlayerFriendsListResponse" />
   </wsdl:message>
+  <wsdl:message name="IPlayerFriendsListService_GetConnectedFriends_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetConnectedFriends" />
+  </wsdl:message>
+  <wsdl:message name="IPlayerFriendsListService_GetConnectedFriends_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetConnectedFriendsResponse" />
+  </wsdl:message>
   <wsdl:message name="IPlayerFriendsListService_PlayerFriendsList_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:PlayerFriendsList" />
   </wsdl:message>
@@ -237,6 +243,10 @@
     <wsdl:operation name="GetPlayerFriendsList">
       <wsdl:input wsaw:Action="http://tempuri.org/IPlayerFriendsListService/GetPlayerFriendsList" message="tns:IPlayerFriendsListService_GetPlayerFriendsList_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPlayerFriendsListService/GetPlayerFriendsListResponse" message="tns:IPlayerFriendsListService_GetPlayerFriendsList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetConnectedFriends">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPlayerFriendsListService/GetConnectedFriends" message="tns:IPlayerFriendsListService_GetConnectedFriends_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPlayerFriendsListService/GetConnectedFriendsResponse" message="tns:IPlayerFriendsListService_GetConnectedFriends_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="PlayerFriendsList">
       <wsdl:output wsaw:Action="http://tempuri.org/IPlayerFriendsListService/PlayerFriendsList" message="tns:IPlayerFriendsListService_PlayerFriendsList_OutputCallbackMessage" />
@@ -318,6 +328,15 @@
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
     <wsdl:operation name="GetPlayerFriendsList">
       <soap12:operation soapAction="http://tempuri.org/IPlayerFriendsListService/GetPlayerFriendsList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetConnectedFriends">
+      <soap12:operation soapAction="http://tempuri.org/IPlayerFriendsListService/GetConnectedFriends" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

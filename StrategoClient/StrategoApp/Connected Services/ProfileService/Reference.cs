@@ -762,6 +762,12 @@ namespace StrategoApp.ProfileService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPlayerFriendsListService/GetPlayerFriendsList", ReplyAction="http://tempuri.org/IPlayerFriendsListService/GetPlayerFriendsListResponse")]
         System.Threading.Tasks.Task GetPlayerFriendsListAsync(int playerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPlayerFriendsListService/GetConnectedFriends", ReplyAction="http://tempuri.org/IPlayerFriendsListService/GetConnectedFriendsResponse")]
+        void GetConnectedFriends(int playerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPlayerFriendsListService/GetConnectedFriends", ReplyAction="http://tempuri.org/IPlayerFriendsListService/GetConnectedFriendsResponse")]
+        System.Threading.Tasks.Task GetConnectedFriendsAsync(int playerId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -805,6 +811,14 @@ namespace StrategoApp.ProfileService {
         
         public System.Threading.Tasks.Task GetPlayerFriendsListAsync(int playerId) {
             return base.Channel.GetPlayerFriendsListAsync(playerId);
+        }
+        
+        public void GetConnectedFriends(int playerId) {
+            base.Channel.GetConnectedFriends(playerId);
+        }
+        
+        public System.Threading.Tasks.Task GetConnectedFriendsAsync(int playerId) {
+            return base.Channel.GetConnectedFriendsAsync(playerId);
         }
     }
     

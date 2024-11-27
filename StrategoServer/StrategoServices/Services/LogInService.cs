@@ -80,7 +80,7 @@ namespace StrategoServices.Services
             }
 
             var playerInfo = playerResult.Value;
-            var playerAdded = _connectedPlayersManager.AddPlayer(playerId, playerInfo.Name);
+            var playerAdded = _connectedPlayersManager.AddPlayer(playerInfo.Id, playerInfo.Name);
             if (!playerAdded)
             {
                 await Task.Run(() => callback.LogInResult(new OperationResult(false, "Failed to add player to connected players list.")));

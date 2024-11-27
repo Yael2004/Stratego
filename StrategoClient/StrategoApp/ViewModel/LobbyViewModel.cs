@@ -369,7 +369,8 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                await _playerFriendsListServiceClient.GetPlayerFriendsListAsync(UserId);
+                //await _playerFriendsListServiceClient.GetPlayerFriendsListAsync(UserId);
+                await _playerFriendsListServiceClient.GetConnectedFriendsAsync(UserId);
             }
             catch (Exception ex)
             {
