@@ -16,6 +16,9 @@ namespace StrategoServices.Services.Interfaces
     {
         [OperationContract]
         Task GetPlayerStatisticsAsync(int playerId);
+
+        [OperationContract]
+        void LogOut(int playerId);
     }
 
 }

@@ -16,10 +16,12 @@ namespace StrategoServices.Services
         Interfaces.IOtherProfileDataService, Interfaces.ITopPlayersListService
     {
         private readonly Lazy<ProfilesManager> _profilesManager;
+        private readonly ConnectedPlayersManager _connectedPlayersManager;
 
-        public ProfileService(Lazy<ProfilesManager> profilesManager)
+        public ProfileService(Lazy<ProfilesManager> profilesManager, ConnectedPlayersManager connectedPlayersManager)
         {
             _profilesManager = profilesManager;
+            _connectedPlayersManager = connectedPlayersManager;
         }
 
         public async Task GetOtherPlayerInfoAsync(int playerId, int requesterPlayerId)
@@ -194,6 +196,18 @@ namespace StrategoServices.Services
             }
 
             await Task.Run(() => callback.TopPlayersList(response));
+        }
+
+        public void LogOut(int playerId)
+        {
+            if (_connectedPlayersManager.RemovePlayer(playerId))
+            {
+                Console.WriteLine($"Player {playerId} eliminated from the list");
+            }
+            else
+            {
+                Console.WriteLine($"Error: Player {playerId} wasn't in the list");
+            }
         }
     }
 }

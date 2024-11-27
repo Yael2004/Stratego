@@ -32,6 +32,7 @@ namespace StrategoServices
             builder.RegisterType<InvitationManager>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<WinsManager>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<ReportPlayerManager>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<ConnectedPlayersManager>().AsSelf().SingleInstance();
 
             builder.RegisterType<AccountRepository>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<PlayerRepository>().AsSelf().InstancePerLifetimeScope();

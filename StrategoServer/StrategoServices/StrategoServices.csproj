@@ -104,6 +104,7 @@
     <Compile Include="Data\DTO\PositionDTO.cs" />
     <Compile Include="Data\DTO\RoomCreatedResponse.cs" />
     <Compile Include="Data\DTO\TopPlayersResponse.cs" />
+    <Compile Include="Logic\ConnectedPlayersManager.cs" />
     <Compile Include="Logic\FriendsManager.cs" />
     <Compile Include="Logic\GameSession.cs" />
     <Compile Include="Logic\InvitationManager.cs" />

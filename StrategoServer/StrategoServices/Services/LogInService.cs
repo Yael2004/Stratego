@@ -18,13 +18,16 @@ namespace StrategoServices.Services
     {
         private readonly Lazy<AccountManager> _accountManager;
         private readonly Lazy<PasswordManager> _passwordManager;
+        private readonly ConnectedPlayersManager _connectedPlayersManager;
 
-        public LogInService(Lazy<AccountManager> accountManager, Lazy<PasswordManager> passwordManager)
+        public LogInService(Lazy<AccountManager> accountManager, Lazy<PasswordManager> passwordManager, ConnectedPlayersManager connectedPlayersManager)
         {
             _accountManager = accountManager;
             _passwordManager = passwordManager;
+            _connectedPlayersManager = connectedPlayersManager;
         }
 
+        /*
         public async Task LogInAsync(string email, string password)
         {
             var callback = OperationContext.Current.GetCallbackChannel<ILogInServiceCallback>();
@@ -48,6 +51,47 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.AccountInfo(playerResult.Value));
 
             await Task.Run(() => callback.LogInResult(new OperationResult(true, "Login successful")));
+        }
+        */
+
+        public async Task LogInAsync(string email, string password)
+        {
+            var callback = OperationContext.Current.GetCallbackChannel<ILogInServiceCallback>();
+
+            var loginResult = _accountManager.Value.LogInAccount(email, password);
+            if (!loginResult.IsSuccess)
+            {
+                await Task.Run(() => callback.LogInResult(new OperationResult(false, loginResult.Error)));
+                return;
+            }
+
+            var playerId = loginResult.Value;
+            if (_connectedPlayersManager.IsPlayerConnected(playerId))
+            {
+                await Task.Run(() => callback.LogInResult(new OperationResult(false, "User is already logged in.")));
+                return;
+            }
+
+            var playerResult = _accountManager.Value.GetLogInAccount(playerId);
+            if (!playerResult.IsSuccess)
+            {
+                await Task.Run(() => callback.LogInResult(new OperationResult(false, playerResult.Error)));
+                return;
+            }
+
+            var playerInfo = playerResult.Value;
+            var playerAdded = _connectedPlayersManager.AddPlayer(playerId, playerInfo.Name);
+            if (!playerAdded)
+            {
+                await Task.Run(() => callback.LogInResult(new OperationResult(false, "Failed to add player to connected players list.")));
+                return;
+            }
+
+            await Task.Run(() =>
+            {
+                callback.AccountInfo(playerInfo);
+                callback.LogInResult(new OperationResult(true, "Login successful"));
+            });
         }
 
         public async Task SignUpAsync(string email, string password, string playername)

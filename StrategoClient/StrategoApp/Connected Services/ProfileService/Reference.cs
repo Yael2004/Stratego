@@ -635,6 +635,12 @@ namespace StrategoApp.ProfileService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileDataService/GetPlayerStatistics", ReplyAction="http://tempuri.org/IProfileDataService/GetPlayerStatisticsResponse")]
         System.Threading.Tasks.Task GetPlayerStatisticsAsync(int playerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileDataService/LogOut", ReplyAction="http://tempuri.org/IProfileDataService/LogOutResponse")]
+        void LogOut(int playerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileDataService/LogOut", ReplyAction="http://tempuri.org/IProfileDataService/LogOutResponse")]
+        System.Threading.Tasks.Task LogOutAsync(int playerId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -681,6 +687,14 @@ namespace StrategoApp.ProfileService {
         
         public System.Threading.Tasks.Task GetPlayerStatisticsAsync(int playerId) {
             return base.Channel.GetPlayerStatisticsAsync(playerId);
+        }
+        
+        public void LogOut(int playerId) {
+            base.Channel.LogOut(playerId);
+        }
+        
+        public System.Threading.Tasks.Task LogOutAsync(int playerId) {
+            return base.Channel.LogOutAsync(playerId);
         }
     }
     

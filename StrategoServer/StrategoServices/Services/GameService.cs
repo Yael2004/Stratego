@@ -65,7 +65,6 @@ namespace StrategoServices.Services
             }
 
             var joinResult = await AddPlayerToSessionAsync(gameSession, playerId, playerCallback);
-            await NotifyCallbackAsync(() => playerCallback.OnGameStarted(gameId, new GameStartedResponse(false, joinResult)));
         }
 
         private async Task<OperationResult> AddPlayerToSessionAsync(GameSession gameSession, int playerId, IGameServiceCallback playerCallback)

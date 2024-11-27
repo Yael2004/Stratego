@@ -160,6 +160,12 @@
   <wsdl:message name="IProfileDataService_GetPlayerStatistics_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPlayerStatisticsResponse" />
   </wsdl:message>
+  <wsdl:message name="IProfileDataService_LogOut_InputMessage">
+    <wsdl:part name="parameters" element="tns:LogOut" />
+  </wsdl:message>
+  <wsdl:message name="IProfileDataService_LogOut_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LogOutResponse" />
+  </wsdl:message>
   <wsdl:message name="IProfileDataService_PlayerInfo_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:PlayerInfo" />
   </wsdl:message>
@@ -206,6 +212,10 @@
     <wsdl:operation name="GetPlayerStatistics">
       <wsdl:input wsaw:Action="http://tempuri.org/IProfileDataService/GetPlayerStatistics" message="tns:IProfileDataService_GetPlayerStatistics_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProfileDataService/GetPlayerStatisticsResponse" message="tns:IProfileDataService_GetPlayerStatistics_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LogOut">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProfileDataService/LogOut" message="tns:IProfileDataService_LogOut_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProfileDataService/LogOutResponse" message="tns:IProfileDataService_LogOut_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="PlayerInfo">
       <wsdl:output wsaw:Action="http://tempuri.org/IProfileDataService/PlayerInfo" message="tns:IProfileDataService_PlayerInfo_OutputCallbackMessage" />
@@ -255,6 +265,15 @@
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
     <wsdl:operation name="GetPlayerStatistics">
       <soap12:operation soapAction="http://tempuri.org/IProfileDataService/GetPlayerStatistics" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogOut">
+      <soap12:operation soapAction="http://tempuri.org/IProfileDataService/LogOut" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

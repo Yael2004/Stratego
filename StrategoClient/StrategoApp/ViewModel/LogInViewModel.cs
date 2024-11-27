@@ -410,6 +410,7 @@ namespace StrategoApp.ViewModel
                 else
                 {
                     ErrorMessage = Properties.Resources.NonexistentAccount_Label;
+                    MessageBox.Show(result.Message);
                 }
             });
         }
