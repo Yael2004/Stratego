@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
@@ -12,6 +13,7 @@ namespace StrategoDataAccess
     public class LabelRepository
     {
         private readonly Lazy<StrategoEntities> _context;
+        private static readonly ILog log = LogManager.GetLogger(typeof(LabelRepository));
 
         public LabelRepository(Lazy<StrategoEntities> context)
         {
@@ -33,10 +35,12 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
+                log.Error("Database error", sqlEx);
                 return Result<Label>.Failure($"Database error: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
+                log.Error("Unexpected error", ex);
                 return Result<Label>.Failure($"Unexpected error: {ex.Message}");
             }
         }

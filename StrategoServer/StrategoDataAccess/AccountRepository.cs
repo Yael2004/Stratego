@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
@@ -12,6 +13,7 @@ namespace StrategoDataAccess
 {
     public class AccountRepository
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(AccountRepository));
         private readonly Lazy<StrategoEntities> _context;
 
         public AccountRepository(Lazy<StrategoEntities> context)
@@ -25,6 +27,7 @@ namespace StrategoDataAccess
 
             if (!existenceCheckResult.IsSuccess)
             {
+                log.Warn($"Account creation failed: {existenceCheckResult.Error}");
                 return Result<string>.Failure(existenceCheckResult.Error);
             }
 
@@ -52,8 +55,8 @@ namespace StrategoDataAccess
                     var newPlayer = new Player
                     {
                         Name = playerName,
-                        PictureId = defaultPictureId,  
-                        IdLabel = defaultLabelId,      
+                        PictureId = defaultPictureId,
+                        IdLabel = defaultLabelId,
                         AccountId = newAccount.IdAccount
                     };
 
@@ -71,22 +74,24 @@ namespace StrategoDataAccess
                     _context.Value.SaveChanges();
 
                     transaction.Commit();
-
                     return Result<string>.Success("Account and player created successfully");
                 }
                 catch (DbEntityValidationException dbEx)
                 {
                     transaction.Rollback();
+                    log.Error("Entity validation error during account creation", dbEx);
                     return Result<string>.Failure($"Entity validation error: {dbEx.Message}");
                 }
                 catch (SqlException sqlEx)
                 {
                     transaction.Rollback();
+                    log.Error("Database error during account creation", sqlEx);
                     return Result<string>.Failure($"Database error: {sqlEx.Message}");
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
+                    log.Error("Unexpected error during account creation", ex);
                     return Result<string>.Failure($"Unexpected error: {ex.Message}");
                 }
             }
@@ -107,14 +112,17 @@ namespace StrategoDataAccess
             }
             catch (DbEntityValidationException dbEx)
             {
+                log.Error("Entity validation error during credential validation", dbEx);
                 return Result<int>.Failure($"Entity validation error: {dbEx.Message}");
             }
             catch (SqlException sqlEx)
             {
+                log.Error("Database error during credential validation", sqlEx);
                 return Result<int>.Failure($"Database error: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
+                log.Error("Unexpected error during credential validation", ex);
                 return Result<int>.Failure($"Unexpected error: {ex.Message}");
             }
         }
@@ -128,10 +136,12 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
+                log.Error("Database error during account existence check", sqlEx);
                 return Result<bool>.Failure($"Database error: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
+                log.Error("Unexpected error during account existence check", ex);
                 return Result<bool>.Failure($"Unexpected error: {ex.Message}");
             }
         }
@@ -145,6 +155,7 @@ namespace StrategoDataAccess
                     var existenceCheckResult = AlreadyExistentAccount(email);
                     if (!existenceCheckResult.IsSuccess)
                     {
+                        log.Warn($"Password change failed: {existenceCheckResult.Error}");
                         return Result<string>.Failure(existenceCheckResult.Error);
                     }
 
@@ -163,26 +174,27 @@ namespace StrategoDataAccess
                     _context.Value.SaveChanges();
 
                     transaction.Commit();
-
                     return Result<string>.Success("Password changed successfully");
                 }
                 catch (DbEntityValidationException dbEx)
                 {
                     transaction.Rollback();
+                    log.Error("Entity validation error during password change", dbEx);
                     return Result<string>.Failure($"Entity validation error: {dbEx.Message}");
                 }
                 catch (SqlException sqlEx)
                 {
                     transaction.Rollback();
+                    log.Error("Database error during password change", sqlEx);
                     return Result<string>.Failure($"Database error: {sqlEx.Message}");
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
+                    log.Error("Unexpected error during password change", ex);
                     return Result<string>.Failure($"Unexpected error: {ex.Message}");
                 }
             }
         }
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using MailKit.Net.Smtp;
+﻿using log4net;
+using MailKit.Net.Smtp;
 using MimeKit;
 using StrategoServices.Logic.Interfaces;
 using System;
@@ -14,6 +15,7 @@ namespace StrategoServices.Logic
         private readonly string _userMail;
         private readonly string _password;
         private SmtpClient _smtpClient;
+        private static readonly ILog log = LogManager.GetLogger(typeof(EmailSender));
 
         private EmailSender()
         {
@@ -36,7 +38,7 @@ namespace StrategoServices.Logic
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Sending mail error: {ex.Message}");
+                log.Error("Sending email error: ", ex);
             }
             finally
             {
@@ -55,7 +57,7 @@ namespace StrategoServices.Logic
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Sending mail error: {ex.Message}");
+                log.Error("Sending email error: ", ex);
             }
             finally
             {

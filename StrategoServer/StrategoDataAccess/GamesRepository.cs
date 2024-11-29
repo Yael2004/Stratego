@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
@@ -13,6 +14,7 @@ namespace StrategoDataAccess
     public class GamesRepository
     {
         private readonly Lazy<StrategoEntities> _context;
+        private static readonly ILog log = LogManager.GetLogger(typeof(GamesRepository));
 
         public GamesRepository(Lazy<StrategoEntities> context)
         {
@@ -36,10 +38,12 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
+                log.Error("Database error", sqlEx);
                 return Result<Games>.Failure($"Database error: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
+                log.Error("Unexpected error", ex);
                 return Result<Games>.Failure($"Unexpected error: {ex.Message}");
             }
         }
@@ -62,10 +66,12 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
+                log.Error("Database error", sqlEx);
                 return Result<string>.Failure($"Database error: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
+                log.Error("Unexpected error", ex);
                 return Result<string>.Failure($"Unexpected error: {ex.Message}");
             }
         }
@@ -88,10 +94,12 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
+                log.Error("Database error", sqlEx);
                 return Result<string>.Failure($"Database error: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
+                log.Error("Unexpected error", ex);
                 return Result<string>.Failure($"Unexpected error: {ex.Message}");
             }
         }
