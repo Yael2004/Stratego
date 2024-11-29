@@ -359,7 +359,7 @@ namespace StrategoApp.ViewModel
         private void Logout(Object obj)
         {
             var client = new ProfileDataServiceClient(new InstanceContext(this));
-            client.LogOut(AccountId);
+            client.LogOut(PlayerId);
             _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
         }
 

@@ -13,14 +13,16 @@ namespace StrategoServices.Services
         private readonly ChatManager _chatManager;
         private readonly ConcurrentDictionary<int, IChatServiceCallback> _clients = new ConcurrentDictionary<int, IChatServiceCallback>();
         private int _nextGuestId = -1;
+        private readonly ConnectedPlayersManager _connectedPlayersManager;
 
-        public ChatService()
+        public ChatService(ConnectedPlayersManager connectedPlayersManager)
         {
             _chatManager = new ChatManager();
 
             _chatManager.OnClientConnected += HandleClientConnected;
             _chatManager.OnClientDisconnected += HandleClientDisconnected;
             _chatManager.OnMessageBroadcast += BroadcastMessage;
+            _connectedPlayersManager = connectedPlayersManager;
         }
 
         public int Connect(int userId, string username)
@@ -47,6 +49,10 @@ namespace StrategoServices.Services
                 {
                     callback.ChatResponse(new OperationResult(false, "Failed to connect user."));
                 }
+
+                var communicationObject = (ICommunicationObject)callback;
+                communicationObject.Closed += (s, e) => OnClientDisconnected(userId);
+                communicationObject.Faulted += (s, e) => OnClientDisconnected(userId);
             }
 
             return userId;
@@ -101,6 +107,21 @@ namespace StrategoServices.Services
                     Console.WriteLine($"Sending message error: {ex.Message}");
                 }
             }
+        }
+
+        private void OnClientDisconnected(int userId)
+        {
+            if (_connectedPlayersManager.RemovePlayer(userId))
+            {
+                Console.WriteLine($"Player {userId} removed from connected players list.");
+            }
+            else
+            {
+                Console.WriteLine($"Error: Player {userId} wasn't in the connected players list.");
+            }
+
+            IChatServiceCallback callback;
+            _clients.TryRemove(userId, out callback);
         }
     }
 }

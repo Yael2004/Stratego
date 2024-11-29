@@ -2,8 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ServiceModel;
 
 namespace StrategoServices.Logic
 {
@@ -30,29 +29,5 @@ namespace StrategoServices.Logic
         {
             return _connectedPlayers.TryRemove(playerId, out _);
         }
-
-        public string GetPlayerInfo(int playerId)
-        {
-            _connectedPlayers.TryGetValue(playerId, out var playerInfo);
-            return playerInfo;
-        }
-
-        public IReadOnlyDictionary<int, string> GetAllConnectedPlayers()
-        {
-            return _connectedPlayers;
-        }
-
-        public IReadOnlyDictionary<int, string> GetConnectedFriends(IEnumerable<int> friendIds)
-        {
-            if (friendIds == null || !friendIds.Any())
-            {
-                return new Dictionary<int, string>();
-            }
-
-            return _connectedPlayers
-                .Where(kvp => friendIds.Contains(kvp.Key))
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-        }
-
     }
 }

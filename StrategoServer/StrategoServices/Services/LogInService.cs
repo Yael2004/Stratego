@@ -27,33 +27,6 @@ namespace StrategoServices.Services
             _connectedPlayersManager = connectedPlayersManager;
         }
 
-        /*
-        public async Task LogInAsync(string email, string password)
-        {
-            var callback = OperationContext.Current.GetCallbackChannel<ILogInServiceCallback>();
-
-            var loginResult = _accountManager.Value.LogInAccount(email, password);
-
-            if (!loginResult.IsSuccess)
-            {
-                await Task.Run(() => callback.LogInResult(new OperationResult(false, loginResult.Error)));
-                return;
-            }
-
-            var playerResult = _accountManager.Value.GetLogInAccount(loginResult.Value);
-
-            if (!playerResult.IsSuccess)
-            {
-                await Task.Run(() => callback.LogInResult(new OperationResult(false, playerResult.Error)));
-                return;
-            }
-
-            await Task.Run(() => callback.AccountInfo(playerResult.Value));
-
-            await Task.Run(() => callback.LogInResult(new OperationResult(true, "Login successful")));
-        }
-        */
-
         public async Task LogInAsync(string email, string password)
         {
             var callback = OperationContext.Current.GetCallbackChannel<ILogInServiceCallback>();
