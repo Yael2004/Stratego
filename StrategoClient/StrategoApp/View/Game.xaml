@@ -12,9 +12,25 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <helpers:NullToDefaultImageConverter x:Key="NullToDefaultImageConverter"/>
+
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="LightGray" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding DataContext.IsMyTurn, 
+                                      RelativeSource={RelativeSource AncestorType=ItemsControl}}" 
+                     Value="True">
+                    <Setter Property="Background" Value="Green" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding DataContext.IsMyTurn, 
+                                      RelativeSource={RelativeSource AncestorType=ItemsControl}}" 
+                     Value="False">
+                    <Setter Property="Background" Value="Red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="Black" Effect="{Binding Path=ShadowEffect}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="120" />
@@ -24,11 +40,19 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Ellipse Width="50" Height="50" Fill="Black" />
-            <TextBlock Text="Saay" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" />
+            <Ellipse Width="50" Height="50">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="{Binding ProfilePicture}" Stretch="UniformToFill"/>
+                </Ellipse.Fill>
+            </Ellipse>
+            <TextBlock Text="{Binding Username}" 
+                       FontSize="20" 
+                       FontWeight="Bold" 
+                       HorizontalAlignment="Center" 
+                       Foreground="{StaticResource DarkViolet}"/>
         </StackPanel>
 
-        <Border Grid.Column="1" Background="LightGray" Width="100">
+        <Border Grid.Column="1" Background="Transparent" Width="100">
             <TextBlock Text="Información de personajes" RenderTransformOrigin="0.5,0.5" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock.RenderTransform>
                     <RotateTransform Angle="-90"/>
@@ -37,28 +61,34 @@
         </Border>
 
         <Grid Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Image Source="/StrategoApp;component/Assets/Images/Board.png" Stretch="Fill" />
+            <Grid>
+                <Image Source="/StrategoApp;component/Assets/Images/Board.png" Stretch="Fill" />
+                <ItemsControl ItemsSource="{Binding Board}" Margin="0" MaxWidth="700" MaxHeight="700" RenderTransformOrigin="0.5,0.5">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="10" Columns="10" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DataContext.CellClickedCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                    CommandParameter="{Binding}"
+                                    Background="{Binding IsOccupied, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <Image Source="{Binding OccupiedPieceImage}" />
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
 
-            <ItemsControl ItemsSource="{Binding Board}" Margin="0" MaxWidth="700" MaxHeight="700" RenderTransformOrigin="0.5,0.5">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="10" Columns="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button Background="Transparent" BorderThickness="1" BorderBrush="Black" 
-                                Command="{Binding DataContext.CellClickedCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                CommandParameter="{Binding}">
-                            <Image Source="{Binding OccupiedPieceImage, Converter={StaticResource NullToDefaultImageConverter}}" 
-                                   Visibility="{Binding IsOccupied, Converter={StaticResource BoolToVisibilityConverter}}" />
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <Grid Background="Transparent"
+          Visibility="{Binding IsMyTurn, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock Text="Esperando turno..." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Foreground="Red" />
+            </Grid>
         </Grid>
 
-        <Border Grid.Column="3" Background="LightGray" Width="100">
+
+        <Border Grid.Column="3" Background="Transparent" Width="100">
             <TextBlock Text="Información de personajes" RenderTransformOrigin="0.5,0.5" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock.RenderTransform>
                     <RotateTransform Angle="90"/>
@@ -67,8 +97,17 @@
         </Border>
 
         <StackPanel Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Ellipse Width="50" Height="50" Fill="Black" />
-            <TextBlock Text="McGabo" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" />
+            <Ellipse Width="50" Height="50">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="{Binding OpponentProfilePicture}" Stretch="UniformToFill"/>
+                </Ellipse.Fill>
+            </Ellipse>
+            
+            <TextBlock Text="{Binding OpponentUsername}" 
+                       FontSize="20" 
+                       FontWeight="Bold" 
+                       HorizontalAlignment="Center" 
+                       Foreground="{StaticResource DarkViolet}"/>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,10 +28,12 @@ namespace StrategoApp.ViewModel
         private int _selectedPieceId;
         private int _gameId;
         private bool _playerStartTurn;
+        private bool _isMyTurn;
         private Cell _selectedCell;
 
         private MainWindowViewModel _mainWindowViewModel;
         private GameServiceClient _gameServiceClient;
+        private OtherProfileDataServiceClient _otherProfileDataService;
         public ObservableCollection<Piece> PlayerPieces { get; set; }
         public ObservableCollection<Cell> Board { get; set; }
         private Button[,] _boardButtons;
@@ -57,6 +60,7 @@ namespace StrategoApp.ViewModel
             _mainWindowViewModel = mainWindowViewModel;
             AvailablePices = availablePieces;
             _gameServiceClient = new GameServiceClient(new System.ServiceModel.InstanceContext(this));
+            _otherProfileDataService = new OtherProfileDataServiceClient(new System.ServiceModel.InstanceContext(this));
 
             PlayerPieces = new ObservableCollection<Piece>();
             Board = new ObservableCollection<Cell>();
@@ -68,10 +72,22 @@ namespace StrategoApp.ViewModel
         public GameViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _gameServiceClient = new GameServiceClient(new System.ServiceModel.InstanceContext(this));
+            _otherProfileDataService = new OtherProfileDataServiceClient(new System.ServiceModel.InstanceContext(this));
+
             _mainWindowViewModel = mainWindowViewModel;
             PlayerPieces = new ObservableCollection<Piece>();
             Board = new ObservableCollection<Cell>();
             CellClickedCommand = new ViewModelCommandGeneric<Cell>(OnCellClicked);
+
+            invalidPositions.Add((5, 3));
+            invalidPositions.Add((5, 4));
+            invalidPositions.Add((6, 3));
+            invalidPositions.Add((6, 4));
+            invalidPositions.Add((5, 7));
+            invalidPositions.Add((5, 8));
+            invalidPositions.Add((6, 7));
+            invalidPositions.Add((6, 8));
+
             LoadPlayerData();
             InitializeBoard();
         }
@@ -143,6 +159,19 @@ namespace StrategoApp.ViewModel
             {
                 _selectedPieceId = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public bool IsMyTurn
+        {
+            get => _isMyTurn;
+            set
+            {
+                if (_isMyTurn != value)
+                {
+                    _isMyTurn = value;
+                    OnPropertyChanged(nameof(IsMyTurn));
+                }
             }
         }
 
@@ -321,6 +350,11 @@ namespace StrategoApp.ViewModel
 
         public void OnCellClicked(Cell clickedCell)
         {
+            if (IsMyTurn)
+            {
+                return;
+            }
+
             if (clickedCell == null) return;
 
             if (SelectedCell == null && clickedCell.IsOccupied && clickedCell.OccupyingPiece?.OwnerId == UserId)
@@ -354,8 +388,6 @@ namespace StrategoApp.ViewModel
 
         private void HandleTrapbreakerRule(Cell originCell, Cell destinationCell, Piece movingPiece)
         {
-            if (destinationCell.OccupyingPiece?.Name == "PotionTrap" && movingPiece.Name == "Trapbreaker")
-            {
                 MessageBox.Show("¡El Trapbreaker desactivó una poción!");
                 destinationCell.OccupiedPieceImage = originCell.OccupiedPieceImage;
                 destinationCell.IsOccupied = true;
@@ -366,14 +398,13 @@ namespace StrategoApp.ViewModel
                 originCell.OccupyingPiece = null;
 
                 SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column);
-            }
         }
 
         private void HandleAbysswatcherRule(Cell originCell, Cell destinationCell, Piece movingPiece)
         {
             var defenderPiece = destinationCell.OccupyingPiece;
 
-            if (movingPiece.Name == "Abysswatcher" && defenderPiece?.Name == "Archfiend")
+            if (movingPiece.Name == "Abysswatcher" && defenderPiece.Name == "Archfiend")
             {
                 MessageBox.Show("¡El Abysswatcher eliminó al Archfiend!");
                 destinationCell.OccupiedPieceImage = originCell.OccupiedPieceImage;
@@ -402,6 +433,7 @@ namespace StrategoApp.ViewModel
             };
 
             SendPositionToServer(position);
+            IsMyTurn = true;
         }
 
 
@@ -410,7 +442,6 @@ namespace StrategoApp.ViewModel
             try
             {
                 await _gameServiceClient.SendPositionAsync(_gameId, UserId, position);
-                Console.WriteLine($"Posición enviada: Fila {position.FinalX}, Columna {position.FinalY}");
             }
             catch (Exception ex)
             {
@@ -418,13 +449,19 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public void LoadOponentPlayerInfo(string opponentUserName, string opponentProfilePicture)
+        {
+            OpponentUsername = opponentUserName;
+            OpponentProfilePicture = opponentProfilePicture;
+        }
+
         public void ReceiveOtherPlayerInfo(OtherPlayerInfoResponse response)
         {
             if (response.Result.IsSuccess)
             {
-                Username = response.PlayerInfo.PlayerInfo.Name;
-                UserId = response.PlayerInfo.PlayerInfo.Id;
-                ProfilePicture = response.PlayerInfo.PlayerInfo.PicturePath;
+                OpponentUsername = response.PlayerInfo.PlayerInfo.Name;
+                OpponentId = response.PlayerInfo.PlayerInfo.Id;
+                OpponentProfilePicture = response.PlayerInfo.PlayerInfo.PicturePath;
             }
         }
 
@@ -433,7 +470,8 @@ namespace StrategoApp.ViewModel
             _gameId = gameId;
             if (gameStartedResponse.OperationResult.IsSuccess)
             {
-                _playerStartTurn = gameStartedResponse.IsStarter;
+                MessageBox.Show(gameStartedResponse.IsStarter.ToString());
+                IsMyTurn = gameStartedResponse.IsStarter;
                 _mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel, this));
             }
             else
@@ -449,6 +487,8 @@ namespace StrategoApp.ViewModel
                 MessageBox.Show($"Error del servidor: {operationResult.Message}");
                 return;
             }
+
+            IsMyTurn = false;
 
             int invertedInitialRow = Math.Abs(9 - position.InitialX);
             int invertedFinalRow = Math.Abs(9 - position.FinalX);
@@ -500,30 +540,26 @@ namespace StrategoApp.ViewModel
             {
                 if (attackerPowerLevel > defenderPiece.PowerLevel)
                 {
-                    MessageBox.Show("¡El oponente destruyó tu pieza!");
-                    UpdateCellState(originCell, null, false, null);
                     UpdateCellState(destinationCell, originCell.OccupiedPieceImage, true, originCell.OccupyingPiece);
+                    UpdateCellState(originCell, null, false, null);
                     return "Kill";
                 }
                 else if (attackerPowerLevel < defenderPiece.PowerLevel)
                 {
-                    MessageBox.Show("¡Tu pieza resistió el ataque!");
                     UpdateCellState(originCell, null, false, null);
                     return "Fail";
                 }
                 else
                 {
-                    MessageBox.Show("¡Empate! Ninguna pieza se movió.");
-                    UpdateCellState(originCell, null, false, null);
                     UpdateCellState(destinationCell, null, false, null);
+                    UpdateCellState(originCell, null, false, null);
                     return "Draw";
                 }
             }
             else
             {
-                MessageBox.Show("¡Movimiento exitoso!");
-                UpdateCellState(originCell, null, false, null);
                 UpdateCellState(destinationCell, originCell.OccupiedPieceImage, true, originCell.OccupyingPiece);
+                UpdateCellState(originCell, null, false, null);
                 return "Move";
             }
         }
@@ -588,24 +624,20 @@ namespace StrategoApp.ViewModel
             switch (instruction.Result)
             {
                 case "Kill":
-                    MessageBox.Show("¡Tu ataque fue exitoso! La pieza enemiga fue destruida.");
                     UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
                     UpdateCellState(originCell, null, false, null);
                     break;
 
                 case "Fail":
-                    MessageBox.Show("Tu ataque falló. Tu pieza fue destruida.");
                     UpdateCellState(originCell, null, false, null);
                     break;
 
                 case "Draw":
-                    MessageBox.Show("¡Empate! Ambas piezas fueron destruidas.");
-                    UpdateCellState(originCell, null, false, null);
                     UpdateCellState(destinationCell, null, false, null);
+                    UpdateCellState(originCell, null, false, null);
                     break;
 
                 case "Move":
-                    MessageBox.Show("¡Movimiento exitoso! Has ocupado la nueva posición.");
                     UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
                     UpdateCellState(originCell, null, false, null);
                     break;
@@ -617,6 +649,5 @@ namespace StrategoApp.ViewModel
 
             OnPropertyChanged(nameof(Board));
         }
-
     }
 }

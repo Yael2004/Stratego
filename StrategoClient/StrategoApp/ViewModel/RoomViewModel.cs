@@ -66,8 +66,6 @@ namespace StrategoApp.ViewModel
             LoadPlayerData();
         }
 
-        public RoomViewModel() { }
-
         private void InitializeService()
         {
             try
@@ -409,7 +407,7 @@ namespace StrategoApp.ViewModel
             else
             {
                 UserIdOponent = connectedPlayerId;
-                UsernameOponent = "Guest";
+                UsernameOponent = "Invited";
                 ProfilePictureOponent = "pack://application:,,,/StrategoApp;component/Assets/Images/ProfilePictures/Picture1.png";
             }
         }
@@ -426,6 +424,7 @@ namespace StrategoApp.ViewModel
             {
                 _gameId = gameId;
                 _gameViewModel.SuscribeToGame(gameId);
+                _gameViewModel.LoadOponentPlayerInfo(UsernameOponent, ProfilePictureOponent);
             }
             else
             {
