@@ -21,6 +21,7 @@ namespace StrategoApp.ViewModel
     {
         private string _username;
         private int _userId;
+        private int _accountId;
         private string _profilePicture;
         private string _opponentUsername;
         private int _opponentId;
@@ -119,6 +120,16 @@ namespace StrategoApp.ViewModel
             set
             {
                 _profilePicture = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int AccountId
+        {
+            get => _accountId;
+            set
+            {
+                _accountId = value;
                 OnPropertyChanged();
             }
         }
@@ -224,6 +235,7 @@ namespace StrategoApp.ViewModel
         {
             if (PlayerSingleton.Instance.IsLoggedIn())
             {
+                AccountId = PlayerSingleton.Instance.Player.AccountId;
                 Username = PlayerSingleton.Instance.Player.Name;
                 UserId = PlayerSingleton.Instance.Player.Id;
                 ProfilePicture = PlayerSingleton.Instance.Player.PicturePath;
@@ -542,7 +554,7 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                await _gameServiceClient.EndGameAsync(_gameId, UserId, _isWonGame);
+                await _gameServiceClient.EndGameAsync(_gameId, AccountId, _isWonGame);
             }
             catch (Exception ex)
             {
