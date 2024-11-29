@@ -97,9 +97,16 @@ namespace StrategoServices.Services
             else
             {
                 var verificationCode = _passwordManager.Value.GenerateVerificationCode(email);
-                EmailSender.Instance.SendVerificationEmail(email, verificationCode);
-                response = new OperationResult(true, "Verification code sent.");
-                isSuccessResponse = true;
+                var sendingResult = EmailSender.Instance.SendVerificationEmail(email, verificationCode);
+                if (!sendingResult)
+                {
+                    response = new OperationResult(false, "Failed to send verification code");
+                }
+                else
+                {
+                    response = new OperationResult(true, "Verification code sent.");
+                    isSuccessResponse = true;
+                }
             }
 
             await Task.Run(() => callback.ChangePasswordResult(response));

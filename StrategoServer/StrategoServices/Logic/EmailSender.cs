@@ -1,4 +1,5 @@
 ﻿using log4net;
+using MailKit;
 using MailKit.Net.Smtp;
 using MimeKit;
 using StrategoServices.Logic.Interfaces;
@@ -27,14 +28,20 @@ namespace StrategoServices.Logic
 
         public static EmailSender Instance => _instance.Value;
 
-        public void SendVerificationEmail(string destinationAddress, string verificationCode)
+        public bool SendVerificationEmail(string destinationAddress, string verificationCode)
         {
+            bool result = false;
             try
             {
                 var message = MakeVerificationMessage(destinationAddress, verificationCode);
                 _smtpClient = ConfigureMailClient();
                 AuthenticateSmtpClient(_smtpClient);
                 _smtpClient.Send(message);
+                result = true;
+            }
+            catch (ProtocolException pex)
+            {
+                log.Error("Sending email error: ", pex);
             }
             catch (Exception ex)
             {
@@ -44,16 +51,23 @@ namespace StrategoServices.Logic
             {
                 DisconnectMailClient();
             }
+            return result;
         }
 
-        public void SendInvitationEmail(string destinationAddress, string message)
+        public bool SendInvitationEmail(string destinationAddress, string message)
         {
+            bool result = false;
             try
             {
                 var mailMessage = MakeInvitationMessage(destinationAddress, message);
                 _smtpClient = ConfigureMailClient();
                 AuthenticateSmtpClient(_smtpClient);
                 _smtpClient.Send(mailMessage);
+                result = true;
+            }
+            catch (ProtocolException pex)
+            {
+                log.Error("Sending email error: ", pex);
             }
             catch (Exception ex)
             {
@@ -63,6 +77,7 @@ namespace StrategoServices.Logic
             {
                 DisconnectMailClient();
             }
+            return result;
         }
 
         private MimeMessage MakeVerificationMessage(string destinationAddress, string verificationCode)

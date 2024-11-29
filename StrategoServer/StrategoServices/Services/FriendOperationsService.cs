@@ -124,9 +124,16 @@ namespace StrategoServices.Services
             }
             else
             {
-                EmailSender.Instance.SendInvitationEmail(mailResult.Value, roomCode);
-                operationResult = new OperationResult(true, "Room invitation sent");
-                response = true;
+                var sendingResult = EmailSender.Instance.SendInvitationEmail(mailResult.Value, roomCode);
+                if (!sendingResult)
+                {
+                    operationResult = new OperationResult(false, "Failed to send room invitation");
+                }
+                else
+                {
+                    operationResult = new OperationResult(true, "Room invitation sent");
+                    response = true;
+                }
             }
 
             await Task.Run(() => callback.SendRoomInvitationResponseCall(operationResult));
