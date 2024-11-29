@@ -1,10 +1,12 @@
 ﻿using log4net;
 using MailKit;
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using MimeKit;
 using StrategoServices.Logic.Interfaces;
 using System;
 using System.Configuration;
+using System.Net.Sockets;
 
 namespace StrategoServices.Logic
 {
@@ -112,13 +114,35 @@ namespace StrategoServices.Logic
             {
                 CheckCertificateRevocation = false
             };
-            client.Connect(_mailHost, _port, MailKit.Security.SecureSocketOptions.StartTls);
+            try
+            {
+                client.Connect(_mailHost, _port, MailKit.Security.SecureSocketOptions.StartTls);
+            }
+            catch (SocketException sex)
+            {
+                log.Error("Connecting to mail server error: ", sex);
+            }
+            catch (Exception ex)
+            {
+                log.Error("Connecting to mail server error: ", ex);
+            }
             return client;
         }
 
         private void AuthenticateSmtpClient(SmtpClient smtpClient)
         {
-            smtpClient.Authenticate(_userMail, _password);
+            try
+            {
+                smtpClient.Authenticate(_userMail, _password);
+            }
+            catch (AuthenticationException aex)
+            {
+                log.Error("Authentication error: ", aex);
+            }
+            catch (Exception ex)
+            {
+                log.Error("Authentication error: ", ex);
+            }
         }
 
         private void DisconnectMailClient()
