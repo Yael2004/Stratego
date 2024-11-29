@@ -29,6 +29,7 @@ namespace StrategoApp.ViewModel
         private int _gameId;
         private bool _playerStartTurn;
         private bool _isMyTurn;
+        private bool _isWonGame;
         private Cell _selectedCell;
 
         private MainWindowViewModel _mainWindowViewModel;
@@ -288,6 +289,16 @@ namespace StrategoApp.ViewModel
             return isAdjacent;
         }
 
+        private bool isNecronomicon(Cell originCell, Cell destinationCell)
+        {
+            if (destinationCell.OccupyingPiece.Name == "Necronomicon")
+            {
+                return true;
+            }
+
+            return false;
+        }
+
 
         public bool IsPathClear(Cell originCell, Cell destinationCell)
         {
@@ -527,6 +538,18 @@ namespace StrategoApp.ViewModel
             });
         }
 
+        private async void EndGame()
+        {
+            try
+            {
+                await _gameServiceClient.EndGameAsync(_gameId, UserId, _isWonGame);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al finalizar el juego: {ex.Message}");
+            }
+        }
+
         public async void SendMyMovement(MovementInstructionDTO movementInstruction)
         {
             await _gameServiceClient.SendMovementInstructionsAsync(_gameId, movementInstruction);
@@ -540,9 +563,20 @@ namespace StrategoApp.ViewModel
             {
                 if (attackerPowerLevel > defenderPiece.PowerLevel)
                 {
-                    UpdateCellState(destinationCell, originCell.OccupiedPieceImage, true, originCell.OccupyingPiece);
-                    UpdateCellState(originCell, null, false, null);
-                    return "Kill";
+                    if (defenderPiece.Name == "Necronomicon")
+                    {
+                        _isWonGame = true;
+                        UpdateCellState(destinationCell, originCell.OccupiedPieceImage, true, originCell.OccupyingPiece);
+                        UpdateCellState(originCell, null, false, null);
+                        Task.Run(() =>EndGame());
+                        return "Kill";
+                    }
+                    else
+                    {
+                        UpdateCellState(destinationCell, originCell.OccupiedPieceImage, true, originCell.OccupyingPiece);
+                        UpdateCellState(originCell, null, false, null);
+                        return "Kill";
+                    }
                 }
                 else if (attackerPowerLevel < defenderPiece.PowerLevel)
                 {
@@ -580,12 +614,33 @@ namespace StrategoApp.ViewModel
 
         public void OnGameEnded(string resultString, GameService.OperationResult operationResult)
         {
-            throw new NotImplementedException();
+            if (operationResult.IsSuccess)
+            {
+                MessageBox.Show(resultString);
+            }
+            else
+            {
+                MessageBox.Show("Error al finalizar el juego: " + operationResult.Message);
+            }
         }
 
         public async void SuscribeToGame(int gameId)
         {
             await _gameServiceClient.JoinGameSessionAsync(gameId, UserId);
+        }
+
+        public async void GetOtherPlayerInfo(int opponentId)
+        {
+            if (opponentId > 0)
+            {
+                await _otherProfileDataService.GetOtherPlayerInfoAsync(opponentId, UserId);
+            }
+            else
+            {
+                OpponentId = opponentId;
+                OpponentUsername = "Invited";
+                OpponentProfilePicture = "pack://application:,,,/StrategoApp;component/Assets/Images/ProfilePictures/Picture1.png";
+            }
         }
 
         public void OnReceiveMovementInstructions(MovementInstructionResponse movementInstructionResponse)
@@ -624,9 +679,20 @@ namespace StrategoApp.ViewModel
             switch (instruction.Result)
             {
                 case "Kill":
-                    UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
-                    UpdateCellState(originCell, null, false, null);
-                    break;
+                    if (originCell.OccupyingPiece.Name == "Necronomicon")
+                    {
+                        _isWonGame = false;
+                        UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
+                        UpdateCellState(originCell, null, false, null);
+                        Task.Run(() => EndGame());
+                        break;
+                    }
+                    else
+                    {
+                        UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
+                        UpdateCellState(originCell, null, false, null);
+                        break;
+                    }
 
                 case "Fail":
                     UpdateCellState(originCell, null, false, null);

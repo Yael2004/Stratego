@@ -424,7 +424,7 @@ namespace StrategoApp.ViewModel
             {
                 _gameId = gameId;
                 _gameViewModel.SuscribeToGame(gameId);
-                _gameViewModel.LoadOponentPlayerInfo(UsernameOponent, ProfilePictureOponent);
+                _gameViewModel.GetOtherPlayerInfo(UserIdOponent);
             }
             else
             {
