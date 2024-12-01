@@ -35,10 +35,9 @@ namespace StrategoApp.ViewModel
 
         private MainWindowViewModel _mainWindowViewModel;
         private GameServiceClient _gameServiceClient;
-        private OtherProfileDataServiceClient _otherProfileDataService;
+        private readonly OtherProfileDataServiceClient _otherProfileDataService;
         public ObservableCollection<Piece> PlayerPieces { get; set; }
         public ObservableCollection<Cell> Board { get; set; }
-        private Button[,] _boardButtons;
         private Dictionary<Piece, Queue<(int row, int column)>> pieceMovementHistory = new Dictionary<Piece, Queue<(int, int)>>();
 
         public readonly List<(int Row, int Column)> invalidPositions = new List<(int Row, int Column)> { };
@@ -263,6 +262,7 @@ namespace StrategoApp.ViewModel
                             cell.IsOccupied = true;
                             cell.OccupyingPiece = piece;
                             piece.OwnerId = UserId;
+                            piece.PowerLevel = piece.PowerLevel;
                         }
                     }
                 }
@@ -406,7 +406,7 @@ namespace StrategoApp.ViewModel
 
         private void HandleMove(Cell originCell, Cell destinationCell, Piece movingPiece)
         {
-            SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column);
+            SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column, movingPiece.PowerLevel);
         }
 
         private void HandleTrapbreakerRule(Cell originCell, Cell destinationCell, Piece movingPiece)
@@ -420,7 +420,7 @@ namespace StrategoApp.ViewModel
                 originCell.IsOccupied = false;
                 originCell.OccupyingPiece = null;
 
-                SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column);
+                //SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column);
         }
 
         private void HandleAbysswatcherRule(Cell originCell, Cell destinationCell, Piece movingPiece)
@@ -438,12 +438,12 @@ namespace StrategoApp.ViewModel
                 originCell.IsOccupied = false;
                 originCell.OccupyingPiece = null;
 
-                SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column);
+                //SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column);
             }
         }
 
 
-        public void SendUpdatedPositionToServer(int initialRow, int initialColumn, int targetRow, int targetColumn)
+        public void SendUpdatedPositionToServer(int initialRow, int initialColumn, int targetRow, int targetColumn, int powerLevel)
         {
             var position = new PositionDTO
             {
@@ -451,7 +451,7 @@ namespace StrategoApp.ViewModel
                 InitialY = initialColumn,
                 FinalX = targetRow,
                 FinalY = targetColumn,
-                PowerLevel = Board.FirstOrDefault(cell => cell.Row == targetRow && cell.Column == targetColumn)?.OccupyingPiece?.PowerLevel ?? 0,
+                PowerLevel = powerLevel,
                 MoveType = "move"
             };
 
@@ -525,7 +525,7 @@ namespace StrategoApp.ViewModel
                 return;
             }
 
-            string result = ProcessMove(originCell, destinationCell, position.PowerLevel);
+            string result = ProcessMove(originCell, destinationCell);
 
             var movementInstruction = new MovementInstructionDTO
             {
@@ -567,13 +567,14 @@ namespace StrategoApp.ViewModel
             await _gameServiceClient.SendMovementInstructionsAsync(_gameId, movementInstruction);
         }
 
-        private string ProcessMove(Cell originCell, Cell destinationCell, int attackerPowerLevel)
+        private string ProcessMove(Cell originCell, Cell destinationCell)
         {
             var defenderPiece = destinationCell.OccupyingPiece;
+            var attackerPiece = originCell.OccupyingPiece;
 
             if (destinationCell.IsOccupied && defenderPiece != null && defenderPiece.OwnerId == UserId)
             {
-                if (attackerPowerLevel > defenderPiece.PowerLevel)
+                if (attackerPiece.PowerLevel > defenderPiece.PowerLevel)
                 {
                     if (defenderPiece.Name == "Necronomicon")
                     {
@@ -590,7 +591,7 @@ namespace StrategoApp.ViewModel
                         return "Kill";
                     }
                 }
-                else if (attackerPowerLevel < defenderPiece.PowerLevel)
+                else if (attackerPiece.PowerLevel < defenderPiece.PowerLevel)
                 {
                     UpdateCellState(originCell, null, false, null);
                     return "Fail";
