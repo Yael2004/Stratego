@@ -548,7 +548,7 @@ namespace StrategoApp.ViewModel
                 return;
             }
 
-            string result = ProcessMove(originCell, destinationCell);
+            string result = ProcessMove(originCell, destinationCell, position.PowerLevel);
 
             var movementInstruction = new MovementInstructionDTO
             {
@@ -578,7 +578,7 @@ namespace StrategoApp.ViewModel
             string resultMessage = isWinner ? "Victory" : "Defeat";
             IsGameResultPopupOpen = true;
 
-            Task.Delay(5000).ContinueWith(t => GoToLobby(), TaskScheduler.FromCurrentSynchronizationContext());
+            MessageBox.Show(resultMessage);
 
             GoToLobby();
         }
@@ -606,18 +606,17 @@ namespace StrategoApp.ViewModel
             await _gameServiceClient.SendMovementInstructionsAsync(_gameId, movementInstruction);
         }
 
-        private string ProcessMove(Cell originCell, Cell destinationCell)
+        private string ProcessMove(Cell originCell, Cell destinationCell, int oponnentPowerLevel)
         {
             var defenderPiece = destinationCell.OccupyingPiece;
-            var attackerPiece = originCell.OccupyingPiece;
 
             if (destinationCell.IsOccupied && defenderPiece != null && defenderPiece.OwnerId == UserId)
             {
-                if (attackerPiece.PowerLevel > defenderPiece.PowerLevel)
+                if (oponnentPowerLevel > defenderPiece.PowerLevel)
                 {
                     if (defenderPiece.Name == "Necronomicon")
                     {
-                        _isWonGame = true;
+                        _isWonGame = false;
                         UpdateCellState(destinationCell, originCell.OccupiedPieceImage, true, originCell.OccupyingPiece);
                         UpdateCellState(originCell, null, false, null);
                         Task.Run(() =>EndGame());
@@ -630,7 +629,7 @@ namespace StrategoApp.ViewModel
                         return "Kill";
                     }
                 }
-                else if (attackerPiece.PowerLevel < defenderPiece.PowerLevel)
+                else if (oponnentPowerLevel < defenderPiece.PowerLevel)
                 {
                     UpdateCellState(originCell, null, false, null);
                     return "Fail";
@@ -733,7 +732,7 @@ namespace StrategoApp.ViewModel
                 case "Kill":
                     if (destinationCell.OccupyingPiece.Name == "Necronomicon")
                     {
-                        _isWonGame = false;
+                        _isWonGame = true;
                         UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
                         UpdateCellState(originCell, null, false, null);
                         Task.Run(() => EndGame());
