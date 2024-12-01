@@ -5,6 +5,7 @@ using StrategoApp.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
@@ -31,6 +32,8 @@ namespace StrategoApp.ViewModel
         private bool _playerStartTurn;
         private bool _isMyTurn;
         private bool _isWonGame;
+        private bool _isGameResultPopupOpen;
+        private string _gameResultText;
         private Cell _selectedCell;
 
         private MainWindowViewModel _mainWindowViewModel;
@@ -193,6 +196,26 @@ namespace StrategoApp.ViewModel
             {
                 _selectedCell = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public bool IsGameResultPopupOpen
+        {
+            get => _isGameResultPopupOpen;
+            set
+            {
+                _isGameResultPopupOpen = value;
+                OnPropertyChanged(nameof(IsGameResultPopupOpen));
+            }
+        }
+
+        public string GameResultText
+        {
+            get => _gameResultText;
+            set
+            {
+                _gameResultText = value;
+                OnPropertyChanged(nameof(GameResultText));
             }
         }
 
@@ -550,16 +573,32 @@ namespace StrategoApp.ViewModel
             });
         }
 
+        public void ShowGameResult(bool isWinner)
+        {
+            string resultMessage = isWinner ? "Victory" : "Defeat";
+            IsGameResultPopupOpen = true;
+
+            Task.Delay(5000).ContinueWith(t => GoToLobby(), TaskScheduler.FromCurrentSynchronizationContext());
+
+            GoToLobby();
+        }
+
         private async void EndGame()
         {
             try
             {
                 await _gameServiceClient.EndGameAsync(_gameId, AccountId, _isWonGame);
+                ShowGameResult(_isWonGame);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al finalizar el juego: {ex.Message}");
             }
+        }
+
+        private void GoToLobby()
+        {
+            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
         }
 
         public async void SendMyMovement(MovementInstructionDTO movementInstruction)
@@ -692,7 +731,7 @@ namespace StrategoApp.ViewModel
             switch (instruction.Result)
             {
                 case "Kill":
-                    if (originCell.OccupyingPiece.Name == "Necronomicon")
+                    if (destinationCell.OccupyingPiece.Name == "Necronomicon")
                     {
                         _isWonGame = false;
                         UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
