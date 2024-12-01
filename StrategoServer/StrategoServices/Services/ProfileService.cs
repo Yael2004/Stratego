@@ -1,4 +1,5 @@
-﻿using StrategoServices.Data;
+﻿using log4net;
+using StrategoServices.Data;
 using StrategoServices.Data.DTO;
 using StrategoServices.Logic;
 using System;
@@ -17,6 +18,7 @@ namespace StrategoServices.Services
     {
         private readonly Lazy<ProfilesManager> _profilesManager;
         private readonly ConnectedPlayersManager _connectedPlayersManager;
+        private static readonly ILog log = LogManager.GetLogger(typeof(ProfileService));
 
         public ProfileService(Lazy<ProfilesManager> profilesManager, ConnectedPlayersManager connectedPlayersManager)
         {
@@ -44,13 +46,15 @@ namespace StrategoServices.Services
                     response.Result = new OperationResult(true, "Player info retrieved successfully");
                 }
             }
-            catch (TimeoutException)
+            catch (TimeoutException tex)
             {
+                log.Error("TimeoutException during getting other player info", tex);
                 response.Result = new OperationResult(false, "Server error");
                 response.PlayerInfo = new OtherPlayerInfoDTO();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                log.Fatal("Exception during getting other player info", ex);
                 response.Result = new OperationResult(false, "Unexpected error");
                 response.PlayerInfo = new OtherPlayerInfoDTO();
             }
@@ -82,13 +86,15 @@ namespace StrategoServices.Services
                     response.Result = new OperationResult(true, "Player statistics retrieved successfully");
                 }
             }
-            catch (TimeoutException)
+            catch (TimeoutException tex)
             {
+                log.Error("TimeoutException during getting statistics", tex);
                 response.Result = new OperationResult(false, "Server error");
                 response.Statistics = new PlayerStatisticsDTO();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                log.Fatal("Exception during getting statistics", ex);
                 response.Result = new OperationResult(false, "Unexpected error");
                 response.Statistics = new PlayerStatisticsDTO();
             }
@@ -122,13 +128,15 @@ namespace StrategoServices.Services
                     };
                 }
             }
-            catch (TimeoutException)
+            catch (TimeoutException tex)
             {
+                log.Error("TimeoutException during update profile", tex);
                 response.Result = new OperationResult(false, "Server error");
                 response.Profile = new PlayerInfoShownDTO();
             }
             catch (Exception ex)
             {
+                log.Fatal("Exception during update profile", ex);
                 response.Result = new OperationResult(false, $"Unexpected error: {ex.Message}");
                 response.Profile = new PlayerInfoShownDTO();
             }
@@ -155,12 +163,14 @@ namespace StrategoServices.Services
                     response.FriendsIds = getFriendsResult.Value;
                 }
             }
-            catch (TimeoutException)
+            catch (TimeoutException tex)
             {
+                log.Error("TimeoutException during get friends", tex);
                 response.Result = new OperationResult(false, "Server error");
             }
             catch (Exception ex)
             {
+                log.Fatal("Exception during get friends", ex);
                 response.Result = new OperationResult(false, $"Unexpected error: {ex.Message}");
             }
 
@@ -186,12 +196,14 @@ namespace StrategoServices.Services
                     response.TopPlayersIds = getTopPlayersResult.Value;
                 }
             } 
-            catch (TimeoutException)
+            catch (TimeoutException tex)
             {
+                log.Error("TimeoutException during get top players", tex);
                 response.Result = new OperationResult(false, "Server error");
             }
             catch (Exception ex)
             {
+                log.Fatal("Exception during get top players", ex);
                 response.Result = new OperationResult(false, $"Unexpected error: {ex.Message}");
             }
 
@@ -221,12 +233,14 @@ namespace StrategoServices.Services
                     response.FriendsIds = connectedFriends;
                 }
             }
-            catch (TimeoutException)
+            catch (TimeoutException tex)
             {
+                log.Error("TimeoutException during get connected friends", tex);
                 response.Result = new OperationResult(false, "Server error");
             }
             catch (Exception ex)
             {
+                log.Fatal("Exception during get connected friends", ex);
                 response.Result = new OperationResult(false, $"Unexpected error: {ex.Message}");
             }
 

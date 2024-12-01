@@ -24,12 +24,12 @@ namespace StrategoServices.Services.Interfaces
         Task SendMessageToRoomAsync(string roomCode, int playerId, string message);
 
         [OperationContract]
-        Task NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId);
+        void NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId);
 
         [OperationContract]
-        Task NotifyOpponentToJoinGameAsync(string roomCode, int gameId);
+        void NotifyOpponentToJoinGameAsync(string roomCode, int gameId);
 
         [OperationContract]
-        Task ReportPlayerAccountAsync(int reporterId, int reportedId, string reason);
+        void ReportPlayerAccountAsync(int reporterId, int reportedId, string reason);
     }
 }

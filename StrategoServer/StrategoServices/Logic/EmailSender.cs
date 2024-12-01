@@ -147,11 +147,18 @@ namespace StrategoServices.Logic
 
         private void DisconnectMailClient()
         {
-            if (_smtpClient != null && _smtpClient.IsConnected)
+            try
             {
-                _smtpClient.Disconnect(true);
-                _smtpClient.Dispose();
-                _smtpClient = null;
+                if (_smtpClient != null && _smtpClient.IsConnected)
+                {
+                    _smtpClient.Disconnect(true);
+                    _smtpClient.Dispose();
+                    _smtpClient = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Disconnecting from mail server error: ", ex);
             }
         }
 

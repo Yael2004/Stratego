@@ -163,23 +163,23 @@ namespace StrategoApp.RoomService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/SendMessageToRoom", ReplyAction="http://tempuri.org/IRoomService/SendMessageToRoomResponse")]
         System.Threading.Tasks.Task SendMessageToRoomAsync(string roomCode, int playerId, string message);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnection", ReplyAction="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnectionResponse")]
-        void NotifyPlayersOfNewConnection(string roomCode, int connectedPlayerId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnectionAsync", ReplyAction="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnectionAsyncResponse")]
+        void NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnection", ReplyAction="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnectionResponse")]
-        System.Threading.Tasks.Task NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnectionAsync", ReplyAction="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnectionAsyncResponse")]
+        System.Threading.Tasks.Task NotifyPlayersOfNewConnectionAsyncAsync(string roomCode, int connectedPlayerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/NotifyOpponentToJoinGame", ReplyAction="http://tempuri.org/IRoomService/NotifyOpponentToJoinGameResponse")]
-        void NotifyOpponentToJoinGame(string roomCode, int gameId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/NotifyOpponentToJoinGameAsync", ReplyAction="http://tempuri.org/IRoomService/NotifyOpponentToJoinGameAsyncResponse")]
+        void NotifyOpponentToJoinGameAsync(string roomCode, int gameId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/NotifyOpponentToJoinGame", ReplyAction="http://tempuri.org/IRoomService/NotifyOpponentToJoinGameResponse")]
-        System.Threading.Tasks.Task NotifyOpponentToJoinGameAsync(string roomCode, int gameId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/NotifyOpponentToJoinGameAsync", ReplyAction="http://tempuri.org/IRoomService/NotifyOpponentToJoinGameAsyncResponse")]
+        System.Threading.Tasks.Task NotifyOpponentToJoinGameAsyncAsync(string roomCode, int gameId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/ReportPlayerAccount", ReplyAction="http://tempuri.org/IRoomService/ReportPlayerAccountResponse")]
-        void ReportPlayerAccount(int reporterId, int reportedId, string reason);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/ReportPlayerAccountAsync", ReplyAction="http://tempuri.org/IRoomService/ReportPlayerAccountAsyncResponse")]
+        void ReportPlayerAccountAsync(int reporterId, int reportedId, string reason);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/ReportPlayerAccount", ReplyAction="http://tempuri.org/IRoomService/ReportPlayerAccountResponse")]
-        System.Threading.Tasks.Task ReportPlayerAccountAsync(int reporterId, int reportedId, string reason);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IRoomService/ReportPlayerAccountAsync", ReplyAction="http://tempuri.org/IRoomService/ReportPlayerAccountAsyncResponse")]
+        System.Threading.Tasks.Task ReportPlayerAccountAsyncAsync(int reporterId, int reportedId, string reason);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -264,28 +264,28 @@ namespace StrategoApp.RoomService {
             return base.Channel.SendMessageToRoomAsync(roomCode, playerId, message);
         }
         
-        public void NotifyPlayersOfNewConnection(string roomCode, int connectedPlayerId) {
-            base.Channel.NotifyPlayersOfNewConnection(roomCode, connectedPlayerId);
+        public void NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId) {
+            base.Channel.NotifyPlayersOfNewConnectionAsync(roomCode, connectedPlayerId);
         }
         
-        public System.Threading.Tasks.Task NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId) {
-            return base.Channel.NotifyPlayersOfNewConnectionAsync(roomCode, connectedPlayerId);
+        public System.Threading.Tasks.Task NotifyPlayersOfNewConnectionAsyncAsync(string roomCode, int connectedPlayerId) {
+            return base.Channel.NotifyPlayersOfNewConnectionAsyncAsync(roomCode, connectedPlayerId);
         }
         
-        public void NotifyOpponentToJoinGame(string roomCode, int gameId) {
-            base.Channel.NotifyOpponentToJoinGame(roomCode, gameId);
+        public void NotifyOpponentToJoinGameAsync(string roomCode, int gameId) {
+            base.Channel.NotifyOpponentToJoinGameAsync(roomCode, gameId);
         }
         
-        public System.Threading.Tasks.Task NotifyOpponentToJoinGameAsync(string roomCode, int gameId) {
-            return base.Channel.NotifyOpponentToJoinGameAsync(roomCode, gameId);
+        public System.Threading.Tasks.Task NotifyOpponentToJoinGameAsyncAsync(string roomCode, int gameId) {
+            return base.Channel.NotifyOpponentToJoinGameAsyncAsync(roomCode, gameId);
         }
         
-        public void ReportPlayerAccount(int reporterId, int reportedId, string reason) {
-            base.Channel.ReportPlayerAccount(reporterId, reportedId, reason);
+        public void ReportPlayerAccountAsync(int reporterId, int reportedId, string reason) {
+            base.Channel.ReportPlayerAccountAsync(reporterId, reportedId, reason);
         }
         
-        public System.Threading.Tasks.Task ReportPlayerAccountAsync(int reporterId, int reportedId, string reason) {
-            return base.Channel.ReportPlayerAccountAsync(reporterId, reportedId, reason);
+        public System.Threading.Tasks.Task ReportPlayerAccountAsyncAsync(int reporterId, int reportedId, string reason) {
+            return base.Channel.ReportPlayerAccountAsyncAsync(reporterId, reportedId, reason);
         }
     }
 }

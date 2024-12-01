@@ -52,7 +52,7 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="NotifyPlayersOfNewConnection">
+  <xs:element name="NotifyPlayersOfNewConnectionAsync">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
@@ -60,12 +60,12 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="NotifyPlayersOfNewConnectionResponse">
+  <xs:element name="NotifyPlayersOfNewConnectionAsyncResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="NotifyOpponentToJoinGame">
+  <xs:element name="NotifyOpponentToJoinGameAsync">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="roomCode" nillable="true" type="xs:string" />
@@ -73,12 +73,12 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="NotifyOpponentToJoinGameResponse">
+  <xs:element name="NotifyOpponentToJoinGameAsyncResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="ReportPlayerAccount">
+  <xs:element name="ReportPlayerAccountAsync">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="reporterId" type="xs:int" />
@@ -87,7 +87,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ReportPlayerAccountResponse">
+  <xs:element name="ReportPlayerAccountAsyncResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

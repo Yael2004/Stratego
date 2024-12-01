@@ -230,7 +230,7 @@ namespace StrategoApp.ViewModel
 
                 if (canJoin)
                 {
-                    await _roomServiceClient.NotifyPlayersOfNewConnectionAsync(RoomCode, UserId);
+                    await Task.Run(() => _roomServiceClient.NotifyPlayersOfNewConnectionAsync(RoomCode, UserId));
                     IsPlayAvalible = true;
                 }
             }
@@ -292,7 +292,7 @@ namespace StrategoApp.ViewModel
 
         private async void ReportPlayer()
         {
-            await _roomServiceClient.ReportPlayerAccountAsync(UserId, UserIdOponent, _reportMessage);
+            await Task.Run(() => _roomServiceClient.ReportPlayerAccountAsync(UserId, UserIdOponent, _reportMessage));
         }
 
         public void SetReportMessage(object obj)
@@ -319,7 +319,7 @@ namespace StrategoApp.ViewModel
             if (response.OperationResult.IsSuccess)
             {
                 _gameId = response.GameId;
-                await _roomServiceClient.NotifyOpponentToJoinGameAsync(RoomCode, _gameId);
+                await Task.Run(() => _roomServiceClient.NotifyOpponentToJoinGameAsync(RoomCode, _gameId));
             }
             else
             {

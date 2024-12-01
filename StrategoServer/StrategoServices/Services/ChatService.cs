@@ -4,12 +4,14 @@ using System.ServiceModel;
 using StrategoServices.Services.Interfaces;
 using StrategoServices.Logic;
 using StrategoServices.Data;
+using log4net;
 
 namespace StrategoServices.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class ChatService : IChatService
     {
+        private readonly ILog _log = LogManager.GetLogger(typeof(ChatService));
         private readonly ChatManager _chatManager;
         private readonly ConcurrentDictionary<int, IChatServiceCallback> _clients = new ConcurrentDictionary<int, IChatServiceCallback>();
         private int _nextGuestId = -1;
@@ -27,60 +29,106 @@ namespace StrategoServices.Services
 
         public int Connect(int userId, string username)
         {
-            var callback = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
-
-            if (userId == 0)
+            try
             {
-                lock (this)
+                var callback = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
+
+                if (userId == 0)
                 {
-                    userId = _nextGuestId--;
-                }
-            }
-
-            if (_clients.ContainsKey(userId))
-            {
-                callback.ChatResponse(new OperationResult(false, "User is already connected."));
-            }
-            else
-            {
-                _clients[userId] = callback;
-
-                if (!_chatManager.Connect(userId, username))
-                {
-                    callback.ChatResponse(new OperationResult(false, "Failed to connect user."));
+                    lock (this)
+                    {
+                        userId = _nextGuestId--;
+                    }
                 }
 
-                var communicationObject = (ICommunicationObject)callback;
-                communicationObject.Closed += (s, e) => OnClientDisconnected(userId);
-                communicationObject.Faulted += (s, e) => OnClientDisconnected(userId);
-            }
+                if (_clients.ContainsKey(userId))
+                {
+                    callback.ChatResponse(new OperationResult(false, "User is already connected."));
+                }
+                else
+                {
+                    _clients[userId] = callback;
 
-            return userId;
+                    if (!_chatManager.Connect(userId, username))
+                    {
+                        callback.ChatResponse(new OperationResult(false, "Failed to connect user."));
+                    }
+
+                    var communicationObject = (ICommunicationObject)callback;
+                    communicationObject.Closed += (s, e) => OnClientDisconnected(userId);
+                    communicationObject.Faulted += (s, e) => OnClientDisconnected(userId);
+                }
+
+                return userId;
+            }
+            catch (TimeoutException tex)
+            {
+                _log.Error("Timeout error in Connect method: " + tex.Message);
+                return 0;
+            }
+            catch (CommunicationException cex)
+            {
+                _log.Error("Communication error in Connect method: " + cex.Message);
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Error in Connect method: " + ex.Message);
+                return 0;
+            }
         }
-
-
 
         public void Disconnect(int userId)
         {
-            var callback = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
+            try
+            {
+                var callback = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
 
-            if (_clients.TryRemove(userId, out _))
-            {
-                _chatManager.Disconnect(userId, "");
+                if (_clients.TryRemove(userId, out _))
+                {
+                    _chatManager.Disconnect(userId, "");
+                }
+                else
+                {
+                    callback.ChatResponse(new OperationResult(false, "User is not connected."));
+                }
             }
-            else
+            catch (TimeoutException tex)
             {
-                callback.ChatResponse(new OperationResult(false, "User is not connected."));
+                _log.Error("Timeout error in Disconnect method: " + tex.Message);
+            }
+            catch (CommunicationException cex)
+            {
+                _log.Error("Communication error in Disconnect method: " + cex.Message);
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Error in Disconnect method: " + ex.Message);
             }
         }
 
         public void SendMessage(int userId, string username, string message)
         {
-            var callback = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
-
-            if (!_chatManager.SendMessage(userId, username, message))
+            try
             {
-                callback.ChatResponse(new OperationResult(false, "User is not connected."));
+                var callback = OperationContext.Current.GetCallbackChannel<IChatServiceCallback>();
+
+                if (!_chatManager.SendMessage(userId, username, message))
+                {
+                    callback.ChatResponse(new OperationResult(false, "User is not connected."));
+                }
+            }
+            catch (TimeoutException tex)
+            {
+                _log.Error("Timeout error in SendMessage method: " + tex.Message);
+            }
+            catch (CommunicationException cex)
+            {
+                _log.Error("Communication error in SendMessage method: " + cex.Message);
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Error in SendMessage method: " + ex.Message);
             }
         }
 
@@ -104,24 +152,39 @@ namespace StrategoServices.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Sending message error: {ex.Message}");
+                    _log.Error($"Sending message error: {ex.Message}");
                 }
             }
         }
 
         private void OnClientDisconnected(int userId)
         {
-            if (_connectedPlayersManager.RemovePlayer(userId))
+            try
             {
-                Console.WriteLine($"Player {userId} removed from connected players list.");
-            }
-            else
-            {
-                Console.WriteLine($"Error: Player {userId} wasn't in the connected players list.");
-            }
+                if (_connectedPlayersManager.RemovePlayer(userId))
+                {
+                    Console.WriteLine($"Player {userId} removed from connected players list.");
+                }
+                else
+                {
+                    Console.WriteLine($"Error: Player {userId} wasn't in the connected players list.");
+                }
 
-            IChatServiceCallback callback;
-            _clients.TryRemove(userId, out callback);
+                IChatServiceCallback callback;
+                _clients.TryRemove(userId, out callback);
+            }
+            catch (TimeoutException tex)
+            {
+                _log.Error("Timeout error in OnClientDisconnected method: " + tex.Message);
+            }
+            catch (CommunicationException cex)
+            {
+                _log.Error("Communication error in OnClientDisconnected method: " + cex.Message);
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Error in OnClientDisconnected method: " + ex.Message);
+            }
         }
     }
 }

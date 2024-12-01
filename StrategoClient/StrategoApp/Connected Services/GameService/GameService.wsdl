@@ -258,7 +258,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:1015/GameService/GameService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-4SRV2TJ2\yaela</Upn>
+          <Upn>LAPTOP-1UFSE68T\armas</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -267,7 +267,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:1015/GameService/CreateGameService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-4SRV2TJ2\yaela</Upn>
+          <Upn>LAPTOP-1UFSE68T\armas</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

@@ -1,4 +1,5 @@
-﻿using StrategoServices.Data;
+﻿using log4net;
+using StrategoServices.Data;
 using StrategoServices.Data.DTO;
 using StrategoServices.Logic;
 using StrategoServices.Services.Interfaces;
@@ -19,6 +20,7 @@ namespace StrategoServices.Services
         private readonly Lazy<AccountManager> _accountManager;
         private readonly Lazy<PasswordManager> _passwordManager;
         private readonly ConnectedPlayersManager _connectedPlayersManager;
+        private static readonly ILog log = LogManager.GetLogger(typeof(LogInService));
 
         public LogInService(Lazy<AccountManager> accountManager, Lazy<PasswordManager> passwordManager, ConnectedPlayersManager connectedPlayersManager)
         {
@@ -31,55 +33,86 @@ namespace StrategoServices.Services
         {
             var callback = OperationContext.Current.GetCallbackChannel<ILogInServiceCallback>();
 
-            var loginResult = _accountManager.Value.LogInAccount(email, password);
-            if (!loginResult.IsSuccess)
+            try
             {
-                await Task.Run(() => callback.LogInResult(new OperationResult(false, loginResult.Error)));
-                return;
-            }
+                var loginResult = _accountManager.Value.LogInAccount(email, password);
+                if (!loginResult.IsSuccess)
+                {
+                    await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, loginResult.Error));
+                    return;
+                }
 
-            var playerId = loginResult.Value;
-            if (_connectedPlayersManager.IsPlayerConnected(playerId))
-            {
-                await Task.Run(() => callback.LogInResult(new OperationResult(false, "User is already logged in.")));
-                return;
-            }
+                var playerId = loginResult.Value;
+                if (_connectedPlayersManager.IsPlayerConnected(playerId))
+                {
+                    await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, "User is already logged in."));
+                    return;
+                }
 
-            var playerResult = _accountManager.Value.GetLogInAccount(playerId);
-            if (!playerResult.IsSuccess)
-            {
-                await Task.Run(() => callback.LogInResult(new OperationResult(false, playerResult.Error)));
-                return;
-            }
+                var playerResult = _accountManager.Value.GetLogInAccount(playerId);
+                if (!playerResult.IsSuccess)
+                {
+                    await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, playerResult.Error));
+                    return;
+                }
 
-            var playerInfo = playerResult.Value;
-            var playerAdded = _connectedPlayersManager.AddPlayer(playerInfo.Id, playerInfo.Name);
-            if (!playerAdded)
-            {
-                await Task.Run(() => callback.LogInResult(new OperationResult(false, "Failed to add player to connected players list.")));
-                return;
-            }
+                var playerInfo = playerResult.Value;
+                var playerAdded = _connectedPlayersManager.AddPlayer(playerInfo.Id, playerInfo.Name);
+                if (!playerAdded)
+                {
+                    await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, "Failed to add player to connected players list."));
+                    return;
+                }
 
-            await Task.Run(() =>
+                await NotifyCallbackAsync(() =>
+                {
+                    callback.AccountInfo(playerInfo);
+                    callback.LogInResult(new OperationResult(true, "Login successful"));
+                });
+            }
+            catch (TimeoutException tex)
             {
-                callback.AccountInfo(playerInfo);
-                callback.LogInResult(new OperationResult(true, "Login successful"));
-            });
+                log.Error("TimeoutException during LogInAsync", tex);
+                await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, "The operation timed out."));
+            }
+            catch (CommunicationException cex)
+            {
+                log.Error("CommunicationException during LogInAsync", cex);
+                await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, "A communication error occurred."));
+            }
+            catch (Exception ex)
+            {
+                log.Error("Exception during LogInAsync", ex);
+                await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, "An error occurred during login."));
+            }
         }
 
         public async Task SignUpAsync(string email, string password, string playername)
         {
             var callback = OperationContext.Current.GetCallbackChannel<ISignUpServiceCallback>();
 
-            var result = _accountManager.Value.CreateAccount(email, password, playername);
+            try
+            {
+                var result = _accountManager.Value.CreateAccount(email, password, playername);
 
-            if (result.IsSuccess)
-            {
-                await Task.Run(() => callback.SignUpResult(new OperationResult(true, "Account created successfully")));
+                await NotifyCallbackAsync(callback.SignUpResult, result.IsSuccess
+                    ? new OperationResult(true, "Account created successfully")
+                    : new OperationResult(false, result.Error));
             }
-            else
+            catch (TimeoutException tex)
             {
-                await Task.Run(() => callback.SignUpResult(new OperationResult(false, result.Error)));
+                log.Error("TimeoutException during SignUpAsync", tex);
+                await NotifyCallbackAsync(callback.SignUpResult, new OperationResult(false, "The operation timed out."));
+            }
+            catch (CommunicationException cex)
+            {
+                log.Error("CommunicationException during SignUpAsync", cex);
+                await NotifyCallbackAsync(callback.SignUpResult, new OperationResult(false, "A communication error occurred."));
+            }
+            catch (Exception ex)
+            {
+                log.Error("Exception during SignUpAsync", ex);
+                await NotifyCallbackAsync(callback.SignUpResult, new OperationResult(false, "An error occurred during sign up."));
             }
         }
 
@@ -89,27 +122,46 @@ namespace StrategoServices.Services
             OperationResult response;
             bool isSuccessResponse = false;
 
-            var accountExistsResult = _passwordManager.Value.AlreadyExistentAccount(email);
-            if (!accountExistsResult.IsSuccess || !accountExistsResult.Value)
+            try
             {
-                response = new OperationResult(false, "Account not found");
-            } 
-            else
-            {
-                var verificationCode = _passwordManager.Value.GenerateVerificationCode(email);
-                var sendingResult = EmailSender.Instance.SendVerificationEmail(email, verificationCode);
-                if (!sendingResult)
+                var accountExistsResult = _passwordManager.Value.AlreadyExistentAccount(email);
+                if (!accountExistsResult.IsSuccess || !accountExistsResult.Value)
                 {
-                    response = new OperationResult(false, "Failed to send verification code");
+                    response = new OperationResult(false, "Account not found");
                 }
                 else
                 {
-                    response = new OperationResult(true, "Verification code sent.");
-                    isSuccessResponse = true;
+                    var verificationCode = _passwordManager.Value.GenerateVerificationCode(email);
+                    var sendingResult = EmailSender.Instance.SendVerificationEmail(email, verificationCode);
+                    if (!sendingResult)
+                    {
+                        response = new OperationResult(false, "Failed to send verification code");
+                    }
+                    else
+                    {
+                        response = new OperationResult(true, "Verification code sent.");
+                        isSuccessResponse = true;
+                    }
                 }
+
+                await NotifyCallbackAsync(callback.ChangePasswordResult, response);
+            }
+            catch (TimeoutException tex)
+            {
+                log.Error("TimeoutException during ObtainVerificationCodeAsync", tex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "The operation timed out."));
+            }
+            catch (CommunicationException cex)
+            {
+                log.Error("CommunicationException during ObtainVerificationCodeAsync", cex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "A communication error occurred."));
+            }
+            catch (Exception ex)
+            {
+                log.Error("Exception during ObtainVerificationCodeAsync", ex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "An error occurred while obtaining the verification code."));
             }
 
-            await Task.Run(() => callback.ChangePasswordResult(response));
             return isSuccessResponse;
         }
 
@@ -119,18 +171,33 @@ namespace StrategoServices.Services
             OperationResult response;
             bool isValid = false;
 
-            var verificationResult = _passwordManager.Value.ValidateVerificationCode(email, code);
-            if (!verificationResult.IsSuccess)
+            try
             {
-                response = new OperationResult(false, "Invalid verification code");
+                var verificationResult = _passwordManager.Value.ValidateVerificationCode(email, code);
+                response = verificationResult.IsSuccess
+                    ? new OperationResult(true, "Verification code is correct")
+                    : new OperationResult(false, "Invalid verification code");
+
+                isValid = verificationResult.IsSuccess;
+
+                await NotifyCallbackAsync(callback.ChangePasswordResult, response);
             }
-            else
+            catch (TimeoutException tex)
             {
-                response = new OperationResult(true, "Verification code is correct");
-                isValid = true;
+                log.Error("TimeoutException during SendVerificationCodeAsync", tex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "The operation timed out."));
+            }
+            catch (CommunicationException cex)
+            {
+                log.Error("CommunicationException during SendVerificationCodeAsync", cex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "A communication error occurred."));
+            }
+            catch (Exception ex)
+            {
+                log.Error("Exception during SendVerificationCodeAsync", ex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "An error occurred while sending the verification code."));
             }
 
-            await Task.Run(() => callback.ChangePasswordResult(response));
             return isValid;
         }
 
@@ -138,20 +205,40 @@ namespace StrategoServices.Services
         {
             var callback = OperationContext.Current.GetCallbackChannel<IChangePasswordServiceCallback>();
 
-            var result = _passwordManager.Value.ChangePassword(email, newHashedPassword);
-            OperationResult response;
-
-            if (!result.IsSuccess)
+            try
             {
-                response = new OperationResult(false, result.Error);
-            }
-            else
-            {
-                response = new OperationResult(true, "Password changed successfully");
-            }
+                var result = _passwordManager.Value.ChangePassword(email, newHashedPassword);
+                var response = result.IsSuccess
+                    ? new OperationResult(true, "Password changed successfully")
+                    : new OperationResult(false, result.Error);
 
-            await Task.Run(() => callback.ChangePasswordResult(response));
+                await NotifyCallbackAsync(callback.ChangePasswordResult, response);
+            }
+            catch (TimeoutException tex)
+            {
+                log.Error("TimeoutException during SendNewPasswordAsync", tex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "The operation timed out."));
+            }
+            catch (CommunicationException cex)
+            {
+                log.Error("CommunicationException during SendNewPasswordAsync", cex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "A communication error occurred."));
+            }
+            catch (Exception ex)
+            {
+                log.Error("Exception during SendNewPasswordAsync", ex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "An error occurred while changing the password."));
+            }
         }
 
+        private async Task NotifyCallbackAsync(Action<OperationResult> callbackAction, OperationResult result)
+        {
+            await Task.Run(() => callbackAction(result));
+        }
+
+        private async Task NotifyCallbackAsync(Action callbackAction)
+        {
+            await Task.Run(callbackAction);
+        }
     }
 }

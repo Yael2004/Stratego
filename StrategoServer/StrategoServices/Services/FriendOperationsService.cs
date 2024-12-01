@@ -1,4 +1,5 @@
-﻿using StrategoServices.Data;
+﻿using log4net;
+using StrategoServices.Data;
 using StrategoServices.Data.DTO;
 using StrategoServices.Logic;
 using System;
@@ -15,6 +16,7 @@ namespace StrategoServices.Services
     {
         private readonly Lazy<FriendsManager> _friendsManager;
         private readonly Lazy<InvitationManager> _invitationManager;
+        private static readonly ILog log = LogManager.GetLogger(typeof(FriendOperationsService));
 
         public FriendOperationsService(Lazy<FriendsManager> friendsManager, Lazy<InvitationManager> invitationManager)
         {
@@ -32,12 +34,19 @@ namespace StrategoServices.Services
                 var result = _friendsManager.Value.SendFriendRequest(destinationId, requesterId);
                 operationResult = new OperationResult(result.IsSuccess, result.Error);
             }
-            catch (TimeoutException)
+            catch (TimeoutException tex)
             {
+                log.Error("Timeout error in SendFriendRequest", tex);
                 operationResult = new OperationResult(false, "Timeout error");
             }
-            catch (Exception)
+            catch (CommunicationException cex)
             {
+                log.Error("Communication error in SendFriendRequest", cex);
+                operationResult = new OperationResult(false, "Communication error");
+            }
+            catch (Exception ex)
+            {
+                log.Fatal("Unexpected error in SendFriendRequest", ex);
                 operationResult = new OperationResult(false, "Unexpected error");
             }
 
@@ -54,12 +63,19 @@ namespace StrategoServices.Services
                 var result = _friendsManager.Value.AcceptFriendRequest(destinationId, requesterId);
                 operationResult = new OperationResult(result.IsSuccess, result.Error);
             }
-            catch (TimeoutException)
+            catch (TimeoutException tex)
             {
+                log.Error("Timeout error in AcceptFriendRequest", tex);
                 operationResult = new OperationResult(false, "Timeout error");
             }
-            catch (Exception)
+            catch (CommunicationException cex)
             {
+                log.Error("Communication error in AcceptFriendRequest", cex);
+                operationResult = new OperationResult(false, "Communication error");
+            }
+            catch (Exception ex)
+            {
+                log.Fatal("Unexpected error in AcceptFriendRequest", ex);
                 operationResult = new OperationResult(false, "Unexpected error");
             }
 
@@ -76,12 +92,19 @@ namespace StrategoServices.Services
                 var result = _friendsManager.Value.DeclineFriendRequest(destinationId, requesterId);
                 operationResult = new OperationResult(result.IsSuccess, result.Error);
             }
-            catch (TimeoutException)
+            catch (TimeoutException tex)
             {
+                log.Error("Timeout error in DeclineFriendRequest", tex);
                 operationResult = new OperationResult(false, "Timeout error");
             }
-            catch (Exception)
+            catch (CommunicationException cex)
             {
+                log.Error("Communication error in DeclineFriendRequest", cex);
+                operationResult = new OperationResult(false, "Communication error");
+            }
+            catch (Exception ex)
+            {
+                log.Fatal("Unexpected error in DeclineFriendRequest", ex);
                 operationResult = new OperationResult(false, "Unexpected error");
             }
 
@@ -98,12 +121,19 @@ namespace StrategoServices.Services
                 var result = _friendsManager.Value.RemoveFriend(destinationId, requesterId);
                 operationResult = new OperationResult(result.IsSuccess, result.Error);
             }
-            catch (TimeoutException)
+            catch (TimeoutException tex)
             {
+                log.Error("Timeout error in RemoveFriend", tex);
                 operationResult = new OperationResult(false, "Timeout error");
             }
-            catch (Exception)
+            catch (CommunicationException cex)
             {
+                log.Error("Communication error in RemoveFriend", cex);
+                operationResult = new OperationResult(false, "Communication error");
+            }
+            catch (Exception ex)
+            {
+                log.Fatal("Unexpected error in RemoveFriend", ex);
                 operationResult = new OperationResult(false, "Unexpected error");
             }
 
@@ -116,24 +146,42 @@ namespace StrategoServices.Services
             OperationResult operationResult;
             bool response = false;
 
-            var mailResult = _invitationManager.Value.GetPlayerMail(playerId);
+            try
+            {
+                var mailResult = _invitationManager.Value.GetPlayerMail(playerId);
 
-            if (!mailResult.IsSuccess)
-            {
-                operationResult = new OperationResult(false, mailResult.Error);
-            }
-            else
-            {
-                var sendingResult = EmailSender.Instance.SendInvitationEmail(mailResult.Value, roomCode);
-                if (!sendingResult)
+                if (!mailResult.IsSuccess)
                 {
-                    operationResult = new OperationResult(false, "Failed to send room invitation");
+                    operationResult = new OperationResult(false, mailResult.Error);
                 }
                 else
                 {
-                    operationResult = new OperationResult(true, "Room invitation sent");
-                    response = true;
+                    var sendingResult = EmailSender.Instance.SendInvitationEmail(mailResult.Value, roomCode);
+                    if (!sendingResult)
+                    {
+                        operationResult = new OperationResult(false, "Failed to send room invitation");
+                    }
+                    else
+                    {
+                        operationResult = new OperationResult(true, "Room invitation sent");
+                        response = true;
+                    }
                 }
+            }
+            catch (TimeoutException tex)
+            {
+                log.Error("Timeout error in SendRoomInvitation", tex);
+                operationResult = new OperationResult(false, "Timeout error");
+            }
+            catch (CommunicationException cex)
+            {
+                log.Error("Communication error in SendRoomInvitation", cex);
+                operationResult = new OperationResult(false, "Communication error");
+            }
+            catch (Exception ex)
+            {
+                log.Fatal("Unexpected error in SendRoomInvitation", ex);
+                operationResult = new OperationResult(false, "Unexpected error");
             }
 
             await Task.Run(() => callback.SendRoomInvitationResponseCall(operationResult));
@@ -159,12 +207,19 @@ namespace StrategoServices.Services
                     response.Result = new OperationResult(true, "Friend requests retrieved successfully");
                 }
             }
-            catch (TimeoutException)
+            catch (TimeoutException tex)
             {
+                log.Error("Timeout error in GetPlayerFriendRequestAsync", tex);
                 response.Result = new OperationResult(false, "Server error");
             }
-            catch (Exception)
+            catch (CommunicationException cex)
             {
+                log.Error("Communication error in GetPlayerFriendRequestAsync", cex);
+                response.Result = new OperationResult(false, "Communication error");
+            }
+            catch (Exception ex)
+            {
+                log.Fatal("Unexpected error in GetPlayerFriendRequestAsync", ex);
                 response.Result = new OperationResult(false, "Unexpected error");
             }
 

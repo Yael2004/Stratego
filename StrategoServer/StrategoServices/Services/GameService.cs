@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using log4net;
 using StrategoDataAccess;
 using StrategoServices.Data;
 using StrategoServices.Data.DTO;
@@ -16,6 +17,7 @@ namespace StrategoServices.Services
     {
         private readonly ConcurrentDictionary<int, GameSession> _activeGames = new ConcurrentDictionary<int, GameSession>();
         private readonly Lazy<WinsManager> _winsManager;
+        private readonly ILog log = LogManager.GetLogger(typeof(GameService));
 
         public GameService(Lazy<WinsManager> winsManager)
         {
@@ -151,6 +153,7 @@ namespace StrategoServices.Services
             }
             catch (Exception ex)
             {
+                log.Error("Exception during ending game", ex);
                 statsUpdateResult = new OperationResult(false, $"An unexpected error occurred: {ex.Message}");
                 await NotifyCallbackAsync(() => playerCallback.OnGameEnded("Error", statsUpdateResult));
             }
@@ -190,9 +193,17 @@ namespace StrategoServices.Services
             {
                 await Task.Run(callbackAction);
             }
+            catch (TimeoutException tex)
+            {
+                log.Error($"Timeout error while notifying callback. Exception: {tex.Message}");
+            }
+            catch (CommunicationException cex)
+            {
+                log.Fatal($"Communication error while notifying callback. Exception: {cex.Message}");
+            }
             catch (Exception ex)
             {
-                Console.WriteLine($"Callback failed: {ex.Message}");
+                log.Fatal($"Error while notifying callback. Exception: {ex.Message}");
             }
         }
 
@@ -225,9 +236,18 @@ namespace StrategoServices.Services
             {
                 await NotifyCallbackAsync(() => attackerCallback.OnReceiveMovementInstructions(response));
             }
+            catch (TimeoutException tex)
+            {
+                log.Error($"Timeout error while sending movement instructions to OpponentId: {opponentId}. Exception: {tex.Message}");
+            }
+            catch (CommunicationException cex)
+            {
+                log.Fatal($"Communication error while sending movement instructions to OpponentId: {opponentId}. Exception: {cex.Message}");
+
+            }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error while sending movement instructions to OpponentId: {opponentId}. Exception: {ex.Message}");
+                log.Fatal($"Error while sending movement instructions to OpponentId: {opponentId}. Exception: {ex.Message}");
             }
         }
 
