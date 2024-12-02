@@ -24,14 +24,17 @@ namespace StrategoDataAccess
         {
             try
             {
-                var picture = _context.Value.Pictures.FirstOrDefault(p => p.IdPicture == pictureId);
-
-                if (picture == null)
+                using (var context = new StrategoEntities())
                 {
-                    return Result<Pictures>.Failure("Picture not found");
-                }
+                    var picture = context.Pictures.FirstOrDefault(p => p.IdPicture == pictureId);
 
-                return Result<Pictures>.Success(picture);
+                    if (picture == null)
+                    {
+                        return Result<Pictures>.Failure("Picture not found");
+                    }
+
+                    return Result<Pictures>.Success(picture);
+                }
             }
             catch (SqlException sqlEx)
             {

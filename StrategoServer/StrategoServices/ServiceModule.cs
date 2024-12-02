@@ -41,7 +41,7 @@ namespace StrategoServices
             builder.RegisterType<GamesRepository>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<FriendsRepository>().AsSelf().InstancePerLifetimeScope();
 
-            builder.RegisterType<StrategoEntities>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<StrategoEntities>().AsSelf().InstancePerDependency();
         }
     }
 

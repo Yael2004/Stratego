@@ -25,16 +25,19 @@ namespace StrategoDataAccess
         {
             try
             {
-                var games = _context.Value.Games
+                using (var context = new StrategoEntities())
+                {
+                    var games = context.Games
                     .Where(g => g.AccountId == accountId)
                     .FirstOrDefault();
 
-                if (games == null)
-                {
-                    return Result<Games>.Failure("Not available");
-                }
+                    if (games == null)
+                    {
+                        return Result<Games>.Failure("Not available");
+                    }
 
-                return Result<Games>.Success(games);
+                    return Result<Games>.Success(games);
+                }
             }
             catch (SqlException sqlEx)
             {
@@ -52,17 +55,20 @@ namespace StrategoDataAccess
         {
             try
             {
-                var game = _context.Value.Games.FirstOrDefault(g => g.AccountId == accountId);
-
-                if (game == null)
+                using (var context = new StrategoEntities())
                 {
-                    return Result<string>.Failure("Game record not found for the specified AccountId.");
+                    var game = context.Games.FirstOrDefault(g => g.AccountId == accountId);
+
+                    if (game == null)
+                    {
+                        return Result<string>.Failure("Game record not found for the specified AccountId.");
+                    }
+
+                    game.WonGames += 1;
+                    context.SaveChanges();
+
+                    return Result<string>.Success("Won saved succesfully");
                 }
-
-                game.WonGames += 1;
-                _context.Value.SaveChanges();
-
-                return Result<string>.Success("Won saved succesfully");
             }
             catch (SqlException sqlEx)
             {
@@ -80,17 +86,20 @@ namespace StrategoDataAccess
         {
             try
             {
-                var game = _context.Value.Games.FirstOrDefault(g => g.AccountId == accountId);
-
-                if (game == null)
+                using (var context = new StrategoEntities())
                 {
-                    return Result<string>.Failure("Game record not found for the specified AccountId.");
+                    var game = context.Games.FirstOrDefault(g => g.AccountId == accountId);
+
+                    if (game == null)
+                    {
+                        return Result<string>.Failure("Game record not found for the specified AccountId.");
+                    }
+
+                    game.DeafeatGames += 1;
+                    context.SaveChanges();
+
+                    return Result<string>.Success("Defeat saved succesfully");
                 }
-
-                game.DeafeatGames += 1;
-                _context.Value.SaveChanges();
-
-                return Result<string>.Success("Defeat saved succesfully");
             }
             catch (SqlException sqlEx)
             {

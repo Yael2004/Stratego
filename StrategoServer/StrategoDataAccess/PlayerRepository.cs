@@ -28,14 +28,17 @@ namespace StrategoDataAccess
         {
             try
             {
-                var player = _context.Value.Player.FirstOrDefault(p => p.Id == playerId);
-
-                if (player == null)
+                using (var context = new StrategoEntities())
                 {
-                    return Result<Player>.Failure("Player not found");
-                }
+                    var player = context.Player.FirstOrDefault(p => p.Id == playerId);
 
-                return Result<Player>.Success(player);
+                    if (player == null)
+                    {
+                        return Result<Player>.Failure("Player not found");
+                    }
+
+                    return Result<Player>.Success(player);
+                }
             }
             catch (SqlException sqlEx)
             {
@@ -53,11 +56,14 @@ namespace StrategoDataAccess
         {
             try
             {
-                var isFriend = _context.Value.Friend.Any(f =>
-                    (f.PlayerId == playerId && f.FriendId == otherPlayerId && f.Status == "friend") ||
-                    (f.PlayerId == otherPlayerId && f.FriendId == playerId && f.Status == "friend"));
+                using (var context = new StrategoEntities())
+                {
+                    var isFriend = context.Friend.Any(f =>
+                        (f.PlayerId == playerId && f.FriendId == otherPlayerId && f.Status == "friend") ||
+                        (f.PlayerId == otherPlayerId && f.FriendId == playerId && f.Status == "friend"));
 
-                return Result<bool>.Success(isFriend);
+                    return Result<bool>.Success(isFriend);
+                }
             }
             catch (SqlException sqlEx)
             {
@@ -75,12 +81,14 @@ namespace StrategoDataAccess
         {
             try
             {
-                var result = _context.Value.Friend
+                using (var context = new StrategoEntities())
+                {
+                    var result = context.Friend
                     .Where(f =>
                         (f.PlayerId == playerId || f.FriendId == playerId) &&
                         f.Status == "accepted")
                     .Join(
-                        _context.Value.Player,
+                        context.Player,
                         friend => friend.PlayerId == playerId ? friend.FriendId : friend.PlayerId,
                         player => player.Id,
                         (friend, player) => player
@@ -88,11 +96,12 @@ namespace StrategoDataAccess
                     .Distinct()
                     .ToList();
 
-                if (result.Count == 0)
-                {
-                   return Result<IEnumerable<Player>>.Failure("No friends found for the given player ID");
+                    if (result.Count == 0)
+                    {
+                        return Result<IEnumerable<Player>>.Failure("No friends found for the given player ID");
+                    }
+                    return Result<IEnumerable<Player>>.Success(result);
                 }
-                return Result<IEnumerable<Player>>.Success(result);
             } 
             catch (SqlException sqlEx)
             {
@@ -108,7 +117,8 @@ namespace StrategoDataAccess
 
         public virtual Result<Player> UpdatePlayer(Player updatedPlayer, string labelPath, string picturePath)
         {
-            using (var transaction = _context.Value.Database.BeginTransaction())
+            using (var context = new StrategoEntities())
+            using (var transaction = context.Database.BeginTransaction())
             {
                 try
                 {
@@ -124,7 +134,7 @@ namespace StrategoDataAccess
                         return Result<Player>.Failure(labelIdResult.Error);
                     }
 
-                    var playerInDb = _context.Value.Player
+                    var playerInDb = context.Player
                         .FirstOrDefault(p => p.Id == updatedPlayer.Id);
 
                     if (playerInDb == null)
@@ -136,7 +146,7 @@ namespace StrategoDataAccess
                     playerInDb.PictureId = pictureIdResult.Value;
                     playerInDb.IdLabel = labelIdResult.Value;
 
-                    _context.Value.SaveChanges();
+                    context.SaveChanges();
 
                     transaction.Commit();
 
@@ -168,14 +178,17 @@ namespace StrategoDataAccess
         {
             try
             {
-                var player = _context.Value.Player.FirstOrDefault(p => p.AccountId == accountId);
-
-                if (player == null)
+                using (var context = new StrategoEntities())
                 {
-                    return Result<Player>.Failure("Player not found for the given account ID");
-                }
+                    var player = context.Player.FirstOrDefault(p => p.AccountId == accountId);
 
-                return Result<Player>.Success(player);
+                    if (player == null)
+                    {
+                        return Result<Player>.Failure("Player not found for the given account ID");
+                    }
+
+                    return Result<Player>.Success(player);
+                }
             }
             catch (SqlException sqlEx)
             {
@@ -193,15 +206,18 @@ namespace StrategoDataAccess
         {
             try
             {
-                var label = _context.Value.Label
+                using (var context = new StrategoEntities())
+                {
+                    var label = context.Label
                     .FirstOrDefault(l => l.Path == labelPath);
 
-                if (label == null)
-                {
-                    return Result<int>.Failure("Label path not found.");
-                }
+                    if (label == null)
+                    {
+                        return Result<int>.Failure("Label path not found.");
+                    }
 
-                return Result<int>.Success(label.IdLabel);
+                    return Result<int>.Success(label.IdLabel);
+                }
             }
             catch (SqlException sqlEx)
             {
@@ -219,15 +235,18 @@ namespace StrategoDataAccess
         {
             try
             {
-                var picture = _context.Value.Pictures
-                    .FirstOrDefault(p => p.path == picturePath);
-
-                if (picture == null)
+                using (var context = new StrategoEntities())
                 {
-                    return Result<int>.Failure("Picture path not found.");
-                }
+                    var picture = context.Pictures
+                        .FirstOrDefault(p => p.path == picturePath);
 
-                return Result<int>.Success(picture.IdPicture);
+                    if (picture == null)
+                    {
+                        return Result<int>.Failure("Picture path not found.");
+                    }
+
+                    return Result<int>.Success(picture.IdPicture);
+                }
             }
             catch (SqlException sqlEx)
             {
@@ -245,15 +264,18 @@ namespace StrategoDataAccess
         {
             try
             {
-                var picture = _context.Value.Pictures
+                using (var context = new StrategoEntities())
+                {
+                    var picture = context.Pictures
                     .FirstOrDefault(p => p.IdPicture == pictureId);
 
-                if (picture == null)
-                {
-                    return Result<string>.Failure("Picture not found.");
-                }
+                    if (picture == null)
+                    {
+                        return Result<string>.Failure("Picture not found.");
+                    }
 
-                return Result<string>.Success(picture.path);
+                    return Result<string>.Success(picture.path);
+                }
             }
             catch (SqlException sqlEx)
             {
@@ -271,15 +293,18 @@ namespace StrategoDataAccess
         {
             try
             {
-                var label = _context.Value.Label
+                using (var context = new StrategoEntities())
+                {
+                    var label = context.Label
                     .FirstOrDefault(l => l.IdLabel == labelId);
 
-                if (label == null)
-                {
-                    return Result<string>.Failure("Label not found.");
-                }
+                    if (label == null)
+                    {
+                        return Result<string>.Failure("Label not found.");
+                    }
 
-                return Result<string>.Success(label.Path);
+                    return Result<string>.Success(label.Path);
+                }
             }
             catch (SqlException sqlEx)
             {
@@ -297,17 +322,20 @@ namespace StrategoDataAccess
         {
             try
             {
-                var email = _context.Value.Player
+                using (var context = new StrategoEntities())
+                {
+                    var email = context.Player
                     .Where(p => p.Id == playerId)
-                    .Select(p => p.Account.mail) 
+                    .Select(p => p.Account.mail)
                     .FirstOrDefault();
 
-                if (email == null)
-                {
-                    return Result<string>.Failure("Player or account not found.");
-                }
+                    if (email == null)
+                    {
+                        return Result<string>.Failure("Player or account not found.");
+                    }
 
-                return Result<string>.Success(email);
+                    return Result<string>.Success(email);
+                }
             }
             catch (SqlException sqlEx)
             {
@@ -325,28 +353,31 @@ namespace StrategoDataAccess
         {
             try
             {
-                var result = _context.Value.Games
-                    .GroupBy(g => g.AccountId) 
+                using (var context = new StrategoEntities())
+                {
+                    var result = context.Games
+                    .GroupBy(g => g.AccountId)
                     .Select(g => new
                     {
                         AccountId = g.Key,
-                        WonGames = g.Sum(x => x.WonGames) 
+                        WonGames = g.Sum(x => x.WonGames)
                     })
-                    .OrderByDescending(g => g.WonGames) 
-                    .Take(10) 
+                    .OrderByDescending(g => g.WonGames)
+                    .Take(10)
                     .Join(
-                        _context.Value.Player, 
-                        games => games.AccountId, 
-                        player => player.AccountId, 
-                        (games, player) => player 
+                        context.Player,
+                        games => games.AccountId,
+                        player => player.AccountId,
+                        (games, player) => player
                     )
                     .ToList();
 
-                if (result.Count == 0)
-                {
-                    return Result<IEnumerable<Player>>.Failure("No players found with games won.");
+                    if (result.Count == 0)
+                    {
+                        return Result<IEnumerable<Player>>.Failure("No players found with games won.");
+                    }
+                    return Result<IEnumerable<Player>>.Success(result);
                 }
-                return Result<IEnumerable<Player>>.Success(result);
             }
             catch (SqlException sqlEx)
             {
@@ -364,23 +395,26 @@ namespace StrategoDataAccess
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(reason))
+                using (var context = new StrategoEntities())
                 {
-                    return Result<string>.Failure("Reason for report cannot be empty.");
+                    if (string.IsNullOrWhiteSpace(reason))
+                    {
+                        return Result<string>.Failure("Reason for report cannot be empty.");
+                    }
+
+                    var report = new Report
+                    {
+                        IdReporter = reporterId,
+                        IdReported = reportedId,
+                        Reason = reason,
+                        Date = DateTime.Now
+                    };
+
+                    context.Report.Add(report);
+                    context.SaveChanges();
+
+                    return Result<string>.Success("Player reported successfully.");
                 }
-
-                var report = new Report
-                {
-                    IdReporter = reporterId,
-                    IdReported = reportedId,
-                    Reason = reason,
-                    Date = DateTime.Now 
-                };
-
-                _context.Value.Report.Add(report);
-                _context.Value.SaveChanges();
-
-                return Result<string>.Success("Player reported successfully.");
             }
             catch (SqlException sqlEx)
             {
@@ -398,10 +432,13 @@ namespace StrategoDataAccess
         {
             try
             {
-                var reportCount = _context.Value.Report
-                    .Count(r => r.IdReported == playerId);
+                using (var context = new StrategoEntities())
+                {
+                    var reportCount = context.Report
+                        .Count(r => r.IdReported == playerId);
 
-                return Result<int>.Success(reportCount);
+                    return Result<int>.Success(reportCount);
+                }
             }
             catch (SqlException sqlEx)
             {

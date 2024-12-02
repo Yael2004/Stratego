@@ -36,7 +36,8 @@ namespace StrategoDataAccess
                 return Result<string>.Failure("Account already exists");
             }
 
-            using (var transaction = _context.Value.Database.BeginTransaction())
+            using (var context = new StrategoEntities())
+            using (var transaction = context.Database.BeginTransaction())
             {
                 try
                 {
@@ -46,8 +47,8 @@ namespace StrategoDataAccess
                         password = hashedPassword
                     };
 
-                    _context.Value.Account.Add(newAccount);
-                    _context.Value.SaveChanges();
+                    context.Account.Add(newAccount);
+                    context.SaveChanges();
 
                     const int defaultPictureId = 1;
                     const int defaultLabelId = 1;
@@ -60,8 +61,8 @@ namespace StrategoDataAccess
                         AccountId = newAccount.IdAccount
                     };
 
-                    _context.Value.Player.Add(newPlayer);
-                    _context.Value.SaveChanges();
+                    context.Player.Add(newPlayer);
+                    context.SaveChanges();
 
                     var playerStatistics = new Games
                     {
@@ -70,8 +71,8 @@ namespace StrategoDataAccess
                         AccountId = newAccount.IdAccount
                     };
 
-                    _context.Value.Games.Add(playerStatistics);
-                    _context.Value.SaveChanges();
+                    context.Games.Add(playerStatistics);
+                    context.SaveChanges();
 
                     transaction.Commit();
                     return Result<string>.Success("Account and player created successfully");
@@ -101,14 +102,17 @@ namespace StrategoDataAccess
         {
             try
             {
-                var account = _context.Value.Account.FirstOrDefault(a => a.mail == email && a.password == hashedPassword);
-
-                if (account == null)
+                using (var context = new StrategoEntities())
                 {
-                    return Result<int>.Failure("Invalid credentials");
-                }
+                    var account = context.Account.FirstOrDefault(a => a.mail == email && a.password == hashedPassword);
 
-                return Result<int>.Success(account.IdAccount);
+                    if (account == null)
+                    {
+                        return Result<int>.Failure("Invalid credentials");
+                    }
+
+                    return Result<int>.Success(account.IdAccount);
+                }
             }
             catch (DbEntityValidationException dbEx)
             {
@@ -131,8 +135,11 @@ namespace StrategoDataAccess
         {
             try
             {
-                bool exists = _context.Value.Account.Any(a => a.mail == email);
-                return Result<bool>.Success(exists);
+                using (var context = new StrategoEntities())
+                {
+                    bool exists = context.Account.Any(a => a.mail == email);
+                    return Result<bool>.Success(exists);
+                }
             }
             catch (SqlException sqlEx)
             {
@@ -148,7 +155,8 @@ namespace StrategoDataAccess
 
         public virtual Result<string> ChangePassword(string email, string newHashedPassword)
         {
-            using (var transaction = _context.Value.Database.BeginTransaction())
+            using (var context = new StrategoEntities())
+            using (var transaction = context.Database.BeginTransaction())
             {
                 try
                 {
@@ -164,14 +172,14 @@ namespace StrategoDataAccess
                         return Result<string>.Failure("Account does not exist");
                     }
 
-                    var account = _context.Value.Account.FirstOrDefault(a => a.mail == email);
+                    var account = context.Account.FirstOrDefault(a => a.mail == email);
                     if (account == null)
                     {
                         return Result<string>.Failure("Account not found");
                     }
 
                     account.password = newHashedPassword;
-                    _context.Value.SaveChanges();
+                    context.SaveChanges();
 
                     transaction.Commit();
                     return Result<string>.Success("Password changed successfully");

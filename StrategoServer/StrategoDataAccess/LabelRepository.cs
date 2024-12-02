@@ -24,14 +24,17 @@ namespace StrategoDataAccess
         {
             try
             {
-                var label = _context.Value.Label.FirstOrDefault(l => l.IdLabel == labelId);
-
-                if (label == null)
+                using (var context = new StrategoEntities())
                 {
-                    return Result<Label>.Failure("Label not found");
-                }
+                    var label = context.Label.FirstOrDefault(l => l.IdLabel == labelId);
 
-                return Result<Label>.Success(label);
+                    if (label == null)
+                    {
+                        return Result<Label>.Failure("Label not found");
+                    }
+
+                    return Result<Label>.Success(label);
+                }
             }
             catch (SqlException sqlEx)
             {
