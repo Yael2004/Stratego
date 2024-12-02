@@ -30,12 +30,15 @@ namespace StrategoApp.ViewModel
         private string _codeErrorMessage;
         private string _emailErrorMessage;
         private string _passwordErrorMessage;
+        private string _passwordChangedErrorMessage;
         private bool _isServiceErrorVisible;
         private bool _isPasswordVisible;
+        private bool _isPasswordChangedVisible;
         private bool _isDatabaseError;
         private bool _isForgotPasswordVisible;
         private bool _isCodeVerificationVisible;
         private bool _isChangePasswordVisible;
+        private bool _passwordChangedSuccesfully;
         private string _togglePasswordVisibilityIcon;
 
         private string _codePart1;
@@ -52,6 +55,8 @@ namespace StrategoApp.ViewModel
 
         private readonly MainWindowViewModel _mainWindowViewModel;
 
+        public event Action ClearPasswordBox;
+
         public ICommand LogInCommand { get; }
         public ICommand SignUpCommand { get; }
         public ICommand LogInAsInvitedCommand { get; }
@@ -64,6 +69,7 @@ namespace StrategoApp.ViewModel
         public ICommand CancelVerificationCommand { get; }
         public ICommand ChangePasswordCommand { get; }
         public ICommand CancelChangePasswordCommand { get; }
+        public ICommand CloseChangedPasswordMessageCommand { get; }
 
         public string CodePart1
         {
@@ -155,6 +161,16 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public bool IsPasswordChangedVisible
+        {
+            get => _isPasswordChangedVisible;
+            set
+            {
+                _isPasswordChangedVisible = value;
+                OnPropertyChanged(nameof(IsPasswordChangedVisible));
+            }
+        }
+
         public bool IsChangePasswordVisible
         {
             get { return _isChangePasswordVisible; }
@@ -235,6 +251,26 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public bool PasswordChangedSuccesfully
+        {
+            get { return _passwordChangedSuccesfully; }
+            set
+            {
+                _passwordChangedSuccesfully = value;
+                OnPropertyChanged(nameof(PasswordChangedSuccesfully));
+            }
+        }
+
+        public string PasswordChangedErrorMessage
+        {
+            get { return _passwordChangedErrorMessage; }
+            set
+            {
+                _passwordChangedErrorMessage = value;
+                OnPropertyChanged(nameof(PasswordChangedErrorMessage));
+            }
+        }
+
         public bool IsDatabaseError
         {
             get { return _isDatabaseError; }
@@ -262,10 +298,12 @@ namespace StrategoApp.ViewModel
             CancelVerificationCommand = new ViewModelCommand(CancelVerification);
             ChangePasswordCommand = new ViewModelCommand(ChangePassword);
             CancelChangePasswordCommand = new ViewModelCommand(CancelChangePassword);
+            CloseChangedPasswordMessageCommand = new ViewModelCommand(CloseChangedPasswordMessage);
 
             IsForgotPasswordVisible = false;
             IsServiceErrorVisible = false;
             IsPasswordVisible = false;
+            IsPasswordChangedVisible = false;
             IsCodeVerificationVisible = false;
             IsChangePasswordVisible = false;
         }
@@ -290,10 +328,14 @@ namespace StrategoApp.ViewModel
         private void CancelChangePassword(object obj)
         {
             IsChangePasswordVisible = false;
+
+            EmptyFields();
         }
 
         private void SendMail(object obj)
         {
+            EmailErrorMessage = string.Empty;
+
             ObtainVerificationCodeClient();
         }
 
@@ -320,14 +362,8 @@ namespace StrategoApp.ViewModel
 
         private void CancelVerification(object obj)
         {
-            CodePart1 = string.Empty;
-            CodePart2 = string.Empty;
-            CodePart3 = string.Empty;
-            CodePart4 = string.Empty;
-            CodePart5 = string.Empty;
-            CodePart6 = string.Empty;
             IsCodeVerificationVisible = false;
-            RecoveryMail = string.Empty;
+            EmptyFields();
         }
 
         private void ExecuteSignUpCommand(object obj)
@@ -341,7 +377,7 @@ namespace StrategoApp.ViewModel
             {
                 return false;
             }
-                
+
             return true;
         }
 
@@ -386,6 +422,13 @@ namespace StrategoApp.ViewModel
         private void ExecuteCloseServerError(object obj)
         {
             IsServiceErrorVisible = false;
+        }
+
+        private void CloseChangedPasswordMessage(object obj)
+        {
+            PasswordChangedSuccesfully = false;
+
+            EmptyFields();
         }
 
         public void LogInResult(OperationResult result)
@@ -484,7 +527,6 @@ namespace StrategoApp.ViewModel
                 }
                 else
                 {
-                    EmailErrorMessage = string.Empty;
                     IsForgotPasswordVisible = false;
                     IsCodeVerificationVisible = true;
                 }
@@ -510,8 +552,18 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                string hashedPassword = HashPassword(EditedPassword);
-                await _changePasswordServiceClient.SendNewPasswordAsync(RecoveryMail, hashedPassword);
+                if (!Validations.IsValidPassword(EditedPassword))
+                {
+                    PasswordErrorMessage = Properties.Resources.InvalidPassword_Label;
+                }
+                else
+                {
+                    string hashedPassword = HashPassword(EditedPassword);
+                    await _changePasswordServiceClient.SendNewPasswordAsync(RecoveryMail, hashedPassword);
+
+                    IsChangePasswordVisible = false;
+                    PasswordChangedSuccesfully = true;
+                }
             }
             catch (CommunicationException ex)
             {
@@ -525,9 +577,26 @@ namespace StrategoApp.ViewModel
             }
             catch (Exception ex)
             {
-                Log.Error("Error inesperado al cambiar la contraseña.", ex);
+                Log.Error("Unexpected error while changing password.", ex);
                 IsServiceErrorVisible = true;
             }
+        }
+
+        private void EmptyFields()
+        {
+            RecoveryMail = string.Empty;
+            EditedPassword = string.Empty;
+            CodeErrorMessage = string.Empty;
+            EmailErrorMessage = string.Empty;
+            PasswordErrorMessage = string.Empty;
+            CodePart1 = string.Empty;
+            CodePart2 = string.Empty;
+            CodePart3 = string.Empty;
+            CodePart4 = string.Empty;
+            CodePart5 = string.Empty;
+            CodePart6 = string.Empty;
+
+            ClearPasswordBox?.Invoke();
         }
     }
 }

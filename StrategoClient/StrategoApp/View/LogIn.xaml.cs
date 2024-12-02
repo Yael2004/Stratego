@@ -25,7 +25,18 @@ namespace StrategoApp.View
         {
             InitializeComponent();
             this.Cursor = new Cursor(Application.GetResourceStream(new Uri("pack://application:,,,/StrategoApp;component/Assets/Cursors/normal_cursor.cur")).Stream);
+
+            if (DataContext is LogInViewModel viewModel)
+            {
+                viewModel.ClearPasswordBox += ClearPasswordFields;
+            }
         }
+
+        public void ClearPasswordFields()
+        {
+            PasswordBoxChanged.Password = string.Empty;
+        }
+
         private void ShowPassword(object sender, MouseButtonEventArgs e)
         {
             if (DataContext is LogInViewModel viewModel)
@@ -61,6 +72,45 @@ namespace StrategoApp.View
                 else
                 {
                     PasswordBox.Password = PasswordTextBox.Text;
+                }
+            }
+        }
+
+        private void ShowPasswordChanged(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is LogInViewModel viewModel)
+            {
+                viewModel.IsPasswordChangedVisible = true;
+            }
+        }
+
+        private void HidePasswordChanged(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is LogInViewModel viewModel)
+            {
+                viewModel.IsPasswordChangedVisible = false;
+            }
+        }
+
+        private void PasswordBoxChanged_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is LogInViewModel viewModel)
+            {
+                viewModel.EditedPassword = ((PasswordBox)sender).Password;
+            }
+        }
+
+        private void SyncPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is LogInViewModel viewModel)
+            {
+                if (viewModel.IsPasswordChangedVisible)
+                {
+                    PasswordTextBoxChanged.Text = PasswordBoxChanged.Password;
+                }
+                else
+                {
+                    PasswordBoxChanged.Password = PasswordTextBoxChanged.Text;
                 }
             }
         }
