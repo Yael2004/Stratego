@@ -133,6 +133,15 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Your account has been banned.
+        /// </summary>
+        public static string BannedAccount_Label {
+            get {
+                return ResourceManager.GetString("BannedAccount_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Cancel.
         /// </summary>
         public static string Cancel_Button {

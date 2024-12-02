@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,6 +51,19 @@ namespace StrategoApp.ViewModel
         private readonly ChangePasswordServiceClient _changePasswordServiceClient;
 
         private readonly MainWindowViewModel _mainWindowViewModel;
+
+        public ICommand LogInCommand { get; }
+        public ICommand SignUpCommand { get; }
+        public ICommand LogInAsInvitedCommand { get; }
+        public ICommand TogglePasswordVisibilityCommand { get; }
+        public ICommand ExecuteCloseServiceErrorCommand { get; }
+        public ICommand ForgotPasswordCommand { get; }
+        public ICommand SendMailCommand { get; }
+        public ICommand CancelSendMailCommand { get; }
+        public ICommand VerifyCodeCommand { get; }
+        public ICommand CancelVerificationCommand { get; }
+        public ICommand ChangePasswordCommand { get; }
+        public ICommand CancelChangePasswordCommand { get; }
 
         public string CodePart1
         {
@@ -108,7 +122,7 @@ namespace StrategoApp.ViewModel
             set
             {
                 _password = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(Password));
             }
         }
 
@@ -133,12 +147,11 @@ namespace StrategoApp.ViewModel
 
         public bool IsPasswordVisible
         {
-            get { return _isPasswordVisible; }
+            get => _isPasswordVisible;
             set
             {
                 _isPasswordVisible = value;
-                OnPropertyChanged();
-                _togglePasswordVisibilityIcon = _isPasswordVisible ? "HidePasswordIcon" : "ShowPasswordIcon";
+                OnPropertyChanged(nameof(IsPasswordVisible));
             }
         }
 
@@ -232,19 +245,6 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public ICommand LogInCommand { get; }
-        public ICommand SignUpCommand { get; }
-        public ICommand LogInAsInvitedCommand { get; }
-        public ICommand TogglePasswordVisibilityCommand { get; }
-        public ICommand ExecuteCloseServiceErrorCommand { get; }
-        public ICommand ForgotPasswordCommand { get; }
-        public ICommand SendMailCommand { get; }
-        public ICommand CancelSendMailCommand { get; }
-        public ICommand VerifyCodeCommand { get; }
-        public ICommand CancelVerificationCommand { get; }
-        public ICommand ChangePasswordCommand { get; }
-        public ICommand CancelChangePasswordCommand { get; }
-
         public LogInViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _logInServiceClient = new LogInServiceClient(new System.ServiceModel.InstanceContext(this));
@@ -254,7 +254,6 @@ namespace StrategoApp.ViewModel
             LogInCommand = new ViewModelCommand(ExecuteLogInCommand, CanExecuteLogInCommand);
             LogInAsInvitedCommand = new ViewModelCommand(ExcuteLogInAsInvitedCommand);
             SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand);
-            TogglePasswordVisibilityCommand = new ViewModelCommand(ExecuteTogglePasswordVisibilityCommand);
             ExecuteCloseServiceErrorCommand = new ViewModelCommand(ExecuteCloseServerError);
             ForgotPasswordCommand = new ViewModelCommand(ForgotPassword);
             CancelSendMailCommand = new ViewModelCommand(CancelForgotPassword);
@@ -269,21 +268,6 @@ namespace StrategoApp.ViewModel
             IsPasswordVisible = false;
             IsCodeVerificationVisible = false;
             IsChangePasswordVisible = false;
-        }
-
-        public LogInViewModel()
-        {
-            _logInServiceClient = new LogInServiceClient(new System.ServiceModel.InstanceContext(this));
-
-            LogInCommand = new ViewModelCommand(ExecuteLogInCommand, CanExecuteLogInCommand);
-            SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand);
-            LogInAsInvitedCommand = new ViewModelCommand(ExcuteLogInAsInvitedCommand);
-            TogglePasswordVisibilityCommand = new ViewModelCommand(ExecuteTogglePasswordVisibilityCommand);
-        }
-
-        private void ExecuteTogglePasswordVisibilityCommand(object obj)
-        {
-            IsPasswordVisible = !IsPasswordVisible;
         }
 
         private void ForgotPassword(object obj)
@@ -369,9 +353,19 @@ namespace StrategoApp.ViewModel
             {
                 await _logInServiceClient.LogInAsync(Mail, hashedPassword);
             }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error with the login service.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while communicating with the login service.", ex);
+                IsServiceErrorVisible = true;
+            }
             catch (Exception ex)
             {
-                Log.Error(ex);
+                Log.Error("Unexpected error while logging in.", ex);
                 IsServiceErrorVisible = true;
             }
         }
@@ -386,7 +380,6 @@ namespace StrategoApp.ViewModel
             catch (Exception ex)
             {
                 Log.Error(ex.Message);
-                IsServiceErrorVisible = true;
             }
         }
 
@@ -405,12 +398,11 @@ namespace StrategoApp.ViewModel
                 }
                 else if (result.Message == "Access denied: This account has been reported too many times.")
                 {
-                    //ErrorMessage = Properties.Resources.BannedAccount_Label;
+                    ErrorMessage = Properties.Resources.BannedAccount_Label;
                 }
                 else
                 {
                     ErrorMessage = Properties.Resources.NonexistentAccount_Label;
-                    MessageBox.Show(result.Message);
                 }
             });
         }
@@ -469,45 +461,73 @@ namespace StrategoApp.ViewModel
 
         public void ChangePasswordResult(OperationResult result)
         {
-            try
+            if (result.IsSuccess)
             {
-                if (result.IsSuccess)
-                {
-                    Password = EditedPassword;
-                }
-                else
-                {
-                    EmailErrorMessage = Properties.Resources.NonexistentAccount_Label;
-                }
+                Password = EditedPassword;
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message);
+                EmailErrorMessage = Properties.Resources.NonexistentAccount_Label;
             }
         }
 
         public async void ObtainVerificationCodeClient()
         {
-            bool isMailValid = await _changePasswordServiceClient.ObtainVerificationCodeAsync(RecoveryMail);
+            try
+            {
+                bool isMailValid = await _changePasswordServiceClient.ObtainVerificationCodeAsync(RecoveryMail);
 
-            if (!isMailValid)
-            {
-                EmailErrorMessage = Properties.Resources.NonexistentAccount_Label;
-                return;
+                if (!isMailValid)
+                {
+                    EmailErrorMessage = Properties.Resources.NonexistentAccount_Label;
+                    return;
+                }
+                else
+                {
+                    EmailErrorMessage = string.Empty;
+                    IsForgotPasswordVisible = false;
+                    IsCodeVerificationVisible = true;
+                }
             }
-            else
+            catch (CommunicationException ex)
             {
-                EmailErrorMessage = string.Empty;
-                IsForgotPasswordVisible = false;
-                IsCodeVerificationVisible = true;
+                Log.Error("Communication error while obtaining verification code.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while getting verification code.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unexpected error while getting verification code.", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
         public async void ChangePasswordClient()
         {
-            string hashedPassword = HashPassword(EditedPassword);
-            await _changePasswordServiceClient.SendNewPasswordAsync(RecoveryMail, hashedPassword);
+            try
+            {
+                string hashedPassword = HashPassword(EditedPassword);
+                await _changePasswordServiceClient.SendNewPasswordAsync(RecoveryMail, hashedPassword);
+            }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while changing password.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while changing password.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error inesperado al cambiar la contraseña.", ex);
+                IsServiceErrorVisible = true;
+            }
         }
-
     }
 }

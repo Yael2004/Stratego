@@ -58,22 +58,22 @@
                        HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
                     <PasswordBox x:Name="PasswordBox"
+                                Style="{StaticResource InputBoxStyle}"
+                                Canvas.Left="260" Canvas.Top="220"
+                                Width="280" Height="33"
+                                HorizontalAlignment="Center" VerticalAlignment="Top"
+                                PasswordChanged="PasswordBox_PasswordChanged"
+                                Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                                Loaded="SyncPassword" />
+
+                    <TextBox x:Name="PasswordTextBox"
                             Style="{StaticResource InputBoxStyle}"
+                            Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
                             Canvas.Left="260" Canvas.Top="220"
                             Width="280" Height="33"
                             HorizontalAlignment="Center" VerticalAlignment="Top"
-                            PasswordChanged="PasswordBox_PasswordChanged"
-                            Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                            Visibility="{Binding IsPasswordVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                             Loaded="SyncPassword" />
-
-                    <TextBox x:Name="PasswordTextBox"
-                        Style="{StaticResource InputBoxStyle}"
-                        Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
-                        Canvas.Left="260" Canvas.Top="220"
-                        Width="280" Height="33"
-                        HorizontalAlignment="Center" VerticalAlignment="Top"
-                        Visibility="{Binding IsPasswordVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                        Loaded="SyncPassword" />
 
                     <Button Content="{x:Static res:Resources.Login_Button}" 
                         Style="{StaticResource ButtonStyle}"
@@ -97,43 +97,36 @@
                         HorizontalAlignment="Left" VerticalAlignment="Top"
                         Command="{Binding LogInAsInvitedCommand}"/>
 
-                    <CheckBox Command="{Binding TogglePasswordVisibilityCommand}"
-                          Canvas.Left="545" Canvas.Top="220"
-                          Width="50" Height="33"
-                          HorizontalAlignment="Left" VerticalAlignment="Center">
-                        <CheckBox.Template>
-                            <ControlTemplate TargetType="CheckBox">
-                                <ContentPresenter />
-                            </ControlTemplate>
-                        </CheckBox.Template>
+                    <Button Canvas.Left="545" Canvas.Top="220"
+                            Width="50" Height="33"
+                            HorizontalAlignment="Left" VerticalAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            PreviewMouseDown="ShowPassword"
+                            PreviewMouseUp="HidePassword">
+                        <Image Width="30" Height="33">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPasswordVisible}" Value="True">
+                                            <Setter Property="Source" Value="/Assets/Images/Icons/EyeOpen_Icon.png"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                    </Button>
 
-                        <CheckBox.Content>
-                            <Image Width="30" Height="33">
-                                <Image.Style>
-                                    <Style TargetType="Image">
-                                        <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}" Value="True">
-                                                <Setter Property="Source" Value="/Assets/Images/Icons/EyeOpen_Icon.png"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}" Value="False">
-                                                <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Image.Style>
-                            </Image>
-                        </CheckBox.Content>
-                    </CheckBox>
 
                     <Label Content="{Binding ErrorMessage}"
-                   FontSize="15" 
-                   FontWeight="Bold"
-                   Foreground="{StaticResource IntenseRed}"
-                   FontFamily="{StaticResource AugustaFont}"
-                   Canvas.Left="260" Canvas.Top="258" 
-                   HorizontalAlignment="Left" VerticalAlignment="Center"
-                   Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                           FontSize="15" 
+                           FontWeight="Bold"
+                           Foreground="{StaticResource IntenseRed}"
+                           FontFamily="{StaticResource AugustaFont}"
+                           Canvas.Left="260" Canvas.Top="258" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                           Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
                 </Canvas>
 
                 <TextBlock FontSize="14" Foreground="{StaticResource IntenseRed}" Canvas.Left="260" Canvas.Top="310" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,411,0,0">
@@ -196,7 +189,7 @@
                                  HorizontalAlignment="Center" 
                                  Width="200" 
                                  Margin="0,30,0,5"
-                                 MaxLength="100"/>       
+                                 MaxLength="100"/>
 
                         <Border Height="28" Width="292" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <TextBlock Text="{Binding EmailErrorMessage}"
@@ -254,19 +247,19 @@
                         <StackPanel Orientation="Horizontal" 
                                     HorizontalAlignment="Center" 
                                     Margin="0,30,0,5">
-                            
+
                             <TextBox Width="40" Height="40" MaxLength="1" TextAlignment="Center"
                                      Style="{StaticResource InputBoxStyle}" 
                                      BorderBrush="{StaticResource IntenseRed}" 
                                      BorderThickness="1" 
                                      Text="{Binding CodePart1, UpdateSourceTrigger=PropertyChanged}"/>
-                            
+
                             <TextBox Width="40" Height="40" MaxLength="1" TextAlignment="Center"
                                      Style="{StaticResource InputBoxStyle}" 
                                      BorderBrush="{StaticResource IntenseRed}" 
                                      BorderThickness="1" 
                                      Text="{Binding CodePart2, UpdateSourceTrigger=PropertyChanged}"/>
-                            
+
                             <TextBox Width="40" Height="40" MaxLength="1" TextAlignment="Center"
                                      Style="{StaticResource InputBoxStyle}" 
                                      BorderBrush="{StaticResource IntenseRed}" 
@@ -288,8 +281,8 @@
                                      BorderThickness="1" 
                                      Text="{Binding CodePart6, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
-                        
-                            <TextBlock Text="{Binding CodeErrorMessage}"
+
+                        <TextBlock Text="{Binding CodeErrorMessage}"
                                        FontFamily="{StaticResource AugustaFont}"
                                        Foreground="{StaticResource IntenseRed}" 
                                        FontSize="12" 
@@ -300,7 +293,7 @@
                                        Margin="0,0,0,0"
                                        VerticalAlignment="Center"/>
 
-                            <StackPanel Orientation="Horizontal" 
+                        <StackPanel Orientation="Horizontal" 
                                         HorizontalAlignment="Center" 
                                         Margin="0,20,0,0">
 
@@ -333,25 +326,60 @@
                         BorderBrush="Black">
 
                     <StackPanel Margin="0,-26,0,-26">
-                        <TextBlock Text="{x:Static res:Resources.EnterEmail_Label}" 
+                        <TextBlock Text="{x:Static res:Resources.ChangePassword_Title}" 
                                    FontFamily="{StaticResource AugustaFont}" 
                                    Foreground="{StaticResource IntenseRed}" 
                                    FontSize="18" 
                                    FontWeight="Bold" 
                                    HorizontalAlignment="Center"/>
 
-                        <TextBox Text="{Binding EditedPassword, UpdateSourceTrigger=PropertyChanged}"
-                                 Style="{StaticResource InputBoxStyle}" 
-                                 BorderBrush="{StaticResource IntenseRed}" 
-                                 BorderThickness="1" 
-                                 HorizontalAlignment="Center" 
-                                 Width="200" 
-                                 Margin="0,30,0,5"
-                                 MaxLength="100"/>
+                        <Grid Margin="0,30,0,5" HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Grid.Column="0"
+                                     Style="{StaticResource InputBoxStyle}"
+                                     Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                                     Canvas.Left="260" Canvas.Top="220"
+                                     HorizontalAlignment="Left" VerticalAlignment="Center"
+                                     Visibility="{Binding IsPasswordVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                                     Loaded="SyncPassword"
+                                     MaxLength="100" Width="214" Grid.ColumnSpan="2" Margin="18,0,0,0"/>
+
+                            <PasswordBox Grid.Column="0"
+                                     Style="{StaticResource InputBoxStyle}"
+                                     Canvas.Left="260" Canvas.Top="220"
+                                     HorizontalAlignment="Left" VerticalAlignment="Center"
+                                     PasswordChanged="PasswordBox_PasswordChanged"
+                                     Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                                     Loaded="SyncPassword" 
+                                     MaxLength="100" Width="214" Grid.ColumnSpan="2" Margin="18,0,0,0" Height="33"/>
+
+                            <Button Grid.Column="1"
+                                    Width="50" Height="33"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    PreviewMouseDown="ShowPassword"
+                                    PreviewMouseUp="HidePassword" Margin="58,0,-58,0">
+                                <Image Width="30" Height="33">
+                                    <Image.Style>
+                                        <Style TargetType="Image">
+                                            <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsPasswordVisible}" Value="True">
+                                                    <Setter Property="Source" Value="/Assets/Images/Icons/EyeOpen_Icon.png"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
+                            </Button>
+                        </Grid>
 
                         <Border Height="28" Width="292" 
                                 HorizontalAlignment="Center" VerticalAlignment="Center">
-                            
                             <TextBlock Text="{Binding PasswordErrorMessage}"
                                        FontFamily="{StaticResource AugustaFont}"
                                        Foreground="{StaticResource IntenseRed}" 
@@ -365,22 +393,22 @@
                         </Border>
 
                         <StackPanel Orientation="Horizontal" 
-                                    HorizontalAlignment="Center" 
-                                    Margin="0,20,0,0">
-
+                HorizontalAlignment="Center" 
+                Margin="0,20,0,0">
                             <Button Content="{x:Static res:Resources.Accept_Button}" 
-                                    Style="{StaticResource ButtonStyle}" 
-                                    Width="100" 
-                                    Margin="5"
-                                    Command="{Binding ChangePasswordCommand}"/>
+                Style="{StaticResource ButtonStyle}" 
+                Width="100" 
+                Margin="5"
+                Command="{Binding ChangePasswordCommand}"/>
 
                             <Button Content="{x:Static res:Resources.Cancel_Button}" 
-                                    Style="{StaticResource ButtonStyle}" 
-                                    Width="100" 
-                                    Margin="5"
-                                    Command="{Binding CancelChangePasswordCommand}"/>
+                Style="{StaticResource ButtonStyle}" 
+                Width="100" 
+                Margin="5"
+                Command="{Binding CancelChangePasswordCommand}"/>
                         </StackPanel>
                     </StackPanel>
+
                 </Border>
             </Grid>
 

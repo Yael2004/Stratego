@@ -26,14 +26,27 @@ namespace StrategoApp.View
             InitializeComponent();
             this.Cursor = new Cursor(Application.GetResourceStream(new Uri("pack://application:,,,/StrategoApp;component/Assets/Cursors/normal_cursor.cur")).Stream);
         }
+        private void ShowPassword(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is LogInViewModel viewModel)
+            {
+                viewModel.IsPasswordVisible = true;
+            }
+        }
+
+        private void HidePassword(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is LogInViewModel viewModel)
+            {
+                viewModel.IsPasswordVisible = false;
+            }
+        }
+
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext is LogInViewModel viewModel)
             {
-                if (!viewModel.IsPasswordVisible)
-                {
-                    viewModel.Password = ((PasswordBox)sender).Password;
-                }
+                viewModel.Password = ((PasswordBox)sender).Password;
             }
         }
 
@@ -51,6 +64,5 @@ namespace StrategoApp.View
                 }
             }
         }
-
     }
 }

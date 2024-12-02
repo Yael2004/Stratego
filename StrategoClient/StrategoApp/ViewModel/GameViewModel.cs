@@ -660,7 +660,15 @@ namespace StrategoApp.ViewModel
 
         public void OnOpponentAbandonedGame(GameService.OperationResult operationResult)
         {
-            throw new NotImplementedException();
+            if (operationResult.IsSuccess)
+            {
+                MessageBox.Show("El oponente abandonó el juego.");
+                GoToLobby();
+            }
+            else
+            {
+                MessageBox.Show("Error al abandonar el juego: " + operationResult.Message);
+            }
         }
 
         public void OnGameEnded(string resultString, GameService.OperationResult operationResult)
@@ -760,7 +768,7 @@ namespace StrategoApp.ViewModel
                     break;
 
                 default:
-                    MessageBox.Show($"Resultado desconocido: {instruction.Result}");
+                    MessageBox.Show($"Unknown Result: {instruction.Result}");
                     break;
             }
 
