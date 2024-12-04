@@ -24,6 +24,10 @@ namespace StrategoServices.Data.DTO
 
         [DataMember]
         public int DefenderId { get; set; }
+
+        [DataMember]
+        public string TargetPiceName { get; set; }
+
         [DataMember]
         public string Result { get; set; }
 
