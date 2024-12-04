@@ -30,7 +30,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid Background="Black" Effect="{Binding Path=ShadowEffect}">
+    <Grid Background="Black">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="120" />

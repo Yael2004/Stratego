@@ -442,8 +442,6 @@ namespace StrategoApp.ViewModel
                 originCell.OccupiedPieceImage = null;
                 originCell.IsOccupied = false;
                 originCell.OccupyingPiece = null;
-
-                //SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column);
         }
 
         private void HandleAbysswatcherRule(Cell originCell, Cell destinationCell, Piece movingPiece)
@@ -460,8 +458,6 @@ namespace StrategoApp.ViewModel
                 originCell.OccupiedPieceImage = null;
                 originCell.IsOccupied = false;
                 originCell.OccupyingPiece = null;
-
-                //SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column);
             }
         }
 
@@ -575,12 +571,14 @@ namespace StrategoApp.ViewModel
 
         public void ShowGameResult(bool isWinner)
         {
-            string resultMessage = isWinner ? "Victory" : "Defeat";
+            GameResultText = isWinner ? "Victory!" : "Defeat!"; 
             IsGameResultPopupOpen = true;
 
-            MessageBox.Show(resultMessage);
-
-            GoToLobby();
+            Task.Run(async () =>
+            {
+                await Task.Delay(2000);
+                Application.Current.Dispatcher.Invoke(GoToLobby);
+            });
         }
 
         private async void EndGame()
@@ -675,7 +673,14 @@ namespace StrategoApp.ViewModel
         {
             if (operationResult.IsSuccess)
             {
-                MessageBox.Show(resultString);
+                IsGameResultPopupOpen = true;
+                GameResultText = resultString;
+
+                Task.Run(async () =>
+                {
+                    await Task.Delay(2000);
+                    Application.Current.Dispatcher.Invoke(GoToLobby);
+                });
             }
             else
             {
@@ -717,6 +722,7 @@ namespace StrategoApp.ViewModel
             }
 
             var instruction = movementInstructionResponse.MovementInstructionDTO;
+
             if (instruction == null)
             {
                 MessageBox.Show("Error: Los datos de la instrucción de movimiento son nulos.");
@@ -743,6 +749,7 @@ namespace StrategoApp.ViewModel
                         _isWonGame = true;
                         UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
                         UpdateCellState(originCell, null, false, null);
+
                         Task.Run(() => EndGame());
                         break;
                     }
