@@ -1,4 +1,5 @@
 ﻿using log4net;
+using StrategoApp.FriendService;
 using StrategoApp.Helpers;
 using StrategoApp.Model;
 using StrategoApp.ProfileService;
@@ -18,7 +19,8 @@ using System.Windows.Media.Animation;
 
 namespace StrategoApp.ViewModel
 {
-    public class LobbyViewModel : ViewModelBase, Service.IChatServiceCallback, ProfileService.IPlayerFriendsListServiceCallback, ProfileService.IOtherProfileDataServiceCallback
+    public class LobbyViewModel : ViewModelBase, Service.IChatServiceCallback, ProfileService.IPlayerFriendsListServiceCallback, 
+        ProfileService.IOtherProfileDataServiceCallback, FriendService.ISendRoomInvitationServiceCallback
     {
         private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
 
@@ -34,9 +36,12 @@ namespace StrategoApp.ViewModel
 
         private string _joinRoomCode;
 
-        private ChatServiceClient _chatClient;
-        private OtherProfileDataServiceClient _otherProfileDataServiceClient;
-        private PlayerFriendsListServiceClient _playerFriendsListServiceClient;
+        private RoomViewModel roomViewModel;
+
+        private readonly ChatServiceClient _chatClient;
+        private readonly OtherProfileDataServiceClient _otherProfileDataServiceClient;
+        private readonly PlayerFriendsListServiceClient _playerFriendsListServiceClient;
+        private readonly SendRoomInvitationServiceClient _friendServiceClient;
         private MainWindowViewModel _mainWindowViewModel;
         private ObservableCollection<string> _messages;
         private ObservableCollection<Player> _friends;
@@ -50,12 +55,14 @@ namespace StrategoApp.ViewModel
         public ICommand JoinToRoomShowCommand { get; }
         public ICommand ShowScoreboardCommand { get; }
         public ICommand ShowFriendsCommand { get; }
+        public ICommand InviteFriendCommand { get; }
 
         public LobbyViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _chatClient = new ChatServiceClient(new InstanceContext(this));
             _playerFriendsListServiceClient = new PlayerFriendsListServiceClient(new InstanceContext(this));
             _otherProfileDataServiceClient = new OtherProfileDataServiceClient(new InstanceContext(this));
+            _friendServiceClient = new SendRoomInvitationServiceClient(new InstanceContext(this));
 
             AssignValuesToUser();
             Connection();
@@ -70,6 +77,7 @@ namespace StrategoApp.ViewModel
             CancelJoinToRoomCommand = new ViewModelCommand(CancelJoinToRoom);
             CreateRoomCommand = new ViewModelCommand(CreateRoom);
             ShowScoreboardCommand = new ViewModelCommand(ShowScoreboard);
+            InviteFriendCommand = new ViewModelCommand(InviteFriend);
 
             _messages = new ObservableCollection<string>();
             _friends = new ObservableCollection<Player>();
@@ -225,6 +233,36 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        private void InviteFriend(object parameter)
+        {
+            if (parameter is Player friend)
+            {
+                SendFriendInvitation(friend.Id);
+            }
+        }
+
+        private async void SendFriendInvitation(int playerId)
+        {
+            try
+            {
+                roomViewModel = new RoomViewModel(_mainWindowViewModel);
+
+                if (await roomViewModel.JoinToRoomAsync(JoinRoomCode))
+                {
+                    await _friendServiceClient.SendRoomInvitationAsync(playerId, JoinRoomCode);
+                }
+                else
+                {
+                    MessageBox.Show("Error al enviar la invitación a la sala."); 
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error al enviar la invitación a la sala", ex);
+                MessageBox.Show("Error al enviar la invitación a la sala.");
+            }
+        }
+
         public void AssignValuesToUser()
         {
             if (PlayerSingleton.Instance.IsLoggedIn())
@@ -369,7 +407,6 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                //await _playerFriendsListServiceClient.GetPlayerFriendsListAsync(UserId);
                 await _playerFriendsListServiceClient.GetConnectedFriendsAsync(UserId);
             }
             catch (Exception ex)
@@ -417,7 +454,6 @@ namespace StrategoApp.ViewModel
             if (response.Result.IsSuccess)
             {
                 MessageBox.Show(response.PlayerInfo.PlayerInfo.Name);
-                //MessageBox.Show(response.PlayerInfo.PlayerInfo.PicturePath);
 
                 var friend = new Player
                 {
@@ -432,6 +468,19 @@ namespace StrategoApp.ViewModel
             {
                 Log.Error("Error al cargar información de amigo: " + response.Result.Message);
                 MessageBox.Show("Error al cargar información de amigo: " + response.Result.Message);
+            }
+        }
+
+        public void SendRoomInvitationResponseCall(FriendService.OperationResult result)
+        {
+            if (!result.IsSuccess)
+            {
+                MessageBox.Show("Error al enviar la invitación a la sala.");
+            } 
+            else
+            {
+                Disconnection();
+                _mainWindowViewModel.ChangeViewModel(roomViewModel);
             }
         }
     }

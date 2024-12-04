@@ -19,6 +19,9 @@
             >pack://application:,,,/StrategoApp;component/Assets/Cursors/normal_cursor.cur
     </Cursor>
 
+    <ImageBrush x:Key="SwordsInviteButton"
+            ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/Icons/LetsPlaySwords.png"
+            Stretch="UniformToFill"/>
 
     <ImageBrush x:Key="InitialBackground" 
                 ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/Background.png" 
