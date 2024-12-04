@@ -237,19 +237,22 @@ namespace StrategoApp.ViewModel
         {
             if (parameter is Player friend)
             {
-                SendFriendInvitation(friend.Id);
+                SendFriendInvitation(friend);
             }
         }
 
-        private async void SendFriendInvitation(int playerId)
+        private async void SendFriendInvitation(Player friend)
         {
             try
             {
                 roomViewModel = new RoomViewModel(_mainWindowViewModel);
 
-                if (await roomViewModel.JoinToRoomAsync(JoinRoomCode))
+                if (await roomViewModel.CreateARoomAsync())
                 {
-                    await _friendServiceClient.SendRoomInvitationAsync(playerId, JoinRoomCode);
+                    await _friendServiceClient.SendRoomInvitationAsync(friend.AccountId, roomViewModel.RoomCode);
+                    
+                    Disconnection();
+                    _mainWindowViewModel.ChangeViewModel(roomViewModel);
                 }
                 else
                 {

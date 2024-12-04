@@ -115,7 +115,7 @@
                         <ListBox Grid.Row="0" ItemsSource="{Binding Friends}" 
                                  Background="#80000000" 
                                  Foreground="{StaticResource IntenseGreen}">
-                            <ListBox.ItemTemplate>
+                            <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="{Binding PicturePath}" Width="50" Height="50" Margin="5"/>
@@ -129,7 +129,7 @@
                                                 CommandParameter="{Binding}" />
                                     </StackPanel>
                                 </DataTemplate>
-                            </ListBox.ItemTemplate>
+                            </ItemsControl.ItemTemplate>
                         </ListBox>
 
                         <Button Grid.Row="1" Content="{x:Static res:Resources.Friends_Button}" 
