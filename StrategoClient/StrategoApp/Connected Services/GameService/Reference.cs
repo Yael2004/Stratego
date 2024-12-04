@@ -181,6 +181,9 @@ namespace StrategoApp.GameService {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ResultField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TargetPiceNameField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -265,6 +268,19 @@ namespace StrategoApp.GameService {
                 if ((object.ReferenceEquals(this.ResultField, value) != true)) {
                     this.ResultField = value;
                     this.RaisePropertyChanged("Result");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string TargetPiceName {
+            get {
+                return this.TargetPiceNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TargetPiceNameField, value) != true)) {
+                    this.TargetPiceNameField = value;
+                    this.RaisePropertyChanged("TargetPiceName");
                 }
             }
         }

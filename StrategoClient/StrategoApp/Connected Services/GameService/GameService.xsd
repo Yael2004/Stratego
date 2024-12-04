@@ -21,6 +21,7 @@
       <xs:element minOccurs="0" name="InitialX" type="xs:int" />
       <xs:element minOccurs="0" name="InitialY" type="xs:int" />
       <xs:element minOccurs="0" name="Result" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TargetPiceName" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="MovementInstructionDTO" nillable="true" type="tns:MovementInstructionDTO" />

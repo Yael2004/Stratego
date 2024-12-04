@@ -242,7 +242,6 @@ namespace StrategoApp.ViewModel
                             cell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
                             cell.OccupyingPiece = new Piece
                             {
-                                Name = "Dragon",
                                 Color = "Red"
                             };
                         }
@@ -323,17 +322,6 @@ namespace StrategoApp.ViewModel
 
             return isAdjacent;
         }
-
-        private bool isNecronomicon(Cell originCell, Cell destinationCell)
-        {
-            if (destinationCell.OccupyingPiece.Name == "Necronomicon")
-            {
-                return true;
-            }
-
-            return false;
-        }
-
 
         public bool IsPathClear(Cell originCell, Cell destinationCell)
         {
@@ -429,55 +417,20 @@ namespace StrategoApp.ViewModel
 
         private void HandleMove(Cell originCell, Cell destinationCell, Piece movingPiece)
         {
-            SendUpdatedPositionToServer(originCell.Row, originCell.Column, destinationCell.Row, destinationCell.Column, movingPiece.PowerLevel);
-        }
-
-        private void HandleTrapbreakerRule(Cell originCell, Cell destinationCell, Piece movingPiece)
-        {
-                MessageBox.Show("¡El Trapbreaker desactivó una poción!");
-                destinationCell.OccupiedPieceImage = originCell.OccupiedPieceImage;
-                destinationCell.IsOccupied = true;
-                destinationCell.OccupyingPiece = movingPiece;
-
-                originCell.OccupiedPieceImage = null;
-                originCell.IsOccupied = false;
-                originCell.OccupyingPiece = null;
-        }
-
-        private void HandleAbysswatcherRule(Cell originCell, Cell destinationCell, Piece movingPiece)
-        {
-            var defenderPiece = destinationCell.OccupyingPiece;
-
-            if (movingPiece.Name == "Abysswatcher" && defenderPiece.Name == "Archfiend")
-            {
-                MessageBox.Show("¡El Abysswatcher eliminó al Archfiend!");
-                destinationCell.OccupiedPieceImage = originCell.OccupiedPieceImage;
-                destinationCell.IsOccupied = true;
-                destinationCell.OccupyingPiece = movingPiece;
-
-                originCell.OccupiedPieceImage = null;
-                originCell.IsOccupied = false;
-                originCell.OccupyingPiece = null;
-            }
-        }
-
-
-        public void SendUpdatedPositionToServer(int initialRow, int initialColumn, int targetRow, int targetColumn, int powerLevel)
-        {
             var position = new PositionDTO
             {
-                InitialX = initialRow,
-                InitialY = initialColumn,
-                FinalX = targetRow,
-                FinalY = targetColumn,
-                PowerLevel = powerLevel,
+                InitialX = originCell.Row,
+                InitialY = originCell.Column,
+                FinalX = destinationCell.Row,
+                FinalY = destinationCell.Column,
+                PieceName = movingPiece.Name,
+                PowerLevel = movingPiece.PowerLevel,
                 MoveType = "move"
             };
 
             SendPositionToServer(position);
             IsMyTurn = true;
         }
-
 
         private async void SendPositionToServer(PositionDTO position)
         {
@@ -586,7 +539,6 @@ namespace StrategoApp.ViewModel
             try
             {
                 await _gameServiceClient.EndGameAsync(_gameId, AccountId, _isWonGame);
-                ShowGameResult(_isWonGame);
             }
             catch (Exception ex)
             {
@@ -599,11 +551,6 @@ namespace StrategoApp.ViewModel
             _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
         }
 
-        public async void SendMyMovement(MovementInstructionDTO movementInstruction)
-        {
-            await _gameServiceClient.SendMovementInstructionsAsync(_gameId, movementInstruction);
-        }
-
         private string ProcessMove(Cell originCell, Cell destinationCell, int oponnentPowerLevel)
         {
             var defenderPiece = destinationCell.OccupyingPiece;
@@ -612,13 +559,13 @@ namespace StrategoApp.ViewModel
             {
                 if (oponnentPowerLevel > defenderPiece.PowerLevel)
                 {
-                    if (defenderPiece.Name == "Necronomicon")
+                    if (defenderPiece.PowerLevel == -2)
                     {
                         _isWonGame = false;
                         UpdateCellState(destinationCell, originCell.OccupiedPieceImage, true, originCell.OccupyingPiece);
                         UpdateCellState(originCell, null, false, null);
-                        Task.Run(() =>EndGame());
-                        return "Kill";
+
+                        return "Win";
                     }
                     else
                     {
@@ -676,11 +623,7 @@ namespace StrategoApp.ViewModel
                 IsGameResultPopupOpen = true;
                 GameResultText = resultString;
 
-                Task.Run(async () =>
-                {
-                    await Task.Delay(2000);
-                    Application.Current.Dispatcher.Invoke(GoToLobby);
-                });
+                ShowGameResultPopup();
             }
             else
             {
@@ -688,9 +631,25 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public void ShowGameResultPopup()
+        {
+            Task.Run(async () =>
+            {
+                await Task.Delay(2000);
+                Application.Current.Dispatcher.Invoke(GoToLobby);
+            });
+        }
+
         public async void SuscribeToGame(int gameId)
         {
-            await _gameServiceClient.JoinGameSessionAsync(gameId, UserId);
+            try
+            {
+                await _gameServiceClient.JoinGameSessionAsync(gameId, UserId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al unirse al juego: {ex.Message}");
+            }
         }
 
         public async void GetOtherPlayerInfo(int opponentId)
@@ -743,22 +702,18 @@ namespace StrategoApp.ViewModel
 
             switch (instruction.Result)
             {
-                case "Kill":
-                    if (destinationCell.OccupyingPiece.Name == "Necronomicon")
-                    {
-                        _isWonGame = true;
-                        UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
-                        UpdateCellState(originCell, null, false, null);
+                case "Win":
+                    _isWonGame = true;
+                    UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
+                    UpdateCellState(originCell, null, false, null);
 
-                        Task.Run(() => EndGame());
-                        break;
-                    }
-                    else
-                    {
-                        UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
-                        UpdateCellState(originCell, null, false, null);
-                        break;
-                    }
+                    Task.Run(() => EndGame());
+                    break;
+
+                case "Kill":
+                    UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
+                    UpdateCellState(originCell, null, false, null);
+                    break;
 
                 case "Fail":
                     UpdateCellState(originCell, null, false, null);

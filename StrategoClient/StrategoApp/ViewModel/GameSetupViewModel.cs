@@ -84,6 +84,7 @@ namespace StrategoApp.ViewModel
                     InitialY = cell.Column,
                     FinalX = cell.Row,
                     FinalY = cell.Column,
+                    PieceName = cell.OccupyingPiece.Name,
                     PowerLevel = cell.OccupyingPiece.PowerLevel,
                     MoveType = "initial"
                 })
@@ -92,13 +93,6 @@ namespace StrategoApp.ViewModel
             _gameViewModel.AvailablePices = AvailablePieces;
             _gameViewModel.LoadInitialPositions(initialPositions);
             _mainWindowViewModel.ChangeViewModel(_gameViewModel);
-        }
-
-        public void DecrementPieceQuantity(Piece piece)
-        {
-            piece.RemainingQuantity--;
-            if (piece.RemainingQuantity < 0) piece.RemainingQuantity = 0;
-            OnPropertyChanged(nameof(AvailablePieces));
         }
     }
 }
