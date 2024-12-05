@@ -174,7 +174,7 @@ namespace StrategoDataAccess
                     .Where(f => f.FriendId == playerId && f.Status == "sent")
                     .Join
                     (
-                        _context.Value.Player,
+                        context.Player,
                         friend => friend.PlayerId,
                         player => player.Id,
                         (friend, player) => player

@@ -114,9 +114,9 @@ namespace StrategoServices.Services
             await NotifyCallbackAsync(() => opponentCallback.OnReceiveOpponentPosition(position, result));
         }
 
-        public async Task EndGameAsync(int gameId, int playerId, bool hasWon)
+        public async Task EndGameAsync(FinalStatsDTO finalStats)
         {
-            var result = GetGameSession(gameId, out var gameSession);
+            var result = GetGameSession(finalStats.GameId, out var gameSession);
             if (!result.IsSuccess)
             {
                 var callback = OperationContext.Current.GetCallbackChannel<IGameServiceCallback>();
@@ -124,19 +124,19 @@ namespace StrategoServices.Services
                 return;
             }
 
-            var playerCallback = gameSession.GetCallbackForPlayer(playerId);
+            var playerCallback = gameSession.GetCallbackForPlayer(finalStats.PlayerId);
             OperationResult statsUpdateResult;
 
             try
             {
-                if (hasWon)
+                if (finalStats.HasWon)
                 {
-                    var resultIncrementWins = _winsManager.Value.IncrementWins(playerId);
+                    var resultIncrementWins = _winsManager.Value.IncrementWins(finalStats.AccountId);
                     statsUpdateResult = new OperationResult(resultIncrementWins.IsSuccess, resultIncrementWins.Error);
                 }
                 else
                 {
-                    var resultIncrementWins = _winsManager.Value.IncrementDefeats(playerId);
+                    var resultIncrementWins = _winsManager.Value.IncrementDefeats(finalStats.AccountId);
                     statsUpdateResult = new OperationResult(resultIncrementWins.IsSuccess, resultIncrementWins.Error);
                 }
 
@@ -147,7 +147,7 @@ namespace StrategoServices.Services
                 }
                 else
                 {
-                    var message = hasWon ? "You won!" : "You lost!";
+                    var message = finalStats.HasWon ? "You won!" : "You lost!";
                     await NotifyCallbackAsync(() => playerCallback.OnGameEnded(message, statsUpdateResult));
                 }
             }

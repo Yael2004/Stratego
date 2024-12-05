@@ -156,6 +156,99 @@ namespace StrategoApp.GameService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FinalStatsDTO", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
+    [System.SerializableAttribute()]
+    public partial class FinalStatsDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int AccountIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int GameIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool HasWonField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int PlayerIdField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int AccountId {
+            get {
+                return this.AccountIdField;
+            }
+            set {
+                if ((this.AccountIdField.Equals(value) != true)) {
+                    this.AccountIdField = value;
+                    this.RaisePropertyChanged("AccountId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int GameId {
+            get {
+                return this.GameIdField;
+            }
+            set {
+                if ((this.GameIdField.Equals(value) != true)) {
+                    this.GameIdField = value;
+                    this.RaisePropertyChanged("GameId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool HasWon {
+            get {
+                return this.HasWonField;
+            }
+            set {
+                if ((this.HasWonField.Equals(value) != true)) {
+                    this.HasWonField = value;
+                    this.RaisePropertyChanged("HasWon");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int PlayerId {
+            get {
+                return this.PlayerIdField;
+            }
+            set {
+                if ((this.PlayerIdField.Equals(value) != true)) {
+                    this.PlayerIdField = value;
+                    this.RaisePropertyChanged("PlayerId");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="MovementInstructionDTO", Namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO")]
     [System.SerializableAttribute()]
     public partial class MovementInstructionDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -556,10 +649,10 @@ namespace StrategoApp.GameService {
         System.Threading.Tasks.Task SendPositionAsync(int gameId, int playerId, StrategoApp.GameService.PositionDTO position);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/EndGame", ReplyAction="http://tempuri.org/IGameService/EndGameResponse")]
-        void EndGame(int gameId, int playerId, bool hasWon);
+        void EndGame(StrategoApp.GameService.FinalStatsDTO finalStats);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/EndGame", ReplyAction="http://tempuri.org/IGameService/EndGameResponse")]
-        System.Threading.Tasks.Task EndGameAsync(int gameId, int playerId, bool hasWon);
+        System.Threading.Tasks.Task EndGameAsync(StrategoApp.GameService.FinalStatsDTO finalStats);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameService/AbandonGame", ReplyAction="http://tempuri.org/IGameService/AbandonGameResponse")]
         void AbandonGame(int gameId, int playerId);
@@ -637,12 +730,12 @@ namespace StrategoApp.GameService {
             return base.Channel.SendPositionAsync(gameId, playerId, position);
         }
         
-        public void EndGame(int gameId, int playerId, bool hasWon) {
-            base.Channel.EndGame(gameId, playerId, hasWon);
+        public void EndGame(StrategoApp.GameService.FinalStatsDTO finalStats) {
+            base.Channel.EndGame(finalStats);
         }
         
-        public System.Threading.Tasks.Task EndGameAsync(int gameId, int playerId, bool hasWon) {
-            return base.Channel.EndGameAsync(gameId, playerId, hasWon);
+        public System.Threading.Tasks.Task EndGameAsync(StrategoApp.GameService.FinalStatsDTO finalStats) {
+            return base.Channel.EndGameAsync(finalStats);
         }
         
         public void AbandonGame(int gameId, int playerId) {

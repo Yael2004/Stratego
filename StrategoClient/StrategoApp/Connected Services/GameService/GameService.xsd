@@ -13,6 +13,15 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PositionDTO" nillable="true" type="tns:PositionDTO" />
+  <xs:complexType name="FinalStatsDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountId" type="xs:int" />
+      <xs:element minOccurs="0" name="GameId" type="xs:int" />
+      <xs:element minOccurs="0" name="HasWon" type="xs:boolean" />
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FinalStatsDTO" nillable="true" type="tns:FinalStatsDTO" />
   <xs:complexType name="MovementInstructionDTO">
     <xs:sequence>
       <xs:element minOccurs="0" name="DefenderId" type="xs:int" />

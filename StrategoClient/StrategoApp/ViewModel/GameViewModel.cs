@@ -509,11 +509,16 @@ namespace StrategoApp.ViewModel
                 Result = result
             };
 
-            _ = Task.Run(async () =>
+            Task.Run(async () =>
             {
                 try
                 {
                     await _gameServiceClient.SendMovementInstructionsAsync(_gameId, movementInstruction);
+                    if (result == "Win")
+                    {
+                        await Task.Run(() => EndGame());
+                    }
+  
                 }
                 catch (Exception ex)
                 {
@@ -538,7 +543,14 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                await _gameServiceClient.EndGameAsync(_gameId, AccountId, _isWonGame);
+                var finalStats = new FinalStatsDTO
+                {
+                    GameId = _gameId,
+                    AccountId = AccountId,
+                    PlayerId = UserId,
+                    HasWon = _isWonGame
+                };
+                await _gameServiceClient.EndGameAsync(finalStats);
             }
             catch (Exception ex)
             {

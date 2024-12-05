@@ -13,14 +13,14 @@ using System.IO;
 
 namespace StrategoHost
 {
-    class Program
+    class Host
     {
         static void Main(string[] args)
         {
             var logConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log4net.config");
             XmlConfigurator.ConfigureAndWatch(new FileInfo(logConfigPath));
 
-            var log = LogManager.GetLogger(typeof(Program));
+            var log = LogManager.GetLogger(typeof(Host));
 
             try
             {

@@ -20,7 +20,7 @@ namespace StrategoServices.Services.Interfaces
         Task SendPositionAsync(int gameId, int playerId, PositionDTO position);
 
         [OperationContract]
-        Task EndGameAsync(int gameId, int playerId, bool hasWon);
+        Task EndGameAsync(FinalStatsDTO finalStats);
 
         [OperationContract]
         Task AbandonGameAsync(int gameId, int playerId);
