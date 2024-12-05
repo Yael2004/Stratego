@@ -280,8 +280,8 @@ namespace StrategoApp.ViewModel
 
         public LogInViewModel(MainWindowViewModel mainWindowViewModel)
         {
-            _logInServiceClient = new LogInServiceClient(new System.ServiceModel.InstanceContext(this));
-            _changePasswordServiceClient = new ChangePasswordServiceClient(new System.ServiceModel.InstanceContext(this));
+            _logInServiceClient = new LogInServiceClient(new InstanceContext(this));
+            _changePasswordServiceClient = new ChangePasswordServiceClient(new InstanceContext(this));
 
             _mainWindowViewModel = mainWindowViewModel;
 

@@ -24,26 +24,25 @@ namespace StrategoApp.ViewModel
 
         private string _username;
         private string _usernameEdited;
-        private int _playerId;
         private string _profilePicture;
         private string _playerTag;
-        private int _gamesWon;
-        private int _gamesLost;
-        private int _gamesPlayed;
         private string _selectedProfilePicture;
-        
         private string _usernameError;
-
         private bool _isServiceErrorVisible;
         private bool _isProileSelectorVisible;
         private bool _isEditUsernameVisible;
-        public ObservableCollection<string> ProfilePictures { get; set; }
-        public ObservableCollection<string> ProfileTags { get; set; }
+        private int _playerId;
+        private int _gamesWon;
+        private int _gamesLost;
+        private int _gamesPlayed;
+
+        private readonly ProfileModifierServiceClient _playerModifierServiceClient;
+        private readonly ProfileDataServiceClient _playerDataServiceClient;
 
         private readonly MainWindowViewModel _mainWindowViewModel;
-        public bool IsOwnProfile { get; set; }
-        public bool IsFriedged { get; set; }
-        public bool CanEdit { get; set; }
+
+        public ObservableCollection<string> ProfilePictures { get; set; }
+        public ObservableCollection<string> ProfileTags { get; set; }
 
         public ICommand EditProfilePictureCommand { get; }
         public ICommand EditUsernameCommand { get; }
@@ -57,46 +56,6 @@ namespace StrategoApp.ViewModel
         public ICommand SaveProfilePictureSelectionCommand { get; }
         public ICommand LogoutCommand { get; }
         public ICommand ExecuteCloseServiceErrorCommand { get; }
-
-        public PlayerProfileViewModel(MainWindowViewModel mainWindowViewModel)
-        {
-            PlayerInfoResponse playerInfoResponse = new PlayerInfoResponse();
-            PlayerStatisticsResponse playerStatisticsResponse = new PlayerStatisticsResponse();
-
-            LoadPlayerInfoFromSingleton();
-            LoadPlayerStatisticsAsync();
-
-            ProfileTags = new ObservableCollection<string>
-            {
-                Properties.Resources.NovicePlayer_Label,
-                Properties.Resources.ProPlayer_Label,
-                Properties.Resources.Apprentice_Label,
-                Properties.Resources.Competitive_Label
-            };
-
-            ProfilePictures = new ObservableCollection<string>
-            {
-                "pack://application:,,,/Assets/Images/ProfilePictures/Picture1.png",
-                "pack://application:,,,/Assets/Images/ProfilePictures/Picture2.png",
-                "pack://application:,,,/Assets/Images/ProfilePictures/Picture3.png",
-                "pack://application:,,,/Assets/Images/ProfilePictures/Picture4.png",
-                "pack://application:,,,/Assets/Images/ProfilePictures/Picture5.png",
-                "pack://application:,,,/Assets/Images/ProfilePictures/Picture6.png"
-            };
-
-            _mainWindowViewModel = mainWindowViewModel;
-            BackToLobbyCommand = new ViewModelCommand(ExecuteBackToLobby);
-            SelectProfilePictureCommand = new ViewModelCommand(SelectProfilePicture);
-            ToggleProfileSelectorVisibilityCommand = new ViewModelCommand(ToggleProfileSelectorVisibility);
-            ToggleEditUsernameVisibilityCommand = new ViewModelCommand(ToggleEditUsernameVisibility);
-            CancelProfileSelectionCommand = new ViewModelCommand(CancelProfileSelection);
-            CancelEditUsernameCommand = new ViewModelCommand(CancelEditUsername);
-            AcceptEditUsernameCommand = new ViewModelCommand(AcceptEditUsername, CanAcceptEditUsername);
-            SaveProfilePictureSelectionCommand = new ViewModelCommand(ConfirmProfileSelection);
-            LogoutCommand = new ViewModelCommand(Logout);
-            ExecuteCloseServiceErrorCommand = new ViewModelCommand(ExecuteCloseServerError);
-            IsServiceErrorVisible = false;
-        }
 
         public string Username
         {
@@ -148,7 +107,7 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public int AccountId
+        public static int AccountId
         {
             get { return PlayerSingleton.Instance.Player.AccountId; }
         }
@@ -221,18 +180,56 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public PlayerProfileViewModel(MainWindowViewModel mainWindowViewModel)
+        {
+            _playerModifierServiceClient = new ProfileModifierServiceClient(new InstanceContext(this));
+            _playerDataServiceClient = new ProfileDataServiceClient(new InstanceContext(this));
+
+            _mainWindowViewModel = mainWindowViewModel;
+
+
+            BackToLobbyCommand = new ViewModelCommand(ExecuteBackToLobby);
+            SelectProfilePictureCommand = new ViewModelCommand(SelectProfilePicture);
+            ToggleProfileSelectorVisibilityCommand = new ViewModelCommand(ToggleProfileSelectorVisibility);
+            ToggleEditUsernameVisibilityCommand = new ViewModelCommand(ToggleEditUsernameVisibility);
+            CancelProfileSelectionCommand = new ViewModelCommand(CancelProfileSelection);
+            CancelEditUsernameCommand = new ViewModelCommand(CancelEditUsername);
+            AcceptEditUsernameCommand = new ViewModelCommand(AcceptEditUsername, CanAcceptEditUsername);
+            SaveProfilePictureSelectionCommand = new ViewModelCommand(ConfirmProfileSelection);
+            LogoutCommand = new ViewModelCommand(Logout);
+            ExecuteCloseServiceErrorCommand = new ViewModelCommand(ExecuteCloseServerError);
+            
+            ProfileTags = new ObservableCollection<string>
+            {
+                Properties.Resources.NovicePlayer_Label,
+                Properties.Resources.ProPlayer_Label,
+                Properties.Resources.Apprentice_Label,
+                Properties.Resources.Competitive_Label
+            };
+
+            ProfilePictures = new ObservableCollection<string>
+            {
+                "pack://application:,,,/Assets/Images/ProfilePictures/Picture1.png",
+                "pack://application:,,,/Assets/Images/ProfilePictures/Picture2.png",
+                "pack://application:,,,/Assets/Images/ProfilePictures/Picture3.png",
+                "pack://application:,,,/Assets/Images/ProfilePictures/Picture4.png",
+                "pack://application:,,,/Assets/Images/ProfilePictures/Picture5.png",
+                "pack://application:,,,/Assets/Images/ProfilePictures/Picture6.png"
+            };
+
+            IsServiceErrorVisible = false;
+
+            LoadPlayerInfoFromSingleton();
+            LoadPlayerStatisticsAsync();
+        }
+
         private void ExecuteBackToLobby(Object obj)
         {
-            try
-            {
-                EditProfileTag();
-                PlayerSingleton.Instance.Player.LabelPath = PlayerTag;
-                _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel)); 
-            }
-            catch (Exception e) 
-            { 
-                Console.WriteLine(e.Message); 
-            }
+            EditProfileTag();
+
+            PlayerSingleton.Instance.Player.LabelPath = PlayerTag;
+
+            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel)); 
         }
 
         private void EditProfileTag()
@@ -247,12 +244,21 @@ namespace StrategoApp.ViewModel
 
             try
             {
-                var client = new ProfileModifierServiceClient(new InstanceContext(this));
-                client.UpdatePlayerProfileAsync(updatedProfile);
+                _playerModifierServiceClient.UpdatePlayerProfileAsync(updatedProfile);
+            }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while updating tag.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while communicating with the update tag.", ex);
+                IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Log.Error("Unexpected error while updating tag.", ex);
                 IsServiceErrorVisible = true;
             }
         }
@@ -299,6 +305,8 @@ namespace StrategoApp.ViewModel
 
         private async void AcceptEditUsername(Object obj)
         {
+            UsernameEdited = UsernameEdited.Trim();
+
             if (Validations.IsValidUsername(UsernameEdited))
             {
                 UsernameError = string.Empty;
@@ -313,13 +321,23 @@ namespace StrategoApp.ViewModel
 
                 try
                 {
-                    var client = new ProfileModifierServiceClient(new InstanceContext(this));
-                    await client.UpdatePlayerProfileAsync(updatedProfile);
+                    await _playerModifierServiceClient.UpdatePlayerProfileAsync(updatedProfile);
+
                     PlayerSingleton.Instance.Player.Name = UsernameEdited;
+                }
+                catch (CommunicationException ex)
+                {
+                    Log.Error("Communication error while updating username.", ex);
+                    IsServiceErrorVisible = true;
+                }
+                catch (TimeoutException ex)
+                {
+                    Log.Error("Timed out while communicating with the update username.", ex);
+                    IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex.Message);
+                    Log.Error("Unexpected error while updating username.", ex);
                     IsServiceErrorVisible = true;
                 }
             }
@@ -343,23 +361,32 @@ namespace StrategoApp.ViewModel
                         LabelPath = PlayerTag
                     };
 
-                    var client = new ProfileModifierServiceClient(new InstanceContext(this));
-
-                    await client.UpdatePlayerProfileAsync(updatedProfile);
+                    await _playerModifierServiceClient.UpdatePlayerProfileAsync(updatedProfile);
 
                     PlayerSingleton.Instance.Player.PicturePath = SelectedProfilePicture;
                 }
             }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while updating profile picture.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while communicating with the profile picture update.", ex);
+                IsServiceErrorVisible = true;
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al actualizar la imagen de perfil: " + ex.Message);
+                Log.Error("Unexpected error while updating profile picture.", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
         private void Logout(Object obj)
         {
-            var client = new ProfileDataServiceClient(new InstanceContext(this));
-            client.LogOut(PlayerId);
+
+            _playerDataServiceClient.LogOut(PlayerId);
             _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
         }
 
@@ -380,13 +407,13 @@ namespace StrategoApp.ViewModel
             IsServiceErrorVisible = false;
         }
 
-        public void PlayerInfo(PlayerInfoResponse response)
+        public void PlayerInfo(PlayerInfoResponse playerInfo1)
         {
-            if (response.Result.IsSuccess)
+            if (playerInfo1.Result.IsSuccess)
             {
-                Username = response.Profile.Name;
-                PlayerId = response.Profile.Id;
-                ProfilePicture = response.Profile.PicturePath;
+                Username = playerInfo1.Profile.Name;
+                PlayerId = playerInfo1.Profile.Id;
+                ProfilePicture = playerInfo1.Profile.PicturePath;
             }
         }
 
@@ -394,23 +421,32 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                var client = new ProfileDataServiceClient(new InstanceContext(this));
-                await client.GetPlayerStatisticsAsync(AccountId);
+                await _playerDataServiceClient.GetPlayerStatisticsAsync(AccountId);
+            }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while getting player statistics.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while communicating with the get player statistics.", ex);
+                IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
-                Log.Error("Error al cargar las estadísticas del jugador", ex);
+                Log.Error("Unexpected error while getting player statistics.", ex);
                 IsServiceErrorVisible = true;
             }
         }
 
-        public void PlayerStatistics(PlayerStatisticsResponse response)
+        public void PlayerStatistics(PlayerStatisticsResponse playerStatistics1)
         {
-            if (response.Result.IsSuccess) 
+            if (playerStatistics1.Result.IsSuccess) 
             { 
-                GamesWon = response.Statistics.WonGames;
-                GamesLost = response.Statistics.LostGames;
-                GamesPlayed = response.Statistics.TotalGames;
+                GamesWon = playerStatistics1.Statistics.WonGames;
+                GamesLost = playerStatistics1.Statistics.LostGames;
+                GamesPlayed = playerStatistics1.Statistics.TotalGames;
             }
         }
 
