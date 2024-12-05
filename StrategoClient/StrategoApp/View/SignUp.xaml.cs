@@ -34,5 +34,44 @@ namespace StrategoApp.View
                 viewModel.Password = ((PasswordBox)sender).Password;
             }
         }
+
+        private void ShowPassword(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is SignUpViewModel viewModel)
+            {
+                viewModel.IsPasswordVisible = true;
+            }
+        }
+
+        private void HidePassword(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is SignUpViewModel viewModel)
+            {
+                viewModel.IsPasswordVisible = false;
+            }
+        }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is SignUpViewModel viewModel)
+            {
+                viewModel.Password = ((PasswordBox)sender).Password;
+            }
+        }
+
+        private void SyncPassword(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is SignUpViewModel viewModel)
+            {
+                if (viewModel.IsPasswordVisible)
+                {
+                    PasswordTextBox.Text = PasswordBox.Password;
+                }
+                else
+                {
+                    PasswordBox.Password = PasswordTextBox.Text;
+                }
+            }
+        }
     }
 }

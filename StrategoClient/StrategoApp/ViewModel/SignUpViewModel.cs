@@ -23,9 +23,10 @@ namespace StrategoApp.ViewModel
         private string _usernameError;
         private string _emailError;
         private string _passwordError;
+        private string _signUpResultMessage;
         private bool _isServiceErrorVisible;
         private bool _isPasswordVisible;
-        private bool _isSignUpSuccess;
+        private bool _isSignUpResultVisible;
 
         private readonly SignUpServiceClient _signUpServiceClient;
 
@@ -113,16 +114,26 @@ namespace StrategoApp.ViewModel
             set
             {
                 _isPasswordVisible = value;
+                OnPropertyChanged(nameof(IsPasswordVisible));
+            }
+        }
+
+        public bool IsSignUpResultVisible
+        {
+            get { return _isSignUpResultVisible; }
+            set
+            {
+                _isSignUpResultVisible = value;
                 OnPropertyChanged();
             }
         }
 
-        public bool IsSignUpSuccess
+        public string SignUpResultMessage
         {
-            get { return _isSignUpSuccess; }
+            get { return _signUpResultMessage; }
             set
             {
-                _isSignUpSuccess = value;
+                _signUpResultMessage = value;
                 OnPropertyChanged();
             }
         }
@@ -141,6 +152,7 @@ namespace StrategoApp.ViewModel
 
             IsServiceErrorVisible = false;
             IsPasswordVisible = false;
+            IsSignUpResultVisible = false;
         }
 
         private void ExecuteTogglePasswordVisibilityCommand(object obj)
@@ -200,13 +212,14 @@ namespace StrategoApp.ViewModel
         {
             if (result.IsSuccess)
             {
-                IsSignUpSuccess = true;
-                _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+                SignUpResultMessage = Properties.Resources.SignUpMessage_Label;
             }
             else
             {
-                MessageBox.Show(result.Message);
+                SignUpResultMessage = Properties.Resources.AccountAlreadyExistMessage_Label;
             }
+
+            IsSignUpResultVisible = true;
         }
 
         public bool ValidateFields()
@@ -227,10 +240,12 @@ namespace StrategoApp.ViewModel
             if (!Validations.IsValidUsername(Username))
             {
                 UsernameError = Properties.Resources.InvalidUsername_Label;
+
                 return false;
             }
 
             UsernameError = string.Empty;
+
             return true;
         }
 
@@ -241,10 +256,12 @@ namespace StrategoApp.ViewModel
             if (!Validations.IsValidEmail(Email))
             {
                 EmailError = Properties.Resources.InvalidMail_Label;
+
                 return false;
             }
 
             EmailError = string.Empty;
+
             return true;
         }
 
@@ -253,16 +270,23 @@ namespace StrategoApp.ViewModel
             if (!Validations.IsValidPassword(Password))
             {
                 PasswordError = Properties.Resources.InvalidPassword_Label;
+
                 return false;
             }
 
             PasswordError = string.Empty;
+
             return true;
         }
 
         private void AcceptSignUpSuccess(object obj)
         {
-            IsSignUpSuccess = false;
+            IsSignUpResultVisible = false;
+
+            if (SignUpResultMessage == Properties.Resources.SignUpMessage_Label)
+            {
+                _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+            }
         }
 
         private static string HashPassword(string password)

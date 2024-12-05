@@ -88,7 +88,7 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a This account already exist, try with another.
+        ///   Busca una cadena traducida similar a This account already exist, try with another one.
         /// </summary>
         public static string AccountAlreadyExistMessage_Label {
             get {
@@ -106,7 +106,7 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a .
+        ///   Busca una cadena traducida similar a Apprentice.
         /// </summary>
         public static string Apprentice_Button {
             get {
@@ -214,7 +214,7 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a .
+        ///   Busca una cadena traducida similar a Competitive.
         /// </summary>
         public static string Competitive_Button {
             get {
@@ -520,7 +520,7 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a .
+        ///   Busca una cadena traducida similar a Misbehavior.
         /// </summary>
         public static string Misbehavior_Button {
             get {
@@ -601,7 +601,7 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a .
+        ///   Busca una cadena traducida similar a Novice player.
         /// </summary>
         public static string NovicePlayer_Button {
             get {
@@ -691,7 +691,7 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a .
+        ///   Busca una cadena traducida similar a Pro player.
         /// </summary>
         public static string ProPlayer_Button {
             get {

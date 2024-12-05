@@ -124,7 +124,7 @@
     <value>Accept</value>
   </data>
   <data name="AccountAlreadyExistMessage_Label" xml:space="preserve">
-    <value>This account already exist, try with another</value>
+    <value>This account already exist, try with another one</value>
   </data>
   <data name="AccountAlreadyExist_Title" xml:space="preserve">
     <value>Account already exist</value>

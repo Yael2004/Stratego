@@ -22,10 +22,8 @@
             <Grid Height="440" Width="800" Background="{StaticResource InitialBackground}">
 
                 <Rectangle Fill="#A0000000" />
-                <Rectangle Fill="#80000000" 
-                           Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                           Panel.ZIndex="1" 
-                           IsHitTestVisible="True"/>
+                <Rectangle Fill="#80000000" Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Panel.ZIndex="1" IsHitTestVisible="True"/>
+                <Rectangle Fill="#80000000" Visibility="{Binding IsSignUpResultVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Panel.ZIndex="1" IsHitTestVisible="True"/>
 
                 <Canvas>
                     <Label Content="{x:Static res:Resources.Stratego_Label}" 
@@ -90,7 +88,7 @@
                              Canvas.Left="260" Canvas.Top="273" 
                              Width="280" Height="33" 
                              HorizontalAlignment="Center" VerticalAlignment="Top"
-                             PasswordChanged="PasswordTextBox_PasswordChanged"
+                             PasswordChanged="PasswordBox_PasswordChanged"
                              Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
 
                     <TextBox x:Name="PasswordTextBox"
@@ -99,7 +97,8 @@
                             Canvas.Left="260" Canvas.Top="273"
                             Width="280" Height="33"
                             HorizontalAlignment="Center" VerticalAlignment="Top"
-                            Visibility="{Binding IsPasswordVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            Visibility="{Binding IsPasswordVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Loaded="SyncPassword"/>
 
                     <Label Content="{Binding PasswordError}"
                        FontFamily="{StaticResource AugustaFont}"
@@ -123,34 +122,26 @@
                         VerticalAlignment="Top"
                         Command="{Binding CancelCommand}"/>
 
-                    <CheckBox Command="{Binding TogglePasswordVisibilityCommand}"
-                          Canvas.Left="545" Canvas.Top="273"
-                          Width="50" Height="33"
-                          HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <CheckBox.Template>
-                            <ControlTemplate TargetType="CheckBox">
-                                <ContentPresenter />
-                            </ControlTemplate>
-                        </CheckBox.Template>
-
-                        <CheckBox.Content>
-                            <Image Width="30" Height="33">
-                                <Image.Style>
-                                    <Style TargetType="Image">
-                                        <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}" Value="True">
-                                                <Setter Property="Source" Value="/Assets/Images/Icons/EyeOpen_Icon.png"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}" Value="False">
-                                                <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Image.Style>
-                            </Image>
-                        </CheckBox.Content>
-                    </CheckBox>
+                    <Button Canvas.Left="545" Canvas.Top="273"
+                            Width="50" Height="33"
+                            HorizontalAlignment="Left" VerticalAlignment="Top"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            PreviewMouseDown="ShowPassword"
+                            PreviewMouseUp="HidePassword">
+                        <Image Width="30" Height="33">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Source" Value="/Assets/Images/Icons/EyeClosed_Icon.png"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPasswordVisible}" Value="True">
+                                            <Setter Property="Source" Value="/Assets/Images/Icons/EyeOpen_Icon.png"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                    </Button>
                 </Canvas>
             </Grid>
 
@@ -181,7 +172,7 @@
             </Grid>
 
             <Grid Background="{StaticResource SemiTransparent}"
-                  Visibility="{Binding IsSignUpSuccess, Converter={StaticResource BooleanToVisibilityConverter}}"
+                  Visibility="{Binding IsSignUpResultVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                   HorizontalAlignment="Center"
                   VerticalAlignment="Center"
                   Width="340"
@@ -189,7 +180,7 @@
                 
                 <Border Background="Black" BorderBrush="{StaticResource DarkRed}" BorderThickness="2" CornerRadius="10" Padding="15">
                     <StackPanel>
-                        <TextBlock Text="{x:Static res:Resources.SignUpMessage_Label}"
+                        <TextBlock Text="{Binding SignUpResultMessage}"
                                    TextAlignment="Center"
                                    TextWrapping="Wrap"
                                    FontSize="16"
