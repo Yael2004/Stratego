@@ -29,6 +29,12 @@ namespace StrategoServices.Services
             _connectedPlayersManager = connectedPlayersManager;
         }
 
+        /// <summary>
+        /// Logs in the user with the given email and password if account exists and is not already logged in or has too many reports.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns>Task</returns>
         public async Task LogInAsync(string email, string password)
         {
             var callback = OperationContext.Current.GetCallbackChannel<ILogInServiceCallback>();
@@ -87,6 +93,13 @@ namespace StrategoServices.Services
             }
         }
 
+        /// <summary>
+        /// Creates a new account with the given email, password and playername.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <param name="playername"></param>
+        /// <returns>Task</returns>
         public async Task SignUpAsync(string email, string password, string playername)
         {
             var callback = OperationContext.Current.GetCallbackChannel<ISignUpServiceCallback>();
@@ -116,6 +129,11 @@ namespace StrategoServices.Services
             }
         }
 
+        /// <summary>
+        /// Sends a verification code to the given emailfor changing password.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>Task</returns>
         public async Task<bool> ObtainVerificationCodeAsync(string email)
         {
             var callback = OperationContext.Current.GetCallbackChannel<IChangePasswordServiceCallback>();
@@ -165,6 +183,12 @@ namespace StrategoServices.Services
             return isSuccessResponse;
         }
 
+        /// <summary>
+        /// Validates the verification code sended to the given email.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="code"></param>
+        /// <returns>Task</returns>
         public async Task<bool> SendVerificationCodeAsync(string email, string code)
         {
             var callback = OperationContext.Current.GetCallbackChannel<IChangePasswordServiceCallback>();
@@ -201,6 +225,12 @@ namespace StrategoServices.Services
             return isValid;
         }
 
+        /// <summary>
+        /// Updates the password of the account with the given email.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="newHashedPassword"></param>
+        /// <returns>Task</returns>
         public async Task SendNewPasswordAsync(string email, string newHashedPassword)
         {
             var callback = OperationContext.Current.GetCallbackChannel<IChangePasswordServiceCallback>();
@@ -231,11 +261,22 @@ namespace StrategoServices.Services
             }
         }
 
+        /// <summary>
+        /// Helper method to notify the client with the given result.
+        /// </summary>
+        /// <param name="callbackAction"></param>
+        /// <param name="result"></param>
+        /// <returns>Task</returns>
         private async Task NotifyCallbackAsync(Action<OperationResult> callbackAction, OperationResult result)
         {
             await Task.Run(() => callbackAction(result));
         }
 
+        /// <summary>
+        /// Helper method to notify the client with the given action.
+        /// </summary>
+        /// <param name="callbackAction"></param>
+        /// <returns>Task</returns>
         private async Task NotifyCallbackAsync(Action callbackAction)
         {
             await Task.Run(callbackAction);

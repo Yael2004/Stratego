@@ -12,13 +12,7 @@ namespace StrategoDataAccess
 {
     public class PictureRepository
     {
-        private readonly Lazy<StrategoEntities> _context;
         private static readonly ILog log = LogManager.GetLogger(typeof(PictureRepository));
-
-        public PictureRepository(Lazy<StrategoEntities> context)
-        {
-            _context = context;
-        }
 
         public virtual Result<Pictures> GetPictureById(int pictureId)
         {

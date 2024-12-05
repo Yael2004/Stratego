@@ -27,6 +27,12 @@ namespace StrategoServices.Services
             _connectedPlayersManager = connectedPlayersManager;
         }
 
+        /// <summary>
+        /// Makes a connection with the user and chat
+        /// </summary>
+        /// <param name="userId">Connected user id, if id is equal to 0, then assign an id as a guest.</param>
+        /// <param name="username">Connected user name</param>
+        /// <returns>Assigned user id, if there was an error, it returns 0</returns>
         public int Connect(int userId, string username)
         {
             try
@@ -78,6 +84,10 @@ namespace StrategoServices.Services
             }
         }
 
+        /// <summary>
+        /// Disconnect an user from the chat, notices client if user is not connected.
+        /// </summary>
+        /// <param name="userId">Connected user id.</param>
         public void Disconnect(int userId)
         {
             try
@@ -107,6 +117,12 @@ namespace StrategoServices.Services
             }
         }
 
+        /// <summary>
+        /// Sends a message to the chat, notices client if user is not connected.
+        /// </summary>
+        /// <param name="message">Message to send.</param>
+        /// <param name="userId">Connected user id.</param>
+        /// <param name="username">Connected user name.</param>
         public void SendMessage(int userId, string username, string message)
         {
             try
@@ -132,16 +148,30 @@ namespace StrategoServices.Services
             }
         }
 
+        /// <summary>
+        /// Shows connected player advice
+        /// </summary>
+        /// <param name="userId">Connected user id</param>
+        /// <param name="username">Connected user name</param>
         private void HandleClientConnected(int userId, string username)
         {
             Console.WriteLine($"Client {username} (ID: {userId}) has connected to the chat.");
         }
 
+        /// <summary>
+        /// Shows disconnected player advice
+        /// <param name="userId"/>Connected user id</param>
+        /// <param name="username"/>Connected user name</param>
         private void HandleClientDisconnected(int userId, string username)
         {
             Console.WriteLine($"Client {username} (ID: {userId}) has disconnected from the chat.");
         }
 
+        /// <summary>
+        /// Sends a message to all connected clients
+        /// <param name="senderId"/>Connected user id</param>
+        /// <param name="username"/>Connected user name</param>
+        /// <param name="message"/>Message to send</param>
         private void BroadcastMessage(int senderId, string username, string message)
         {
             foreach (var client in _clients.Values)
@@ -157,6 +187,9 @@ namespace StrategoServices.Services
             }
         }
 
+        /// <summary>
+        /// Handles client disconnection and removes it from the connected players list
+        /// <param name="userId"/>Connected user id</param>
         private void OnClientDisconnected(int userId)
         {
             try

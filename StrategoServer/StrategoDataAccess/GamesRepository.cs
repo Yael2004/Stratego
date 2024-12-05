@@ -13,13 +13,7 @@ namespace StrategoDataAccess
 {
     public class GamesRepository
     {
-        private readonly Lazy<StrategoEntities> _context;
         private static readonly ILog log = LogManager.GetLogger(typeof(GamesRepository));
-
-        public GamesRepository(Lazy<StrategoEntities> context)
-        {
-            _context = context;
-        }
 
         public virtual Result<Games> GetGameStatisticsByAccountId(int accountId)
         {

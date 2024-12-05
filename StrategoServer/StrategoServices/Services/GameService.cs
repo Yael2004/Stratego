@@ -24,6 +24,10 @@ namespace StrategoServices.Services
             _winsManager = winsManager;
         }
 
+        /// <summary>
+        /// Creates a new game session and adds it to the active games list
+        /// </summary>
+        /// <returns>Game id and operation result encapsulated</returns>
         public GameSessionCreatedResponse CreateGameSession()
         {
             OperationResult result;
@@ -55,6 +59,12 @@ namespace StrategoServices.Services
             };
         }
 
+        /// <summary>
+        /// Associate a player with a game session and sets the callback for the player
+        /// </summary>
+        /// <param name="gameId"></param>
+        /// <param name="playerId"></param>
+        /// <returns>Task</returns>
         public async Task JoinGameSessionAsync(int gameId, int playerId)
         {
             var playerCallback = OperationContext.Current.GetCallbackChannel<IGameServiceCallback>();
@@ -69,6 +79,13 @@ namespace StrategoServices.Services
             var joinResult = await AddPlayerToSessionAsync(gameSession, playerId, playerCallback);
         }
 
+        /// <summary>
+        /// Adds a player to a game session for starts the game if both players are ready
+        /// </summary>
+        /// <param name="gameSession"></param>
+        /// <param name="playerId"></param>
+        /// <param name="playerCallback"></param>
+        /// <returns>Task with operation result</returns>
         private async Task<OperationResult> AddPlayerToSessionAsync(GameSession gameSession, int playerId, IGameServiceCallback playerCallback)
         {
             if (gameSession.Player1Id == 0)
@@ -98,6 +115,13 @@ namespace StrategoServices.Services
             return new OperationResult(false, "Game session is already full.");
         }
 
+        /// <summary>
+        /// Sends the position of a player piece to the opponent for handling
+        /// </summary>
+        /// <param name="gameId"></param>
+        /// <param name="playerId"></param>
+        /// <param name="position"></param>
+        /// <returns>Task</returns>
         public async Task SendPositionAsync(int gameId, int playerId, PositionDTO position)
         {
             var playerCallback = OperationContext.Current.GetCallbackChannel<IGameServiceCallback>();
@@ -114,6 +138,11 @@ namespace StrategoServices.Services
             await NotifyCallbackAsync(() => opponentCallback.OnReceiveOpponentPosition(position, result));
         }
 
+        /// <summary>
+        /// Sends the final position and stats for ending the game and sets the win or defeat for the players
+        /// </summary>
+        /// <param name="finalStats"></param>
+        /// <returns>Task</returns>
         public async Task EndGameAsync(FinalStatsDTO finalStats)
         {
             var result = GetGameSession(finalStats.GameId, out var gameSession);
@@ -160,6 +189,12 @@ namespace StrategoServices.Services
 
         }
 
+        /// <summary>
+        /// Handle the abandonment of a game by a player and notifies the opponent
+        /// </summary>
+        /// <param name="gameId"></param>
+        /// <param name="playerId"></param>
+        /// <returns>Task</returns>
         public async Task AbandonGameAsync(int gameId, int playerId)
         {
             var result = GetGameSession(gameId, out var gameSession);
@@ -177,6 +212,12 @@ namespace StrategoServices.Services
             _activeGames.TryRemove(gameId, out _);
         }
 
+        /// <summary>
+        /// Get the game session for a given game id
+        /// </summary>
+        /// <param name="gameId"></param>
+        /// <param name="gameSession"></param>
+        /// <returns>Operation result</returns>
         private OperationResult GetGameSession(int gameId, out GameSession gameSession)
         {
             if (_activeGames.TryGetValue(gameId, out gameSession))
@@ -187,6 +228,11 @@ namespace StrategoServices.Services
             return new OperationResult(false, "Game session not found.");
         }
 
+        /// <summary>
+        /// Helper method to notify a callback action asynchronously
+        /// </summary>
+        /// <param name="callbackAction"></param>
+        /// <returns>Task</returns>
         private async Task NotifyCallbackAsync(Action callbackAction)
         {
             try
@@ -207,6 +253,12 @@ namespace StrategoServices.Services
             }
         }
 
+        /// <summary>
+        /// Sends the movement instructions to the opponent for handling
+        /// </summary>
+        /// <param name="gameId"></param>
+        /// <param name="instruction"></param>
+        /// <returns>Task</returns>
         public async Task SendMovementInstructionsAsync(int gameId, MovementInstructionDTO instruction)
         {
             var result = GetGameSession(gameId, out var gameSession);

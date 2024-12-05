@@ -12,13 +12,7 @@ namespace StrategoDataAccess
 {
     public class FriendsRepository
     {
-        private readonly Lazy<StrategoEntities> _context;
         private static readonly ILog log = LogManager.GetLogger(typeof(FriendsRepository));
-
-        public FriendsRepository(Lazy<StrategoEntities> context)
-        {
-            _context = context;
-        }
 
         public virtual Result<string> SendFriendRequest(int destinationId, int requesterId)
         {

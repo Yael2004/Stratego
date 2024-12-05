@@ -16,13 +16,7 @@ namespace StrategoDataAccess
 {
     public class PlayerRepository
     {
-        private readonly Lazy<StrategoEntities> _context;
         private static readonly ILog log = LogManager.GetLogger(typeof(PlayerRepository));
-
-        public PlayerRepository(Lazy<StrategoEntities> context)
-        {
-            _context = context;
-        }
 
         public virtual Result<Player> GetOtherPlayerById(int playerId)
         {

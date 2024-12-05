@@ -26,6 +26,12 @@ namespace StrategoServices.Services
             _connectedPlayersManager = connectedPlayersManager;
         }
 
+        /// <summary>
+        /// Obtains the player's profile information
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <param name="requesterPlayerId"></param>
+        /// <returns>Task</returns>
         public async Task GetOtherPlayerInfoAsync(int playerId, int requesterPlayerId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IOtherProfileDataCallback>();
@@ -62,6 +68,11 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.ReceiveOtherPlayerInfo(response));
         }
 
+        /// <summary>
+        /// Obtains the player's statistics
+        /// </summary>
+        /// <param name="playerAccountId"></param>
+        /// <returns>Task</returns>
         public async Task GetPlayerStatisticsAsync(int playerAccountId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IProfileDataServiceCallback>();
@@ -102,6 +113,11 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.PlayerStatistics(response));
         }
 
+        /// <summary>
+        /// Updates the player's profile information
+        /// </summary>
+        /// <param name="newProfile"></param>
+        /// <returns>Task</returns>
         public async Task UpdatePlayerProfileAsync(PlayerInfoShownDTO newProfile)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IProfileModifierServiceCallback>();
@@ -144,6 +160,11 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.ReceiveUpdatePlayerProfile(response));
         }
 
+        /// <summary>
+        /// Obtains the player's friends ids list
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <returns>Task</returns>
         public async Task GetPlayerFriendsListAsync(int playerId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IPlayerFriendsListServiceCallback>();
@@ -177,6 +198,10 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.PlayerFriendsList(response));
         }
 
+        /// <summary>
+        /// Obtains the top global players ids list
+        /// </summary>
+        /// <returns>Task</returns>
         public async Task GetTopPlayersListAsync()
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.ITopPlayersListCallback>();
@@ -210,6 +235,11 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.TopPlayersList(response));
         }
 
+        /// <summary>
+        /// Obtains the refined connected friends ids list
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <returns>Task</returns>
         public async Task GetConnectedFriendsAsync(int playerId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IPlayerFriendsListServiceCallback>();
@@ -247,6 +277,10 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.PlayerFriendsList(response));
         }
 
+        /// <summary>
+        /// Remove a player from the connected players list
+        /// </summary>
+        /// <param name="playerId"></param>
         public void LogOut(int playerId)
         {
             if (_connectedPlayersManager.RemovePlayer(playerId))

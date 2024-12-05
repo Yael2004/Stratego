@@ -24,6 +24,12 @@ namespace StrategoServices.Services
             _invitationManager = invitationManager;
         }
 
+        /// <summary>
+        /// Add a new friend request to the database associated to the requesterId and destinationId. Set pending status
+        /// </summary>
+        /// <param name="destinationId"></param>
+        /// <param name="requesterId"></param>
+        /// <returns>Task</returns>
         public async Task SendFriendRequest(int destinationId, int requesterId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IFriendOperationCallback>();
@@ -53,6 +59,12 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.GetFriendOperationSend(operationResult));
         }
 
+        /// <summary>
+        /// Accept a friend request from the requesterId to the destinationId. Set accepted status
+        /// </summary>
+        /// <param name="destinationId"></param>
+        /// <param name="requesterId"></param>
+        /// <returns></returns>
         public async Task AcceptFriendRequest(int destinationId, int requesterId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IFriendOperationCallback>();
@@ -82,6 +94,12 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.GetFriendOperationAccept(operationResult));
         }
 
+        /// <summary>
+        /// Decline a friend request from the requesterId to the destinationId. Set canceled status
+        /// </summary>
+        /// <param name="destinationId"></param>
+        /// <param name="requesterId"></param>
+        /// <returns></returns>
         public async Task DeclineFriendRequest(int destinationId, int requesterId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IFriendOperationCallback>();
@@ -111,6 +129,12 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.GetFriendOperationDecline(operationResult));
         }
 
+        /// <summary>
+        /// Remove a friend from the database associated to the requesterId and destinationId. Set canceled status
+        /// </summary>
+        /// <param name="destinationId"></param>
+        /// <param name="requesterId"></param>
+        /// <returns></returns>
         public async Task RemoveFriend(int destinationId, int requesterId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IFriendOperationCallback>();
@@ -140,6 +164,12 @@ namespace StrategoServices.Services
             await Task.Run(() => callback.GetFriendOperationRemove(operationResult));
         }
 
+        /// <summary>
+        /// Sends an email to the player with the room code
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <param name="roomCode"></param>
+        /// <returns></returns>
         public async Task<bool> SendRoomInvitation(int playerId, string roomCode)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.ISendRoomInvitationServiceCallback>();
@@ -188,6 +218,11 @@ namespace StrategoServices.Services
             return response;
         }
 
+        /// <summary>
+        /// Obtains the list of friend requests for the player
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <returns></returns>
         public async Task GetPlayerFriendRequestAsync(int playerId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IPlayerFriendRequestServiceCallback>();

@@ -12,13 +12,7 @@ namespace StrategoDataAccess
 {
     public class LabelRepository
     {
-        private readonly Lazy<StrategoEntities> _context;
         private static readonly ILog log = LogManager.GetLogger(typeof(LabelRepository));
-
-        public LabelRepository(Lazy<StrategoEntities> context)
-        {
-            _context = context;
-        }
 
         public virtual Result<Label> GetLabelById(int labelId)
         {

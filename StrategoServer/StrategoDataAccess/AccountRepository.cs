@@ -14,12 +14,6 @@ namespace StrategoDataAccess
     public class AccountRepository
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AccountRepository));
-        private readonly Lazy<StrategoEntities> _context;
-
-        public AccountRepository(Lazy<StrategoEntities> context)
-        {
-            _context = context;
-        }
 
         public virtual Result<string> CreateAccount(string email, string hashedPassword, string playerName)
         {

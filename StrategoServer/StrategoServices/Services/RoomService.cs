@@ -25,6 +25,11 @@ namespace StrategoServices.Services
             _reportPlayerManager = reportPlayerManager;
         }
 
+        /// <summary>
+        /// Creates a room and adds the player to it, sending the room code back to the player.
+        /// </summary>
+        /// <param name="playerId"></param>
+        /// <returns>bool status</returns>
         public async Task<bool> CreateRoomAsync(int playerId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IRoomServiceCallback>();
@@ -82,6 +87,12 @@ namespace StrategoServices.Services
             return canCreate;
         }
 
+        /// <summary>
+        /// Adds the player to the room and sends a response back to the player.
+        /// </summary>
+        /// <param name="roomCode"></param>
+        /// <param name="playerId"></param>
+        /// <returns>bool status</returns>
         public async Task<bool> JoinRoomAsync(string roomCode, int playerId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IRoomServiceCallback>();
@@ -140,6 +151,10 @@ namespace StrategoServices.Services
             return canJoin;
         }
 
+        /// <summary>
+        /// Removes the player from the room and sends a response back to the player.
+        /// </summary>
+        /// <param name="playerId"></param>
         public void LeaveRoomAsync(int playerId)
         {
             var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IRoomServiceCallback>();
@@ -193,6 +208,13 @@ namespace StrategoServices.Services
             }
         }
 
+        /// <summary>
+        /// Sends a message to the room.
+        /// </summary>
+        /// <param name="roomCode"></param>
+        /// <param name="playerId"></param>
+        /// <param name="message"></param>
+        /// <returns>Task</returns>
         public async Task SendMessageToRoomAsync(string roomCode, int playerId, string message)
         {
             try
@@ -232,6 +254,11 @@ namespace StrategoServices.Services
             return Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
         }
 
+        /// <summary>
+        /// Handles player disconnection from the room.
+        /// </summary>
+        /// <param name="roomCode"></param>
+        /// <param name="playerId"></param>
         private void HandlePlayerDisconnection(string roomCode, int playerId)
         {
             if (_rooms.TryGetValue(roomCode, out var room))
@@ -254,9 +281,11 @@ namespace StrategoServices.Services
             }
         }
 
-
-
-
+        /// <summary>
+        /// Notifies the player already set the new id player connected for getting the new id player connected.
+        /// </summary>
+        /// <param name="roomCode"></param>
+        /// <param name="connectedPlayerId"></param>
         public void NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId)
         {
             try
@@ -292,6 +321,11 @@ namespace StrategoServices.Services
             }
         }
 
+        /// <summary>
+        /// Notifies the players the connection for starting a game
+        /// </summary>
+        /// <param name="roomCode"></param>
+        /// <param name="gameId"></param>
         public void NotifyOpponentToJoinGameAsync(string roomCode, int gameId)
         {
             try
@@ -319,6 +353,11 @@ namespace StrategoServices.Services
             }
         }
 
+        /// <summary>
+        /// Helper method to notify all players in a room.
+        /// </summary>
+        /// <param name="room"></param>
+        /// <param name="action"></param>
         private void NotifyAllPlayersInRoomAsync(Room room, Action<IRoomServiceCallback> action)
         {
             foreach (var callback in room.PlayerCallbacks)
@@ -330,6 +369,12 @@ namespace StrategoServices.Services
             }
         }
 
+        /// <summary>
+        /// Reports a player account.
+        /// </summary>
+        /// <param name="reporterId"></param>
+        /// <param name="reportedId"></param>
+        /// <param name="reason"></param>
         public void ReportPlayerAccountAsync(int reporterId, int reportedId, string reason)
         {
             var callback = OperationContext.Current.GetCallbackChannel<IRoomServiceCallback>();
@@ -371,6 +416,10 @@ namespace StrategoServices.Services
             SafeCallbackInvoke(() => callback.NotifyPlayerReported(operationResult));
         }
 
+        /// <summary>
+        /// Helper method to safely invoke a callback
+        /// </summary>
+        /// <param name="callbackAction"></param>
         private void SafeCallbackInvoke(Action callbackAction)
         {
             try

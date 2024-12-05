@@ -32,14 +32,19 @@ namespace Test.ResultTest
         }
 
         [TestMethod]
-        public void Test_Constructor_ShouldSetPropertiesCorrectly()
+        public void Test_Constructor_ShouldSetValueCorrectly()
         {
             var expectedValue = "Test";
-            var expectedError = "Error";
 
             var resultSuccess = new Result<string>(expectedValue, true, string.Empty);
 
             Assert.AreEqual(expectedValue, resultSuccess.Value);
+        }
+
+        [TestMethod]
+        public void Test_Constructor_ShouldSetErrorCorrectly()
+        {
+            var expectedError = "Test";
 
             var resultFailure = new Result<string>(false, expectedError);
 
@@ -63,7 +68,7 @@ namespace Test.ResultTest
 
             var result = Result<int>.Failure(expectedError);
 
-            Assert.AreEqual(expectedError, result.Error);
+            Assert.AreEqual(0, result.Value);
         }
 
         [TestMethod]
