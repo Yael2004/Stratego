@@ -20,21 +20,22 @@ namespace StrategoApp.ViewModel
         private string _username;
         private string _password;
         private string _email;
-        private bool _isServiceErrorVisible;
-        private bool _isPasswordVisible;
-        private string _togglePasswordVisibilityIcon;
-
-        private MainWindowViewModel _mainWindowViewModel;
-        private SignUpServiceClient _signUpServiceClient;
-
         private string _usernameError;
         private string _emailError;
         private string _passwordError;
+        private bool _isServiceErrorVisible;
+        private bool _isPasswordVisible;
+        private bool _isSignUpSuccess;
+
+        private readonly SignUpServiceClient _signUpServiceClient;
+
+        private readonly MainWindowViewModel _mainWindowViewModel;
 
         public ICommand SignUpCommand { get; }
         public ICommand CancelCommand { get; }
         public ICommand TogglePasswordVisibilityCommand { get; }
         public ICommand ExecuteCloseServiceErrorCommand { get; }
+        public ICommand AcceptSuccessfullyMessage { get; }
 
         public string Username
         {
@@ -113,36 +114,36 @@ namespace StrategoApp.ViewModel
             {
                 _isPasswordVisible = value;
                 OnPropertyChanged();
-                _togglePasswordVisibilityIcon = _isPasswordVisible ? "HidePasswordIcon" : "ShowPasswordIcon";
             }
         }
 
-        public string TogglePasswordVisibilityIcon
+        public bool IsSignUpSuccess
         {
-            get { return _togglePasswordVisibilityIcon; }
+            get { return _isSignUpSuccess; }
             set
             {
-                _togglePasswordVisibilityIcon = value;
+                _isSignUpSuccess = value;
                 OnPropertyChanged();
             }
         }
 
         public SignUpViewModel(MainWindowViewModel mainWindowViewModel)
         {
+            _signUpServiceClient = new SignUpServiceClient(new InstanceContext(this));
+
             _mainWindowViewModel = mainWindowViewModel;
-
-            InstanceContext context = new InstanceContext(this);
-            _signUpServiceClient = new SignUpServiceClient(context, "NetTcpBinding_ISignUpService");
-
-            IsServiceErrorVisible = false;
 
             SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand, CanExecuteSignUpCommand);
             CancelCommand = new ViewModelCommand(ExecuteCancelCommand);
-            TogglePasswordVisibilityCommand = new ViewModelCommand(p => ExecuteTogglePasswordVisibilityCommand());
+            TogglePasswordVisibilityCommand = new ViewModelCommand(ExecuteTogglePasswordVisibilityCommand);
             ExecuteCloseServiceErrorCommand = new ViewModelCommand(ExecuteCloseServiceError);
+            AcceptSuccessfullyMessage = new ViewModelCommand(AcceptSignUpSuccess);
+
+            IsServiceErrorVisible = false;
+            IsPasswordVisible = false;
         }
 
-        private void ExecuteTogglePasswordVisibilityCommand()
+        private void ExecuteTogglePasswordVisibilityCommand(object obj)
         {
             IsPasswordVisible = !IsPasswordVisible;
         }
@@ -167,10 +168,20 @@ namespace StrategoApp.ViewModel
                 {
                     await _signUpServiceClient.SignUpAsync(Email, hashedPassword, Username);
                 }
+                catch (CommunicationException ex)
+                {
+                    Log.Error("Communication error with the signup service.", ex);
+                    IsServiceErrorVisible = true;
+                }
+                catch (TimeoutException ex)
+                {
+                    Log.Error("Timed out while communicating with the signup service.", ex);
+                    IsServiceErrorVisible = true;
+                }
                 catch (Exception ex)
                 {
+                    Log.Error("Unexpected error while signing up.", ex);
                     IsServiceErrorVisible = true;
-                    Log.Error(ex.Message);
                 }
             }
         }
@@ -189,7 +200,7 @@ namespace StrategoApp.ViewModel
         {
             if (result.IsSuccess)
             {
-                MessageBox.Show(result.Message);
+                IsSignUpSuccess = true;
                 _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
             }
             else
@@ -211,6 +222,8 @@ namespace StrategoApp.ViewModel
 
         private bool IsValidUsername()
         {
+            Username = Username.Trim();
+
             if (!Validations.IsValidUsername(Username))
             {
                 UsernameError = Properties.Resources.InvalidUsername_Label;
@@ -223,6 +236,8 @@ namespace StrategoApp.ViewModel
 
         private bool IsValidEmail()
         {
+            Email = Email.Trim();
+
             if (!Validations.IsValidEmail(Email))
             {
                 EmailError = Properties.Resources.InvalidMail_Label;
@@ -245,7 +260,12 @@ namespace StrategoApp.ViewModel
             return true;
         }
 
-        private string HashPassword(string password)
+        private void AcceptSignUpSuccess(object obj)
+        {
+            IsSignUpSuccess = false;
+        }
+
+        private static string HashPassword(string password)
         {
             using (SHA256 sha256 = SHA256.Create())
             {

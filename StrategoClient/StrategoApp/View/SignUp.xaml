@@ -179,6 +179,31 @@
                     </StackPanel>
                 </Border>
             </Grid>
+
+            <Grid Background="{StaticResource SemiTransparent}"
+                  Visibility="{Binding IsSignUpSuccess, Converter={StaticResource BooleanToVisibilityConverter}}"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Width="340"
+                  Height="148" Canvas.Left="230" Canvas.Top="146">
+                
+                <Border Background="Black" BorderBrush="{StaticResource DarkRed}" BorderThickness="2" CornerRadius="10" Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="{x:Static res:Resources.SignUpMessage_Label}"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   FontSize="16"
+                                   Margin="0,20,0,20"
+                                   Foreground="{StaticResource IntenseRed}"/>
+
+                        <Button Content="{x:Static res:Resources.Accept_Button}"
+                                Command="{Binding AcceptSuccessfullyMessage}"
+                                Style="{StaticResource ButtonStyle}"
+                                Width="100"
+                                HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
     </Viewbox>
 </UserControl>

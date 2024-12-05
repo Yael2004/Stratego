@@ -31,6 +31,13 @@ namespace StrategoApp.ViewModel
         private string _emailErrorMessage;
         private string _passwordErrorMessage;
         private string _passwordChangedErrorMessage;
+        private string _togglePasswordVisibilityIcon;
+        private string _codePart1;
+        private string _codePart2;
+        private string _codePart3;
+        private string _codePart4;
+        private string _codePart5;
+        private string _codePart6;
         private bool _isServiceErrorVisible;
         private bool _isPasswordVisible;
         private bool _isPasswordChangedVisible;
@@ -39,16 +46,6 @@ namespace StrategoApp.ViewModel
         private bool _isCodeVerificationVisible;
         private bool _isChangePasswordVisible;
         private bool _passwordChangedSuccesfully;
-        private string _togglePasswordVisibilityIcon;
-
-        private string _codePart1;
-        private string _codePart2;
-        private string _codePart3;
-        private string _codePart4;
-        private string _codePart5;
-        private string _codePart6;
-
-        public string LogInErrorMessage { get; set; }
 
         private readonly LogInServiceClient _logInServiceClient;
         private readonly ChangePasswordServiceClient _changePasswordServiceClient;
@@ -285,6 +282,7 @@ namespace StrategoApp.ViewModel
         {
             _logInServiceClient = new LogInServiceClient(new System.ServiceModel.InstanceContext(this));
             _changePasswordServiceClient = new ChangePasswordServiceClient(new System.ServiceModel.InstanceContext(this));
+
             _mainWindowViewModel = mainWindowViewModel;
 
             LogInCommand = new ViewModelCommand(ExecuteLogInCommand, CanExecuteLogInCommand);
