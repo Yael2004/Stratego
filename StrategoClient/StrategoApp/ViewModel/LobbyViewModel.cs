@@ -19,7 +19,7 @@ using System.Windows.Media.Animation;
 
 namespace StrategoApp.ViewModel
 {
-    public class LobbyViewModel : ViewModelBase, Service.IChatServiceCallback, ProfileService.IPlayerFriendsListServiceCallback, 
+    public class LobbyViewModel : ViewModelBase, Service.IChatServiceCallback, ProfileService.IPlayerFriendsListServiceCallback,
         ProfileService.IOtherProfileDataServiceCallback, FriendService.ISendRoomInvitationServiceCallback
     {
         private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
@@ -28,25 +28,25 @@ namespace StrategoApp.ViewModel
         private string _errorMessage;
         private string _username;
         private string _profilePicture;
-        private int _userId;
-
-        private bool _isViewEnabled;
-        private bool _isConnected = false;
-        private bool _isJoinRoomDialogVisible = false;
-
         private string _joinRoomCode;
-
-        private RoomViewModel roomViewModel;
+        private int _userId;
+        private bool _isViewEnabled;
+        private bool _isConnected;
+        private bool _isJoinRoomDialogVisible;
+        private bool _isServiceErrorVisible;
 
         private readonly ChatServiceClient _chatClient;
         private readonly OtherProfileDataServiceClient _otherProfileDataServiceClient;
         private readonly PlayerFriendsListServiceClient _playerFriendsListServiceClient;
         private readonly SendRoomInvitationServiceClient _friendServiceClient;
-        private MainWindowViewModel _mainWindowViewModel;
+
+        private readonly MainWindowViewModel _mainWindowViewModel;
+
+        private RoomViewModel roomViewModel;
         private ObservableCollection<string> _messages;
         private ObservableCollection<Player> _friends;
 
-        public ICommand SendMessagesCommand;
+        public ICommand SendMessagesCommand { get; }
         public ICommand ShowProfileCommand { get; }
         public ICommand SendMessageCommand { get; }
         public ICommand JoinToRoomCommand { get; }
@@ -56,68 +56,7 @@ namespace StrategoApp.ViewModel
         public ICommand ShowScoreboardCommand { get; }
         public ICommand ShowFriendsCommand { get; }
         public ICommand InviteFriendCommand { get; }
-
-        public LobbyViewModel(MainWindowViewModel mainWindowViewModel)
-        {
-            _chatClient = new ChatServiceClient(new InstanceContext(this));
-            _playerFriendsListServiceClient = new PlayerFriendsListServiceClient(new InstanceContext(this));
-            _otherProfileDataServiceClient = new OtherProfileDataServiceClient(new InstanceContext(this));
-            _friendServiceClient = new SendRoomInvitationServiceClient(new InstanceContext(this));
-
-            AssignValuesToUser();
-            Connection();
-
-            _mainWindowViewModel = mainWindowViewModel;
-
-            ShowFriendsCommand = new ViewModelCommand(ShowFriends);
-            SendMessageCommand = new ViewModelCommand(ClientSendMessage, CanSendMessage);
-            ShowProfileCommand = new ViewModelCommand(ClientShowProfile, CanShowProfile);
-            JoinToRoomShowCommand = new ViewModelCommand(JoinToRoomShow);
-            JoinToRoomCommand = new ViewModelCommand(JoinToRoom);
-            CancelJoinToRoomCommand = new ViewModelCommand(CancelJoinToRoom);
-            CreateRoomCommand = new ViewModelCommand(CreateRoom);
-            ShowScoreboardCommand = new ViewModelCommand(ShowScoreboard);
-            InviteFriendCommand = new ViewModelCommand(InviteFriend);
-
-            _messages = new ObservableCollection<string>();
-            _friends = new ObservableCollection<Player>();
-
-            LoadFriendsListAsync();
-        }
-
-        public void Connection()
-        {
-            if (!_isConnected)
-            {
-                try
-                {
-                    _userId = _chatClient.ConnectAsync(_userId, _username).Result;
-
-                    PlayerSingleton.Instance.Player.Id = _userId;
-
-                    MessageBox.Show($"{_username} conectado al chat.");
-                }
-                catch (FaultException ex)
-                {
-                    Log.Error("Error al conectar al servicio de chat", ex);
-                    MessageBox.Show("No se pudo conectar al servicio de chat.");
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("Error inesperado al conectar al chat", ex);
-                    MessageBox.Show("Ha ocurrido un error inesperado.");
-                }
-            }
-        }
-
-        public void Disconnection()
-        {
-            if (_chatClient != null)
-            {
-                _chatClient.Disconnect(_userId);
-                _chatClient.Close();
-            }
-        }
+        public ICommand CloseServiceErrorCommand { get; }
 
         public ObservableCollection<string> Messages
         {
@@ -233,6 +172,103 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public bool IsServiceErrorVisible
+        {
+            get { return _isServiceErrorVisible; }
+            set
+            {
+                _isServiceErrorVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public LobbyViewModel(MainWindowViewModel mainWindowViewModel)
+        {
+            _chatClient = new ChatServiceClient(new InstanceContext(this));
+            _playerFriendsListServiceClient = new PlayerFriendsListServiceClient(new InstanceContext(this));
+            _otherProfileDataServiceClient = new OtherProfileDataServiceClient(new InstanceContext(this));
+            _friendServiceClient = new SendRoomInvitationServiceClient(new InstanceContext(this));
+
+            AssignValuesToUser();
+            ConnectPlayerToChat();
+
+            _mainWindowViewModel = mainWindowViewModel;
+
+            ShowFriendsCommand = new ViewModelCommand(ShowFriends);
+            SendMessageCommand = new ViewModelCommand(ClientSendMessage);
+            ShowProfileCommand = new ViewModelCommand(ClientShowProfile);
+            JoinToRoomShowCommand = new ViewModelCommand(JoinToRoomShow);
+            JoinToRoomCommand = new ViewModelCommand(JoinToRoom);
+            CancelJoinToRoomCommand = new ViewModelCommand(CancelJoinToRoom);
+            CreateRoomCommand = new ViewModelCommand(CreateRoom);
+            ShowScoreboardCommand = new ViewModelCommand(ShowScoreboard);
+            InviteFriendCommand = new ViewModelCommand(InviteFriend);
+            CloseServiceErrorCommand = new ViewModelCommand(ExecuteCloseServiceError);
+
+            _messages = new ObservableCollection<string>();
+            _friends = new ObservableCollection<Player>();
+
+            LoadFriendsListAsync();
+
+            IsConnected = false;
+            _isJoinRoomDialogVisible = false;
+        }
+
+        public void ConnectPlayerToChat()
+        {
+            if (!_isConnected)
+            {
+                try
+                {
+                    _userId = _chatClient.ConnectAsync(_userId, _username).Result;
+
+                    PlayerSingleton.Instance.Player.Id = _userId;
+                }
+                catch (CommunicationException ex)
+                {
+                    Log.Error("Communication error with the connect service.", ex);
+                    IsServiceErrorVisible = true;
+                }
+                catch (TimeoutException ex)
+                {
+                    Log.Error("Timed out while communicating with the connect service.", ex);
+                    IsServiceErrorVisible = true;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Unexpected error while connecting in.", ex);
+                    IsServiceErrorVisible = true;
+                }
+            }
+        }
+
+        public void DisconnectPlayerFromChat()
+        {
+            if (_chatClient != null)
+            {
+                try
+                {
+                    _chatClient.Disconnect(_userId);
+                    _chatClient.Close();
+                }
+                catch (CommunicationException ex)
+                {
+                    Log.Error("Communication error while disconnecting player from chat password.", ex);
+                    IsServiceErrorVisible = true;
+                }
+                catch (TimeoutException ex)
+                {
+                    Log.Error("Timed out while disconnecting player from chat password.", ex);
+                    IsServiceErrorVisible = true;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Unexpected error while disconnecting player from chat password.", ex);
+                    IsServiceErrorVisible = true;
+                }
+            }
+        }
+
         private void InviteFriend(object parameter)
         {
             if (parameter is Player friend)
@@ -250,19 +286,29 @@ namespace StrategoApp.ViewModel
                 if (await roomViewModel.CreateARoomAsync())
                 {
                     await _friendServiceClient.SendRoomInvitationAsync(friend.AccountId, roomViewModel.RoomCode);
-                    
-                    Disconnection();
+
+                    DisconnectPlayerFromChat();
                     _mainWindowViewModel.ChangeViewModel(roomViewModel);
                 }
                 else
                 {
-                    MessageBox.Show("Error al enviar la invitación a la sala."); 
+                    Log.Warn("An error was ocurred on lobby send room invitation response.");
                 }
+            }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while sending invitation.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while communicating with sending invitation.", ex);
+                IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
-                Log.Error("Error al enviar la invitación a la sala", ex);
-                MessageBox.Show("Error al enviar la invitación a la sala.");
+                Log.Error("Unexpected error while sending invitation.", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -277,37 +323,51 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public bool CanSendMessage(object obj)
-        {
-            return !string.IsNullOrWhiteSpace(MessageToSend);
-        }
-
         public void ClientSendMessage(object obj)
         {
-            if (_chatClient == null || _chatClient.State == CommunicationState.Closed || _chatClient.State == CommunicationState.Faulted)
+            try
             {
-                Connection();
+                _chatClient.SendMessage(_userId, _username, MessageToSend);
+                MessageToSend = string.Empty;
             }
-
-            _chatClient.SendMessage(_userId, _username, MessageToSend);
-            MessageToSend = string.Empty;
-        }
-
-        private bool CanShowProfile(object obj)
-        {
-            return true;
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while sending message.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while communicating with sending message.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unexpected error while sending message.", ex);
+                IsServiceErrorVisible = true;
+            }
         }
 
         public void ClientShowProfile(object obj)
         {
             try
             {
-                Disconnection();
+                DisconnectPlayerFromChat();
                 _mainWindowViewModel.ChangeViewModel(new PlayerProfileViewModel(_mainWindowViewModel));
+            }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while showing profile.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while communicating with showing profile.", ex);
+                IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
-                Log.Error("Error al mostrar el perfil del jugador", ex);
+                Log.Error("Unexpected error while while showing profile.", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -315,12 +375,23 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                Disconnection();
+                DisconnectPlayerFromChat();
                 _mainWindowViewModel.ChangeViewModel(new ScoreboardViewModel(_mainWindowViewModel));
+            }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while showing scoreboard.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while communicating with showing scoreboard.", ex);
+                IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
-                Log.Error("Error al mostrar el marcador", ex);
+                Log.Error("Unexpected error while showing scoreboard.", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -328,81 +399,95 @@ namespace StrategoApp.ViewModel
         {
             try
             {
-                Disconnection();
+                DisconnectPlayerFromChat();
                 _mainWindowViewModel.ChangeViewModel(new FriendsViewModel(_mainWindowViewModel));
+            }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while showing friends.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while communicating with showing friends.", ex);
+                IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
-                Log.Error("Error al mostrar la lista de amigos", ex);
+                Log.Error("Unexpected error while showing friends.", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
         public void JoinToRoomShow(object obj)
         {
-            try
-            {
-                JoinRoomCode = string.Empty;
-                IsJoinRoomDialogVisible = true;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Error al unirse a la sala", ex);
-            }
+            JoinRoomCode = string.Empty;
+            IsJoinRoomDialogVisible = true;
         }
 
         public async void JoinToRoom(object obj)
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(JoinRoomCode))
+                roomViewModel = new RoomViewModel(_mainWindowViewModel);
+
+                if (await roomViewModel.JoinToRoomAsync(JoinRoomCode))
                 {
-                    var roomViewModel = new RoomViewModel(_mainWindowViewModel);
-                    
-                    if (await roomViewModel.JoinToRoomAsync(JoinRoomCode))
-                    {
-                        Disconnection();
-                        _mainWindowViewModel.ChangeViewModel(roomViewModel);
-                    }
+                    DisconnectPlayerFromChat();
+                    _mainWindowViewModel.ChangeViewModel(roomViewModel);
                 }
                 else
                 {
-                    MessageBox.Show("Por favor, ingresa un código de sala válido.");
+                    ErrorMessage = Properties.Resources.InvalidCode_Label;
                 }
+            }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while joining to room.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while communicating with join to room.", ex);
+                IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
-                Log.Error("Error al unirse a la sala", ex);
-                MessageBox.Show("Error al unirse a la sala: " + ex.Message);
+                Log.Error("Unexpected error while joining to room.", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
         public void CancelJoinToRoom(object obj)
         {
-            try
-            {
-                IsJoinRoomDialogVisible = false;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Error al cancelar unirse a la sala", ex);
-            }
+            IsJoinRoomDialogVisible = false;
         }
 
         public async void CreateRoom(object obj)
         {
             try
             {
-                var roomViewModel = new RoomViewModel(_mainWindowViewModel);
+                roomViewModel = new RoomViewModel(_mainWindowViewModel);
                 if (await roomViewModel.CreateARoomAsync())
                 {
-                    Disconnection();
+                    DisconnectPlayerFromChat();
                     _mainWindowViewModel.ChangeViewModel(roomViewModel);
                 }
             }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while creating room.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while communicating with create room.", ex);
+                IsServiceErrorVisible = true;
+            }
             catch (Exception ex)
             {
-                Log.Error("Error al crear la sala", ex);
-                MessageBox.Show("Error al crear la sala: " + ex.Message);
+                Log.Error("Unexpected error while creating room.", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -412,10 +497,20 @@ namespace StrategoApp.ViewModel
             {
                 await _playerFriendsListServiceClient.GetConnectedFriendsAsync(UserId);
             }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while getting connected friends.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while communicating getting connected friends.", ex);
+                IsServiceErrorVisible = true;
+            }
             catch (Exception ex)
             {
-                Log.Error("Error al cargar la lista de amigos", ex);
-                MessageBox.Show("Error al cargar la lista de amigos.");
+                Log.Error("Unexpected error getting connected friends.", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -429,25 +524,42 @@ namespace StrategoApp.ViewModel
         {
             if (!result.IsSuccess)
             {
-                ErrorMessage = "Error al enviar el mensaje";
+                Log.Warn("An error was ocurred on lobby chat response");
             }
         }
 
-        public async void PlayerFriendsList(PlayerFriendsResponse response)
+        public async void PlayerFriendsList(PlayerFriendsResponse plalyerFriends)
         {
-            if (response.Result.IsSuccess)
+            try
             {
-                var myFriends = response.FriendsIds;
-                
-                foreach (var friendId in myFriends)
+                if (plalyerFriends.Result.IsSuccess)
                 {
-                    await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendId, UserId);
+                    var myFriends = plalyerFriends.FriendsIds;
+
+                    foreach (var friendId in myFriends)
+                    {
+                        await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendId, UserId);
+                    }
+                }
+                else
+                {
+                    Log.Warn($"Error to load friends list: {plalyerFriends.Result.Message}");
                 }
             }
-            else
+            catch (CommunicationException ex)
             {
-                Log.Error($"Error al cargar la lista de amigos: {response.Result.Message}");
-                MessageBox.Show($"Error al cargar la lista de amigos: {response.Result.Message}");
+                Log.Error("Communication error while getting friends list.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while communicating getting friends list.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unexpected error getting friends list.", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -456,21 +568,18 @@ namespace StrategoApp.ViewModel
         {
             if (response.Result.IsSuccess)
             {
-                MessageBox.Show(response.PlayerInfo.PlayerInfo.Name);
-
                 var friend = new Player
                 {
                     AccountId = response.PlayerInfo.PlayerInfo.Id,
                     Name = response.PlayerInfo.PlayerInfo.Name,
                     PicturePath = response.PlayerInfo.PlayerInfo.PicturePath
                 };
-                   
+
                 Friends.Add(friend);
             }
             else
             {
-                Log.Error("Error al cargar información de amigo: " + response.Result.Message);
-                MessageBox.Show("Error al cargar información de amigo: " + response.Result.Message);
+                Log.Warn("Error to load player information: " + response.Result.Message);
             }
         }
 
@@ -478,13 +587,19 @@ namespace StrategoApp.ViewModel
         {
             if (!result.IsSuccess)
             {
-                MessageBox.Show("Error al enviar la invitación a la sala.");
-            } 
+                Log.Warn("An error was ocurred on lobby send room invitation response");
+            }
             else
             {
-                Disconnection();
+                DisconnectPlayerFromChat();
                 _mainWindowViewModel.ChangeViewModel(roomViewModel);
             }
+        }
+
+        public void ExecuteCloseServiceError(object obj)
+        {
+            IsServiceErrorVisible = false;
+            _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
         }
     }
 }

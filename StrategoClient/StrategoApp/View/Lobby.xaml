@@ -18,6 +18,7 @@
             <Grid Background="{StaticResource LobbyBackground}" />
             <Rectangle Fill="#C0000000" />
             <Rectangle Fill="#80000000" Visibility="{Binding IsJoinRoomDialogVisible, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="1" IsHitTestVisible="True"/>
+            <Rectangle Fill="#80000000" Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="1" IsHitTestVisible="True"/>
 
             <Grid IsEnabled="{Binding IsJoinRoomDialogVisible, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=False}">
                 <Grid.ColumnDefinitions>
@@ -85,12 +86,12 @@
                                    Foreground="{StaticResource IntenseGreen}" 
                                    Background="{StaticResource SemiTransparent}" Width="298"
                                    FontFamily="{StaticResource AugustaFont}"/>
-                        
+
                         <ListBox ItemsSource="{Binding Messages}" 
                                  Height="250" Width="300" 
                                  Background="#80000000" 
                                  Foreground="{StaticResource IntenseGreen}">
-                            
+
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding}" />
@@ -210,8 +211,11 @@
                                  Width="200" 
                                  Margin="0,10,0,0"
                                  MaxLength="6"/>
-                        
-                        <Label Content="{Binding ErrorMessage}"/>
+
+                        <Label Content="{Binding ErrorMessage}"
+                               Foreground="{StaticResource IntenseGreen}"
+                               FontFamily="{StaticResource AugustaFont}"
+                               HorizontalAlignment="Center"/>
 
                         <StackPanel Orientation="Horizontal" 
                                     HorizontalAlignment="Center" 
@@ -237,6 +241,32 @@
                                 Margin="0,10,0,0"
                                 Command="{Binding CreateRoomCommand}"/>
                         
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid x:Name="ModalContainer"
+                    Background="{StaticResource SemiTransparent}"
+                    Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="340"
+                    Height="148" Canvas.Left="230" Canvas.Top="146">
+
+                <Border Background="Black" BorderBrush="{StaticResource DarkRed}" BorderThickness="2" CornerRadius="10" Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="{x:Static res:Resources.ServerConnectionLostMessage_Label}"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   FontSize="16"
+                                   Margin="0,20,0,20"
+                                   Foreground="{StaticResource IntenseRed}"/>
+
+                        <Button Content="{x:Static res:Resources.Accept_Button}"
+                                Command="{Binding CloseServiceErrorCommand}"
+                                Style="{StaticResource ButtonStyle}"
+                                Width="100"
+                                HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Border>
             </Grid>
