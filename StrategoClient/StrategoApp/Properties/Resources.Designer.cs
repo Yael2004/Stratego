@@ -774,6 +774,15 @@ namespace StrategoApp.Properties {
         /// <summary>
         ///   Busca una cadena traducida similar a Scoreboard.
         /// </summary>
+        public static string Scoreboard_Button {
+            get {
+                return ResourceManager.GetString("Scoreboard_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Scoreboard.
+        /// </summary>
         public static string Scoreboard_Title {
             get {
                 return ResourceManager.GetString("Scoreboard_Title", resourceCulture);

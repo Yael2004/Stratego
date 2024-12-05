@@ -415,4 +415,7 @@
   <data name="BannedAccount_Label" xml:space="preserve">
     <value>Your account has been banned</value>
   </data>
+  <data name="Scoreboard_Button" xml:space="preserve">
+    <value>Scoreboard</value>
+  </data>
 </root>

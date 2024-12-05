@@ -118,304 +118,303 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Abysswatcher_Label" xml:space="preserve">
-    <value>Abysswatcher</value>
+    <value>Vigilante del abismo</value>
   </data>
   <data name="Accept_Button" xml:space="preserve">
-    <value>Accept</value>
+    <value>Aceptar</value>
   </data>
   <data name="AccountAlreadyExistMessage_Label" xml:space="preserve">
-    <value>This account already exist, try with another one</value>
+    <value>Esta cuenta ya existe, prueba con otra</value>
   </data>
   <data name="AccountAlreadyExist_Title" xml:space="preserve">
-    <value>Account already exist</value>
+    <value>La cuenta ya existe</value>
   </data>
   <data name="AddFriend_Button" xml:space="preserve">
-    <value>Add</value>
+    <value>Agregar</value>
   </data>
   <data name="Apprentice_Label" xml:space="preserve">
-    <value>Apprentice</value>
+    <value>Aprendiz</value>
   </data>
   <data name="Archfiend_Label" xml:space="preserve">
-    <value>Archfiend</value>
+    <value>Archidemonio</value>
   </data>
   <data name="Cancel_Button" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Cancelar</value>
   </data>
   <data name="Casual_Button" xml:space="preserve">
-    <value>Casual player</value>
+    <value>Jugador casual</value>
   </data>
   <data name="ChangedPasswordMessage_Label" xml:space="preserve">
-    <value>Your password has been changed succesfully</value>
+    <value>Tu contraseña ha sido cambiada exitosamente</value>
   </data>
   <data name="ChangePassword_Button" xml:space="preserve">
-    <value>Change Password</value>
+    <value>Cambiar contraseña</value>
   </data>
   <data name="ChangePassword_Title" xml:space="preserve">
-    <value>Change Password</value>
+    <value>Cambiar contraseña</value>
   </data>
   <data name="CheckProfile_Button" xml:space="preserve">
-    <value>Check profile</value>
+    <value>Ver perfil</value>
   </data>
   <data name="Code_Label" xml:space="preserve">
-    <value>Code</value>
+    <value>Código</value>
   </data>
   <data name="Competitive_Label" xml:space="preserve">
-    <value>Competitive</value>
+    <value>Competitivo</value>
   </data>
   <data name="CreateLobby_Button" xml:space="preserve">
-    <value>Create lobby</value>
+    <value>Crear sala</value>
   </data>
   <data name="CurrentPassword_Label" xml:space="preserve">
-    <value>Current Password</value>
+    <value>Contraseña actual</value>
   </data>
   <data name="DarkKnight_Label" xml:space="preserve">
-    <value>DarkKnight</value>
+    <value>Caballero oscuro</value>
   </data>
   <data name="Darkwraith_Label" xml:space="preserve">
-    <value>Darkwraith</value>
+    <value>Espectro oscuro</value>
   </data>
   <data name="DatabaseConnectionErrorMessage_Label" xml:space="preserve">
-    <value>Connection error has ocurred, try again later</value>
+    <value>Se ha producido un error de conexión, inténtalo de nuevo más tarde</value>
   </data>
   <data name="DatabaseConnectionError_Title" xml:space="preserve">
-    <value>Connection error</value>
+    <value>Error de conexión</value>
   </data>
   <data name="Defeat_Label" xml:space="preserve">
-    <value>Defeat</value>
+    <value>Derrota</value>
   </data>
   <data name="FieldsInBlank_Label" xml:space="preserve">
-    <value>Some fields are in blank</value>
+    <value>Algunos campos están vacíos</value>
   </data>
   <data name="FriendRequestMessage_Label" xml:space="preserve">
-    <value>Sent request to</value>
+    <value>Enviar solicitud a</value>
   </data>
   <data name="Friends_Title" xml:space="preserve">
-    <value>Friends</value>
+    <value>Amigos</value>
   </data>
   <data name="FullLobby_Label" xml:space="preserve">
-    <value>Lobby is full</value>
+    <value>La sala está llena</value>
   </data>
   <data name="GamesLost_Label" xml:space="preserve">
-    <value>Games lost</value>
+    <value>Partidas perdidas</value>
   </data>
   <data name="GamesPlayed_Label" xml:space="preserve">
-    <value>Games played</value>
+    <value>Partidas jugadas</value>
   </data>
   <data name="GamesWon_Label" xml:space="preserve">
-    <value>Games won</value>
+    <value>Partidas ganadas</value>
   </data>
   <data name="GrimReaper_Label" xml:space="preserve">
-    <value>GrimReaper</value>
+    <value>Parca</value>
   </data>
   <data name="Hellhound_Label" xml:space="preserve">
-    <value>Hellhound</value>
+    <value>Sabuezo infernal</value>
   </data>
   <data name="InvalidCode_Label" xml:space="preserve">
-    <value>Enter a valid code</value>
+    <value>Ingresa un código válido</value>
   </data>
   <data name="InvalidMail_Label" xml:space="preserve">
-    <value>Invalid mail (ex: name@domain.com)</value>
+    <value>Correo inválido (ej: nombre@dominio.com)</value>
   </data>
   <data name="InvalidPassword_Label" xml:space="preserve">
-    <value>Invalid password (8-32 characters, 1 number)</value>
+    <value>Contraseña no válida (8-32 caracteres, 1 número)</value>
   </data>
   <data name="InvalidUsername_Label" xml:space="preserve">
-    <value>Invalid name (4-16 characters)</value>
+    <value>Nombre no válido (4-16 caracteres)</value>
   </data>
   <data name="InviteToLobby_Button" xml:space="preserve">
-    <value>Invite</value>
+    <value>Invitar</value>
   </data>
   <data name="Join_Button" xml:space="preserve">
-    <value>Join</value>
+    <value>Unirse</value>
   </data>
   <data name="LobbyCode_Title" xml:space="preserve">
-    <value>Join to lobby</value>
+    <value>Unirse a sala</value>
   </data>
   <data name="Login_Button" xml:space="preserve">
-    <value>Login</value>
-    <comment>T</comment>
+    <value>Iniciar sesión</value>
   </data>
   <data name="Login_Title" xml:space="preserve">
-    <value>LogIn</value>
+    <value>Inicio de sesión</value>
   </data>
   <data name="MessageReport_Label" xml:space="preserve">
-    <value>The player has been reported, thanks for your contribution</value>
+    <value>El jugador ha sido reportado, gracias por tu aporte</value>
   </data>
   <data name="Misbehavior_Label" xml:space="preserve">
-    <value>Misbehavior</value>
+    <value>Mal comportamiento</value>
   </data>
   <data name="NameChange_Label" xml:space="preserve">
-    <value>Name change</value>
+    <value>Cambiar nombre</value>
   </data>
   <data name="Necrofiend_Label" xml:space="preserve">
-    <value>Necrofiend</value>
+    <value>Demonio de la muerte</value>
   </data>
   <data name="Necronomicon_Label" xml:space="preserve">
     <value>Necronomicon</value>
   </data>
   <data name="NewPassword_Label" xml:space="preserve">
-    <value>New Password</value>
+    <value>Nueva contraseña</value>
   </data>
   <data name="Nightmare_Label" xml:space="preserve">
-    <value>Nightmare</value>
+    <value>Pesadilla</value>
   </data>
   <data name="NonexistentAccount_Label" xml:space="preserve">
-    <value>This account doesn´t exist</value>
+    <value>La cuenta no existe</value>
   </data>
   <data name="NonexistentCode_Label" xml:space="preserve">
-    <value>Code doesn't exist</value>
+    <value>El código no existe</value>
   </data>
   <data name="NovicePlayer_Label" xml:space="preserve">
-    <value>Novice player</value>
+    <value>Jugador novato</value>
   </data>
   <data name="OffensiveLanguage_Button" xml:space="preserve">
-    <value>Offensive language</value>
+    <value>Lenguaje inapropiado</value>
   </data>
   <data name="Offline_Label" xml:space="preserve">
-    <value>Offline</value>
+    <value>Fuera de línea</value>
   </data>
   <data name="Online_Label" xml:space="preserve">
-    <value>Online</value>
+    <value>En línea</value>
   </data>
   <data name="PasswordChanged_Title" xml:space="preserve">
-    <value>Password Changed</value>
+    <value>Contraseña cambiada</value>
   </data>
   <data name="PlayerIdPrompt_Label" xml:space="preserve">
-    <value>Insert player id</value>
+    <value>Ingrese el id del jugador</value>
   </data>
   <data name="Play_Button" xml:space="preserve">
-    <value>Play</value>
+    <value>Jugar</value>
   </data>
   <data name="Potiontrap_Label" xml:space="preserve">
-    <value>Potiontrap</value>
+    <value>Poción trampa</value>
   </data>
   <data name="Profile_Title" xml:space="preserve">
-    <value>Profile</value>
+    <value>Perfil</value>
   </data>
   <data name="ProPlayer_Label" xml:space="preserve">
-    <value>Pro player</value>
+    <value>Jugador profesional</value>
   </data>
   <data name="Register_Title" xml:space="preserve">
-    <value>Register</value>
+    <value>Registrar</value>
   </data>
   <data name="RemoveFriendConfirmationMessage_Label" xml:space="preserve">
-    <value>Are you sure you want to remove this friend?</value>
+    <value>¿Estás seguro de que deseas eliminar a este amigo?</value>
   </data>
   <data name="Remove_Button" xml:space="preserve">
-    <value>Remove</value>
+    <value>Eliminar</value>
   </data>
   <data name="Report_Button" xml:space="preserve">
-    <value>Report</value>
+    <value>Reportar</value>
   </data>
   <data name="Report_Title" xml:space="preserve">
-    <value>Report</value>
+    <value>Reportar</value>
   </data>
   <data name="RulesViolation_Button" xml:space="preserve">
-    <value>Rules violation</value>
+    <value>Violación de reglas</value>
   </data>
   <data name="Save_Button" xml:space="preserve">
-    <value>Save</value>
+    <value>Guardar</value>
   </data>
   <data name="Scoreboard_Title" xml:space="preserve">
-    <value>Scoreboard</value>
+    <value>Puntuaciones</value>
   </data>
   <data name="SearchPlayer_Label" xml:space="preserve">
-    <value>Search player</value>
+    <value>Buscar jugador</value>
   </data>
   <data name="SearchPlayer_Title" xml:space="preserve">
-    <value>Search player</value>
+    <value>Buscar jugador</value>
   </data>
   <data name="ServerConnectionLostMessage_Label" xml:space="preserve">
-    <value>Server connection lost, try again later</value>
+    <value>Se perdió la conexión con el servidor, inténtelo nuevamente más tarde</value>
   </data>
   <data name="ServerConnectionLost_Title" xml:space="preserve">
-    <value>Server connection lost</value>
+    <value>Pérdida de conexión con el servidor</value>
   </data>
   <data name="SignUpMessage_Label" xml:space="preserve">
-    <value>Your account has been created</value>
+    <value>Tu cuenta ha sido creada</value>
   </data>
   <data name="SignUp_Button" xml:space="preserve">
-    <value>Sign up</value>
+    <value>Registrarse</value>
   </data>
   <data name="Soulhunter_Label" xml:space="preserve">
-    <value>Soulhunter</value>
+    <value>Cazador de almas</value>
   </data>
   <data name="Stratego_Label" xml:space="preserve">
     <value>Stratego</value>
   </data>
   <data name="Toxicity_Button" xml:space="preserve">
-    <value>Toxicity</value>
+    <value>Toxicidad</value>
   </data>
   <data name="Trapbreaker_Label" xml:space="preserve">
-    <value>Trapbreaker</value>
+    <value>Destructor de trampas</value>
   </data>
   <data name="UseHacks_Button" xml:space="preserve">
-    <value>Use of hacks</value>
+    <value>Uso de trampas</value>
   </data>
   <data name="UserMail_Label" xml:space="preserve">
-    <value>Email</value>
+    <value>Correo</value>
   </data>
   <data name="UserName_Label" xml:space="preserve">
-    <value>Username</value>
+    <value>Usuario</value>
   </data>
   <data name="UserPassword_Label" xml:space="preserve">
-    <value>Password</value>
+    <value>Contraseña</value>
   </data>
   <data name="Victories_Label" xml:space="preserve">
-    <value>Victories</value>
+    <value>Victorias</value>
   </data>
   <data name="Victory_Label" xml:space="preserve">
-    <value>Victory</value>
+    <value>Victoria</value>
   </data>
   <data name="WrongPassword_Label" xml:space="preserve">
-    <value>Wrong Password</value>
+    <value>Contraseña equivocada</value>
   </data>
   <data name="LoginAsInvited_Button" xml:space="preserve">
-    <value>Login as invited</value>
+    <value>Iniciar como invitado</value>
   </data>
   <data name="Friends_Button" xml:space="preserve">
-    <value>Friends</value>
+    <value>Amigos</value>
   </data>
   <data name="Send_Button" xml:space="preserve">
-    <value>Send</value>
+    <value>Enviar</value>
   </data>
   <data name="Chat_Label" xml:space="preserve">
     <value>Chat</value>
   </data>
   <data name="SelectProfilePicture_Title" xml:space="preserve">
-    <value>Select Profile Picture</value>
+    <value>Seleccionar foto de perfil</value>
   </data>
   <data name="Logout_Button" xml:space="preserve">
-    <value>Logout</value>
+    <value>Cerrar sesión</value>
   </data>
   <data name="Apprentice_Button" xml:space="preserve">
-    <value>Apprentice</value>
+    <value>Aprendiz</value>
   </data>
   <data name="Competitive_Button" xml:space="preserve">
-    <value>Competitive</value>
+    <value>Competitivo</value>
   </data>
   <data name="Misbehavior_Button" xml:space="preserve">
-    <value>Misbehavior</value>
+    <value>Mal comportamiento</value>
   </data>
   <data name="NovicePlayer_Button" xml:space="preserve">
-    <value>Novice player</value>
+    <value>Jugador novato</value>
   </data>
   <data name="ProPlayer_Button" xml:space="preserve">
-    <value>Pro player</value>
+    <value>Jugador profesional</value>
   </data>
   <data name="ForgotPassword_Label" xml:space="preserve">
-    <value>Forgot your password?</value>
+    <value>¿Olvidates tu contraseña?</value>
   </data>
   <data name="EnterEmail_Label" xml:space="preserve">
-    <value>Enter your email</value>
+    <value>Ingresa tu correo</value>
   </data>
   <data name="FriendRequests_Title" xml:space="preserve">
-    <value>Friend requests</value>
+    <value>Solicitudes de amistad</value>
   </data>
   <data name="BannedAccount_Label" xml:space="preserve">
-    <value>Your account has been banned</value>
+    <value>Tu cuenta ha sido baneada</value>
   </data>
   <data name="Scoreboard_Button" xml:space="preserve">
-    <value>Scoreboard</value>
+    <value>Puntuaciones</value>
   </data>
 </root>

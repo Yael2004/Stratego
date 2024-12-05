@@ -1,8 +1,10 @@
 ﻿using StrategoApp.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,7 +25,13 @@ namespace StrategoApp
     {
         public MainWindow()
         {
+            CultureInfo culture = CultureInfo.CurrentCulture;
+            CultureInfo.CurrentUICulture = culture;
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+
             InitializeComponent();
+
             this.DataContext = new MainWindowViewModel();
         }
     }

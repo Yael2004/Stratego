@@ -71,7 +71,7 @@ namespace StrategoApp.ViewModel
                 Properties.Resources.NovicePlayer_Label,
                 Properties.Resources.ProPlayer_Label,
                 Properties.Resources.Apprentice_Label,
-                Properties.Resources.Misbehavior_Label
+                Properties.Resources.Competitive_Label
             };
 
             ProfilePictures = new ObservableCollection<string>

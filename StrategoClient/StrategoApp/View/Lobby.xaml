@@ -70,13 +70,13 @@
                 </StackPanel>
 
                 <Button Grid.Column="1" Grid.Row="0" 
-                        Content="Scoreboard" 
+                        Content="{x:Static res:Resources.Scoreboard_Button}" 
                         Style="{StaticResource ButtonGreenStyle}"
                         HorizontalAlignment="Center" 
                         VerticalAlignment="Top" 
                         Margin="0,10,0,0"
                         Command="{Binding ShowScoreboardCommand}" />
-                
+
                 <Border Grid.Column="0" Grid.Row="1" Margin="10,10,174,10">
                     <StackPanel Margin="0,0,-1,0">
                         <TextBlock Text="{x:Static res:Resources.Chat_Label}" 
