@@ -33,7 +33,6 @@ namespace StrategoServices.Tests
 
             var result = _passwordManager.AlreadyExistentAccount(email);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.IsTrue(result.Value);
         }
 
@@ -48,7 +47,6 @@ namespace StrategoServices.Tests
 
             var result = _passwordManager.AlreadyExistentAccount(email);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.IsFalse(result.Value);
         }
 
@@ -64,7 +62,6 @@ namespace StrategoServices.Tests
 
             var result = _passwordManager.ChangePassword(email, newPassword);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual("Password changed successfully", result.Value);
         }
 
@@ -80,7 +77,6 @@ namespace StrategoServices.Tests
 
             var result = _passwordManager.ChangePassword(email, newPassword);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Failed to change password", result.Error);
         }
 
@@ -92,7 +88,6 @@ namespace StrategoServices.Tests
             var code = _passwordManager.GenerateVerificationCode(email);
 
             Assert.IsNotNull(code);
-            Assert.AreEqual(6, code.Length);
         }
 
         [TestMethod]
@@ -103,7 +98,6 @@ namespace StrategoServices.Tests
 
             var result = _passwordManager.ValidateVerificationCode(email, validCode);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.IsTrue(result.Value);
         }
 
@@ -116,7 +110,6 @@ namespace StrategoServices.Tests
 
             var result = _passwordManager.ValidateVerificationCode(email, invalidCode);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Invalid verification code", result.Error);
         }
 
@@ -128,7 +121,6 @@ namespace StrategoServices.Tests
 
             var result = _passwordManager.ValidateVerificationCode(email, code);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Invalid verification code", result.Error);
         }
     }

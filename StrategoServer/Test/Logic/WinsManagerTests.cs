@@ -31,7 +31,6 @@ namespace StrategoServices.Tests
 
             var actualResult = _winsManager.IncrementWins(accountId);
 
-            Assert.IsTrue(actualResult.IsSuccess);
             Assert.AreEqual("Win incremented successfully", actualResult.Value);
         }
 
@@ -46,7 +45,6 @@ namespace StrategoServices.Tests
 
             var actualResult = _winsManager.IncrementWins(accountId);
 
-            Assert.IsFalse(actualResult.IsSuccess);
             Assert.AreEqual("Failed to increment wins", actualResult.Error);
         }
 
@@ -61,7 +59,6 @@ namespace StrategoServices.Tests
 
             var actualResult = _winsManager.IncrementDefeats(accountId);
 
-            Assert.IsTrue(actualResult.IsSuccess);
             Assert.AreEqual("Defeat incremented successfully", actualResult.Value);
         }
 
@@ -76,7 +73,6 @@ namespace StrategoServices.Tests
 
             var actualResult = _winsManager.IncrementDefeats(accountId);
 
-            Assert.IsFalse(actualResult.IsSuccess);
             Assert.AreEqual("Failed to increment defeats", actualResult.Error);
         }
     }

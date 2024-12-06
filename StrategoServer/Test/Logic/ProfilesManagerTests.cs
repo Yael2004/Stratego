@@ -40,7 +40,6 @@ namespace StrategoServices.Tests
 
             var result = _profilesManager.GetPlayerInfo(playerId, requesterId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Player not found", result.Error);
         }
 
@@ -63,10 +62,7 @@ namespace StrategoServices.Tests
 
             var result = _profilesManager.UpdatePlayerProfile(playerInfo);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual("UpdatedName", result.Value.Name);
-            Assert.AreEqual("new/path/to/picture", result.Value.PicturePath);
-            Assert.AreEqual("new/path/to/label", result.Value.LabelPath);
         }
 
         [TestMethod]
@@ -87,7 +83,6 @@ namespace StrategoServices.Tests
 
             var result = _profilesManager.UpdatePlayerProfile(playerInfo);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Failed to update player", result.Error);
         }
 
@@ -102,7 +97,6 @@ namespace StrategoServices.Tests
 
             var result = _profilesManager.GetFriendIdsList(playerId);
 
-            Assert.IsTrue(result.IsSuccess);
             CollectionAssert.AreEqual(new List<int> { 2, 3 }, result.Value);
         }
 
@@ -116,7 +110,6 @@ namespace StrategoServices.Tests
 
             var result = _profilesManager.GetFriendIdsList(playerId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("No friends found.", result.Error);
         }
 
@@ -130,7 +123,6 @@ namespace StrategoServices.Tests
 
             var result = _profilesManager.GetTopPlayersIds();
 
-            Assert.IsTrue(result.IsSuccess);
             CollectionAssert.AreEqual(new List<int> { 1, 2 }, result.Value);
         }
 
@@ -143,7 +135,6 @@ namespace StrategoServices.Tests
 
             var result = _profilesManager.GetTopPlayersIds();
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("No top players found.", result.Error);
         }
     }

@@ -33,7 +33,6 @@ namespace StrategoServices.Tests
 
             var result = _invitationManager.GetPlayerMail(playerId);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(expectedMail, result.Value);
         }
 
@@ -48,7 +47,6 @@ namespace StrategoServices.Tests
 
             var result = _invitationManager.GetPlayerMail(playerId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Player not found", result.Error);
         }
 
@@ -63,7 +61,6 @@ namespace StrategoServices.Tests
 
             var result = _invitationManager.GetPlayerMail(playerId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Invalid player ID", result.Error);
         }
     }

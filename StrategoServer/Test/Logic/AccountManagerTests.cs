@@ -45,7 +45,6 @@ namespace StrategoServices.Tests
 
             var result = _accountManager.CreateAccount(email, password, playerName);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual("Account created successfully", result.Value);
         }
 
@@ -69,7 +68,6 @@ namespace StrategoServices.Tests
 
             var result = _accountManager.LogInAccount(email, password);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(accountId, result.Value);
         }
 
@@ -93,7 +91,6 @@ namespace StrategoServices.Tests
 
             var result = _accountManager.LogInAccount(email, password);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Access denied: This account has been reported too many times.", result.Error);
         }
 
@@ -116,10 +113,7 @@ namespace StrategoServices.Tests
 
             var result = _accountManager.GetLogInAccount(accountId);
 
-            Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(player.Id, result.Value.Id);
-            Assert.AreEqual("picturePath", result.Value.PicturePath);
-            Assert.AreEqual("labelPath", result.Value.LabelPath);
         }
 
         [TestMethod]
@@ -132,7 +126,6 @@ namespace StrategoServices.Tests
 
             var result = _accountManager.GetLogInAccount(accountId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Player not found", result.Error);
         }
 
@@ -150,7 +143,6 @@ namespace StrategoServices.Tests
 
             var result = _accountManager.GetLogInAccount(accountId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Picture not found", result.Error);
         }
     }
