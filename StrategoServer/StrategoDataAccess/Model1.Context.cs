@@ -28,7 +28,6 @@ namespace StrategoDataAccess
         }
     
         public virtual DbSet<Account> Account { get; set; }
-        public virtual DbSet<Ban> Ban { get; set; }
         public virtual DbSet<Friend> Friend { get; set; }
         public virtual DbSet<Games> Games { get; set; }
         public virtual DbSet<Label> Label { get; set; }

@@ -17,7 +17,6 @@ namespace StrategoDataAccess
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Player()
         {
-            this.Ban = new HashSet<Ban>();
             this.Friend = new HashSet<Friend>();
             this.Friend1 = new HashSet<Friend>();
             this.Report = new HashSet<Report>();
@@ -31,8 +30,6 @@ namespace StrategoDataAccess
         public int IdLabel { get; set; }
     
         public virtual Account Account { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Ban> Ban { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Friend> Friend { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

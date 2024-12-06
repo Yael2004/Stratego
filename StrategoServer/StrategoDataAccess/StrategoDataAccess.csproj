@@ -77,9 +77,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="AccountRepository.cs" />
-    <Compile Include="Ban.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Friend.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

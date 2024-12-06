@@ -13,15 +13,6 @@
           <Property Name="password" Type="nvarchar" MaxLength="64" Nullable="false" />
           <Property Name="IdAccount" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
-        <EntityType Name="Ban">
-          <Key>
-            <PropertyRef Name="IdBan" />
-          </Key>
-          <Property Name="IdBan" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PlayerId" Type="int" Nullable="false" />
-          <Property Name="StartDate" Type="datetime" Nullable="false" />
-          <Property Name="EndDate" Type="datetime" />
-        </EntityType>
         <EntityType Name="Friend">
           <Key>
             <PropertyRef Name="PlayerId" />
@@ -50,7 +41,7 @@
           <Key>
             <PropertyRef Name="IdPicture" />
           </Key>
-          <Property Name="path" Type="varchar" MaxLength="20" />
+          <Property Name="path" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="IdPicture" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="Player">
@@ -83,18 +74,6 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
-        <Association Name="FK__Ban__PlayerId__44FF419A">
-          <End Role="Player" Type="Self.Player" Multiplicity="1" />
-          <End Role="Ban" Type="Self.Ban" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Player">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Ban">
-              <PropertyRef Name="PlayerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Friend__FriendId__45F365D3">
           <End Role="Player" Type="Self.Player" Multiplicity="1" />
           <End Role="Friend" Type="Self.Friend" Multiplicity="*" />
@@ -236,7 +215,6 @@
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="StrategoModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Ban" EntityType="Self.Ban" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Friend" EntityType="Self.Friend" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Games" EntityType="Self.Games" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Label" EntityType="Self.Label" Schema="dbo" store:Type="Tables" />
@@ -244,10 +222,6 @@
           <EntitySet Name="Player" EntityType="Self.Player" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Report" EntityType="Self.Report" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Ban__PlayerId__44FF419A" Association="Self.FK__Ban__PlayerId__44FF419A">
-            <End Role="Player" EntitySet="Player" />
-            <End Role="Ban" EntitySet="Ban" />
-          </AssociationSet>
           <AssociationSet Name="FK__Friend__FriendId__45F365D3" Association="Self.FK__Friend__FriendId__45F365D3">
             <End Role="Player" EntitySet="Player" />
             <End Role="Friend" EntitySet="Friend" />
@@ -300,16 +274,6 @@
           <NavigationProperty Name="Games" Relationship="Self.FK__Games__AccountId__47DBAE45" FromRole="Account" ToRole="Games" />
           <NavigationProperty Name="Player" Relationship="Self.FK__Player__AccountI__48CFD27E" FromRole="Account" ToRole="Player" />
         </EntityType>
-        <EntityType Name="Ban">
-          <Key>
-            <PropertyRef Name="IdBan" />
-          </Key>
-          <Property Name="IdBan" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PlayerId" Type="Int32" Nullable="false" />
-          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="EndDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Player" Relationship="Self.FK__Ban__PlayerId__44FF419A" FromRole="Ban" ToRole="Player" />
-        </EntityType>
         <EntityType Name="Friend">
           <Key>
             <PropertyRef Name="PlayerId" />
@@ -342,7 +306,7 @@
           <Key>
             <PropertyRef Name="IdPicture" />
           </Key>
-          <Property Name="path" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="path" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IdPicture" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Player" Relationship="Self.FK__Player__PictureI__49C3F6B7" FromRole="Pictures" ToRole="Player" />
           <NavigationProperty Name="Player1" Relationship="Self.FK_Player_Pictures" FromRole="Pictures" ToRole="Player" />
@@ -357,7 +321,6 @@
           <Property Name="AccountId" Type="Int32" Nullable="false" />
           <Property Name="IdLabel" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Account" Relationship="Self.FK__Player__AccountI__48CFD27E" FromRole="Player" ToRole="Account" />
-          <NavigationProperty Name="Ban" Relationship="Self.FK__Ban__PlayerId__44FF419A" FromRole="Player" ToRole="Ban" />
           <NavigationProperty Name="Friend" Relationship="Self.FK__Friend__FriendId__45F365D3" FromRole="Player" ToRole="Friend" />
           <NavigationProperty Name="Friend1" Relationship="Self.FK__Friend__PlayerId__46E78A0C" FromRole="Player" ToRole="Friend" />
           <NavigationProperty Name="Label" Relationship="Self.FK_Player_Label" FromRole="Player" ToRole="Label" />
@@ -409,18 +372,6 @@
             </Principal>
             <Dependent Role="Player">
               <PropertyRef Name="AccountId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Ban__PlayerId__44FF419A">
-          <End Role="Player" Type="Self.Player" Multiplicity="1" />
-          <End Role="Ban" Type="Self.Ban" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Player">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Ban">
-              <PropertyRef Name="PlayerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -510,7 +461,6 @@
         </Association>
         <EntityContainer Name="StrategoEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Account" EntityType="Self.Account" />
-          <EntitySet Name="Ban" EntityType="Self.Ban" />
           <EntitySet Name="Friend" EntityType="Self.Friend" />
           <EntitySet Name="Games" EntityType="Self.Games" />
           <EntitySet Name="Label" EntityType="Self.Label" />
@@ -525,10 +475,6 @@
           <AssociationSet Name="FK__Player__AccountI__48CFD27E" Association="Self.FK__Player__AccountI__48CFD27E">
             <End Role="Account" EntitySet="Account" />
             <End Role="Player" EntitySet="Player" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Ban__PlayerId__44FF419A" Association="Self.FK__Ban__PlayerId__44FF419A">
-            <End Role="Player" EntitySet="Player" />
-            <End Role="Ban" EntitySet="Ban" />
           </AssociationSet>
           <AssociationSet Name="FK__Friend__FriendId__45F365D3" Association="Self.FK__Friend__FriendId__45F365D3">
             <End Role="Player" EntitySet="Player" />
@@ -612,16 +558,6 @@
                 <ScalarProperty Name="mail" ColumnName="mail" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="IdAccount" ColumnName="IdAccount" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Ban">
-            <EntityTypeMapping TypeName="StrategoModel.Ban">
-              <MappingFragment StoreEntitySet="Ban">
-                <ScalarProperty Name="IdBan" ColumnName="IdBan" />
-                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
