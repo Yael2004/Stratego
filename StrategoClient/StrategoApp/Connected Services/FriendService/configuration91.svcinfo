@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="XrKYNIaFt2R6X82HSPbYdYclCQNX47Zl53qIjuXjGQs=">
+<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="Qejxky+xae8qCQX8XIoIAKDxhqIPz2EQ0l3CsK19p2g=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="netTcpBinding" name="NetTcpBinding_IFriendOperationsService">
       <properties>
@@ -357,10 +357,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="NetTcpBinding_IFriendOperationsService" contract="FriendService.IFriendOperationsService" bindingType="netTcpBinding" address="net.tcp://localhost:1014/FriendsService/FriendsService" bindingConfiguration="NetTcpBinding_IFriendOperationsService">
+    <endpoint name="NetTcpBinding_IFriendOperationsService" contract="FriendService.IFriendOperationsService" bindingType="netTcpBinding" address="net.tcp://192.168.137.1:1014/FriendsService/FriendsService" bindingConfiguration="NetTcpBinding_IFriendOperationsService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://localhost:1014/FriendsService/FriendsService</serializedValue>
+          <serializedValue>net.tcp://192.168.137.1:1014/FriendsService/FriendsService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -442,10 +442,10 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_ISendRoomInvitationService" contract="FriendService.ISendRoomInvitationService" bindingType="netTcpBinding" address="net.tcp://localhost:1014/FriendsService/RoomInvitationService" bindingConfiguration="NetTcpBinding_ISendRoomInvitationService">
+    <endpoint name="NetTcpBinding_ISendRoomInvitationService" contract="FriendService.ISendRoomInvitationService" bindingType="netTcpBinding" address="net.tcp://192.168.137.1:1014/FriendsService/RoomInvitationService" bindingConfiguration="NetTcpBinding_ISendRoomInvitationService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://localhost:1014/FriendsService/RoomInvitationService</serializedValue>
+          <serializedValue>net.tcp://192.168.137.1:1014/FriendsService/RoomInvitationService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -527,10 +527,10 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_IPlayerFriendRequestService" contract="FriendService.IPlayerFriendRequestService" bindingType="netTcpBinding" address="net.tcp://localhost:1014/FriendsService/FriendRequestService" bindingConfiguration="NetTcpBinding_IPlayerFriendRequestService">
+    <endpoint name="NetTcpBinding_IPlayerFriendRequestService" contract="FriendService.IPlayerFriendRequestService" bindingType="netTcpBinding" address="net.tcp://192.168.137.1:1014/FriendsService/FriendRequestService" bindingConfiguration="NetTcpBinding_IPlayerFriendRequestService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://localhost:1014/FriendsService/FriendRequestService</serializedValue>
+          <serializedValue>net.tcp://192.168.137.1:1014/FriendsService/FriendRequestService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

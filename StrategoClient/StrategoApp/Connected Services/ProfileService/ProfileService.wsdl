@@ -62,11 +62,11 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://localhost:2022/ProfileService?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://localhost:2022/ProfileService?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:2022/ProfileService?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" />
-      <xsd:import schemaLocation="http://localhost:2022/ProfileService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
-      <xsd:import schemaLocation="http://localhost:2022/ProfileService?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://192.168.137.1:2022/ProfileService?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://192.168.137.1:2022/ProfileService?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://192.168.137.1:2022/ProfileService?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" />
+      <xsd:import schemaLocation="http://192.168.137.1:2022/ProfileService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
+      <xsd:import schemaLocation="http://192.168.137.1:2022/ProfileService?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IProfileDataService_GetPlayerStatistics_InputMessage">
@@ -306,33 +306,33 @@
   </wsdl:binding>
   <wsdl:service name="ProfileService">
     <wsdl:port name="NetTcpBinding_IProfileDataService" binding="tns:NetTcpBinding_IProfileDataService">
-      <soap12:address location="net.tcp://localhost:1012/ProfileService/ProfileDataService" />
+      <soap12:address location="net.tcp://192.168.137.1:1012/ProfileService/ProfileDataService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:1012/ProfileService/ProfileDataService</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.137.1:1012/ProfileService/ProfileDataService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IProfileModifierService" binding="tns:NetTcpBinding_IProfileModifierService">
-      <soap12:address location="net.tcp://localhost:1012/ProfileService/ProfileModifierService" />
+      <soap12:address location="net.tcp://192.168.137.1:1012/ProfileService/ProfileModifierService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:1012/ProfileService/ProfileModifierService</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.137.1:1012/ProfileService/ProfileModifierService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IPlayerFriendsListService" binding="tns:NetTcpBinding_IPlayerFriendsListService">
-      <soap12:address location="net.tcp://localhost:1012/ProfileService/PlayerFriendsListService" />
+      <soap12:address location="net.tcp://192.168.137.1:1012/ProfileService/PlayerFriendsListService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:1012/ProfileService/PlayerFriendsListService</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.137.1:1012/ProfileService/PlayerFriendsListService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IOtherProfileDataService" binding="tns:NetTcpBinding_IOtherProfileDataService">
-      <soap12:address location="net.tcp://localhost:1012/ProfileService/OtherProfileDataService" />
+      <soap12:address location="net.tcp://192.168.137.1:1012/ProfileService/OtherProfileDataService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:1012/ProfileService/OtherProfileDataService</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.137.1:1012/ProfileService/OtherProfileDataService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_ITopPlayersListService" binding="tns:NetTcpBinding_ITopPlayersListService">
-      <soap12:address location="net.tcp://localhost:1012/ProfileService/TopPlayersListService" />
+      <soap12:address location="net.tcp://192.168.137.1:1012/ProfileService/TopPlayersListService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:1012/ProfileService/TopPlayersListService</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.137.1:1012/ProfileService/TopPlayersListService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

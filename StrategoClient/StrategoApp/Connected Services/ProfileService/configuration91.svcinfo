@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="RNTIOR9yJtIsD2fUn4hXuarp34KwtUJ+11TTqDclvoE=">
+<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="hsWN5yosFVI9ZkqQlRsbAL41KXmsH7v9Kw9VXkeCVPw=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="netTcpBinding" name="NetTcpBinding_IProfileDataService">
       <properties>
@@ -593,10 +593,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="NetTcpBinding_IProfileDataService" contract="ProfileService.IProfileDataService" bindingType="netTcpBinding" address="net.tcp://localhost:1012/ProfileService/ProfileDataService" bindingConfiguration="NetTcpBinding_IProfileDataService">
+    <endpoint name="NetTcpBinding_IProfileDataService" contract="ProfileService.IProfileDataService" bindingType="netTcpBinding" address="net.tcp://192.168.137.1:1012/ProfileService/ProfileDataService" bindingConfiguration="NetTcpBinding_IProfileDataService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://localhost:1012/ProfileService/ProfileDataService</serializedValue>
+          <serializedValue>net.tcp://192.168.137.1:1012/ProfileService/ProfileDataService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -678,10 +678,10 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_IProfileModifierService" contract="ProfileService.IProfileModifierService" bindingType="netTcpBinding" address="net.tcp://localhost:1012/ProfileService/ProfileModifierService" bindingConfiguration="NetTcpBinding_IProfileModifierService">
+    <endpoint name="NetTcpBinding_IProfileModifierService" contract="ProfileService.IProfileModifierService" bindingType="netTcpBinding" address="net.tcp://192.168.137.1:1012/ProfileService/ProfileModifierService" bindingConfiguration="NetTcpBinding_IProfileModifierService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://localhost:1012/ProfileService/ProfileModifierService</serializedValue>
+          <serializedValue>net.tcp://192.168.137.1:1012/ProfileService/ProfileModifierService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -763,10 +763,10 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_IPlayerFriendsListService" contract="ProfileService.IPlayerFriendsListService" bindingType="netTcpBinding" address="net.tcp://localhost:1012/ProfileService/PlayerFriendsListService" bindingConfiguration="NetTcpBinding_IPlayerFriendsListService">
+    <endpoint name="NetTcpBinding_IPlayerFriendsListService" contract="ProfileService.IPlayerFriendsListService" bindingType="netTcpBinding" address="net.tcp://192.168.137.1:1012/ProfileService/PlayerFriendsListService" bindingConfiguration="NetTcpBinding_IPlayerFriendsListService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://localhost:1012/ProfileService/PlayerFriendsListService</serializedValue>
+          <serializedValue>net.tcp://192.168.137.1:1012/ProfileService/PlayerFriendsListService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -848,10 +848,10 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_IOtherProfileDataService" contract="ProfileService.IOtherProfileDataService" bindingType="netTcpBinding" address="net.tcp://localhost:1012/ProfileService/OtherProfileDataService" bindingConfiguration="NetTcpBinding_IOtherProfileDataService">
+    <endpoint name="NetTcpBinding_IOtherProfileDataService" contract="ProfileService.IOtherProfileDataService" bindingType="netTcpBinding" address="net.tcp://192.168.137.1:1012/ProfileService/OtherProfileDataService" bindingConfiguration="NetTcpBinding_IOtherProfileDataService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://localhost:1012/ProfileService/OtherProfileDataService</serializedValue>
+          <serializedValue>net.tcp://192.168.137.1:1012/ProfileService/OtherProfileDataService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -933,10 +933,10 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_ITopPlayersListService" contract="ProfileService.ITopPlayersListService" bindingType="netTcpBinding" address="net.tcp://localhost:1012/ProfileService/TopPlayersListService" bindingConfiguration="NetTcpBinding_ITopPlayersListService">
+    <endpoint name="NetTcpBinding_ITopPlayersListService" contract="ProfileService.ITopPlayersListService" bindingType="netTcpBinding" address="net.tcp://192.168.137.1:1012/ProfileService/TopPlayersListService" bindingConfiguration="NetTcpBinding_ITopPlayersListService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://localhost:1012/ProfileService/TopPlayersListService</serializedValue>
+          <serializedValue>net.tcp://192.168.137.1:1012/ProfileService/TopPlayersListService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

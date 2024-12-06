@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="37b696d8-fa90-4277-8d17-624e9c41bd62" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="f9bcd8f8-99d1-4e3c-a5ed-d936daf2f425" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,16 +19,16 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:2024/FriendsService" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://192.168.137.1:2024/FriendsService" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="FriendsService.xsd" MetadataType="Schema" ID="075de57a-4233-4e71-ad88-24096e0f67e2" SourceId="1" SourceUrl="http://localhost:2024/FriendsService?xsd=xsd0" />
-    <MetadataFile FileName="FriendsService1.xsd" MetadataType="Schema" ID="7e655cf7-879b-4866-9662-9d4648e90382" SourceId="1" SourceUrl="http://localhost:2024/FriendsService?xsd=xsd1" />
-    <MetadataFile FileName="FriendsService2.xsd" MetadataType="Schema" ID="17cc1314-b8d3-4047-9f5d-760919b2a275" SourceId="1" SourceUrl="http://localhost:2024/FriendsService?xsd=xsd2" />
-    <MetadataFile FileName="FriendsService3.xsd" MetadataType="Schema" ID="e5e82dea-9f00-43f1-94f1-6694cac48bd9" SourceId="1" SourceUrl="http://localhost:2024/FriendsService?xsd=xsd3" />
-    <MetadataFile FileName="FriendsService4.xsd" MetadataType="Schema" ID="1b44d6b0-1a98-4d29-aba6-0947cbfac341" SourceId="1" SourceUrl="http://localhost:2024/FriendsService?xsd=xsd4" />
-    <MetadataFile FileName="FriendsService.disco" MetadataType="Disco" ID="0b8db824-f59f-4f40-a4ca-9ee49168cd8c" SourceId="1" SourceUrl="http://localhost:2024/FriendsService?disco" />
-    <MetadataFile FileName="FriendOperationsService.wsdl" MetadataType="Wsdl" ID="b9b86d57-bf6b-46f7-b10d-11f302ec103e" SourceId="1" SourceUrl="http://localhost:2024/FriendsService?wsdl" />
+    <MetadataFile FileName="FriendsService.xsd" MetadataType="Schema" ID="d3af70ad-6b27-40d0-b63c-9bcf8f3bd71a" SourceId="1" SourceUrl="http://192.168.137.1:2024/FriendsService?xsd=xsd2" />
+    <MetadataFile FileName="FriendsService1.xsd" MetadataType="Schema" ID="c8a2b47d-5f18-49c3-9d50-ed4845ab8520" SourceId="1" SourceUrl="http://192.168.137.1:2024/FriendsService?xsd=xsd1" />
+    <MetadataFile FileName="FriendsService2.xsd" MetadataType="Schema" ID="a7c8d8a2-31cf-44ed-8829-ba6157229028" SourceId="1" SourceUrl="http://192.168.137.1:2024/FriendsService?xsd=xsd0" />
+    <MetadataFile FileName="FriendsService.disco" MetadataType="Disco" ID="3b4a2490-29a3-49f0-a99e-1fe167720e4a" SourceId="1" SourceUrl="http://192.168.137.1:2024/FriendsService?disco" />
+    <MetadataFile FileName="FriendsService3.xsd" MetadataType="Schema" ID="bbc5349d-ed08-4713-a7d3-6d1830000ff1" SourceId="1" SourceUrl="http://192.168.137.1:2024/FriendsService?xsd=xsd4" />
+    <MetadataFile FileName="FriendOperationsService.wsdl" MetadataType="Wsdl" ID="04d7b90d-f65c-4e11-8a21-7cbeacd04511" SourceId="1" SourceUrl="http://192.168.137.1:2024/FriendsService?wsdl" />
+    <MetadataFile FileName="FriendsService4.xsd" MetadataType="Schema" ID="c930cf8d-4b81-460b-9b4f-c5bd5e2ac6f2" SourceId="1" SourceUrl="http://192.168.137.1:2024/FriendsService?xsd=xsd3" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

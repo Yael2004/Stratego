@@ -26,10 +26,10 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://localhost:2025/GameService?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://localhost:2025/GameService?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:2025/GameService?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" />
-      <xsd:import schemaLocation="http://localhost:2025/GameService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
+      <xsd:import schemaLocation="http://192.168.137.1:2025/GameService?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://192.168.137.1:2025/GameService?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://192.168.137.1:2025/GameService?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" />
+      <xsd:import schemaLocation="http://192.168.137.1:2025/GameService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IGameService_JoinGameSession_InputMessage">
@@ -220,15 +220,15 @@
   </wsdl:binding>
   <wsdl:service name="GameService">
     <wsdl:port name="NetTcpBinding_IGameService" binding="tns:NetTcpBinding_IGameService">
-      <soap12:address location="net.tcp://localhost:1015/GameService/GameService" />
+      <soap12:address location="net.tcp://192.168.137.1:1015/GameService/GameService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:1015/GameService/GameService</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.137.1:1015/GameService/GameService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_ICreateGameService" binding="tns:NetTcpBinding_ICreateGameService">
-      <soap12:address location="net.tcp://localhost:1015/GameService/CreateGameService" />
+      <soap12:address location="net.tcp://192.168.137.1:1015/GameService/CreateGameService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:1015/GameService/CreateGameService</wsa10:Address>
+        <wsa10:Address>net.tcp://192.168.137.1:1015/GameService/CreateGameService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>
