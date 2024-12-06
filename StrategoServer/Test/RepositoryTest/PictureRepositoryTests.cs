@@ -18,7 +18,7 @@ namespace StrategoDataAccess.Tests
         }
 
         [TestMethod]
-        public void GetPictureById_ShouldReturnPicture_WhenPictureExists()
+        public void Test_GetPictureById_ShouldReturnPicture_WhenPictureExists()
         {
             var pictureId = 1;
             var expectedPicture = new Pictures { IdPicture = pictureId, path = "Test Picture" };
@@ -34,7 +34,7 @@ namespace StrategoDataAccess.Tests
         }
 
         [TestMethod]
-        public void GetPictureById_ShouldReturnFailure_WhenPictureDoesNotExist()
+        public void Test_GetPictureById_ShouldReturnFailure_WhenPictureDoesNotExist()
         {
             var pictureId = 999;
 
@@ -49,7 +49,7 @@ namespace StrategoDataAccess.Tests
         }
 
         [TestMethod]
-        public void GetPictureById_ShouldThrowException_WhenUnexpectedErrorOccurs()
+        public void Test_GetPictureById_ShouldThrowException_WhenUnexpectedErrorOccurs()
         {
             var pictureId = 1;
 
@@ -62,7 +62,7 @@ namespace StrategoDataAccess.Tests
         }
 
         [TestMethod]
-        public void GetPictureById_ShouldThrowException_WhenDatabaseErrorOccurs()
+        public void Test_GetPictureById_ShouldThrowException_WhenDatabaseErrorOccurs()
         {
             var pictureId = 1;
 

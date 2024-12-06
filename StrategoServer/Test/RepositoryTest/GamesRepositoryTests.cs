@@ -26,9 +26,8 @@ namespace StrategoDataAccess.Tests
         }
 
         [TestMethod]
-        public void IncrementWonGames_ShouldReturnSuccess_WhenGameFound()
+        public void Test_IncrementWonGames_ShouldReturnSuccess_WhenGameFound()
         {
-            // Arrange
             int accountId = 1;
             var game = new Games { AccountId = accountId, WonGames = 5, DeafeatGames = 3 };
 
@@ -39,17 +38,15 @@ namespace StrategoDataAccess.Tests
             _mockGamesDbSet.As<IQueryable<Games>>().Setup(m => m.ElementType).Returns(gameList.ElementType);
             _mockGamesDbSet.As<IQueryable<Games>>().Setup(m => m.GetEnumerator()).Returns(gameList.GetEnumerator());
 
-            _mockContext.Setup(c => c.SaveChanges()).Returns(1);  // Simulamos que se guardan los cambios correctamente
+            _mockContext.Setup(c => c.SaveChanges()).Returns(1);
 
-            // Act
             var result = _gamesRepository.IncrementWonGames(accountId);
 
-            // Assert
-            Assert.AreEqual(5, game.WonGames); // Verificamos que el contador haya aumentado
+            Assert.AreEqual(5, game.WonGames);
         }
 
         [TestMethod]
-        public void GetGameStatisticsByAccountId_ShouldReturnFailure_WhenGameNotFound()
+        public void Test_GetGameStatisticsByAccountId_ShouldReturnFailure_WhenGameNotFound()
         {
             int accountId = 1;
             var gameList = new List<Games>().AsQueryable();
@@ -66,7 +63,7 @@ namespace StrategoDataAccess.Tests
         }
 
         [TestMethod]
-        public void IncrementWonGames_ShouldReturnFailure_WhenGameNotFound()
+        public void Test_IncrementWonGames_ShouldReturnFailure_WhenGameNotFound()
         {
             int accountId = 1;
             var gameList = new List<Games>().AsQueryable();
@@ -83,7 +80,7 @@ namespace StrategoDataAccess.Tests
         }
 
         [TestMethod]
-        public void IncrementDeafeatGames_ShouldReturnFailure_WhenGameNotFound()
+        public void Test_IncrementDeafeatGames_ShouldReturnFailure_WhenGameNotFound()
         {
             int accountId = 1;
             var gameList = new List<Games>().AsQueryable();

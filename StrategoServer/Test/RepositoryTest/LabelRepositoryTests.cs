@@ -19,7 +19,7 @@ namespace StrategoDataAccess.Tests
         }
 
         [TestMethod]
-        public void GetLabelById_ShouldReturnLabel_WhenLabelExists()
+        public void Test_GetLabelById_ShouldReturnLabel_WhenLabelExists()
         {
             var labelId = 1;
             var expectedLabel = new Label { IdLabel = labelId, Path = "Test Label" };
@@ -35,7 +35,7 @@ namespace StrategoDataAccess.Tests
         }
 
         [TestMethod]
-        public void GetLabelById_ShouldReturnFailure_WhenLabelDoesNotExist()
+        public void Test_GetLabelById_ShouldReturnFailure_WhenLabelDoesNotExist()
         {
             var labelId = 999;
 
@@ -50,7 +50,7 @@ namespace StrategoDataAccess.Tests
         }
 
         [TestMethod]
-        public void GetLabelById_ShouldReturnFailure_WhenUnexpectedErrorOccurs()
+        public void Test_GetLabelById_ShouldReturnFailure_WhenUnexpectedErrorOccurs()
         {
             var labelId = 1;
 
@@ -84,7 +84,7 @@ namespace StrategoDataAccess.Tests
         }
 
         [TestMethod]
-        public void GetLabelById_ShouldThrowException_WhenDatabaseErrorOccurs()
+        public void Test_GetLabelById_ShouldThrowException_WhenDatabaseErrorOccurs()
         {
             var labelId = 1;
 

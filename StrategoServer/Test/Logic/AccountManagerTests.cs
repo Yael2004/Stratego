@@ -34,9 +34,8 @@ namespace StrategoServices.Tests
         }
 
         [TestMethod]
-        public void CreateAccount_ValidData_ReturnsSuccess()
+        public void Test_CreateAccount_ValidData_ReturnsSuccess()
         {
-            // Arrange
             var email = "test@example.com";
             var password = "password123";
             var playerName = "TestPlayer";
@@ -44,18 +43,15 @@ namespace StrategoServices.Tests
             _mockAccountRepository.Setup(x => x.CreateAccount(email, password, playerName))
                 .Returns(Result<string>.Success("Account created successfully"));
 
-            // Act
             var result = _accountManager.CreateAccount(email, password, playerName);
 
-            // Assert
             Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual("Account created successfully", result.Value);
         }
 
         [TestMethod]
-        public void LogInAccount_ValidCredentials_ReturnsAccountId()
+        public void Test_LogInAccount_ValidCredentials_ReturnsAccountId()
         {
-            // Arrange
             var email = "test@example.com";
             var password = "password123";
             var accountId = 1;
@@ -71,18 +67,15 @@ namespace StrategoServices.Tests
             _mockPlayerRepository.Setup(x => x.GetReportCount(playerId))
                 .Returns(Result<int>.Success(reportCount));
 
-            // Act
             var result = _accountManager.LogInAccount(email, password);
 
-            // Assert
             Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(accountId, result.Value);
         }
 
         [TestMethod]
-        public void LogInAccount_TooManyReports_ReturnsFailure()
+        public void Test_LogInAccount_TooManyReports_ReturnsFailure()
         {
-            // Arrange
             var email = "test@example.com";
             var password = "password123";
             var accountId = 1;
@@ -98,18 +91,15 @@ namespace StrategoServices.Tests
             _mockPlayerRepository.Setup(x => x.GetReportCount(playerId))
                 .Returns(Result<int>.Success(reportCount));
 
-            // Act
             var result = _accountManager.LogInAccount(email, password);
 
-            // Assert
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Access denied: This account has been reported too many times.", result.Error);
         }
 
         [TestMethod]
-        public void GetLogInAccount_ValidAccount_ReturnsPlayerDTO()
+        public void Test_GetLogInAccount_ValidAccount_ReturnsPlayerDTO()
         {
-            // Arrange
             var accountId = 1;
             var player = new Player { Id = 2, Name = "TestPlayer", AccountId = accountId, PictureId = 1, IdLabel = 1 };
             var picture = new Pictures { path = "picturePath" };
@@ -124,10 +114,8 @@ namespace StrategoServices.Tests
             _mockLabelRepository.Setup(x => x.GetLabelById(player.IdLabel))
                 .Returns(Result<Label>.Success(label));
 
-            // Act
             var result = _accountManager.GetLogInAccount(accountId);
 
-            // Assert
             Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual(player.Id, result.Value.Id);
             Assert.AreEqual("picturePath", result.Value.PicturePath);
@@ -135,26 +123,22 @@ namespace StrategoServices.Tests
         }
 
         [TestMethod]
-        public void GetLogInAccount_PlayerNotFound_ReturnsFailure()
+        public void Test_GetLogInAccount_PlayerNotFound_ReturnsFailure()
         {
-            // Arrange
             var accountId = 1;
 
             _mockPlayerRepository.Setup(x => x.GetPlayerByAccountId(accountId))
                 .Returns(Result<Player>.Failure("Player not found"));
 
-            // Act
             var result = _accountManager.GetLogInAccount(accountId);
 
-            // Assert
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Player not found", result.Error);
         }
 
         [TestMethod]
-        public void GetLogInAccount_PictureNotFound_ReturnsFailure()
+        public void Test_GetLogInAccount_PictureNotFound_ReturnsFailure()
         {
-            // Arrange
             var accountId = 1;
             var player = new Player { Id = 2, Name = "TestPlayer", AccountId = accountId, PictureId = 1, IdLabel = 1 };
 
@@ -164,10 +148,8 @@ namespace StrategoServices.Tests
             _mockPictureRepository.Setup(x => x.GetPictureById(player.PictureId))
                 .Returns(Result<Pictures>.Failure("Picture not found"));
 
-            // Act
             var result = _accountManager.GetLogInAccount(accountId);
 
-            // Assert
             Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Picture not found", result.Error);
         }

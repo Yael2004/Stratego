@@ -22,18 +22,15 @@ namespace StrategoDataAccess.Tests
             _mockFriendSet = new Mock<DbSet<Friend>>();
             _mockPlayerSet = new Mock<DbSet<Player>>();
 
-            // Setup the mock context to return the mock sets
             _mockContext.Setup(c => c.Friend).Returns(_mockFriendSet.Object);
             _mockContext.Setup(c => c.Player).Returns(_mockPlayerSet.Object);
 
-            // Instantiate the repository with the mocked context
             _repository = new FriendsRepository();
         }
 
         [TestMethod]
-        public void SendFriendRequest_FriendRequestAlreadyExists_ShouldReturnFailure()
+        public void Test_SendFriendRequest_FriendRequestAlreadyExists_ShouldReturnFailure()
         {
-            // Arrange
             int requesterId = 1;
             int destinationId = 2;
 
@@ -51,17 +48,14 @@ namespace StrategoDataAccess.Tests
             _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.ElementType).Returns(data.ElementType);
             _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
 
-            // Act
             var result = _repository.SendFriendRequest(destinationId, requesterId);
 
-            // Assert
             Assert.IsFalse(result.IsSuccess);
         }
 
         [TestMethod]
-        public void AcceptFriendRequest_RequestNotFound_ShouldReturnFailure()
+        public void Test_AcceptFriendRequest_RequestNotFound_ShouldReturnFailure()
         {
-            // Arrange
             int requesterId = 1;
             int destinationId = 2;
 
@@ -72,18 +66,15 @@ namespace StrategoDataAccess.Tests
             _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.ElementType).Returns(data.ElementType);
             _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
 
-            // Act
             var result = _repository.AcceptFriendRequest(destinationId, requesterId);
 
-            // Assert
             Assert.AreEqual("Friend request not found.", result.Error);
             Assert.IsFalse(result.IsSuccess);
         }
 
         [TestMethod]
-        public void DeclineFriendRequest_RequestNotFound_ShouldReturnFailure()
+        public void Test_DeclineFriendRequest_RequestNotFound_ShouldReturnFailure()
         {
-            // Arrange
             int requesterId = 1;
             int destinationId = 2;
 
@@ -94,18 +85,15 @@ namespace StrategoDataAccess.Tests
             _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.ElementType).Returns(data.ElementType);
             _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
 
-            // Act
             var result = _repository.DeclineFriendRequest(destinationId, requesterId);
 
-            // Assert
             Assert.AreEqual("Friend request not found.", result.Error);
             Assert.IsFalse(result.IsSuccess);
         }
 
         [TestMethod]
-        public void RemoveFriend_FriendshipNotFound_ShouldReturnFailure()
+        public void Test_RemoveFriend_FriendshipNotFound_ShouldReturnFailure()
         {
-            // Arrange
             int requesterId = 1;
             int destinationId = 2;
 
@@ -116,18 +104,15 @@ namespace StrategoDataAccess.Tests
             _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.ElementType).Returns(data.ElementType);
             _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
 
-            // Act
             var result = _repository.RemoveFriend(destinationId, requesterId);
 
-            // Assert
             Assert.AreEqual("Friendship not found.", result.Error);
             Assert.IsFalse(result.IsSuccess);
         }
 
         [TestMethod]
-        public void GetPendingFriendRequests_NoPendingRequests_ShouldReturnFailure()
+        public void Test_GetPendingFriendRequests_NoPendingRequests_ShouldReturnFailure()
         {
-            // Arrange
             int playerId = 1;
 
             var data = new List<Friend>().AsQueryable();
@@ -142,10 +127,8 @@ namespace StrategoDataAccess.Tests
             _mockPlayerSet.As<IQueryable<Player>>().Setup(m => m.ElementType).Returns(playerData.ElementType);
             _mockPlayerSet.As<IQueryable<Player>>().Setup(m => m.GetEnumerator()).Returns(playerData.GetEnumerator());
 
-            // Act
             var result = _repository.GetPendingFriendRequests(playerId);
 
-            // Assert
             Assert.AreEqual("No pending friend requests found.", result.Error);
             Assert.IsFalse(result.IsSuccess);
         }
