@@ -167,11 +167,33 @@ namespace StrategoApp.ViewModel
             PlayerId = response.PlayerInfo.PlayerInfo.Id;
             Username = response.PlayerInfo.PlayerInfo.Name;
             ProfilePicture = response.PlayerInfo.PlayerInfo.PicturePath;
-            PlayerTag = response.PlayerInfo.PlayerInfo.LabelPath;
             GamesWon = response.PlayerInfo.PlayerStatistics.WonGames;
             GamesLost = response.PlayerInfo.PlayerStatistics.LostGames;
             GamesPlayed = response.PlayerInfo.PlayerStatistics.TotalGames;
             IsFriend = response.PlayerInfo.IsFriend;
+
+            switch (response.PlayerInfo.PlayerInfo.LabelPath)
+            {
+                case "Label1":
+                    PlayerTag = Properties.Resources.NovicePlayer_Label;
+                    break;
+
+                case "Label2":
+                    PlayerTag = Properties.Resources.ProPlayer_Label;
+                    break;
+
+                case "Label3":
+                    PlayerTag = Properties.Resources.Apprentice_Label;
+                    break;
+
+                case "Label4":
+                    PlayerTag = Properties.Resources.Competitive_Label;
+                    break;
+
+                default:
+                    PlayerTag = Properties.Resources.NovicePlayer_Label;
+                    break;
+            }
         }
 
         public async void LoadPlayerInfo(int playerId, int accountId)

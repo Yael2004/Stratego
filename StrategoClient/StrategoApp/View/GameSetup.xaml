@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:StrategoApp.ViewModel"
              xmlns:model="clr-namespace:StrategoApp.Model"
+             xmlns:res="clr-namespace:StrategoApp.Properties"
              xmlns:helpers="clr-namespace:StrategoApp.Helpers"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=viewModel:GameSetupViewModel}" 
@@ -24,8 +25,13 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Acomoda tus fichas en el tablero" FontSize="18" FontWeight="Bold"
-                   Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,10"/>
+        <TextBlock Grid.Row="0" Text="{x:Static res:Resources.PlacePiecesOnBoard_Label}" 
+                   FontSize="18" 
+                   FontWeight="Bold"
+                   Foreground="White" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,10,0,10"
+                   FontFamily="{StaticResource AugustaFont}"/>
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" Margin="10">
             <Border Background="#333333" Padding="5" CornerRadius="10" BorderBrush="#555555" BorderThickness="2">

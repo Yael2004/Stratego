@@ -35,15 +35,14 @@ namespace StrategoApp.ViewModel
         private bool _isReportVisible;
         private bool _isReportButtonVisible;
         private bool _isPlayAvalible;
-        private bool _isEnable;
         private bool _isReportedMessageVisible;
         private bool _isServiceErrorVisible;
 
         private ObservableCollection<string> _messages;
         
-        private RoomServiceClient _roomServiceClient;
-        private OtherProfileDataServiceClient _otherProfileDataService;
-        private CreateGameServiceClient _gameServiceClient;
+        private readonly RoomServiceClient _roomServiceClient;
+        private readonly OtherProfileDataServiceClient _otherProfileDataService;
+        private readonly CreateGameServiceClient _gameServiceClient;
         
         private readonly GameViewModel _gameViewModel;
 
@@ -164,16 +163,6 @@ namespace StrategoApp.ViewModel
             set
             {
                 _isPlayAvalible = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsEnable
-        {
-            get { return _isEnable; }
-            set
-            {
-                _isEnable = value;
                 OnPropertyChanged();
             }
         }
@@ -372,7 +361,6 @@ namespace StrategoApp.ViewModel
         public void ToggleReportVisibility(object obj)
         {
             _reportMessage = string.Empty;
-            IsEnable = !IsEnable;
             IsReportVisible = !IsReportVisible;
         }
 

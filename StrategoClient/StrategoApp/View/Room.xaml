@@ -14,10 +14,10 @@
     </UserControl.Resources>
 
     <Viewbox Stretch="Fill">
-        <Grid Background="{StaticResource RoomBackground}" Width="800" Height="450" IsEnabled="{Binding IsEnable}">
+        <Grid Background="{StaticResource RoomBackground}" Width="800" Height="450">
             <Rectangle Fill="#C0000000" />
             <Rectangle Fill="#80000000" Visibility="{Binding IsReportVisible, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="1" IsHitTestVisible="True"/>
-            <Rectangle Fill="#80000000" Visibility="{Binding IsReportVisible, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="3" IsHitTestVisible="True"/>
+            <Rectangle Fill="#80000000" Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="3" IsHitTestVisible="True"/>
 
             <Grid Height="50" VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>

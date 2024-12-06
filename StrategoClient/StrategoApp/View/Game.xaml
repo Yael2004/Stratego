@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModel="clr-namespace:StrategoApp.ViewModel"
+             xmlns:res="clr-namespace:StrategoApp.Properties"
              xmlns:helpers="clr-namespace:StrategoApp.Helpers" 
              d:DataContext="{d:DesignInstance Type=viewModel:GameViewModel}"
              mc:Ignorable="d"
@@ -48,7 +49,7 @@
             </Border>
         </Popup>
 
-        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="148" Width="100">
             <Ellipse Width="50" Height="50">
                 <Ellipse.Fill>
                     <ImageBrush ImageSource="{Binding ProfilePicture}" Stretch="UniformToFill"/>
@@ -60,14 +61,6 @@
                        HorizontalAlignment="Center" 
                        Foreground="{StaticResource DarkViolet}"/>
         </StackPanel>
-
-        <Border Grid.Column="1" Background="Transparent" Width="100">
-            <TextBlock Text="Información de personajes" RenderTransformOrigin="0.5,0.5" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock.RenderTransform>
-                    <RotateTransform Angle="-90"/>
-                </TextBlock.RenderTransform>
-            </TextBlock>
-        </Border>
 
         <Grid Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid>
@@ -96,16 +89,7 @@
             </Grid>
         </Grid>
 
-
-        <Border Grid.Column="3" Background="Transparent" Width="100">
-            <TextBlock Text="Información de personajes" RenderTransformOrigin="0.5,0.5" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock.RenderTransform>
-                    <RotateTransform Angle="90"/>
-                </TextBlock.RenderTransform>
-            </TextBlock>
-        </Border>
-
-        <StackPanel Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Height="148" Width="100">
             <Ellipse Width="50" Height="50">
                 <Ellipse.Fill>
                     <ImageBrush ImageSource="{Binding OpponentProfilePicture}" Stretch="UniformToFill"/>
@@ -118,5 +102,31 @@
                        HorizontalAlignment="Center" 
                        Foreground="{StaticResource DarkViolet}"/>
         </StackPanel>
+
+        <Grid Grid.Column="2"
+                Background="{StaticResource SemiTransparent}"
+                Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Width="340"
+                Height="148" Canvas.Left="230" Canvas.Top="146">
+
+            <Border Background="Black" BorderBrush="{StaticResource DarkViolet}" BorderThickness="2" CornerRadius="10" Padding="15">
+                <StackPanel>
+                    <TextBlock Text="{x:Static res:Resources.ServerConnectionLostMessage_Label}"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               FontSize="16"
+                               Margin="0,20,0,20"
+                               Foreground="{StaticResource DarkViolet}"/>
+
+                    <Button Content="{x:Static res:Resources.Accept_Button}"
+                            Command="{Binding ExecuteCloseServiceErrorCommand}"
+                            Style="{StaticResource ButtonVioletStyle}"
+                            Width="100"
+                            HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>

@@ -12,15 +12,19 @@ namespace StrategoApp.ViewModel
 {
     public class GameSetupViewModel : ViewModelBase
     {
-        private readonly GameViewModel _gameViewModel;
         private string _counter;
-        private MainWindowViewModel _mainWindowViewModel;
+
+        
+        private readonly MainWindowViewModel _mainWindowViewModel;
+        
         public ObservableCollection<Piece> AvailablePieces { get; set; }
         public ObservableCollection<Cell> PlayerBoard { get; set; }
+        private readonly GameViewModel _gameViewModel;
 
         public GameSetupViewModel(MainWindowViewModel mainWindowViewModel, GameViewModel gameViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
+
             _gameViewModel = gameViewModel;
 
             AvailablePieces = new ObservableCollection<Piece>

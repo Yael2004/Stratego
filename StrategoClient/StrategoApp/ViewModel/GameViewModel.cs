@@ -1,4 +1,6 @@
-﻿using StrategoApp.GameService;
+﻿using log4net;
+using StrategoApp.GameService;
+using StrategoApp.Helpers;
 using StrategoApp.Model;
 using StrategoApp.ProfileService;
 using StrategoApp.View;
@@ -20,81 +22,37 @@ namespace StrategoApp.ViewModel
 {
     public class GameViewModel : ViewModelBase, GameService.IGameServiceCallback, ProfileService.IOtherProfileDataServiceCallback
     {
+        private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
+
         private string _username;
-        private int _userId;
-        private int _accountId;
         private string _profilePicture;
         private string _opponentUsername;
-        private int _opponentId;
         private string _opponentProfilePicture;
-        private int _selectedPieceId;
-        private int _gameId;
-        private bool _playerStartTurn;
+        private string _gameResultText;
         private bool _isMyTurn;
         private bool _isWonGame;
         private bool _isGameResultPopupOpen;
-        private string _gameResultText;
+        private bool _isServiceErrorVisible;
+        private int _userId;
+        private int _accountId;
+        private int _opponentId;
+        private int _gameId;
         private Cell _selectedCell;
 
-        private MainWindowViewModel _mainWindowViewModel;
-        private GameServiceClient _gameServiceClient;
+        private readonly GameServiceClient _gameServiceClient;
         private readonly OtherProfileDataServiceClient _otherProfileDataService;
+
+        private readonly MainWindowViewModel _mainWindowViewModel;
         public ObservableCollection<Piece> PlayerPieces { get; set; }
         public ObservableCollection<Cell> Board { get; set; }
-        private Dictionary<Piece, Queue<(int row, int column)>> pieceMovementHistory = new Dictionary<Piece, Queue<(int, int)>>();
+        private readonly Dictionary<Piece, Queue<(int row, int column)>> pieceMovementHistory = new Dictionary<Piece, Queue<(int, int)>>();
 
-        public readonly List<(int Row, int Column)> invalidPositions = new List<(int Row, int Column)> { };
+        private readonly List<(int Row, int Column)> invalidPositions = new List<(int Row, int Column)> { };
 
         public ObservableCollection<Piece> AvailablePices { get; set; }
 
-        public ICommand SendPositionCommand { get; }
         public ICommand CellClickedCommand { get; }
-
-        public GameViewModel(MainWindowViewModel mainWindowViewModel, ObservableCollection<Piece> availablePieces)
-        {
-            invalidPositions.Add((5, 3));
-            invalidPositions.Add((5, 4));
-            invalidPositions.Add((6, 3));
-            invalidPositions.Add((6, 4));
-            invalidPositions.Add((5, 7));
-            invalidPositions.Add((5, 8));
-            invalidPositions.Add((6, 7));
-            invalidPositions.Add((6, 8));
-
-            _mainWindowViewModel = mainWindowViewModel;
-            AvailablePices = availablePieces;
-            _gameServiceClient = new GameServiceClient(new System.ServiceModel.InstanceContext(this));
-            _otherProfileDataService = new OtherProfileDataServiceClient(new System.ServiceModel.InstanceContext(this));
-
-            PlayerPieces = new ObservableCollection<Piece>();
-            Board = new ObservableCollection<Cell>();
-            CellClickedCommand = new ViewModelCommandGeneric<Cell>(OnCellClicked);
-            LoadPlayerData();
-            InitializeBoard();
-        }
-
-        public GameViewModel(MainWindowViewModel mainWindowViewModel)
-        {
-            _gameServiceClient = new GameServiceClient(new System.ServiceModel.InstanceContext(this));
-            _otherProfileDataService = new OtherProfileDataServiceClient(new System.ServiceModel.InstanceContext(this));
-
-            _mainWindowViewModel = mainWindowViewModel;
-            PlayerPieces = new ObservableCollection<Piece>();
-            Board = new ObservableCollection<Cell>();
-            CellClickedCommand = new ViewModelCommandGeneric<Cell>(OnCellClicked);
-
-            invalidPositions.Add((5, 3));
-            invalidPositions.Add((5, 4));
-            invalidPositions.Add((6, 3));
-            invalidPositions.Add((6, 4));
-            invalidPositions.Add((5, 7));
-            invalidPositions.Add((5, 8));
-            invalidPositions.Add((6, 7));
-            invalidPositions.Add((6, 8));
-
-            LoadPlayerData();
-            InitializeBoard();
-        }
+        public ICommand ExecuteCloseServiceErrorCommand { get; }
 
         public string Username
         {
@@ -166,16 +124,6 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public int SelectedPieceId
-        {
-            get => _selectedPieceId;
-            set
-            {
-                _selectedPieceId = value;
-                OnPropertyChanged();
-            }
-        }
-
         public bool IsMyTurn
         {
             get => _isMyTurn;
@@ -186,6 +134,16 @@ namespace StrategoApp.ViewModel
                     _isMyTurn = value;
                     OnPropertyChanged(nameof(IsMyTurn));
                 }
+            }
+        }
+
+        public bool IsServiceErrorVisible
+        {
+            get => _isServiceErrorVisible;
+            set
+            {
+                _isServiceErrorVisible = value;
+                OnPropertyChanged(nameof(IsServiceErrorVisible));
             }
         }
 
@@ -219,6 +177,35 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public GameViewModel(MainWindowViewModel mainWindowViewModel)
+        {
+            _gameServiceClient = new GameServiceClient(new InstanceContext(this));
+            _otherProfileDataService = new OtherProfileDataServiceClient(new InstanceContext(this));
+
+            _mainWindowViewModel = mainWindowViewModel;
+
+            CellClickedCommand = new ViewModelCommandGeneric<Cell>(OnCellClicked);
+            ExecuteCloseServiceErrorCommand = new ViewModelCommand(CloseServiceError);
+
+            PlayerPieces = new ObservableCollection<Piece>();
+            Board = new ObservableCollection<Cell>();
+
+
+            invalidPositions.Add((5, 3));
+            invalidPositions.Add((5, 4));
+            invalidPositions.Add((6, 3));
+            invalidPositions.Add((6, 4));
+            invalidPositions.Add((5, 7));
+            invalidPositions.Add((5, 8));
+            invalidPositions.Add((6, 7));
+            invalidPositions.Add((6, 8));
+
+            LoadPlayerData();
+            InitializeBoard();
+
+            IsServiceErrorVisible = false;
+        }
+
         private void InitializeBoard()
         {
             for (int row = 0; row < 10; row++)
@@ -236,15 +223,12 @@ namespace StrategoApp.ViewModel
 
                     if (row >= 0 && row < 4)
                     {
-                        if (cell.OccupyingPiece == null)
+                        cell.IsOccupied = true;
+                        cell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
+                        cell.OccupyingPiece = new Piece
                         {
-                            cell.IsOccupied = true;
-                            cell.OccupiedPieceImage = new BitmapImage(new Uri($"pack://application:,,,/StrategoApp;component/Assets/Game/Dragon.png"));
-                            cell.OccupyingPiece = new Piece
-                            {
-                                Color = "Red"
-                            };
-                        }
+                            Color = "Red"
+                        };
                     }
 
                     Board.Add(cell);
@@ -284,18 +268,22 @@ namespace StrategoApp.ViewModel
                             cell.IsOccupied = true;
                             cell.OccupyingPiece = piece;
                             piece.OwnerId = UserId;
-                            piece.PowerLevel = piece.PowerLevel;
                         }
                     }
                 }
             }
         }
 
+        private void CloseServiceError(object obj)
+        {
+            IsServiceErrorVisible = false;
+            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+        }
+
         public bool IsValidMove(Cell originCell, Cell destinationCell, Piece movingPiece)
         {
             if (invalidPositions.Contains((destinationCell.Row, destinationCell.Column)))
             {
-                MessageBox.Show("Movimiento no permitido en el área central.");
                 return false;
             }
 
@@ -315,7 +303,6 @@ namespace StrategoApp.ViewModel
 
             if (destinationCell.IsOccupied && destinationCell.OccupyingPiece != null && destinationCell.OccupyingPiece.Color == movingPiece.Color)
             {
-                MessageBox.Show("No puedes moverte a una celda ocupada por otra de tus propias piezas.");
                 SelectedCell = null;
                 return false;
             }
@@ -327,58 +314,39 @@ namespace StrategoApp.ViewModel
         {
             if (originCell.Row == destinationCell.Row)
             {
-                int minCol = Math.Min(originCell.Column, destinationCell.Column);
-                int maxCol = Math.Max(originCell.Column, destinationCell.Column);
-                for (int col = minCol + 1; col < maxCol; col++)
-                {
-                    var cell = Board.FirstOrDefault(c => c.Row == originCell.Row && c.Column == col);
-                    if (cell != null && cell.IsOccupied)
-                        return false;
-                }
+                return IsPathClearInRow(originCell, destinationCell);
             }
             else if (originCell.Column == destinationCell.Column)
             {
-                int minRow = Math.Min(originCell.Row, destinationCell.Row);
-                int maxRow = Math.Max(originCell.Row, destinationCell.Row);
-                for (int row = minRow + 1; row < maxRow; row++)
-                {
-                    var cell = Board.FirstOrDefault(c => c.Row == row && c.Column == originCell.Column);
-                    if (cell != null && cell.IsOccupied)
-                        return false;
-                }
-            }
-            else
-            {
-                return false;
+                return IsPathClearInColumn(originCell, destinationCell);
             }
 
+            return false;
+        }
+
+        private bool IsPathClearInRow(Cell originCell, Cell destinationCell)
+        {
+            int minColumn = Math.Min(originCell.Column, destinationCell.Column);
+            int maxColumn = Math.Max(originCell.Column, destinationCell.Column);
+            for (int col = minColumn + 1; col < maxColumn; col++)
+            {
+                var cell = Board.FirstOrDefault(c => c.Row == originCell.Row && c.Column == col);
+                if (cell != null && cell.IsOccupied)
+                    return false;
+            }
             return true;
         }
 
-        public bool IsValidRepeatedMove(Piece piece, Cell destinationCell)
+        private bool IsPathClearInColumn(Cell originCell, Cell destinationCell)
         {
-            if (!pieceMovementHistory.ContainsKey(piece))
-                pieceMovementHistory[piece] = new Queue<(int, int)>();
-
-            var history = pieceMovementHistory[piece];
-
-            history.Enqueue((destinationCell.Row, destinationCell.Column));
-
-            if (history.Count > 3)
-                history.Dequeue();
-
-            if (history.Count == 3)
+            int minRow = Math.Min(originCell.Row, destinationCell.Row);
+            int maxRow = Math.Max(originCell.Row, destinationCell.Row);
+            for (int row = minRow + 1; row < maxRow; row++)
             {
-                var moves = history.ToArray();
-                if ((moves[0].Item1 == moves[2].Item1 && moves[0].Item2 == moves[2].Item2) &&
-                    (moves[1].Item1 == destinationCell.Row && moves[1].Item2 == destinationCell.Column))
-                {
-                    MessageBox.Show("Movimiento repetitivo no permitido.");
+                var cell = Board.FirstOrDefault(c => c.Row == row && c.Column == originCell.Column);
+                if (cell != null && cell.IsOccupied)
                     return false;
-                }
-
             }
-
             return true;
         }
 
@@ -399,15 +367,11 @@ namespace StrategoApp.ViewModel
             {
                 Piece movingPiece = SelectedCell.OccupyingPiece;
 
-                bool isValidMove = IsValidMove(SelectedCell, clickedCell, movingPiece) && IsValidRepeatedMove(movingPiece, clickedCell);
+                bool isValidMove = IsValidMove(SelectedCell, clickedCell, movingPiece);
 
                 if (isValidMove)
                 {
                     HandleMove(SelectedCell, clickedCell, movingPiece);
-                }
-                else
-                {
-                    MessageBox.Show("Movimiento inválido.");
                 }
 
                 SelectedCell = null;
@@ -438,16 +402,21 @@ namespace StrategoApp.ViewModel
             {
                 await _gameServiceClient.SendPositionAsync(_gameId, UserId, position);
             }
+            catch (CommunicationException cex)
+            {
+                Log.Error("Communication error while sending position to server.", cex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException tex)
+            {
+                Log.Error("Timed out while sending position to server.", tex);
+                IsServiceErrorVisible = true;
+            }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al enviar la posición: {ex.Message}");
+                Log.Error("Unexpected error while sending position to server.", ex);
+                IsServiceErrorVisible = true;
             }
-        }
-
-        public void LoadOponentPlayerInfo(string opponentUserName, string opponentProfilePicture)
-        {
-            OpponentUsername = opponentUserName;
-            OpponentProfilePicture = opponentProfilePicture;
         }
 
         public void ReceiveOtherPlayerInfo(OtherPlayerInfoResponse response)
@@ -463,15 +432,15 @@ namespace StrategoApp.ViewModel
         public void OnGameStarted(int gameId, GameStartedResponse gameStartedResponse)
         {
             _gameId = gameId;
+
             if (gameStartedResponse.OperationResult.IsSuccess)
             {
-                MessageBox.Show(gameStartedResponse.IsStarter.ToString());
                 IsMyTurn = gameStartedResponse.IsStarter;
                 _mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel, this));
             }
             else
             {
-                MessageBox.Show("Error starting game: " + gameStartedResponse.OperationResult.Message);
+                Log.Warn("Error starting game: " + gameStartedResponse.OperationResult.Message);
             }
         }
 
@@ -479,7 +448,7 @@ namespace StrategoApp.ViewModel
         {
             if (!operationResult.IsSuccess)
             {
-                MessageBox.Show($"Error del servidor: {operationResult.Message}");
+                Log.Warn($"Error on recieve opponent position: {operationResult.Message}");
                 return;
             }
 
@@ -493,7 +462,7 @@ namespace StrategoApp.ViewModel
 
             if (originCell == null || destinationCell == null)
             {
-                MessageBox.Show("Error al procesar las celdas de origen o destino.");
+                Log.Warn($"Error processing source or destination cells.");
                 return;
             }
 
@@ -520,9 +489,20 @@ namespace StrategoApp.ViewModel
                     }
 
                 }
+                catch (CommunicationException cex)
+                {
+                    Log.Error("Communication error while sending movment instructions.", cex);
+                    IsServiceErrorVisible = true;
+                }
+                catch (TimeoutException tex)
+                {
+                    Log.Error("Timed out while sending movment instructions.", tex);
+                    IsServiceErrorVisible = true;
+                }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error al enviar las instrucciones de movimiento: {ex.Message}");
+                    Log.Error("Unexpected error while sending movment instructions.", ex);
+                    IsServiceErrorVisible = true;
                 }
             });
         }
@@ -550,11 +530,23 @@ namespace StrategoApp.ViewModel
                     PlayerId = UserId,
                     HasWon = _isWonGame
                 };
+
                 await _gameServiceClient.EndGameAsync(finalStats);
+            }
+            catch (CommunicationException cex)
+            {
+                Log.Error("Communication error while ending game.", cex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException tex)
+            {
+                Log.Error("Timed out while ending game.", tex);
+                IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al finalizar el juego: {ex.Message}");
+                Log.Error("Unexpected error while ending game.", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -632,24 +624,12 @@ namespace StrategoApp.ViewModel
         {
             if (operationResult.IsSuccess)
             {
-                IsGameResultPopupOpen = true;
-                GameResultText = resultString;
-
-                ShowGameResultPopup();
+                ShowGameResult(_isWonGame);
             }
             else
             {
                 MessageBox.Show("Error al finalizar el juego: " + operationResult.Message);
             }
-        }
-
-        public void ShowGameResultPopup()
-        {
-            Task.Run(async () =>
-            {
-                await Task.Delay(2000);
-                Application.Current.Dispatcher.Invoke(GoToLobby);
-            });
         }
 
         public async void SuscribeToGame(int gameId)
@@ -668,7 +648,25 @@ namespace StrategoApp.ViewModel
         {
             if (opponentId > 0)
             {
-                await _otherProfileDataService.GetOtherPlayerInfoAsync(opponentId, UserId);
+                try
+                {
+                    await _otherProfileDataService.GetOtherPlayerInfoAsync(opponentId, UserId);
+                }
+                catch (CommunicationException cex)
+                {
+                    Log.Error("Communication error with the connect service.", cex);
+                    IsServiceErrorVisible = true;
+                }
+                catch (TimeoutException tex)
+                {
+                    Log.Error("Timed out while communicating with the connect service.", tex);
+                    IsServiceErrorVisible = true;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Unexpected error while connecting in.", ex);
+                    IsServiceErrorVisible = true;
+                }
             }
             else
             {
@@ -680,73 +678,119 @@ namespace StrategoApp.ViewModel
 
         public void OnReceiveMovementInstructions(MovementInstructionResponse movementInstructionResponse)
         {
-            if (movementInstructionResponse == null || movementInstructionResponse.OperationResult == null)
-            {
-                MessageBox.Show("Error: La respuesta del movimiento es nula o inválida.");
+            if (!IsMovementInstructionValid(movementInstructionResponse))
                 return;
-            }
-
-            if (!movementInstructionResponse.OperationResult.IsSuccess)
-            {
-                MessageBox.Show($"Error en el movimiento: {movementInstructionResponse.OperationResult.Message}");
-                return;
-            }
 
             var instruction = movementInstructionResponse.MovementInstructionDTO;
 
             if (instruction == null)
             {
-                MessageBox.Show("Error: Los datos de la instrucción de movimiento son nulos.");
+                Log.Error($"The move instruction data is null. {movementInstructionResponse.OperationResult.Message}");
                 return;
             }
 
-            var originCell = Board.FirstOrDefault(c => c.Row == instruction.InitialX && c.Column == instruction.InitialY);
-            var destinationCell = Board.FirstOrDefault(c => c.Row == instruction.FinalX && c.Column == instruction.FinalY);
-
+            var (originCell, destinationCell) = GetCells(instruction);
             if (originCell == null || destinationCell == null)
             {
-                MessageBox.Show("No se pudieron encontrar las celdas relevantes para este movimiento.");
+                Log.Error($"The relevant cells for this move could not be found: {movementInstructionResponse.OperationResult.Message}");
                 return;
             }
 
-            var pieceImage = originCell.OccupiedPieceImage;
-            var occupyingPiece = originCell.OccupyingPiece;
+            ProcessMovementInstruction(instruction, originCell, destinationCell);
+            OnPropertyChanged(nameof(Board));
+        }
 
+        private (Cell originCell, Cell destinationCell) GetCells(MovementInstructionDTO instruction)
+        {
+            var originCell = Board.FirstOrDefault(c => c.Row == instruction.InitialX && c.Column == instruction.InitialY);
+            var destinationCell = Board.FirstOrDefault(c => c.Row == instruction.FinalX && c.Column == instruction.FinalY);
+            return (originCell, destinationCell);
+        }
+
+        private void ProcessMovementInstruction(MovementInstructionDTO instruction, Cell originCell, Cell destinationCell)
+        {
             switch (instruction.Result)
             {
                 case "Win":
-                    _isWonGame = true;
-                    UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
-                    UpdateCellState(originCell, null, false, null);
-
-                    Task.Run(() => EndGame());
+                    HandleWin(destinationCell, originCell);
                     break;
 
                 case "Kill":
-                    UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
-                    UpdateCellState(originCell, null, false, null);
+                    HandleKill(destinationCell, originCell);
                     break;
 
                 case "Fail":
-                    UpdateCellState(originCell, null, false, null);
+                    HandleFail(originCell);
                     break;
 
                 case "Draw":
-                    UpdateCellState(destinationCell, null, false, null);
-                    UpdateCellState(originCell, null, false, null);
+                    HandleDraw(destinationCell, originCell);
                     break;
 
                 case "Move":
-                    UpdateCellState(destinationCell, pieceImage, true, occupyingPiece);
-                    UpdateCellState(originCell, null, false, null);
+                    HandleMove(destinationCell, originCell);
                     break;
 
                 default:
-                    MessageBox.Show($"Unknown Result: {instruction.Result}");
+                    Log.Warn($"Unknown Result: {instruction.Result}");
                     break;
             }
+        }
 
-            OnPropertyChanged(nameof(Board));
+        private bool IsMovementInstructionValid(MovementInstructionResponse movementInstructionResponse)
+        {
+            if (movementInstructionResponse == null || movementInstructionResponse.OperationResult == null)
+            {
+                Log.Error($"The movement response is null or invalid: {movementInstructionResponse.OperationResult.Message}");
+                return false;
+            }
+
+            if (!movementInstructionResponse.OperationResult.IsSuccess)
+            {
+                Log.Error($"Movement error: {movementInstructionResponse.OperationResult.Message}");
+                return false;
+            }
+
+            return true;
+        }
+
+        private void HandleWin(Cell destinationCell, Cell originCell)
+        {
+            _isWonGame = true;
+            UpdateCellKillMove(destinationCell, originCell);
+            Task.Run(() => EndGame());
+        }
+
+        private void HandleKill(Cell destinationCell, Cell originCell)
+        {
+            UpdateCellKillMove(destinationCell, originCell);
+        }
+
+        private void HandleFail(Cell originCell)
+        {
+            UpdateCellState(originCell, null, false, null);
+        }
+
+        private void HandleDraw(Cell destinationCell, Cell originCell)
+        {
+            UpdateCellDraw(destinationCell, originCell);
+        }
+
+        private void HandleMove(Cell destinationCell, Cell originCell)
+        {
+            UpdateCellKillMove(destinationCell, originCell);
+        }
+
+        private void UpdateCellKillMove(Cell destinationCell, Cell originCell)
+        {
+            UpdateCellState(destinationCell, originCell.OccupiedPieceImage, true, originCell.OccupyingPiece);
+            UpdateCellState(originCell, null, false, null);
+        }
+
+        private void UpdateCellDraw(Cell destinationCell, Cell originCell)
+        {
+            UpdateCellState(destinationCell, null, false, null);
+            UpdateCellState(originCell, null, false, null);
         }
     }
 }

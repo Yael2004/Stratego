@@ -655,6 +655,15 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Place your pieces on the board.
+        /// </summary>
+        public static string PlacePiecesOnBoard_Label {
+            get {
+                return ResourceManager.GetString("PlacePiecesOnBoard_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Play.
         /// </summary>
         public static string Play_Button {

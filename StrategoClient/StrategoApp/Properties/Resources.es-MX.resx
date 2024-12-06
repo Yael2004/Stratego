@@ -417,4 +417,7 @@
   <data name="Scoreboard_Button" xml:space="preserve">
     <value>Puntuaciones</value>
   </data>
+  <data name="PlacePiecesOnBoard_Label" xml:space="preserve">
+    <value>Coloca tus piezas en el tablero</value>
+  </data>
 </root>
