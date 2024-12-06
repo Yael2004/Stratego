@@ -20,6 +20,19 @@
             >pack://application:,,,/StrategoApp;component/Assets/Cursors/normal_cursor.cur
     </Cursor>
 
+    <Cursor x:Key="SelectCursor"
+            >pack://application:,,,/StrategoApp;component/Assets/Cursors/select_cursor.cur
+    </Cursor>
+
+    <Cursor x:Key="UnavavibleCursor"
+            >pack://application:,,,/StrategoApp;component/Assets/Cursors/unavavible_cursor.cur
+    </Cursor>
+
+    <Cursor x:Key="BeamCursor"
+        >pack://application:,,,/StrategoApp;component/Assets/Cursors/beam_cursor.cur
+    </Cursor>
+
+
     <ImageBrush x:Key="SwordsInviteButton"
             ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/Icons/LetsPlaySwords.png"
             Stretch="UniformToFill"/>
@@ -54,6 +67,7 @@
         <Setter Property="Foreground" Value="{StaticResource IntenseRed}"/>
         <Setter Property="Background" Value="Black"/>
         <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
+        <Setter Property="Cursor" Value="{StaticResource BeamCursor}"/>
     </Style>
 
     <Style x:Key="InputBoxGoldenStyle" TargetType="Control">
@@ -76,7 +90,7 @@
                 <DropShadowEffect Color="Black" ShadowDepth="2" BlurRadius="5"/>
             </Setter.Value>
         </Setter>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Cursor" Value="{StaticResource SelectCursor}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#444444"/>
@@ -104,7 +118,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource DarkRed}"/>
         <Setter Property="BorderThickness" Value="3"/>
         <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Cursor" Value="{StaticResource SelectCursor}"/>
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -123,7 +137,7 @@
         <Setter Property="BorderBrush" Value="White"/>
         <Setter Property="BorderThickness" Value="3"/>
         <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Cursor" Value="{StaticResource SelectCursor}"/>
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -142,7 +156,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource Beige}"/>
         <Setter Property="BorderThickness" Value="3"/>
         <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Cursor" Value="{StaticResource SelectCursor}"/>
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -161,7 +175,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource DarkViolet}"/>
         <Setter Property="BorderThickness" Value="3"/>
         <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Cursor" Value="{StaticResource SelectCursor}"/>
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -180,7 +194,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource IntenseGreen}"/>
         <Setter Property="BorderThickness" Value="3"/>
         <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Cursor" Value="{StaticResource SelectCursor}"/>
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -199,7 +213,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource Pink}"/>
         <Setter Property="BorderThickness" Value="3"/>
         <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Cursor" Value="{StaticResource SelectCursor}"/>
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">

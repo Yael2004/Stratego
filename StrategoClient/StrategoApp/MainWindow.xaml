@@ -57,6 +57,7 @@
     </Window.DataContext>
 
     <Grid>
-        <ContentControl Content="{Binding CurrentViewModel}" />
+        <ContentControl Content="{Binding CurrentViewModel}" 
+                        Cursor="{StaticResource NormalCursor}"/>
     </Grid>
 </Window>
