@@ -14,7 +14,7 @@ using System.Windows.Input;
 
 namespace StrategoApp.ViewModel
 {
-    public class PlayerProfileNotOwnViewModel : ViewModelBase, ProfileService.IOtherProfileDataServiceCallback, ProfileService.IPlayerFriendsListServiceCallback
+    public class PlayerProfileNotOwnViewModel : ViewModelBase, ProfileService.IOtherProfileDataServiceCallback
     {
         private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
 
@@ -27,32 +27,16 @@ namespace StrategoApp.ViewModel
         private int _gamesLost;
         private int _gamesPlayed;
         private bool _isServiceErrorVisible;
-        public ObservableCollection<int> FriendsIds { get; private set; }
-        public bool IsFriend => FriendsIds.Contains(PlayerId);
+        private bool _isFriend;
 
-        private MainWindowViewModel _mainWindowViewModel;
+        private readonly MainWindowViewModel _mainWindowViewModel;
 
-        private OtherProfileDataServiceClient _otherProfileDataServiceClient;
-        private PlayerFriendsListServiceClient _playerFriendsListServiceClient;
+        private readonly OtherProfileDataServiceClient _otherProfileDataServiceClient;
+        private readonly PlayerFriendsListServiceClient _playerFriendsListServiceClient;
 
         public ICommand RemoveFriendCommand { get; }
         public ICommand BackToLobbyCommand { get; }
-
-        public PlayerProfileNotOwnViewModel(MainWindowViewModel mainWindowViewModel)
-        {
-            _accountId = PlayerSingleton.Instance.Player.Id;
-            _mainWindowViewModel = mainWindowViewModel;
-            FriendsIds = new ObservableCollection<int>();
-            FriendsIds.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsFriend));
-
-            _otherProfileDataServiceClient = new OtherProfileDataServiceClient(new System.ServiceModel.InstanceContext(this));
-            _playerFriendsListServiceClient = new PlayerFriendsListServiceClient(new System.ServiceModel.InstanceContext(this));
-
-            RemoveFriendCommand = new ViewModelCommand(RemoveFriend);
-            BackToLobbyCommand = new ViewModelCommand(BackToLobby);
-
-            LoadPlayerFriends();
-        }
+        public ICommand ExecuteCloseServiceErrorCommand { get; }
 
         public string Username
         {
@@ -90,6 +74,16 @@ namespace StrategoApp.ViewModel
             set
             {
                 _playerTag = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int AccountId
+        {
+            get { return _accountId; }
+            set
+            {
+                _accountId = value;
                 OnPropertyChanged();
             }
         }
@@ -134,16 +128,28 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        private async void LoadPlayerFriends()
+        public bool IsFriend
         {
-            try
+            get { return _isFriend; }
+            set
             {
-                await _playerFriendsListServiceClient.GetPlayerFriendsListAsync(_accountId);
+                _isFriend = value;
+                OnPropertyChanged();
             }
-            catch (Exception ex)
-            {
-                Log.Error("Error al cargar la lista de amigos", ex);
-            }
+        }
+
+        public PlayerProfileNotOwnViewModel(MainWindowViewModel mainWindowViewModel)
+        {
+            _otherProfileDataServiceClient = new OtherProfileDataServiceClient(new InstanceContext(this));
+            _playerFriendsListServiceClient = new PlayerFriendsListServiceClient(new InstanceContext(this));
+            
+            _mainWindowViewModel = mainWindowViewModel;
+            
+            RemoveFriendCommand = new ViewModelCommand(RemoveFriend);
+            BackToLobbyCommand = new ViewModelCommand(BackToLobby);
+            ExecuteCloseServiceErrorCommand = new ViewModelCommand(CloseServiceError);
+
+            AccountId = PlayerSingleton.Instance.Player.Id;
         }
 
         private void BackToLobby(object obj)
@@ -153,7 +159,7 @@ namespace StrategoApp.ViewModel
 
         public void RemoveFriend(object obj)
         {
-            var profileDataService = new ProfileDataServiceClient(new System.ServiceModel.InstanceContext(this));
+            var profileDataService = new ProfileDataServiceClient(new InstanceContext(this));
         }
 
         public void ReceiveOtherPlayerInfo(OtherPlayerInfoResponse response)
@@ -165,32 +171,36 @@ namespace StrategoApp.ViewModel
             GamesWon = response.PlayerInfo.PlayerStatistics.WonGames;
             GamesLost = response.PlayerInfo.PlayerStatistics.LostGames;
             GamesPlayed = response.PlayerInfo.PlayerStatistics.TotalGames;
+            IsFriend = response.PlayerInfo.IsFriend;
         }
 
         public async void LoadPlayerInfo(int playerId, int accountId)
         {
-            MessageBox.Show($"Cargando perfil de jugador con ID: {playerId}", "Debug");
-            await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(playerId, accountId);
+            try
+            {
+                await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(playerId, accountId);
+            }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while getting other player info.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while getting other player info.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unexpected error while getting other player info.", ex);
+                IsServiceErrorVisible = true;
+            }
         }
 
-        public void PlayerFriendsList(PlayerFriendsResponse playerFriends)
+        private void CloseServiceError(object obj)
         {
-            if (playerFriends.Result.IsSuccess)
-            {
-                FriendsIds.Clear();
-
-                foreach (var friendId in playerFriends.FriendsIds)
-                {
-                    FriendsIds.Add(friendId);
-                }
-
-                OnPropertyChanged(nameof(FriendsIds));
-                OnPropertyChanged(nameof(IsFriend));
-            }
-            else
-            {
-                MessageBox.Show("No se pudo cargar la lista de amigos: " + playerFriends.Result.Message);
-            }
+            IsServiceErrorVisible = false;
+            _mainWindowViewModel.CurrentViewModel = new LobbyViewModel(_mainWindowViewModel);
         }
     }
 }

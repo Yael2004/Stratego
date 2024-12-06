@@ -20,7 +20,9 @@
     <Viewbox Stretch="Fill">
         <Grid Height="440" Width="800" 
           Background="{StaticResource ProfileSectionBackground}">
+            
             <Rectangle Fill="#80000000"/>
+            <Rectangle Fill="#80000000" Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="1" IsHitTestVisible="True"/>
 
             <Label Content="{x:Static res:Resources.GamesLost_Label}"
                Style="{StaticResource PlayerSectionLabelStyle}"
@@ -116,7 +118,7 @@
                 </Ellipse>
             </Button>
 
-            <Button Content="Remover"
+            <Button Content="{x:Static res:Resources.Remove_Button}"
                     Visibility="{Binding IsFriend, Converter={StaticResource BoolToVisibilityConverter}}"
                     Margin="666,20,10,380"
                     Style="{StaticResource ButtonGoldenStyle}"
@@ -136,6 +138,33 @@
                     </Image.Style>
                 </Image>
             </Button>
+
+            <Grid x:Name="ModalContainer"
+                    Background="{StaticResource SemiTransparent}"
+                    Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="340"
+                    Height="148" Canvas.Left="230" Canvas.Top="146"
+                    Panel.ZIndex="1">
+
+                <Border Background="Black" BorderBrush="{StaticResource Beige}" BorderThickness="2" CornerRadius="10" Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="{x:Static res:Resources.ServerConnectionLostMessage_Label}"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   FontSize="16"
+                                   Margin="0,20,0,20"
+                                   Foreground="{StaticResource Beige}"/>
+
+                        <Button Content="{x:Static res:Resources.Accept_Button}"
+                                Command="{Binding ExecuteCloseServiceErrorCommand}"
+                                Style="{StaticResource ButtonGoldenStyle}"
+                                Width="100"
+                                HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
     </Viewbox>
 </UserControl>
