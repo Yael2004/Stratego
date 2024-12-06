@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://192.168.137.1:2022/ProfileService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
-  <xs:import schemaLocation="http://192.168.137.1:2022/ProfileService?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://localhost:2022/ProfileService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
+  <xs:import schemaLocation="http://localhost:2022/ProfileService?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:complexType name="PlayerInfoResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="Profile" nillable="true" type="tns:PlayerInfoShownDTO" />

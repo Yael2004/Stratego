@@ -338,12 +338,6 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\LobbyBackground.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Cursors\normal_cursor.cur" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\Images\Icons\EyeClosed_Icon.png" />
     <Resource Include="Assets\Images\Icons\EyeOpen_Icon.png" />
   </ItemGroup>
@@ -371,13 +365,10 @@
     <Resource Include="Assets\Images\Icons\ArrowBackOnOProfileSection.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\LobbyBackground2.png" />
+    <Resource Include="Assets\Images\LobbyBackground.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\RoomBackground.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Images\RoomBackground2.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\Icons\Edit_Icon.png" />
@@ -386,22 +377,13 @@
     <Resource Include="Assets\Images\FriendsBackground.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\FriendsBackground2.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\Game\Staff.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Images\Board2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Images\Board3.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Game\Dragon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\Board4.png" />
+    <Resource Include="Assets\Images\Board.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Game\Necronomicon.png" />
@@ -436,9 +418,6 @@
     <Resource Include="Assets\Images\Icons\ArrowBackOnFriends_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\Board.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\Images\Icons\LetsPlaySwords.png" />
   </ItemGroup>
   <ItemGroup>
@@ -448,36 +427,6 @@
     <WCFMetadataStorage Include="Connected Services\ProfileService\" />
     <WCFMetadataStorage Include="Connected Services\RoomService\" />
     <WCFMetadataStorage Include="Connected Services\Service\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\Service\ChatService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\Service\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\Service\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\Service\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\LogInService\LogInService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\LogInService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\LogInService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\LogInService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\ProfileService\ProfileService.disco" />
@@ -495,16 +444,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\RoomService\RoomService.disco" />
+    <None Include="Connected Services\GameService\GameService.disco" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\RoomService\configuration91.svcinfo" />
+    <None Include="Connected Services\GameService\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\RoomService\configuration.svcinfo" />
+    <None Include="Connected Services\GameService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\RoomService\Reference.svcmap">
+    <None Include="Connected Services\GameService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
@@ -525,19 +474,64 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\GameService\GameService.disco" />
+    <None Include="Connected Services\Service\ChatService.disco" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\GameService\configuration91.svcinfo" />
+    <None Include="Connected Services\Service\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\GameService\configuration.svcinfo" />
+    <None Include="Connected Services\Service\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\GameService\Reference.svcmap">
+    <None Include="Connected Services\Service\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\RoomService\RoomService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\RoomService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\RoomService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\RoomService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\LogInService\LogInService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\LogInService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\LogInService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\LogInService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\ScoreboardBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Icons\ArrowBackOnScoreboardSection_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Cursors\select_cursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Cursors\normal_cursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Cursors\beam_cursor.cur" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

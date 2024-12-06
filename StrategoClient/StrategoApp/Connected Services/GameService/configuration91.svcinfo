@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="QOU2PnUEegeZeUNrC1DNE9wZh3DUlZfF5dTaHHRE2Wo=">
+<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="Ztq3wPLfb0aqG+Dtvuq3VyZRh8FtMA4DbocEYELU7vM=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="netTcpBinding" name="NetTcpBinding_IGameService">
       <properties>
@@ -239,10 +239,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="NetTcpBinding_IGameService" contract="GameService.IGameService" bindingType="netTcpBinding" address="net.tcp://192.168.137.1:1015/GameService/GameService" bindingConfiguration="NetTcpBinding_IGameService">
+    <endpoint name="NetTcpBinding_IGameService" contract="GameService.IGameService" bindingType="netTcpBinding" address="net.tcp://localhost:1015/GameService/GameService" bindingConfiguration="NetTcpBinding_IGameService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://192.168.137.1:1015/GameService/GameService</serializedValue>
+          <serializedValue>net.tcp://localhost:1015/GameService/GameService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -324,10 +324,10 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_ICreateGameService" contract="GameService.ICreateGameService" bindingType="netTcpBinding" address="net.tcp://192.168.137.1:1015/GameService/CreateGameService" bindingConfiguration="NetTcpBinding_ICreateGameService">
+    <endpoint name="NetTcpBinding_ICreateGameService" contract="GameService.ICreateGameService" bindingType="netTcpBinding" address="net.tcp://localhost:1015/GameService/CreateGameService" bindingConfiguration="NetTcpBinding_ICreateGameService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://192.168.137.1:1015/GameService/CreateGameService</serializedValue>
+          <serializedValue>net.tcp://localhost:1015/GameService/CreateGameService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

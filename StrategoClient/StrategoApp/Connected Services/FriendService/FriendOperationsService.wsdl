@@ -38,11 +38,11 @@
   </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://192.168.137.1:2024/FriendsService?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://192.168.137.1:2024/FriendsService?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://192.168.137.1:2024/FriendsService?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
-      <xsd:import schemaLocation="http://192.168.137.1:2024/FriendsService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" />
-      <xsd:import schemaLocation="http://192.168.137.1:2024/FriendsService?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://localhost:2024/FriendsService?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:2024/FriendsService?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:2024/FriendsService?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
+      <xsd:import schemaLocation="http://localhost:2024/FriendsService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" />
+      <xsd:import schemaLocation="http://localhost:2024/FriendsService?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IFriendOperationsService_SendFriendRequest_InputMessage">
@@ -286,21 +286,21 @@
   </wsdl:binding>
   <wsdl:service name="FriendOperationsService">
     <wsdl:port name="NetTcpBinding_IFriendOperationsService" binding="tns:NetTcpBinding_IFriendOperationsService">
-      <soap12:address location="net.tcp://192.168.137.1:1014/FriendsService/FriendsService" />
+      <soap12:address location="net.tcp://localhost:1014/FriendsService/FriendsService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://192.168.137.1:1014/FriendsService/FriendsService</wsa10:Address>
+        <wsa10:Address>net.tcp://localhost:1014/FriendsService/FriendsService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_ISendRoomInvitationService" binding="tns:NetTcpBinding_ISendRoomInvitationService">
-      <soap12:address location="net.tcp://192.168.137.1:1014/FriendsService/RoomInvitationService" />
+      <soap12:address location="net.tcp://localhost:1014/FriendsService/RoomInvitationService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://192.168.137.1:1014/FriendsService/RoomInvitationService</wsa10:Address>
+        <wsa10:Address>net.tcp://localhost:1014/FriendsService/RoomInvitationService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IPlayerFriendRequestService" binding="tns:NetTcpBinding_IPlayerFriendRequestService">
-      <soap12:address location="net.tcp://192.168.137.1:1014/FriendsService/FriendRequestService" />
+      <soap12:address location="net.tcp://localhost:1014/FriendsService/FriendRequestService" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://192.168.137.1:1014/FriendsService/FriendRequestService</wsa10:Address>
+        <wsa10:Address>net.tcp://localhost:1014/FriendsService/FriendRequestService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

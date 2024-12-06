@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="xHJWFN86kujpA6tuACpYuBikrBHPvzcpqWppM7NIr7A=">
+<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="oTQ0KDxQC69RfKwsqfkUykztCx1n2dnl0QIXQMIlTs8=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="netTcpBinding" name="NetTcpBinding_ILogInService">
       <properties>
@@ -357,10 +357,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="NetTcpBinding_ILogInService" contract="LogInService.ILogInService" bindingType="netTcpBinding" address="net.tcp://192.168.137.1:1011/LogInService/LogInService" bindingConfiguration="NetTcpBinding_ILogInService">
+    <endpoint name="NetTcpBinding_ILogInService" contract="LogInService.ILogInService" bindingType="netTcpBinding" address="net.tcp://localhost:1011/LogInService/LogInService" bindingConfiguration="NetTcpBinding_ILogInService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://192.168.137.1:1011/LogInService/LogInService</serializedValue>
+          <serializedValue>net.tcp://localhost:1011/LogInService/LogInService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -442,10 +442,10 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_ISignUpService" contract="LogInService.ISignUpService" bindingType="netTcpBinding" address="net.tcp://192.168.137.1:1011/LogInService/SignUpService" bindingConfiguration="NetTcpBinding_ISignUpService">
+    <endpoint name="NetTcpBinding_ISignUpService" contract="LogInService.ISignUpService" bindingType="netTcpBinding" address="net.tcp://localhost:1011/LogInService/SignUpService" bindingConfiguration="NetTcpBinding_ISignUpService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://192.168.137.1:1011/LogInService/SignUpService</serializedValue>
+          <serializedValue>net.tcp://localhost:1011/LogInService/SignUpService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -527,10 +527,10 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="NetTcpBinding_IChangePasswordService" contract="LogInService.IChangePasswordService" bindingType="netTcpBinding" address="net.tcp://192.168.137.1:1011/LogInService/ChangePasswordService" bindingConfiguration="NetTcpBinding_IChangePasswordService">
+    <endpoint name="NetTcpBinding_IChangePasswordService" contract="LogInService.IChangePasswordService" bindingType="netTcpBinding" address="net.tcp://localhost:1011/LogInService/ChangePasswordService" bindingConfiguration="NetTcpBinding_IChangePasswordService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>net.tcp://192.168.137.1:1011/LogInService/ChangePasswordService</serializedValue>
+          <serializedValue>net.tcp://localhost:1011/LogInService/ChangePasswordService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
