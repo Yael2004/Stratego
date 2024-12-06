@@ -322,7 +322,7 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Sent request to.
+        ///   Busca una cadena traducida similar a Request sent.
         /// </summary>
         public static string FriendRequestMessage_Label {
             get {
@@ -435,6 +435,15 @@ namespace StrategoApp.Properties {
         public static string InvalidPassword_Label {
             get {
                 return ResourceManager.GetString("InvalidPassword_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Enter a valid player id.
+        /// </summary>
+        public static string InvalidPlayerId {
+            get {
+                return ResourceManager.GetString("InvalidPlayerId", resourceCulture);
             }
         }
         

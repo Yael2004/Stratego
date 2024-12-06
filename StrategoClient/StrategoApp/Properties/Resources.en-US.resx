@@ -187,7 +187,7 @@
     <value>Some fields are in blank</value>
   </data>
   <data name="FriendRequestMessage_Label" xml:space="preserve">
-    <value>Sent request to</value>
+    <value>Request sent</value>
   </data>
   <data name="Friends_Title" xml:space="preserve">
     <value>Friends</value>
@@ -420,5 +420,8 @@
   </data>
   <data name="PlacePiecesOnBoard_Label" xml:space="preserve">
     <value>Place your pieces on the board</value>
+  </data>
+  <data name="InvalidPlayerId" xml:space="preserve">
+    <value>Enter a valid player id</value>
   </data>
 </root>

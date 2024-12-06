@@ -187,7 +187,7 @@
     <value>Algunos campos están vacíos</value>
   </data>
   <data name="FriendRequestMessage_Label" xml:space="preserve">
-    <value>Enviar solicitud a</value>
+    <value>Solicitud enviada</value>
   </data>
   <data name="Friends_Title" xml:space="preserve">
     <value>Amigos</value>
@@ -419,5 +419,8 @@
   </data>
   <data name="PlacePiecesOnBoard_Label" xml:space="preserve">
     <value>Coloca tus piezas en el tablero</value>
+  </data>
+  <data name="InvalidPlayerId" xml:space="preserve">
+    <value>Ingresa un id de jugador válido</value>
   </data>
 </root>

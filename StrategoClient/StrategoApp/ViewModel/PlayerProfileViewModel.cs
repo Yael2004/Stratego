@@ -220,7 +220,7 @@ namespace StrategoApp.ViewModel
             SaveProfilePictureSelectionCommand = new ViewModelCommand(ConfirmProfileSelection);
             LogoutCommand = new ViewModelCommand(Logout);
             ExecuteCloseServiceErrorCommand = new ViewModelCommand(ExecuteCloseServerError);
-            
+
             ProfileTags = new ObservableCollection<string>
             {
                 Properties.Resources.NovicePlayer_Label,
@@ -249,42 +249,19 @@ namespace StrategoApp.ViewModel
         {
             EditProfileTag();
 
-            PlayerSingleton.Instance.Player.LabelPath = PlayerTag;
-
-            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel)); 
+            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
         }
 
         private void EditProfileTag()
         {
-            switch (PlayerTag)
-            {
-                case var tag when tag == Properties.Resources.NovicePlayer_Label:
-                    PlayerTag = "Label1";
-                    break;
-
-                case var tag when tag == Properties.Resources.ProPlayer_Label:
-                    PlayerTag = "Label2";
-                    break;
-
-                case var tag when tag == Properties.Resources.Apprentice_Label:
-                    PlayerTag = "Label3";
-                    break;
-
-                case var tag when tag == Properties.Resources.Competitive_Label:
-                    PlayerTag = "Label4";
-                    break;
-
-                default:
-                    PlayerTag = "Label1";
-                    break;
-            }
+            var label = SelectTag(PlayerTag);
 
             var updatedProfile = new ProfileService.PlayerInfoShownDTO
             {
                 Name = Username,
                 Id = PlayerId,
                 PicturePath = ProfilePicture,
-                LabelPath = PlayerTag
+                LabelPath = label
             };
 
             try
@@ -356,12 +333,14 @@ namespace StrategoApp.ViewModel
             {
                 UsernameError = string.Empty;
 
+                var label = SelectTag(PlayerTag);
+
                 var updatedProfile = new ProfileService.PlayerInfoShownDTO
                 {
                     Name = UsernameEdited,
                     Id = PlayerId,
                     PicturePath = ProfilePicture,
-                    LabelPath = PlayerTag
+                    LabelPath = label
                 };
 
                 try
@@ -398,12 +377,15 @@ namespace StrategoApp.ViewModel
             {
                 if (!string.IsNullOrEmpty(SelectedProfilePicture))
                 {
+
+                    var label = SelectTag(PlayerTag);
+
                     var updatedProfile = new ProfileService.PlayerInfoShownDTO
                     {
                         Name = Username,
                         Id = PlayerId,
                         PicturePath = SelectedProfilePicture,
-                        LabelPath = PlayerTag
+                        LabelPath = label
                     };
 
                     await _playerModifierServiceClient.UpdatePlayerProfileAsync(updatedProfile);
@@ -443,29 +425,9 @@ namespace StrategoApp.ViewModel
                 Username = player.Name;
                 PlayerId = player.Id;
                 ProfilePicture = player.PicturePath;
-                
-                switch(player.LabelPath)
-                {
-                    case "Label1":
-                        PlayerTag = Properties.Resources.NovicePlayer_Label;
-                        break;
 
-                    case "Label2":
-                        PlayerTag = Properties.Resources.ProPlayer_Label;
-                        break;
-
-                    case "Label3":
-                        PlayerTag = Properties.Resources.Apprentice_Label;
-                        break;
-
-                    case "Label4":
-                        PlayerTag = Properties.Resources.Competitive_Label;
-                        break;
-
-                    default:
-                        PlayerTag = Properties.Resources.NovicePlayer_Label;
-                        break;
-                }
+                var label = SelectTag(player.LabelPath);
+                PlayerTag = label;
             }
         }
 
@@ -476,11 +438,16 @@ namespace StrategoApp.ViewModel
 
         public void PlayerInfo(PlayerInfoResponse playerInfo1)
         {
+            
             if (playerInfo1.Result.IsSuccess)
             {
                 Username = playerInfo1.Profile.Name;
                 PlayerId = playerInfo1.Profile.Id;
                 ProfilePicture = playerInfo1.Profile.PicturePath;
+
+                var tag = GetTag(playerInfo1.Profile.LabelPath);
+                
+                PlayerTag = tag;
             }
         }
 
@@ -509,8 +476,8 @@ namespace StrategoApp.ViewModel
 
         public void PlayerStatistics(PlayerStatisticsResponse playerStatistics1)
         {
-            if (playerStatistics1.Result.IsSuccess) 
-            { 
+            if (playerStatistics1.Result.IsSuccess)
+            {
                 GamesWon = playerStatistics1.Statistics.WonGames;
                 GamesLost = playerStatistics1.Statistics.LostGames;
                 GamesPlayed = playerStatistics1.Statistics.TotalGames;
@@ -535,8 +502,49 @@ namespace StrategoApp.ViewModel
             }
             else
             {
-                MessageBox.Show("No se pudo actualizar el perfil en el servidor.");
                 IsEditUsernameVisible = false;
+            }
+        }
+
+        private string SelectTag(String playerLabel)
+        {
+            switch (playerLabel)
+            {
+                case var tag when tag == Properties.Resources.NovicePlayer_Label:
+                    return "label1";
+
+                case var tag when tag == Properties.Resources.ProPlayer_Label:
+                    return "label2";
+
+                case var tag when tag == Properties.Resources.Apprentice_Label:
+                    return "label3";
+
+                case var tag when tag == Properties.Resources.Competitive_Label:
+                    return "label4";
+
+                default:
+                    return "label1";
+            }
+        }
+
+        private string GetTag(String playerLabel)
+        {
+            switch (playerLabel)
+            {
+                case "label1":
+                    return Properties.Resources.NovicePlayer_Label;
+
+                case "label2":
+                    return Properties.Resources.ProPlayer_Label;
+
+                case "label3":
+                    return Properties.Resources.Apprentice_Label;
+
+                case "label4":
+                    return Properties.Resources.Competitive_Label;
+
+                default:
+                    return Properties.Resources.NovicePlayer_Label;
             }
         }
     }

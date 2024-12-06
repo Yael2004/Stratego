@@ -1,10 +1,12 @@
-﻿using StrategoApp.FriendService;
+﻿using log4net;
+using StrategoApp.FriendService;
 using StrategoApp.Helpers;
 using StrategoApp.Model;
 using StrategoApp.ProfileService;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -13,19 +15,27 @@ namespace StrategoApp.ViewModel
 {
     public class FriendsViewModel : ViewModelBase, ProfileService.IPlayerFriendsListServiceCallback, ProfileService.IOtherProfileDataServiceCallback, FriendService.IPlayerFriendRequestServiceCallback, FriendService.IFriendOperationsServiceCallback
     {
-        private HashSet<int> pendingFriendRequests = new HashSet<int>();
-        private readonly MainWindowViewModel _mainWindowViewModel;
+        private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
 
-        private PlayerFriendsListServiceClient _playerFriendsListServiceClient;
-        private OtherProfileDataServiceClient _otherProfileDataServiceClient;
-        private PlayerFriendRequestServiceClient _playerFriendRequestServiceClient;
-        private FriendOperationsServiceClient _friendOperationsServiceClient;
-
+        private string _searchResult;
         private int _playerId;
-        private Player _selectedFriend;
         private int _friendIdRequested;
         private bool _isRequestsPopupOpen;
         private bool _isSearchPlayerPopupOpen;
+        private bool _isServiceErrorVisible;
+        private bool _isRequestSent;
+        private Player _selectedFriend;
+
+
+        private readonly PlayerFriendsListServiceClient _playerFriendsListServiceClient;
+        private readonly OtherProfileDataServiceClient _otherProfileDataServiceClient;
+        private readonly PlayerFriendRequestServiceClient _playerFriendRequestServiceClient;
+        private readonly FriendOperationsServiceClient _friendOperationsServiceClient;
+
+        private readonly MainWindowViewModel _mainWindowViewModel;
+
+        private readonly HashSet<int> pendingFriendRequests = new HashSet<int>();
+
 
         public ObservableCollection<Player> Friends { get; set; }
         public ObservableCollection<Player> FriendRequests { get; set; }
@@ -39,34 +49,17 @@ namespace StrategoApp.ViewModel
         public ICommand CancelSearchCommand { get; }
         public ICommand AcceptFriendRequestCommand { get; }
         public ICommand DeclineFriendRequestCommand { get; }
+        public ICommand ExecuteCloseServiceErrorCommand { get; }
+        public ICommand ExecuteCloseRequestSent { get; }
 
-        public FriendsViewModel(MainWindowViewModel mainWindowViewModel)
+        public string SearchResult
         {
-            _mainWindowViewModel = mainWindowViewModel;
-
-            AssignValuesToUser();
-
-            Friends = new ObservableCollection<Player>();
-            FriendRequests = new ObservableCollection<Player>();
-
-            _playerFriendsListServiceClient = new PlayerFriendsListServiceClient(new System.ServiceModel.InstanceContext(this));
-            _otherProfileDataServiceClient = new OtherProfileDataServiceClient(new System.ServiceModel.InstanceContext(this));
-            _playerFriendRequestServiceClient = new PlayerFriendRequestServiceClient(new System.ServiceModel.InstanceContext(this));
-            _friendOperationsServiceClient = new FriendOperationsServiceClient(new System.ServiceModel.InstanceContext(this));
-
-            BackToLobbyCommand = new ViewModelCommand(BackToLobby);
-            ViewProfileCommand = new ViewModelCommand(ViewProfile);
-            LoadRequestsCommand = new ViewModelCommand(LoadRequests);
-            CloseRequestsPopupCommand = new ViewModelCommand(CloseRequestsPopup);
-            OpenSearchPlayerPopupCommand = new ViewModelCommand(OpenSearchPlayerPopup);
-            AcceptSendRequestCommand = new ViewModelCommand(SearchPlayerById);
-            CancelSearchCommand = new ViewModelCommand(CloseSearchPlayerPopup);
-            AcceptFriendRequestCommand = new ViewModelCommand(AcceptFriendRequest);
-            DeclineFriendRequestCommand = new ViewModelCommand(RejectFriendRequest);
-
-            LoadFriendsListAsync();
-
-            IsRequestsPopupOpen = false;
+            get { return _searchResult; }
+            set
+            {
+                _searchResult = value;
+                OnPropertyChanged();
+            }
         }
 
         public int PlayerId
@@ -119,6 +112,60 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public bool IsServiceErrorVisible
+        {
+            get { return _isServiceErrorVisible; }
+            set
+            {
+                _isServiceErrorVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsRequestSent
+        {
+            get { return _isRequestSent; }
+            set
+            {
+                _isRequestSent = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        public FriendsViewModel(MainWindowViewModel mainWindowViewModel)
+        {
+            _mainWindowViewModel = mainWindowViewModel;
+
+            AssignValuesToUser();
+
+            Friends = new ObservableCollection<Player>();
+            FriendRequests = new ObservableCollection<Player>();
+
+            _playerFriendsListServiceClient = new PlayerFriendsListServiceClient(new InstanceContext(this));
+            _otherProfileDataServiceClient = new OtherProfileDataServiceClient(new InstanceContext(this));
+            _playerFriendRequestServiceClient = new PlayerFriendRequestServiceClient(new InstanceContext(this));
+            _friendOperationsServiceClient = new FriendOperationsServiceClient(new InstanceContext(this));
+
+            BackToLobbyCommand = new ViewModelCommand(BackToLobby);
+            ViewProfileCommand = new ViewModelCommand(ViewProfile);
+            LoadRequestsCommand = new ViewModelCommand(LoadRequests);
+            CloseRequestsPopupCommand = new ViewModelCommand(CloseRequestsPopup);
+            OpenSearchPlayerPopupCommand = new ViewModelCommand(OpenSearchPlayerPopup);
+            AcceptSendRequestCommand = new ViewModelCommand(SearchPlayerById);
+            CancelSearchCommand = new ViewModelCommand(CloseSearchPlayerPopup);
+            AcceptFriendRequestCommand = new ViewModelCommand(AcceptFriendRequest);
+            DeclineFriendRequestCommand = new ViewModelCommand(RejectFriendRequest);
+            ExecuteCloseServiceErrorCommand = new ViewModelCommand(CloseServiceError);
+            ExecuteCloseRequestSent = new ViewModelCommand(CloseRequestSend);
+
+            LoadFriendsListAsync();
+
+            IsRequestsPopupOpen = false;
+            IsServiceErrorVisible = false;
+            IsRequestSent = false;
+        }
+
         private void ViewProfile(object obj)
         {
             if (obj is Player friend)
@@ -130,14 +177,25 @@ namespace StrategoApp.ViewModel
                     playerProfileNotOwnViewModel.LoadPlayerInfo(friend.AccountId, PlayerId);
                     _mainWindowViewModel.ChangeViewModel(playerProfileNotOwnViewModel);
                 }
+                catch (CommunicationException cex)
+                {
+                    Log.Error($"Communication error while loading player info: {cex.Message}.");
+                    IsServiceErrorVisible = true;
+                }
+                catch (TimeoutException tex)
+                {
+                    Log.Error($"Timed out while loading player info: {tex.Message}");
+                    IsServiceErrorVisible = true;
+                }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al cargar perfil de jugador: " + ex.Message);
+                    Log.Error($"Unexpected error while loading player info: {ex.Message}.");
+                    IsServiceErrorVisible = true;
                 }
             }
             else
             {
-                MessageBox.Show("El parámetro no es un objeto Player.");
+                Log.Warn("The parameter is not a player object");
             }
         }
 
@@ -152,9 +210,20 @@ namespace StrategoApp.ViewModel
             {
                 await _playerFriendsListServiceClient.GetPlayerFriendsListAsync(PlayerId);
             }
+            catch (CommunicationException cex)
+            {
+                Log.Error($"Communication error while getting player friends list: {cex.Message}.");
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException tex)
+            {
+                Log.Error($"Timed out while getting player friends list: {tex.Message}");
+                IsServiceErrorVisible = true;
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar la lista de amigos.");
+                Log.Error($"Unexpected error while getting player friends list: {ex.Message}.");
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -182,9 +251,20 @@ namespace StrategoApp.ViewModel
 
                 IsRequestsPopupOpen = true;
             }
+            catch (CommunicationException cex)
+            {
+                Log.Error($"Communication error while getting friend requsts: {cex.Message}.");
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException tex)
+            {
+                Log.Error($"Timed out while getting friend requsts: {tex.Message}");
+                IsServiceErrorVisible = true;
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar solicitudes de amistad.");
+                Log.Error($"Unexpected error while getting friend requsts: {ex.Message}.");
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -194,14 +274,32 @@ namespace StrategoApp.ViewModel
             {
                 var myFriends = response.FriendsIds;
 
-                foreach (var friendId in myFriends)
+                try
                 {
-                    await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendId, PlayerId);
+                    foreach (var friendId in myFriends)
+                    {
+                        await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendId, PlayerId);
+                    }
+                }
+                catch (CommunicationException cex)
+                {
+                    Log.Error($"Communication error while getting other player info: {cex.Message}.");
+                    IsServiceErrorVisible = true;
+                }
+                catch (TimeoutException tex)
+                {
+                    Log.Error($"Timed out while getting other player info: {tex.Message}");
+                    IsServiceErrorVisible = true;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"Unexpected error while getting other player info: {ex.Message}.");
+                    IsServiceErrorVisible = true;
                 }
             }
             else
             {
-                MessageBox.Show($"Error al cargar la lista de amigos: {response.Result.Message}");
+                Log.Warn($"Failed to load friend list: {response.Result.Message}");
             }
         }
 
@@ -211,9 +309,20 @@ namespace StrategoApp.ViewModel
             {
                 await _friendOperationsServiceClient.SendFriendRequestAsync(FriendIdRequested, PlayerId);
             }
+            catch (CommunicationException cex)
+            {
+                Log.Error($"Communication error while seinding friend request: {cex.Message}.");
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException tex)
+            {
+                Log.Error($"Timed out while seinding friend request: {tex.Message}");
+                IsServiceErrorVisible = true;
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al buscar jugador por ID.");
+                Log.Error($"Unexpected error while seinding friend request: {ex.Message}.");
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -225,16 +334,26 @@ namespace StrategoApp.ViewModel
                 {
                     await _friendOperationsServiceClient.AcceptFriendRequestAsync(friend.AccountId, PlayerId);
                     FriendRequests.Remove(friend);
-                    MessageBox.Show("Solicitud de amistad aceptada.");
+                }
+                catch (CommunicationException cex)
+                {
+                    Log.Error($"Communication error while accepting friend request: {cex.Message}.");
+                    IsServiceErrorVisible = true;
+                }
+                catch (TimeoutException tex)
+                {
+                    Log.Error($"Timed out while accepting friend request: {tex.Message}");
+                    IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al aceptar solicitud de amistad.");
+                    Log.Error($"Unexpected error while accepting friend request: {ex.Message}.");
+                    IsServiceErrorVisible = true;
                 }
             }
             else
             {
-                MessageBox.Show("El parámetro no es un objeto Player válido o el ID es 0.");
+                Log.Warn("Parameter is not valid on AcceptFriendRequest");
             }
         }
 
@@ -246,16 +365,26 @@ namespace StrategoApp.ViewModel
                 {
                     await _friendOperationsServiceClient.DeclineFriendRequestAsync(friend.AccountId, PlayerId);
                     FriendRequests.Remove(friend);
-                    MessageBox.Show("Solicitud de amistad rechazada.");
+                }
+                catch (CommunicationException cex)
+                {
+                    Log.Error($"Communication error while declining friend request: {cex.Message}.");
+                    IsServiceErrorVisible = true;
+                }
+                catch (TimeoutException tex)
+                {
+                    Log.Error($"Timed out while declining friend request: {tex.Message}");
+                    IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al rechazar solicitud de amistad.");
+                    Log.Error($"Unexpected error while declining friend request: {ex.Message}.");
+                    IsServiceErrorVisible = true;
                 }
             }
             else
             {
-                MessageBox.Show("El parámetro no es un objeto Player válido o el ID es 0.");
+                Log.Warn("Parameter is not valid on AcceptFriendRequest");
             }
         }
 
@@ -283,7 +412,7 @@ namespace StrategoApp.ViewModel
             }
             else
             {
-                MessageBox.Show("Error al cargar información del jugador: " + response.Result.Message);
+                Log.Warn("Failed to load player information: " + response.Result.Message);
             }
         }
 
@@ -302,15 +431,33 @@ namespace StrategoApp.ViewModel
             {
                 FriendRequests.Clear();
 
-                foreach (var friendRequestId in response.FriendRequestIds)
+                try
                 {
-                    pendingFriendRequests.Add(friendRequestId);
-                    _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendRequestId, PlayerId);
+                    foreach (var friendRequestId in response.FriendRequestIds)
+                    {
+                        pendingFriendRequests.Add(friendRequestId);
+                        _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendRequestId, PlayerId);
+                    }
+                }
+                catch (CommunicationException cex)
+                {
+                    Log.Error($"Communication error while getting friend request ids: {cex.Message}.");
+                    IsServiceErrorVisible = true;
+                }
+                catch (TimeoutException tex)
+                {
+                    Log.Error($"Timed out while getting friend request ids: {tex.Message}");
+                    IsServiceErrorVisible = true;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"Unexpected error while getting friend request ids: {ex.Message}.");
+                    IsServiceErrorVisible = true;
                 }
             }
             else
             {
-                MessageBox.Show("Error al cargar solicitudes de amistad: " + response.Result.Message);
+                Log.Warn("Failed to load friend requests: " + response.Result.Message);
             }
         }
 
@@ -318,11 +465,13 @@ namespace StrategoApp.ViewModel
         {
             if (result.IsSuccess)
             {
-                MessageBox.Show("Solicitud de amistad enviada.");
+                SearchResult = string.Empty;
+                IsSearchPlayerPopupOpen = false;
+                IsRequestSent = true;
             }
             else
             {
-                MessageBox.Show("Error al enviar solicitud de amistad: " + result.Message);
+                SearchResult = Properties.Resources.InvalidPlayerId;
             }
         }
 
@@ -330,11 +479,11 @@ namespace StrategoApp.ViewModel
         {
             if (result.IsSuccess)
             {
-                MessageBox.Show("Solicitud de amistad acceptada.");
+                Log.Info("Request accepted");
             }
             else
             {
-                MessageBox.Show("Error al aceptar solicitud de amistad: " + result.Message);
+                Log.Warn($"Failed to accept request: {result.Message}");
             }
         }
 
@@ -342,11 +491,11 @@ namespace StrategoApp.ViewModel
         {
             if (result.IsSuccess)
             {
-                MessageBox.Show("Solicitud de amistad rechazada");
+                Log.Info("Request declined");
             }
             else
             {
-                MessageBox.Show("Error al rechazar solicitud de amistad: " + result.Message);
+                Log.Warn($"Failed to decline request: {result.Message}");
             }
         }
 
@@ -354,13 +503,23 @@ namespace StrategoApp.ViewModel
         {
             if (result.IsSuccess)
             {
-                MessageBox.Show("Amigo removido");
+                Log.Info("Friend removed");
             }
             else
             {
-                MessageBox.Show("Error al eliminar amistad: " + result.Message);
+                Log.Warn($"Failed to remove friend: {result.Message}");
             }
         }
 
+        private void CloseServiceError(object obj)
+        {
+            IsServiceErrorVisible = false;
+            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+        }
+
+        private void CloseRequestSend(object obj)
+        {
+            IsRequestSent = false;
+        }
     }
 }

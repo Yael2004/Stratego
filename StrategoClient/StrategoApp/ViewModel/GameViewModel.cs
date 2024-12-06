@@ -45,7 +45,6 @@ namespace StrategoApp.ViewModel
         private readonly MainWindowViewModel _mainWindowViewModel;
         public ObservableCollection<Piece> PlayerPieces { get; set; }
         public ObservableCollection<Cell> Board { get; set; }
-        private readonly Dictionary<Piece, Queue<(int row, int column)>> pieceMovementHistory = new Dictionary<Piece, Queue<(int, int)>>();
 
         private readonly List<(int Row, int Column)> invalidPositions = new List<(int Row, int Column)> { };
 

@@ -9,7 +9,7 @@
     <SolidColorBrush x:Key="Beige" Color="#FEFDC9"/>
     <SolidColorBrush x:Key="DarkGreen" Color="#1B4D3E"/>
     <SolidColorBrush x:Key="IntenseGreen" Color="#008C00"/>
-    <SolidColorBrush x:Key="Prueba" Color="#FFB6C1"/>
+    <SolidColorBrush x:Key="Pink" Color="#FFB6C1"/>
     <SolidColorBrush x:Key="DarkGray" Color="#2E2E2E"/>
     <SolidColorBrush x:Key="Gray" Color="#555555"/>
     <SolidColorBrush x:Key="Blue" Color="#3A6EA5"/>
@@ -191,12 +191,12 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="ButtonYellowStyle" TargetType="Button">
+    <Style x:Key="ButtonPinkStyle" TargetType="Button">
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Background" Value="Black"/>
         <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource Prueba}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Pink}"/>
         <Setter Property="BorderThickness" Value="3"/>
         <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -205,7 +205,7 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="Black"/>
                 <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
-                <Setter Property="BorderBrush" Value="{StaticResource Prueba}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource Pink}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
