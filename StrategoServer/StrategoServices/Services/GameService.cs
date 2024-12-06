@@ -242,15 +242,19 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                log.Error($"Messages.TimeoutError: ", tex);
+                log.Error($"Timeout error: ", tex);
+                var playerCallback = OperationContext.Current.GetCallbackChannel<IGameServiceCallback>();
+                await HandlePlayerDisconnectAsync(playerCallback);
             }
             catch (CommunicationException cex)
             {
-                log.Fatal($"Messages.CommunicationError:", cex);
+                log.Fatal($"Communication error:", cex);
+                var playerCallback = OperationContext.Current.GetCallbackChannel<IGameServiceCallback>();
+                await HandlePlayerDisconnectAsync(playerCallback);
             }
             catch (Exception ex)
             {
-                log.Fatal($"Messages.UnexpectedError: ", ex);
+                log.Fatal($"Unexpected error: ", ex);
             }
         }
 
@@ -304,5 +308,73 @@ namespace StrategoServices.Services
             }
         }
 
+        /// <summary>
+        /// Handle player disconnect (e.g. Timeout or CommunicationException), 
+        /// notify opponent and end the game.
+        /// </summary>
+        /// <param name="playerCallback">The callback of the player who disconnected.</param>
+        private async Task HandlePlayerDisconnectAsync(IGameServiceCallback playerCallback)
+        {
+            var gameSession = GetGameSessionFromCallback(playerCallback);
+            if (gameSession == null)
+            {
+                log.Error("No active game session found.");
+                return;
+            }
+
+            int playerId;
+            if (gameSession.GetCallbackForPlayer(gameSession.Player1Id) == playerCallback)
+            {
+                playerId = gameSession.Player1Id;
+            }
+            else if (gameSession.GetCallbackForPlayer(gameSession.Player2Id) == playerCallback)
+            {
+                playerId = gameSession.Player2Id;
+            }
+            else
+            {
+                log.Error("Callback does not match any player.");
+                return;
+            }
+
+            int opponentId = gameSession.GetOpponentId(playerId);
+
+            var opponentCallback = gameSession.GetCallbackForPlayer(opponentId);
+            var operationResult = new OperationResult(true, "Opponent has disconnected. You win!");
+
+            if (opponentCallback != null)
+            {
+                await NotifyCallbackAsync(() => opponentCallback.OnGameEnded("Opponent disconnected. You win!", operationResult));
+            }
+
+            await EndGameAsync(new FinalStatsDTO
+            {
+                GameId = gameSession.GameId,
+                PlayerId = playerId,
+                AccountId = playerId,
+                HasWon = false
+            });
+
+            _activeGames.TryRemove(gameSession.GameId, out _);
+        }
+
+        /// <summary>
+        /// Helper method to get the game session associated with a player callback.
+        /// </summary>
+        /// <param name="playerCallback">The callback channel of the player.</param>
+        /// <returns>GameSession if found, otherwise null.</returns>
+        private GameSession GetGameSessionFromCallback(IGameServiceCallback playerCallback)
+        {
+            foreach (var gameSession in _activeGames.Values)
+            {
+                if (gameSession.GetCallbackForPlayer(gameSession.Player1Id) == playerCallback ||
+                    gameSession.GetCallbackForPlayer(gameSession.Player2Id) == playerCallback)
+                {
+                    return gameSession;
+                }
+            }
+
+            return null;
+        }
     }
 }
