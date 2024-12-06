@@ -30,7 +30,7 @@ namespace Tests
 
             _mockContext.Setup(c => c.Games).Returns(_fakeGamesSet);
 
-            _gamesRepository = new GamesRepository(new Lazy<StrategoEntities>(() => _mockContext.Object));
+            _gamesRepository = new GamesRepository();
         }
 
         [TestMethod]

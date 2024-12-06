@@ -66,7 +66,7 @@ namespace Tests
 
             _mockContext.Setup(c => c.Pictures).Returns(_fakePictureSet);
 
-            _pictureRepository = new PictureRepository(new Lazy<StrategoEntities>(() => _mockContext.Object));
+            _pictureRepository = new PictureRepository();
         }
 
         [TestMethod]

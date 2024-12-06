@@ -31,7 +31,7 @@ namespace Tests
 
             _mockContext.Setup(c => c.Account).Returns(_fakeAccountSet);
 
-            _accountRepository = new AccountRepository(new Lazy<StrategoEntities>(() => _mockContext.Object));
+            _accountRepository = new AccountRepository();
         }
 
         [TestMethod]

@@ -30,7 +30,7 @@ namespace Tests
 
             _mockContext.Setup(c => c.Label).Returns(_fakeLabelSet);
 
-            _labelRepository = new LabelRepository(new Lazy<StrategoEntities>(() => _mockContext.Object));
+            _labelRepository = new LabelRepository();
         }
 
         [TestMethod]

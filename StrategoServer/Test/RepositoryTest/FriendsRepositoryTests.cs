@@ -36,7 +36,7 @@ namespace Test.RepositoryTest
             _mockContext.Setup(c => c.Friend).Returns(_fakeFriendSet);
             _mockContext.Setup(c => c.Player).Returns(_fakePlayerSet);
 
-            _friendsRepository = new FriendsRepository(new Lazy<StrategoEntities>(() => _mockContext.Object));
+            _friendsRepository = new FriendsRepository();
         }
 
         [TestMethod]
