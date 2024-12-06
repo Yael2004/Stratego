@@ -14,8 +14,11 @@
     </UserControl.Resources>
 
     <Viewbox Stretch="Fill">
-        <Grid Background="{StaticResource RoomBackground}" Width="800" Height="450">
+        <Grid Background="{StaticResource RoomBackground}" Width="800" Height="450" IsEnabled="{Binding IsEnable}">
             <Rectangle Fill="#C0000000" />
+            <Rectangle Fill="#80000000" Visibility="{Binding IsReportVisible, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="1" IsHitTestVisible="True"/>
+            <Rectangle Fill="#80000000" Visibility="{Binding IsReportVisible, Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="3" IsHitTestVisible="True"/>
+
             <Grid Height="50" VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
@@ -157,7 +160,8 @@
 
             <Grid Background="black" 
                   Margin="170,54,170,54"
-                  Visibility="{Binding IsReportVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                  Visibility="{Binding IsReportVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                  Panel.ZIndex="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
@@ -213,6 +217,7 @@
                             Margin="10,0" 
                             FontWeight="Bold" 
                             Background="Orange"/>
+                    
                     <Button Content="{x:Static res:Resources.Cancel_Button}"
                             Command="{Binding ToggleReportVisibilityCommand}"
                             Width="100" Height="40" 
@@ -220,6 +225,32 @@
                             FontWeight="Bold" 
                             Background="Orange"/>
                 </StackPanel>
+            </Grid>
+
+            <Grid   Background="{StaticResource SemiTransparent}"
+                    Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="340"
+                    Height="148" Canvas.Left="230" Canvas.Top="146"
+                    Panel.ZIndex="3">
+
+                <Border Background="Black" BorderBrush="{StaticResource DarkViolet}" BorderThickness="2" CornerRadius="10" Padding="15">
+                    <StackPanel>
+                        <TextBlock Text="{x:Static res:Resources.ServerConnectionLostMessage_Label}"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   FontSize="16"
+                                   Margin="0,20,0,20"
+                                   Foreground="{StaticResource DarkViolet}"/>
+
+                        <Button Content="{x:Static res:Resources.Accept_Button}"
+                                Command="{Binding ExecuteCloseServiceErrorCommand}"
+                                Style="{StaticResource ButtonVioletStyle}"
+                                Width="100"
+                                HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
             </Grid>
 
         </Grid>

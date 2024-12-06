@@ -1,4 +1,6 @@
-﻿using StrategoApp.GameService;
+﻿using log4net;
+using StrategoApp.GameService;
+using StrategoApp.Helpers;
 using StrategoApp.Model;
 using StrategoApp.ProfileService;
 using StrategoApp.RoomService;
@@ -18,25 +20,32 @@ namespace StrategoApp.ViewModel
 {
     public class RoomViewModel : ViewModelBase, RoomService.IRoomServiceCallback, ProfileService.IOtherProfileDataServiceCallback
     {
-        private RoomServiceClient _roomServiceClient;
-        private OtherProfileDataServiceClient _otherProfileDataService;
-        private CreateGameServiceClient _gameServiceClient;
-        private GameViewModel _gameViewModel;
+        private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
 
         private string _username;
-        private int _userId;
         private string _profilePicture;
         private string _usernameOponent;
-        private int _userIdOponent;
         private string _profilePictureOponent;
         private string _messageToSend;
+        private string _reportedResultMessage;
+        private string _reportMessage;
+        private int _userId;
+        private int _userIdOponent;
+        private int _gameId;
         private bool _isReportVisible;
         private bool _isReportButtonVisible;
         private bool _isPlayAvalible;
-        private int _gameId;
-        private string _reportMessage;
+        private bool _isEnable;
+        private bool _isReportedMessageVisible;
+        private bool _isServiceErrorVisible;
 
         private ObservableCollection<string> _messages;
+        
+        private RoomServiceClient _roomServiceClient;
+        private OtherProfileDataServiceClient _otherProfileDataService;
+        private CreateGameServiceClient _gameServiceClient;
+        
+        private readonly GameViewModel _gameViewModel;
 
         private readonly MainWindowViewModel _mainWindowViewModel;
         public ICommand ExecuteBackToLobbyCommand { get; }
@@ -45,40 +54,9 @@ namespace StrategoApp.ViewModel
         public ICommand SendReportCommand { get; }
         public ICommand PlayCommand { get; }
         public ICommand SetReportMessageCommand { get; }
+        public ICommand ExecuteCloseServiceErrorCommand { get; }
 
         public string RoomCode { get; set; }
-
-        public RoomViewModel(MainWindowViewModel mainWindowViewModel)
-        {
-            ExecuteBackToLobbyCommand = new ViewModelCommand(ExecuteBackToLobby);
-            SendMessageCommand = new ViewModelCommand(SendMessageAsync);
-            ToggleReportVisibilityCommand = new ViewModelCommand(ToggleReportVisibility);
-            SendReportCommand = new ViewModelCommand(SendReport);
-            PlayCommand = new ViewModelCommand(ExecutePlay, CanExecutePlay);
-            SetReportMessageCommand = new ViewModelCommand(SetReportMessage);
-
-            _messages = new ObservableCollection<string>();
-            _mainWindowViewModel = mainWindowViewModel;
-            _gameViewModel = new GameViewModel(_mainWindowViewModel);
-            IsReportVisible = false;
-
-            InitializeService();
-            LoadPlayerData();
-        }
-
-        private void InitializeService()
-        {
-            try
-            {
-                InstanceContext context = new InstanceContext(this);
-                _roomServiceClient = new RoomServiceClient(context);
-                _gameServiceClient = new CreateGameServiceClient();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error initializing the service client: " + ex.Message);
-            }
-        }
 
         public string Username
         {
@@ -150,6 +128,16 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public string ReportedResultMessage
+        {
+            get { return _reportedResultMessage; }
+            set
+            {
+                _reportedResultMessage = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool IsReportVisible
         {
             get { return _isReportVisible; }
@@ -180,6 +168,36 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public bool IsEnable
+        {
+            get { return _isEnable; }
+            set
+            {
+                _isEnable = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsReportedMessageVisible
+        {
+            get { return _isReportedMessageVisible; }
+            set
+            {
+                _isReportedMessageVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsServiceErrorVisible
+        {
+            get { return _isServiceErrorVisible; }
+            set
+            {
+                _isServiceErrorVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ObservableCollection<string> Messages
         {
             get { return _messages; }
@@ -191,6 +209,28 @@ namespace StrategoApp.ViewModel
                     OnPropertyChanged(nameof(Messages));
                 }
             }
+        }
+
+        public RoomViewModel(MainWindowViewModel mainWindowViewModel)
+        {
+            _roomServiceClient = new RoomServiceClient(new InstanceContext(this));
+            _otherProfileDataService = new OtherProfileDataServiceClient(new InstanceContext(this));
+
+            _mainWindowViewModel = mainWindowViewModel;
+
+            ExecuteBackToLobbyCommand = new ViewModelCommand(ExecuteBackToLobby);
+            SendMessageCommand = new ViewModelCommand(SendMessageAsync);
+            ToggleReportVisibilityCommand = new ViewModelCommand(ToggleReportVisibility);
+            SendReportCommand = new ViewModelCommand(SendReport);
+            PlayCommand = new ViewModelCommand(ExecutePlay, CanExecutePlay);
+            SetReportMessageCommand = new ViewModelCommand(SetReportMessage);
+            ExecuteCloseServiceErrorCommand = new ViewModelCommand(CloseServiceError);
+
+            _messages = new ObservableCollection<string>();
+            _gameViewModel = new GameViewModel(_mainWindowViewModel);
+            IsReportVisible = false;
+
+            LoadPlayerData();
         }
 
         private void LoadPlayerData()
@@ -208,12 +248,30 @@ namespace StrategoApp.ViewModel
             try
             {
                 var playerId = PlayerSingleton.Instance.Player.Id;
+
                 await _roomServiceClient.CreateRoomAsync(playerId);
+                
                 return true;
+            }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while creating room.", ex);
+                IsServiceErrorVisible = true;
+
+                return false;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while creating room.", ex);
+                IsServiceErrorVisible = true;
+
+                return false;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error creating room: " + ex.Message);
+                Log.Error("Unexpected error while creating room.", ex);
+                IsServiceErrorVisible = true;
+
                 return false;
             }
         }
@@ -234,9 +292,20 @@ namespace StrategoApp.ViewModel
                     IsPlayAvalible = true;
                 }
             }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while joining to room.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while joining to room.", ex);
+                IsServiceErrorVisible = true;
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Error joining room: " + ex.Message);
+                Log.Error("Unexpected error while joining to room.", ex);
+                IsServiceErrorVisible = true;
             }
 
             return canJoin;
@@ -249,35 +318,61 @@ namespace StrategoApp.ViewModel
                 var playerId = PlayerSingleton.Instance.Player.Id;
                 _roomServiceClient.LeaveRoomAsync(playerId);
             }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while leaving room.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while leaving room.", ex);
+                IsServiceErrorVisible = true;
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Error leaving room: " + ex.Message);
+                Log.Error("Unexpected error while leaving room.", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
         public void SendMessageAsync(object obj)
         {
-            if (string.IsNullOrWhiteSpace(MessageToSend))
+            MessageToSend = MessageToSend.Trim();
+
+            if (MessageToSend == string.Empty)
             {
-                MessageBox.Show("Cannot send an empty message.");
                 return;
             }
 
             try
             {
                 var playerId = PlayerSingleton.Instance.Player.Id;
+
                 _roomServiceClient.SendMessageToRoomAsync(RoomCode, playerId, MessageToSend);
+
                 MessageToSend = string.Empty;
+            }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while sending message.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while sending message.", ex);
+                IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error sending message: " + ex.Message);
+                Log.Error("Unexpected error while sending message.", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
         public void ToggleReportVisibility(object obj)
         {
             _reportMessage = string.Empty;
+            IsEnable = !IsEnable;
             IsReportVisible = !IsReportVisible;
         }
 
@@ -292,7 +387,25 @@ namespace StrategoApp.ViewModel
 
         private async void ReportPlayer()
         {
-            await Task.Run(() => _roomServiceClient.ReportPlayerAccountAsync(UserId, UserIdOponent, _reportMessage));
+            try
+            {
+                await Task.Run(() => _roomServiceClient.ReportPlayerAccountAsync(UserId, UserIdOponent, _reportMessage));
+            }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while reporting player.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while reporting player.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unexpected error while reporting player.", ex);
+                IsServiceErrorVisible = true;
+            }
         }
 
         public void SetReportMessage(object obj)
@@ -302,28 +415,64 @@ namespace StrategoApp.ViewModel
 
         public void ExecutePlay(object obj)
         {
-            try
-            {
-                CreateGameCode();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            CreateGameCode();
         }
 
         private async void CreateGameCode()
         {
-            var response = await _gameServiceClient.CreateGameSessionAsync();
-
-            if (response.OperationResult.IsSuccess)
+            try
             {
-                _gameId = response.GameId;
+                var response = await _gameServiceClient.CreateGameSessionAsync();
+
+                if (response.OperationResult.IsSuccess)
+                {
+                    _gameId = response.GameId;
+
+                    NotifyOpponentToJoinGame();
+                }
+                else
+                {
+                    Log.Warn("Failed to create game session: " + response.OperationResult.Message);
+                }
+
+            }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while obtaining verification code.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while getting verification code.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unexpected error while getting verification code.", ex);
+                IsServiceErrorVisible = true;
+            }
+        }
+
+        private async void NotifyOpponentToJoinGame()
+        {
+            try
+            {
                 await Task.Run(() => _roomServiceClient.NotifyOpponentToJoinGameAsync(RoomCode, _gameId));
             }
-            else
+            catch (CommunicationException ex)
             {
-                MessageBox.Show("Error creating game: " + response.OperationResult.Message);
+                Log.Error("Communication error while notifying opponent to join game.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while notifying opponent to join game.", ex);
+                IsServiceErrorVisible = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unexpected error while notifying opponent to join game.", ex);
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -341,14 +490,7 @@ namespace StrategoApp.ViewModel
 
         public void ExecuteBackToLobby(Object obj)
         {
-            try
-            {
-                _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
         }
 
         public void RoomCreatedAsync(RoomCreatedResponse response)
@@ -356,11 +498,10 @@ namespace StrategoApp.ViewModel
             if (response.Result.IsSuccess)
             {
                 RoomCode = response.RoomCode;
-                MessageBox.Show("Room created successfully with code: " + RoomCode);
             }
             else
             {
-                MessageBox.Show("Room creation failed: " + response.Result.Message);
+                Log.Warn("Failed to create a room " + response.Result.Message);            
             }
         }
 
@@ -368,11 +509,11 @@ namespace StrategoApp.ViewModel
         {
             if (response.IsSuccess)
             {
-                MessageBox.Show(response.Message);
+                Log.Info("Room response: " + response.Message);
             }
             else
             {
-                MessageBox.Show("Operation failed: " + response.Message);
+                Log.Warn("Room response: " + response.Message);
             }
         }
 
@@ -393,7 +534,7 @@ namespace StrategoApp.ViewModel
             }
             else
             {
-                MessageBox.Show($"{response.Result.Message}");
+                Log.Warn("Failed to get other player info: " + response.Result.Message);
             }
         }
 
@@ -407,14 +548,13 @@ namespace StrategoApp.ViewModel
             else
             {
                 UserIdOponent = connectedPlayerId;
-                UsernameOponent = "Invited";
+                UsernameOponent = "Guest";
                 ProfilePictureOponent = "pack://application:,,,/StrategoApp;component/Assets/Images/ProfilePictures/Picture1.png";
             }
         }
 
         private void CallOponentPlayerInfo(int connectedPlayerId)
         {
-            _otherProfileDataService = new OtherProfileDataServiceClient(new InstanceContext(this));
             _otherProfileDataService.GetOtherPlayerInfoAsync(connectedPlayerId, UserId);
         }
 
@@ -428,7 +568,7 @@ namespace StrategoApp.ViewModel
             }
             else
             {
-                MessageBox.Show("Error joining game: " + result.Message);
+                Log.Warn("Failed to notify to join game: " + result.Message);
             }
         }
 
@@ -436,12 +576,17 @@ namespace StrategoApp.ViewModel
         {
             if (result.IsSuccess)
             {
-                MessageBox.Show("Player reported successfully.");
+                IsReportedMessageVisible = true;
             }
             else
             {
-                MessageBox.Show("Error reporting player: " + result.Message);
+                Log.Warn("Failed to report player: " + result.Message);
             }
+        }
+
+        private void CloseServiceError(object obj)
+        {
+            IsServiceErrorVisible = false;
         }
 
     }
