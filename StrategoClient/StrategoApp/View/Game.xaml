@@ -90,7 +90,7 @@
 
             <Grid Background="Transparent"
           Visibility="{Binding IsMyTurn, Converter={StaticResource BoolToVisibilityConverter}}">
-                <TextBlock Text="Esperando turno..." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Foreground="Red" />
+                <TextBlock Text="{x:Static res:Resources.WaitingTurn_Label}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Foreground="Red" />
             </Grid>
         </Grid>
 

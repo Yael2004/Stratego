@@ -148,6 +148,7 @@ namespace StrategoApp.ViewModel
             ExecuteCloseServiceErrorCommand = new ViewModelCommand(CloseServiceError);
 
             AccountId = PlayerSingleton.Instance.Player.Id;
+            IsFriend = false;
         }
 
         private void BackToLobby(object obj)
@@ -157,18 +158,28 @@ namespace StrategoApp.ViewModel
 
         public void RemoveFriend(object obj)
         {
-            var profileDataService = new ProfileDataServiceClient(new InstanceContext(this));
+
         }
 
         public void ReceiveOtherPlayerInfo(OtherPlayerInfoResponse response)
         {
+            if (!response.Result.IsSuccess)
+            {
+                return;
+            }
+
             PlayerId = response.PlayerInfo.PlayerInfo.Id;
             Username = response.PlayerInfo.PlayerInfo.Name;
             ProfilePicture = response.PlayerInfo.PlayerInfo.PicturePath;
             GamesWon = response.PlayerInfo.PlayerStatistics.WonGames;
             GamesLost = response.PlayerInfo.PlayerStatistics.LostGames;
             GamesPlayed = response.PlayerInfo.PlayerStatistics.TotalGames;
-            IsFriend = response.PlayerInfo.IsFriend;
+
+            if (response.PlayerInfo.IsFriend)
+            {
+                IsFriend = true;
+            }
+            
 
             var playerTag = response.PlayerInfo.PlayerInfo.LabelPath;
 

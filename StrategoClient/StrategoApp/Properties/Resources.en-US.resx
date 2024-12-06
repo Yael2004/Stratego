@@ -424,4 +424,7 @@
   <data name="InvalidPlayerId" xml:space="preserve">
     <value>Enter a valid player id</value>
   </data>
+  <data name="WaitingTurn_Label" xml:space="preserve">
+    <value>Waiting turn...</value>
+  </data>
 </root>

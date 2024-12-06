@@ -970,6 +970,15 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Waiting turn....
+        /// </summary>
+        public static string WaitingTurn_Label {
+            get {
+                return ResourceManager.GetString("WaitingTurn_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Wrong Password.
         /// </summary>
         public static string WrongPassword_Label {

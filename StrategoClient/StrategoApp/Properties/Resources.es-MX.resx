@@ -423,4 +423,7 @@
   <data name="InvalidPlayerId" xml:space="preserve">
     <value>Ingresa un id de jugador válido</value>
   </data>
+  <data name="WaitingTurn_Label" xml:space="preserve">
+    <value>Esperando turno...</value>
+  </data>
 </root>

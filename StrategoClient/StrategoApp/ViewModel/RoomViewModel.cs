@@ -32,6 +32,7 @@ namespace StrategoApp.ViewModel
         private int _userId;
         private int _userIdOponent;
         private int _gameId;
+        private int _reportsNumber;
         private bool _isReportVisible;
         private bool _isReportButtonVisible;
         private bool _isPlayAvalible;
@@ -103,6 +104,16 @@ namespace StrategoApp.ViewModel
             set
             {
                 _userIdOponent = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int ReportsNumber
+        {
+            get { return _reportsNumber; }
+            set
+            {
+                _reportsNumber = value;
                 OnPropertyChanged();
             }
         }
@@ -219,6 +230,7 @@ namespace StrategoApp.ViewModel
             _messages = new ObservableCollection<string>();
             _gameViewModel = new GameViewModel(_mainWindowViewModel);
             IsReportVisible = false;
+            ReportsNumber = 0;
 
             LoadPlayerData();
         }
@@ -495,7 +507,15 @@ namespace StrategoApp.ViewModel
                 UsernameOponent = response.PlayerInfo.PlayerInfo.Name;
                 UserIdOponent = response.PlayerInfo.PlayerInfo.Id;
                 ProfilePictureOponent = response.PlayerInfo.PlayerInfo.PicturePath;
-                IsReportButtonVisible = true;
+
+                if (ReportsNumber == 0)
+                {
+                    IsReportButtonVisible = true;
+                }
+                else
+                {
+                    IsReportButtonVisible = false;
+                }
             }
             else
             {
@@ -542,6 +562,7 @@ namespace StrategoApp.ViewModel
             if (result.IsSuccess)
             {
                 IsReportedMessageVisible = true;
+                ReportsNumber = 1;
             }
             else
             {

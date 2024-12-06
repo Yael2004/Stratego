@@ -93,7 +93,7 @@ namespace StrategoApp.ViewModel
                 {
                     var playerProfileNotOwnViewModel = new PlayerProfileNotOwnViewModel(_mainWindowViewModel);
 
-                    playerProfileNotOwnViewModel.LoadPlayerInfo(playerScore.PlayerId ,UserId);
+                    playerProfileNotOwnViewModel.LoadPlayerInfo(playerScore.PlayerId , UserId);
                     _mainWindowViewModel.ChangeViewModel(playerProfileNotOwnViewModel);
                 }
                 catch (CommunicationException cex)
@@ -119,12 +119,17 @@ namespace StrategoApp.ViewModel
             _topPlayersListServiceClient.GetTopPlayersListAsync();
         }
 
-        public async void TopPlayersList([MessageParameter(Name = "topPlayersList")] TopPlayersResponse topPlayersList1)
+        public void TopPlayersList([MessageParameter(Name = "topPlayersList")] TopPlayersResponse topPlayersList1)
         {
             foreach (var playerId in topPlayersList1.TopPlayersIds)
             {
-                await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(playerId, UserId);
+               LoadPlayerInfo(playerId);
             }
+        }
+
+        private async void LoadPlayerInfo(int playerId)
+        {
+            await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(playerId, UserId);
         }
 
         public void ReceiveOtherPlayerInfo(OtherPlayerInfoResponse response)
@@ -138,6 +143,14 @@ namespace StrategoApp.ViewModel
                     Position = response.PlayerInfo.PlayerStatistics.WonGames
                 };
                 PlayerScores.Add(playerScore);
+
+                var sortedList = PlayerScores.OrderByDescending(p => p.Position).ToList();
+
+                PlayerScores.Clear();
+                foreach (var player in sortedList)
+                {
+                    PlayerScores.Add(player);
+                }
             }
         }
 

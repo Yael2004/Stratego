@@ -508,7 +508,7 @@ namespace StrategoApp.ViewModel
 
         public void ShowGameResult(bool isWinner)
         {
-            GameResultText = isWinner ? "Victory!" : "Defeat!";
+            GameResultText = isWinner ? Properties.Resources.Victory_Label : Properties.Resources.Defeat_Label;
             IsGameResultPopupOpen = true;
 
             Task.Run(async () =>
