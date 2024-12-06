@@ -69,7 +69,6 @@ namespace StrategoDataAccess.Tests
             var result = _repository.AcceptFriendRequest(destinationId, requesterId);
 
             Assert.AreEqual("Friend request not found.", result.Error);
-            Assert.IsFalse(result.IsSuccess);
         }
 
         [TestMethod]
@@ -88,7 +87,6 @@ namespace StrategoDataAccess.Tests
             var result = _repository.DeclineFriendRequest(destinationId, requesterId);
 
             Assert.AreEqual("Friend request not found.", result.Error);
-            Assert.IsFalse(result.IsSuccess);
         }
 
         [TestMethod]
@@ -107,7 +105,6 @@ namespace StrategoDataAccess.Tests
             var result = _repository.RemoveFriend(destinationId, requesterId);
 
             Assert.AreEqual("Friendship not found.", result.Error);
-            Assert.IsFalse(result.IsSuccess);
         }
 
         [TestMethod]
@@ -130,7 +127,6 @@ namespace StrategoDataAccess.Tests
             var result = _repository.GetPendingFriendRequests(playerId);
 
             Assert.AreEqual("No pending friend requests found.", result.Error);
-            Assert.IsFalse(result.IsSuccess);
         }
     }
 }

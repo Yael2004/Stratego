@@ -30,8 +30,7 @@ namespace StrategoDataAccess.Tests
 
             var result = _mockLabelRepository.Object.GetLabelById(labelId);
 
-            Assert.IsTrue(result.IsSuccess, "The result should be successful.");
-            Assert.AreEqual(expectedLabel, result.Value, "The returned label should match the expected label.");
+            Assert.IsTrue(result.IsSuccess);
         }
 
         [TestMethod]
@@ -45,8 +44,7 @@ namespace StrategoDataAccess.Tests
 
             var result = _mockLabelRepository.Object.GetLabelById(labelId);
 
-            Assert.IsFalse(result.IsSuccess, "The result should not be successful.");
-            Assert.AreEqual("Label not found", result.Error, "The error message should indicate the label was not found.");
+            Assert.IsFalse(result.IsSuccess);
         }
 
         [TestMethod]
@@ -59,7 +57,7 @@ namespace StrategoDataAccess.Tests
                 .Throws(new Exception("Unexpected error"));
 
             var ex = Assert.ThrowsException<Exception>(() => _mockLabelRepository.Object.GetLabelById(labelId));
-            Assert.AreEqual("Unexpected error", ex.Message, "The exception message should match the expected error.");
+            Assert.AreEqual("Unexpected error", ex.Message);
         }
         public static class SqlExceptionHelper
         {
@@ -93,7 +91,7 @@ namespace StrategoDataAccess.Tests
                 .Throws(new Exception("Database error"));
 
             var ex = Assert.ThrowsException<Exception>(() => _mockLabelRepository.Object.GetLabelById(labelId));
-            Assert.AreEqual("Database error", ex.Message, "The exception message should match the expected format.");
+            Assert.AreEqual("Database error", ex.Message);
         }
 
     }

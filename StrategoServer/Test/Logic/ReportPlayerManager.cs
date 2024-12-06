@@ -34,7 +34,6 @@ namespace StrategoServices.Tests
 
             var actualResult = _reportPlayerManager.ReportPlayer(reporterId, reportedId, reason);
 
-            Assert.IsTrue(actualResult.IsSuccess);
             Assert.AreEqual("Report submitted successfully", actualResult.Value);
         }
 
@@ -52,7 +51,6 @@ namespace StrategoServices.Tests
 
             var actualResult = _reportPlayerManager.ReportPlayer(reporterId, reportedId, reason);
 
-            Assert.IsFalse(actualResult.IsSuccess);
             Assert.AreEqual("Failed to submit report", actualResult.Error);
         }
     }

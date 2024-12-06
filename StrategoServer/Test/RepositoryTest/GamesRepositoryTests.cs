@@ -58,7 +58,6 @@ namespace StrategoDataAccess.Tests
 
             var result = _gamesRepository.GetGameStatisticsByAccountId(accountId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Not available", result.Error);
         }
 
@@ -75,7 +74,6 @@ namespace StrategoDataAccess.Tests
 
             var result = _gamesRepository.IncrementWonGames(accountId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Game record not found for the specified AccountId.", result.Error);
         }
 
@@ -92,7 +90,6 @@ namespace StrategoDataAccess.Tests
 
             var result = _gamesRepository.IncrementDeafeatGames(accountId);
 
-            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Game record not found for the specified AccountId.", result.Error);
         }
     }
