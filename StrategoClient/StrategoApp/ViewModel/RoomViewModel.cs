@@ -243,16 +243,16 @@ namespace StrategoApp.ViewModel
                 
                 return true;
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException cex)
             {
-                Log.Error("Communication error while creating room.", ex);
+                Log.Error("Communication error while creating room.", cex);
                 IsServiceErrorVisible = true;
 
                 return false;
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException tex)
             {
-                Log.Error("Timed out while creating room.", ex);
+                Log.Error("Timed out while creating room.", tex);
                 IsServiceErrorVisible = true;
 
                 return false;
@@ -282,14 +282,14 @@ namespace StrategoApp.ViewModel
                     IsPlayAvalible = true;
                 }
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException cex)
             {
-                Log.Error("Communication error while joining to room.", ex);
+                Log.Error("Communication error while joining to room.", cex);
                 IsServiceErrorVisible = true;
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException tex)
             {
-                Log.Error("Timed out while joining to room.", ex);
+                Log.Error("Timed out while joining to room.", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
@@ -299,30 +299,6 @@ namespace StrategoApp.ViewModel
             }
 
             return canJoin;
-        }
-
-        private void LeaveTheRoomAsync()
-        {
-            try
-            {
-                var playerId = PlayerSingleton.Instance.Player.Id;
-                _roomServiceClient.LeaveRoomAsync(playerId);
-            }
-            catch (CommunicationException ex)
-            {
-                Log.Error("Communication error while leaving room.", ex);
-                IsServiceErrorVisible = true;
-            }
-            catch (TimeoutException ex)
-            {
-                Log.Error("Timed out while leaving room.", ex);
-                IsServiceErrorVisible = true;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Unexpected error while leaving room.", ex);
-                IsServiceErrorVisible = true;
-            }
         }
 
         public void SendMessageAsync(object obj)
@@ -342,14 +318,14 @@ namespace StrategoApp.ViewModel
 
                 MessageToSend = string.Empty;
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException cex)
             {
-                Log.Error("Communication error while sending message.", ex);
+                Log.Error("Communication error while sending message.", cex);
                 IsServiceErrorVisible = true;
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException tex)
             {
-                Log.Error("Timed out while sending message.", ex);
+                Log.Error("Timed out while sending message.", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
@@ -380,14 +356,14 @@ namespace StrategoApp.ViewModel
             {
                 await Task.Run(() => _roomServiceClient.ReportPlayerAccountAsync(UserId, UserIdOponent, _reportMessage));
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException cex)
             {
-                Log.Error("Communication error while reporting player.", ex);
+                Log.Error("Communication error while reporting player.", cex);
                 IsServiceErrorVisible = true;
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException tex)
             {
-                Log.Error("Timed out while reporting player.", ex);
+                Log.Error("Timed out while reporting player.", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
@@ -421,18 +397,18 @@ namespace StrategoApp.ViewModel
                 }
                 else
                 {
-                    Log.Warn("Failed to create game session: " + response.OperationResult.Message);
+                    Log.Warn($"Failed to create game session: {response.OperationResult.Message}");
                 }
 
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException cex)
             {
-                Log.Error("Communication error while obtaining verification code.", ex);
+                Log.Error("Communication error while obtaining verification code.", cex);
                 IsServiceErrorVisible = true;
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException tex)
             {
-                Log.Error("Timed out while getting verification code.", ex);
+                Log.Error("Timed out while getting verification code.", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
@@ -448,14 +424,14 @@ namespace StrategoApp.ViewModel
             {
                 await Task.Run(() => _roomServiceClient.NotifyOpponentToJoinGameAsync(RoomCode, _gameId));
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException cex)
             {
-                Log.Error("Communication error while notifying opponent to join game.", ex);
+                Log.Error("Communication error while notifying opponent to join game.", cex);
                 IsServiceErrorVisible = true;
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException tex)
             {
-                Log.Error("Timed out while notifying opponent to join game.", ex);
+                Log.Error("Timed out while notifying opponent to join game.", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
@@ -490,7 +466,7 @@ namespace StrategoApp.ViewModel
             }
             else
             {
-                Log.Warn("Failed to create a room " + response.Result.Message);            
+                Log.Warn($"Failed to create a room {response.Result.Message}");            
             }
         }
 
@@ -498,11 +474,11 @@ namespace StrategoApp.ViewModel
         {
             if (response.IsSuccess)
             {
-                Log.Info("Room response: " + response.Message);
+                Log.Info($"Room response: {response.Message}");
             }
             else
             {
-                Log.Warn("Room response: " + response.Message);
+                Log.Warn($"Room response: {response.Message}");
             }
         }
 
@@ -523,7 +499,7 @@ namespace StrategoApp.ViewModel
             }
             else
             {
-                Log.Warn("Failed to get other player info: " + response.Result.Message);
+                Log.Warn($"Failed to get other player info: {response.Result.Message}");
             }
         }
 
@@ -557,7 +533,7 @@ namespace StrategoApp.ViewModel
             }
             else
             {
-                Log.Warn("Failed to notify to join game: " + result.Message);
+                Log.Warn($"Failed to notify to join game: {result.Message}");
             }
         }
 
@@ -569,7 +545,7 @@ namespace StrategoApp.ViewModel
             }
             else
             {
-                Log.Warn("Failed to report player: " + result.Message);
+                Log.Warn($"Failed to report player: {result.Message}");
             }
         }
 

@@ -180,14 +180,14 @@ namespace StrategoApp.ViewModel
                 {
                     await _signUpServiceClient.SignUpAsync(Email, hashedPassword, Username);
                 }
-                catch (CommunicationException ex)
+                catch (CommunicationException cex)
                 {
-                    Log.Error("Communication error with the signup service.", ex);
+                    Log.Error("Communication error with the signup service.", cex);
                     IsServiceErrorVisible = true;
                 }
-                catch (TimeoutException ex)
+                catch (TimeoutException tex)
                 {
-                    Log.Error("Timed out while communicating with the signup service.", ex);
+                    Log.Error("Timed out while communicating with the signup service.", tex);
                     IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)

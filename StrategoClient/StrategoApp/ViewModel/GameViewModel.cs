@@ -439,7 +439,7 @@ namespace StrategoApp.ViewModel
             }
             else
             {
-                Log.Warn("Error starting game: " + gameStartedResponse.OperationResult.Message);
+                Log.Warn($"Error starting game: {gameStartedResponse.OperationResult.Message}");
             }
         }
 
@@ -461,7 +461,7 @@ namespace StrategoApp.ViewModel
 
             if (originCell == null || destinationCell == null)
             {
-                Log.Warn($"Error processing source or destination cells.");
+                Log.Warn("Error processing source or destination cells");
                 return;
             }
 
@@ -610,12 +610,11 @@ namespace StrategoApp.ViewModel
         {
             if (operationResult.IsSuccess)
             {
-                MessageBox.Show("El oponente abandonó el juego.");
                 GoToLobby();
             }
             else
             {
-                MessageBox.Show("Error al abandonar el juego: " + operationResult.Message);
+                Log.Warn($"Falid to leave game: {operationResult.Message}");
             }
         }
 
@@ -627,7 +626,7 @@ namespace StrategoApp.ViewModel
             }
             else
             {
-                MessageBox.Show("Error al finalizar el juego: " + operationResult.Message);
+                Log.Warn($"Failed to end game: {operationResult.Message}");
             }
         }
 
@@ -639,7 +638,7 @@ namespace StrategoApp.ViewModel
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al unirse al juego: {ex.Message}");
+                Log.Warn($"Failed to join game: {ex.Message}");
             }
         }
 

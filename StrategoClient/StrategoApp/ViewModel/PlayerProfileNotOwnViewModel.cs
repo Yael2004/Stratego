@@ -200,14 +200,14 @@ namespace StrategoApp.ViewModel
             {
                 await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(playerId, accountId);
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException cex)
             {
-                Log.Error("Communication error while getting other player info.", ex);
+                Log.Error("Communication error while getting other player info.", cex);
                 IsServiceErrorVisible = true;
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException tex)
             {
-                Log.Error("Timed out while getting other player info.", ex);
+                Log.Error("Timed out while getting other player info.", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)

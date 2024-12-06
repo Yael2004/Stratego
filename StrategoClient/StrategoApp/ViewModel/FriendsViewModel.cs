@@ -179,17 +179,17 @@ namespace StrategoApp.ViewModel
                 }
                 catch (CommunicationException cex)
                 {
-                    Log.Error($"Communication error while loading player info: {cex.Message}.");
+                    Log.Error("Communication error while loading player info: ", cex);
                     IsServiceErrorVisible = true;
                 }
                 catch (TimeoutException tex)
                 {
-                    Log.Error($"Timed out while loading player info: {tex.Message}");
+                    Log.Error("Timed out while loading player info: ", tex);
                     IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
-                    Log.Error($"Unexpected error while loading player info: {ex.Message}.");
+                    Log.Error("Unexpected error while loading player info: ", ex);
                     IsServiceErrorVisible = true;
                 }
             }
@@ -212,17 +212,17 @@ namespace StrategoApp.ViewModel
             }
             catch (CommunicationException cex)
             {
-                Log.Error($"Communication error while getting player friends list: {cex.Message}.");
+                Log.Error("Communication error while getting player friends list: ", cex);
                 IsServiceErrorVisible = true;
             }
             catch (TimeoutException tex)
             {
-                Log.Error($"Timed out while getting player friends list: {tex.Message}");
+                Log.Error("Timed out while getting player friends list: ", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
-                Log.Error($"Unexpected error while getting player friends list: {ex.Message}.");
+                Log.Error("Unexpected error while getting player friends list: ", ex);
                 IsServiceErrorVisible = true;
             }
         }
@@ -253,17 +253,17 @@ namespace StrategoApp.ViewModel
             }
             catch (CommunicationException cex)
             {
-                Log.Error($"Communication error while getting friend requsts: {cex.Message}.");
+                Log.Error("Communication error while getting friend requsts: ", cex);
                 IsServiceErrorVisible = true;
             }
             catch (TimeoutException tex)
             {
-                Log.Error($"Timed out while getting friend requsts: {tex.Message}");
+                Log.Error("Timed out while getting friend requsts: ", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
-                Log.Error($"Unexpected error while getting friend requsts: {ex.Message}.");
+                Log.Error("Unexpected error while getting friend requsts: ", ex);
                 IsServiceErrorVisible = true;
             }
         }
@@ -283,17 +283,17 @@ namespace StrategoApp.ViewModel
                 }
                 catch (CommunicationException cex)
                 {
-                    Log.Error($"Communication error while getting other player info: {cex.Message}.");
+                    Log.Error("Communication error while getting other player info: ", cex);
                     IsServiceErrorVisible = true;
                 }
                 catch (TimeoutException tex)
                 {
-                    Log.Error($"Timed out while getting other player info: {tex.Message}");
+                    Log.Error("Timed out while getting other player info: ", tex);
                     IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
-                    Log.Error($"Unexpected error while getting other player info: {ex.Message}.");
+                    Log.Error("Unexpected error while getting other player info: ", ex);
                     IsServiceErrorVisible = true;
                 }
             }
@@ -311,17 +311,17 @@ namespace StrategoApp.ViewModel
             }
             catch (CommunicationException cex)
             {
-                Log.Error($"Communication error while seinding friend request: {cex.Message}.");
+                Log.Error("Communication error while seinding friend request: ", cex);
                 IsServiceErrorVisible = true;
             }
             catch (TimeoutException tex)
             {
-                Log.Error($"Timed out while seinding friend request: {tex.Message}");
+                Log.Error("Timed out while seinding friend request: ", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
-                Log.Error($"Unexpected error while seinding friend request: {ex.Message}.");
+                Log.Error("Unexpected error while seinding friend request: ", ex);
                 IsServiceErrorVisible = true;
             }
         }
@@ -337,17 +337,17 @@ namespace StrategoApp.ViewModel
                 }
                 catch (CommunicationException cex)
                 {
-                    Log.Error($"Communication error while accepting friend request: {cex.Message}.");
+                    Log.Error("Communication error while accepting friend request: ", cex);
                     IsServiceErrorVisible = true;
                 }
                 catch (TimeoutException tex)
                 {
-                    Log.Error($"Timed out while accepting friend request: {tex.Message}");
+                    Log.Error("Timed out while accepting friend request: ", tex);
                     IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
-                    Log.Error($"Unexpected error while accepting friend request: {ex.Message}.");
+                    Log.Error("Unexpected error while accepting friend request: ", ex);
                     IsServiceErrorVisible = true;
                 }
             }
@@ -368,17 +368,17 @@ namespace StrategoApp.ViewModel
                 }
                 catch (CommunicationException cex)
                 {
-                    Log.Error($"Communication error while declining friend request: {cex.Message}.");
+                    Log.Error("Communication error while declining friend request: ", cex);
                     IsServiceErrorVisible = true;
                 }
                 catch (TimeoutException tex)
                 {
-                    Log.Error($"Timed out while declining friend request: {tex.Message}");
+                    Log.Error("Timed out while declining friend request: ", tex);
                     IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
-                    Log.Error($"Unexpected error while declining friend request: {ex.Message}.");
+                    Log.Error("Unexpected error while declining friend request: ", ex);
                     IsServiceErrorVisible = true;
                 }
             }
@@ -412,7 +412,7 @@ namespace StrategoApp.ViewModel
             }
             else
             {
-                Log.Warn("Failed to load player information: " + response.Result.Message);
+                Log.Warn($"Failed to load player information: {response.Result.Message}");
             }
         }
 
@@ -441,23 +441,23 @@ namespace StrategoApp.ViewModel
                 }
                 catch (CommunicationException cex)
                 {
-                    Log.Error($"Communication error while getting friend request ids: {cex.Message}.");
+                    Log.Error("Communication error while getting friend request ids: ", cex);
                     IsServiceErrorVisible = true;
                 }
                 catch (TimeoutException tex)
                 {
-                    Log.Error($"Timed out while getting friend request ids: {tex.Message}");
+                    Log.Error("Timed out while getting friend request ids: ", tex);
                     IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
-                    Log.Error($"Unexpected error while getting friend request ids: {ex.Message}.");
+                    Log.Error("Unexpected error while getting friend request ids: ", ex);
                     IsServiceErrorVisible = true;
                 }
             }
             else
             {
-                Log.Warn("Failed to load friend requests: " + response.Result.Message);
+                Log.Warn($"Failed to load friend requests: {response.Result.Message}");
             }
         }
 

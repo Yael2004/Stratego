@@ -387,14 +387,14 @@ namespace StrategoApp.ViewModel
             {
                 await _logInServiceClient.LogInAsync(Mail, hashedPassword);
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException cex)
             {
-                Log.Error("Communication error with the login service.", ex);
+                Log.Error("Communication error with the login service.", cex);
                 IsServiceErrorVisible = true;
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException tex)
             {
-                Log.Error("Timed out while communicating with the login service.", ex);
+                Log.Error("Timed out while communicating with the login service.", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
@@ -529,14 +529,14 @@ namespace StrategoApp.ViewModel
                     IsCodeVerificationVisible = true;
                 }
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException cex)
             {
-                Log.Error("Communication error while obtaining verification code.", ex);
+                Log.Error("Communication error while obtaining verification code.", cex);
                 IsServiceErrorVisible = true;
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException tex)
             {
-                Log.Error("Timed out while getting verification code.", ex);
+                Log.Error("Timed out while getting verification code.", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
@@ -563,14 +563,14 @@ namespace StrategoApp.ViewModel
                     PasswordChangedSuccesfully = true;
                 }
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException cex)
             {
-                Log.Error("Communication error while changing password.", ex);
+                Log.Error("Communication error while changing password.", cex);
                 IsServiceErrorVisible = true;
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException tex)
             {
-                Log.Error("Timed out while changing password.", ex);
+                Log.Error("Timed out while changing password.", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)

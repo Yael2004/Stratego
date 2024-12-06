@@ -268,14 +268,14 @@ namespace StrategoApp.ViewModel
             {
                 _playerModifierServiceClient.UpdatePlayerProfileAsync(updatedProfile);
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException cex)
             {
-                Log.Error("Communication error while updating tag.", ex);
+                Log.Error("Communication error while updating tag.", cex);
                 IsServiceErrorVisible = true;
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException tex)
             {
-                Log.Error("Timed out while communicating with the update tag.", ex);
+                Log.Error("Timed out while communicating with the update tag.", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
@@ -349,14 +349,14 @@ namespace StrategoApp.ViewModel
 
                     PlayerSingleton.Instance.Player.Name = UsernameEdited;
                 }
-                catch (CommunicationException ex)
+                catch (CommunicationException cex)
                 {
-                    Log.Error("Communication error while updating username.", ex);
+                    Log.Error("Communication error while updating username.", cex);
                     IsServiceErrorVisible = true;
                 }
-                catch (TimeoutException ex)
+                catch (TimeoutException tex)
                 {
-                    Log.Error("Timed out while communicating with the update username.", ex);
+                    Log.Error("Timed out while communicating with the update username.", tex);
                     IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
@@ -393,14 +393,14 @@ namespace StrategoApp.ViewModel
                     PlayerSingleton.Instance.Player.PicturePath = SelectedProfilePicture;
                 }
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException cex)
             {
-                Log.Error("Communication error while updating profile picture.", ex);
+                Log.Error("Communication error while updating profile picture.", cex);
                 IsServiceErrorVisible = true;
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException tex)
             {
-                Log.Error("Timed out while communicating with the profile picture update.", ex);
+                Log.Error("Timed out while communicating with the profile picture update.", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
@@ -457,14 +457,14 @@ namespace StrategoApp.ViewModel
             {
                 await _playerDataServiceClient.GetPlayerStatisticsAsync(AccountId);
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException cex)
             {
-                Log.Error("Communication error while getting player statistics.", ex);
+                Log.Error("Communication error while getting player statistics.", cex);
                 IsServiceErrorVisible = true;
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException tex)
             {
-                Log.Error("Timed out while communicating with the get player statistics.", ex);
+                Log.Error("Timed out while communicating with the get player statistics.", tex);
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
