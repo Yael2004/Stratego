@@ -192,8 +192,8 @@ namespace StrategoApp.ViewModel
 
             invalidPositions.Add((4, 2));
             invalidPositions.Add((4, 3));
+            invalidPositions.Add((5, 2));
             invalidPositions.Add((5, 3));
-            invalidPositions.Add((5, 4));
             invalidPositions.Add((4, 6));
             invalidPositions.Add((4, 7));
             invalidPositions.Add((5, 6));
