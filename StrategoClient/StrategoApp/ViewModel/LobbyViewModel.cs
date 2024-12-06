@@ -227,17 +227,26 @@ namespace StrategoApp.ViewModel
                 catch (CommunicationException ex)
                 {
                     Log.Error("Communication error with the connect service.", ex);
-                    IsServiceErrorVisible = true;
+
+                    LogInViewModel logInViewModel = new LogInViewModel(_mainWindowViewModel);
+                    _mainWindowViewModel.ChangeViewModel(logInViewModel);
+                    logInViewModel.IsServiceErrorVisible = true;
                 }
                 catch (TimeoutException ex)
                 {
                     Log.Error("Timed out while communicating with the connect service.", ex);
-                    IsServiceErrorVisible = true;
+
+                    LogInViewModel logInViewModel = new LogInViewModel(_mainWindowViewModel);
+                    _mainWindowViewModel.ChangeViewModel(logInViewModel);
+                    logInViewModel.IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while connecting in.", ex);
-                    IsServiceErrorVisible = true;
+
+                    LogInViewModel logInViewModel = new LogInViewModel(_mainWindowViewModel);
+                    _mainWindowViewModel.ChangeViewModel(logInViewModel);
+                    logInViewModel.IsServiceErrorVisible = true;
                 }
             }
         }

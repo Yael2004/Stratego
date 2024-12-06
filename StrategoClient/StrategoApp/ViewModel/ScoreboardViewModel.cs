@@ -25,7 +25,7 @@ namespace StrategoApp.ViewModel
         private readonly OtherProfileDataServiceClient _otherProfileDataServiceClient;
         private readonly TopPlayersListServiceClient _topPlayersListServiceClient;
 
-        public ObservableCollection<PlayerScore> PlayerScores { get; set; }
+        public ObservableCollection<PlayerScore> _playerScores;
 
         public ICommand BackToLobbyCommand { get; }
         public ICommand ViewProfileCommand { get; }
@@ -51,6 +51,16 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public ObservableCollection<PlayerScore> PlayerScores
+        {
+            get { return _playerScores; }
+            set
+            {
+                _playerScores = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public ScoreboardViewModel(MainWindowViewModel mainWindowViewModel)
         {
@@ -64,6 +74,8 @@ namespace StrategoApp.ViewModel
             ExecuteCloseServiceErrorCommand = new ViewModelCommand(CloseServiceError);
 
             LoadTopPlayers();
+
+            _playerScores = new ObservableCollection<PlayerScore>();
 
             UserId = PlayerSingleton.Instance.Player.Id;
         }
@@ -109,14 +121,10 @@ namespace StrategoApp.ViewModel
 
         public async void TopPlayersList([MessageParameter(Name = "topPlayersList")] TopPlayersResponse topPlayersList1)
         {
-            PlayerScores = new ObservableCollection<PlayerScore>();
-
             foreach (var playerId in topPlayersList1.TopPlayersIds)
             {
                 await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(playerId, UserId);
             }
-
-            OnPropertyChanged(nameof(PlayerScores));
         }
 
         public void ReceiveOtherPlayerInfo(OtherPlayerInfoResponse response)
@@ -130,8 +138,6 @@ namespace StrategoApp.ViewModel
                     Position = response.PlayerInfo.PlayerStatistics.WonGames
                 };
                 PlayerScores.Add(playerScore);
-
-                OnPropertyChanged(nameof(PlayerScores));
             }
         }
 

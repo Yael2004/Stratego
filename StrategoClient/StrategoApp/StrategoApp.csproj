@@ -424,27 +424,18 @@
     <Resource Include="Assets\Images\Icons\LetsPlaySwords.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\Cursors\beam_cursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Cursors\select_cursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\FriendService\" />
     <WCFMetadataStorage Include="Connected Services\GameService\" />
     <WCFMetadataStorage Include="Connected Services\LogInService\" />
     <WCFMetadataStorage Include="Connected Services\ProfileService\" />
     <WCFMetadataStorage Include="Connected Services\RoomService\" />
     <WCFMetadataStorage Include="Connected Services\Service\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\Service\ChatService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\Service\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\Service\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\Service\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\LogInService\LogInService.disco" />
@@ -457,21 +448,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\LogInService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\ProfileService\ProfileService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\ProfileService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\ProfileService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\ProfileService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
@@ -492,16 +468,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\FriendService\FriendsService.disco" />
+    <None Include="Connected Services\Service\ChatService.disco" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\FriendService\configuration91.svcinfo" />
+    <None Include="Connected Services\Service\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\FriendService\configuration.svcinfo" />
+    <None Include="Connected Services\Service\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\FriendService\Reference.svcmap">
+    <None Include="Connected Services\Service\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
@@ -522,10 +498,40 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Cursors\beam_cursor.cur" />
+    <None Include="Connected Services\FriendService\FriendsService.disco" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Cursors\select_cursor.cur" />
+    <None Include="Connected Services\FriendService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\FriendService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\FriendService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ProfileService\ProfileService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ProfileService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ProfileService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ProfileService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\ScoreboardBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Icons\ArrowBackOnScoreboardSection_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

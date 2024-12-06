@@ -192,8 +192,8 @@ namespace StrategoApp.ViewModel
 
             invalidPositions.Add((4, 2));
             invalidPositions.Add((4, 3));
+            invalidPositions.Add((5, 2));
             invalidPositions.Add((5, 3));
-            invalidPositions.Add((5, 4));
             invalidPositions.Add((4, 6));
             invalidPositions.Add((4, 7));
             invalidPositions.Add((5, 6));
@@ -513,7 +513,7 @@ namespace StrategoApp.ViewModel
 
             Task.Run(async () =>
             {
-                await Task.Delay(2000);
+                await Task.Delay(5000);
                 Application.Current.Dispatcher.Invoke(GoToLobby);
             });
         }

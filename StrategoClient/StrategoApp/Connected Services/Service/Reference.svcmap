@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="5e0708f7-08ed-460a-be50-30213ba5d91d" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="40e08918-2324-4bc3-92fd-14f200d9c8b2" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -22,11 +22,11 @@
     <MetadataSource Address="http://192.168.137.1:2020/ChatService" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ChatService.xsd" MetadataType="Schema" ID="73069482-706f-4e94-9dc2-df68dd53ec97" SourceId="1" SourceUrl="http://192.168.137.1:2020/ChatService?xsd=xsd1" />
-    <MetadataFile FileName="ChatService1.xsd" MetadataType="Schema" ID="cdfb4e1b-351d-4f78-919d-d04f74ae9daa" SourceId="1" SourceUrl="http://192.168.137.1:2020/ChatService?xsd=xsd0" />
-    <MetadataFile FileName="ChatService.wsdl" MetadataType="Wsdl" ID="6460461b-7d89-45af-b810-a3c83942f2ce" SourceId="1" SourceUrl="http://192.168.137.1:2020/ChatService?wsdl" />
-    <MetadataFile FileName="ChatService.disco" MetadataType="Disco" ID="1bf6e7ec-786d-4df3-9612-b352c11b7136" SourceId="1" SourceUrl="http://192.168.137.1:2020/ChatService?disco" />
-    <MetadataFile FileName="ChatService2.xsd" MetadataType="Schema" ID="e88d9cbd-d668-44f0-8361-ccb72cd9bf2c" SourceId="1" SourceUrl="http://192.168.137.1:2020/ChatService?xsd=xsd2" />
+    <MetadataFile FileName="ChatService.xsd" MetadataType="Schema" ID="9f76c05d-c392-46af-80ec-dde3960fc665" SourceId="1" SourceUrl="http://192.168.137.1:2020/ChatService?xsd=xsd1" />
+    <MetadataFile FileName="ChatService1.xsd" MetadataType="Schema" ID="492aac49-0a70-42ea-8490-4bb000cc0a94" SourceId="1" SourceUrl="http://192.168.137.1:2020/ChatService?xsd=xsd0" />
+    <MetadataFile FileName="ChatService.wsdl" MetadataType="Wsdl" ID="d69d9312-bdcd-4de0-84c3-9168bb4a49c1" SourceId="1" SourceUrl="http://192.168.137.1:2020/ChatService?wsdl" />
+    <MetadataFile FileName="ChatService.disco" MetadataType="Disco" ID="1512d597-2977-4430-b7dd-aeae91e7967e" SourceId="1" SourceUrl="http://192.168.137.1:2020/ChatService?disco" />
+    <MetadataFile FileName="ChatService2.xsd" MetadataType="Schema" ID="650e1953-2123-44c1-bc18-d50d74d83a74" SourceId="1" SourceUrl="http://192.168.137.1:2020/ChatService?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
