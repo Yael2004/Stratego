@@ -513,7 +513,7 @@ namespace StrategoApp.ViewModel
 
             Task.Run(async () =>
             {
-                await Task.Delay(2000);
+                await Task.Delay(5000);
                 Application.Current.Dispatcher.Invoke(GoToLobby);
             });
         }
