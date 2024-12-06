@@ -42,7 +42,7 @@
                 Stretch="UniformToFill"/>
 
     <ImageBrush x:Key="LobbyBackground"
-                ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/LobbyBackground2.png"
+                ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/LobbyBackground.png"
                 Stretch="UniformToFill"/>
 
     <ImageBrush x:Key="ProfileSectionBackground"
@@ -50,11 +50,11 @@
                 Stretch="UniformToFill"/>
 
     <ImageBrush x:Key="RoomBackground" 
-            ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/RoomBackground2.png" 
+            ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/RoomBackground.png" 
             Stretch="UniformToFill"/>
 
     <ImageBrush x:Key="FriendsBackground" 
-        ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/FriendsBackground2.png" 
+        ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/FriendsBackground.png" 
         Stretch="UniformToFill"/>
 
     <ImageBrush x:Key="ScoreboardBackground" 

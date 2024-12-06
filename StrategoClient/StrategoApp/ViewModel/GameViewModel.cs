@@ -190,14 +190,14 @@ namespace StrategoApp.ViewModel
             Board = new ObservableCollection<Cell>();
 
 
+            invalidPositions.Add((4, 2));
+            invalidPositions.Add((4, 3));
             invalidPositions.Add((5, 3));
             invalidPositions.Add((5, 4));
-            invalidPositions.Add((6, 3));
-            invalidPositions.Add((6, 4));
+            invalidPositions.Add((4, 6));
+            invalidPositions.Add((4, 7));
+            invalidPositions.Add((5, 6));
             invalidPositions.Add((5, 7));
-            invalidPositions.Add((5, 8));
-            invalidPositions.Add((6, 7));
-            invalidPositions.Add((6, 8));
 
             LoadPlayerData();
             InitializeBoard();

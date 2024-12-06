@@ -170,7 +170,9 @@ namespace StrategoApp.ViewModel
             GamesPlayed = response.PlayerInfo.PlayerStatistics.TotalGames;
             IsFriend = response.PlayerInfo.IsFriend;
 
-            switch (response.PlayerInfo.PlayerInfo.LabelPath)
+            var playerTag = response.PlayerInfo.PlayerInfo.LabelPath;
+
+            switch (playerTag)
             {
                 case "label1":
                     PlayerTag = Properties.Resources.NovicePlayer_Label;

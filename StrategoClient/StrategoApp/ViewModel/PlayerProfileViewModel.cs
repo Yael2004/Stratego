@@ -267,6 +267,8 @@ namespace StrategoApp.ViewModel
             try
             {
                 _playerModifierServiceClient.UpdatePlayerProfileAsync(updatedProfile);
+
+                PlayerSingleton.Instance.Player.LabelPath = label;
             }
             catch (CommunicationException cex)
             {
@@ -426,7 +428,7 @@ namespace StrategoApp.ViewModel
                 PlayerId = player.Id;
                 ProfilePicture = player.PicturePath;
 
-                var label = SelectTag(player.LabelPath);
+                var label = GetTag(player.LabelPath);
                 PlayerTag = label;
             }
         }
