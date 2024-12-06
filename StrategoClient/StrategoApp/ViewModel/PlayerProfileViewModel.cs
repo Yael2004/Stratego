@@ -28,9 +28,11 @@ namespace StrategoApp.ViewModel
         private string _playerTag;
         private string _selectedProfilePicture;
         private string _usernameError;
+        private string _updateProfileResult;
         private bool _isServiceErrorVisible;
         private bool _isProileSelectorVisible;
         private bool _isEditUsernameVisible;
+        private bool _isUpdateResultVisible;
         private int _playerId;
         private int _gamesWon;
         private int _gamesLost;
@@ -107,6 +109,16 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public string UpdateProfileResult
+        {
+            get { return _updateProfileResult; }
+            set
+            {
+                _updateProfileResult = value;
+                OnPropertyChanged();
+            }
+        }
+
         public static int AccountId
         {
             get { return PlayerSingleton.Instance.Player.AccountId; }
@@ -166,6 +178,16 @@ namespace StrategoApp.ViewModel
             set
             {
                 _isServiceErrorVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsUpdateResultVisible
+        {
+            get { return _isUpdateResultVisible; }
+            set
+            {
+                _isUpdateResultVisible = value;
                 OnPropertyChanged();
             }
         }
@@ -234,6 +256,29 @@ namespace StrategoApp.ViewModel
 
         private void EditProfileTag()
         {
+            switch (PlayerTag)
+            {
+                case var tag when tag == Properties.Resources.NovicePlayer_Label:
+                    PlayerTag = "Label1";
+                    break;
+
+                case var tag when tag == Properties.Resources.ProPlayer_Label:
+                    PlayerTag = "Label2";
+                    break;
+
+                case var tag when tag == Properties.Resources.Apprentice_Label:
+                    PlayerTag = "Label3";
+                    break;
+
+                case var tag when tag == Properties.Resources.Competitive_Label:
+                    PlayerTag = "Label4";
+                    break;
+
+                default:
+                    PlayerTag = "Label1";
+                    break;
+            }
+
             var updatedProfile = new ProfileService.PlayerInfoShownDTO
             {
                 Name = Username,
@@ -398,7 +443,29 @@ namespace StrategoApp.ViewModel
                 Username = player.Name;
                 PlayerId = player.Id;
                 ProfilePicture = player.PicturePath;
-                PlayerTag = player.LabelPath;
+                
+                switch(player.LabelPath)
+                {
+                    case "Label1":
+                        PlayerTag = Properties.Resources.NovicePlayer_Label;
+                        break;
+
+                    case "Label2":
+                        PlayerTag = Properties.Resources.ProPlayer_Label;
+                        break;
+
+                    case "Label3":
+                        PlayerTag = Properties.Resources.Apprentice_Label;
+                        break;
+
+                    case "Label4":
+                        PlayerTag = Properties.Resources.Competitive_Label;
+                        break;
+
+                    default:
+                        PlayerTag = Properties.Resources.NovicePlayer_Label;
+                        break;
+                }
             }
         }
 
@@ -457,7 +524,6 @@ namespace StrategoApp.ViewModel
                 Username = result.Profile.Name;
                 ProfilePicture = result.Profile.PicturePath;
 
-                MessageBox.Show("Perfil actualizado exitosamente en el servidor.");
                 if (IsEditUsernameVisible)
                 {
                     IsEditUsernameVisible = false;
