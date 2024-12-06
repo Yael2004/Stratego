@@ -14,7 +14,6 @@ namespace StrategoApp.ViewModel
     {
         private string _counter;
 
-        
         private readonly MainWindowViewModel _mainWindowViewModel;
         
         public ObservableCollection<Piece> AvailablePieces { get; set; }

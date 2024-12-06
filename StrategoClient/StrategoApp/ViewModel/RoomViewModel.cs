@@ -204,6 +204,7 @@ namespace StrategoApp.ViewModel
         {
             _roomServiceClient = new RoomServiceClient(new InstanceContext(this));
             _otherProfileDataService = new OtherProfileDataServiceClient(new InstanceContext(this));
+            _gameServiceClient = new CreateGameServiceClient();
 
             _mainWindowViewModel = mainWindowViewModel;
 
