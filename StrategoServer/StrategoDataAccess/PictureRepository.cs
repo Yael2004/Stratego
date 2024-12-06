@@ -32,13 +32,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<Pictures>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<Pictures>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<Pictures>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<Pictures>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
     }

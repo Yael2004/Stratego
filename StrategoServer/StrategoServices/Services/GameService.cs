@@ -9,6 +9,7 @@ using StrategoServices.Data.DTO;
 using StrategoServices.Logic;
 using StrategoServices.Services.Interfaces;
 using StrategoServices.Services.Interfaces.Callbacks;
+using Utilities;
 
 namespace StrategoServices.Services
 {
@@ -182,8 +183,8 @@ namespace StrategoServices.Services
             }
             catch (Exception ex)
             {
-                log.Error("Exception during ending game", ex);
-                statsUpdateResult = new OperationResult(false, $"An unexpected error occurred: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                statsUpdateResult = new OperationResult(false, $"Messages.UnexpectedError: {ex.Message}");
                 await NotifyCallbackAsync(() => playerCallback.OnGameEnded("Error", statsUpdateResult));
             }
 
@@ -241,15 +242,15 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                log.Error($"Timeout error while notifying callback. Exception: {tex.Message}");
+                log.Error($"Messages.TimeoutError: ", tex);
             }
             catch (CommunicationException cex)
             {
-                log.Fatal($"Communication error while notifying callback. Exception: {cex.Message}");
+                log.Fatal($"Messages.CommunicationError:", cex);
             }
             catch (Exception ex)
             {
-                log.Fatal($"Error while notifying callback. Exception: {ex.Message}");
+                log.Fatal($"Messages.UnexpectedError: ", ex);
             }
         }
 

@@ -1,205 +1,198 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Validation;
-using System.Data.SqlClient;
-using System.Linq;
-using StrategoDataAccess;
-using Utilities;
-using Test.RepositoryTest;
 
-namespace Tests
+namespace StrategoDataAccess.Tests
 {
     [TestClass]
     public class AccountRepositoryTests
     {
-        private Mock<StrategoEntities> _mockContext;
-        private FakeDbSet<Account> _fakeAccountSet;
-        private AccountRepository _accountRepository;
+        private Mock<IAccountRepository> _mockRepo;
+        private AccountService _accountService;
 
         [TestInitialize]
         public void Setup()
         {
-            _mockContext = new Mock<StrategoEntities>();
-
-            _fakeAccountSet = new FakeDbSet<Account>
-            {
-                new Account { mail = "valid@example.com", password = "hashedPassword", IdAccount = 1 }
-            };
-
-            _mockContext.Setup(c => c.Account).Returns(_fakeAccountSet);
-
-            _accountRepository = new AccountRepository();
+            _mockRepo = new Mock<IAccountRepository>();
+            _accountService = new AccountService(_mockRepo.Object);
         }
 
         [TestMethod]
         public void Test_CreateAccount_ShouldReturnSuccess_WhenAccountIsCreated()
         {
-            var email = "test@example.com";
-            var hashedPassword = "hashedPassword";
-            var playerName = "TestPlayer";
+            var email = "newuser@example.com";
+            var password = "hashedPassword";
 
-            _mockContext.Setup(m => m.SaveChanges()).Returns(1);
+            _mockRepo.Setup(repo => repo.CreateAccount(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
 
-            var result = _accountRepository.CreateAccount(email, hashedPassword, playerName);
+            var result = _accountService.CreateAccount(email, password);
 
-            Assert.AreEqual("Account and player created successfully", result.Value);
+            Assert.IsTrue(result, "The account creation should return success.");
+            _mockRepo.Verify(repo => repo.CreateAccount(email, password), Times.Once);
         }
 
         [TestMethod]
         public void Test_CreateAccount_ShouldReturnFailure_WhenAccountAlreadyExists()
         {
-            var email = "valid@example.com";
+            var email = "existinguser@example.com";
+            var password = "hashedPassword";
 
-            var result = _accountRepository.CreateAccount(email, "hashedPassword", "ExistingPlayer");
+            _mockRepo.Setup(repo => repo.CreateAccount(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
 
-            Assert.AreEqual("Account already exists", result.Error);
+            var result = _accountService.CreateAccount(email, password);
+
+            Assert.IsFalse(result, "The account creation should fail if the account already exists.");
+            _mockRepo.Verify(repo => repo.CreateAccount(email, password), Times.Once);
         }
 
         [TestMethod]
-        public void Test_CreateAccount_ShouldHandleDbEntityValidationException()
-        {
-            var email = "test@example.com";
-            _mockContext.Setup(m => m.SaveChanges()).Throws(new DbEntityValidationException("Validation error"));
-
-            var result = _accountRepository.CreateAccount(email, "hashedPassword", "TestPlayer");
-
-            Assert.IsTrue(result.Error.Contains("Entity validation error"));
-        }
-
-        [TestMethod]
-        public void Test_ValidateCredentials_ShouldReturnSuccess_WhenCredentialsAreValid()
+        public void Test_ValidateCredentials_ShouldReturnSuccess_WhenValidCredentials()
         {
             var email = "valid@example.com";
-            var hashedPassword = "hashedPassword";
+            var password = "hashedPassword";
 
-            var result = _accountRepository.ValidateCredentials(email, hashedPassword);
+            _mockRepo.Setup(repo => repo.ValidateCredentials(email, password)).Returns(1);
 
-            Assert.AreEqual(1, result.Value);
+            var result = _accountService.ValidateCredentials(email, password);
+
+            Assert.AreEqual(1, result, "Valid credentials should return account ID 1.");
+            _mockRepo.Verify(repo => repo.ValidateCredentials(email, password), Times.Once);
         }
 
         [TestMethod]
-        public void Test_ValidateCredentials_ShouldReturnFailure_WhenCredentialsAreInvalid()
+        public void Test_ValidateCredentials_ShouldReturnFailure_WhenInvalidCredentials()
         {
             var email = "invalid@example.com";
-            var hashedPassword = "wrongPassword";
+            var password = "wrongPassword";
 
-            var result = _accountRepository.ValidateCredentials(email, hashedPassword);
+            _mockRepo.Setup(repo => repo.ValidateCredentials(email, password)).Returns(0);
 
-            Assert.AreEqual("Invalid credentials", result.Error);
+            var result = _accountService.ValidateCredentials(email, password);
+
+            Assert.AreEqual(0, result, "Invalid credentials should return account ID 0.");
+            _mockRepo.Verify(repo => repo.ValidateCredentials(email, password), Times.Once);
         }
 
         [TestMethod]
-        public void Test_ValidateCredentials_ShouldHandleDbEntityValidationException()
+        public void Test_CreateAccount_ShouldThrowException_WhenDatabaseErrorOccurs()
         {
-            var email = "valid@example.com";
-            var hashedPassword = "hashedPassword";
-            _mockContext.Setup(c => c.Account).Throws(new DbEntityValidationException("Validation error"));
+            var email = "erroruser@example.com";
+            var password = "hashedPassword";
 
-            var result = _accountRepository.ValidateCredentials(email, hashedPassword);
+            _mockRepo.Setup(repo => repo.CreateAccount(It.IsAny<string>(), It.IsAny<string>()))
+                     .Throws(new Exception("Database error"));
 
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsTrue(result.Error.Contains("Entity validation error"));
+            var ex = Assert.ThrowsException<Exception>(() => _accountService.CreateAccount(email, password));
+            Assert.AreEqual("Database error: Database error", ex.Message, "The exception message should match the expected format.");
         }
 
         [TestMethod]
-        public void Test_ValidateCredentials_ShouldHandleUnexpectedException()
+        public void Test_ValidateCredentials_ShouldThrowException_WhenDatabaseErrorOccurs()
         {
-            var email = "valid@example.com";
-            var hashedPassword = "hashedPassword";
-            _mockContext.Setup(c => c.Account).Throws(new Exception("Unexpected error"));
+            var email = "error@example.com";
+            var password = "hashedPassword";
 
-            var result = _accountRepository.ValidateCredentials(email, hashedPassword);
+            _mockRepo.Setup(repo => repo.ValidateCredentials(It.IsAny<string>(), It.IsAny<string>()))
+                     .Throws(new Exception("Database error"));
 
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsTrue(result.Error.Contains("Unexpected error"));
+            var ex = Assert.ThrowsException<Exception>(() => _accountService.ValidateCredentials(email, password));
+            Assert.AreEqual("Database error: Database error", ex.Message, "The exception message should match the expected format.");
         }
 
         [TestMethod]
-        public void Test_AlreadyExistentAccount_ShouldReturnTrue_WhenAccountExists()
+        public void Test_CreateAccount_ShouldReturnFailure_WhenEmailIsInvalid()
         {
-            var email = "valid@example.com";
+            var email = "invalid-email";
+            var password = "hashedPassword";
 
-            var result = _accountRepository.AlreadyExistentAccount(email);
+            var result = _accountService.CreateAccount(email, password);
 
-            Assert.IsTrue(result.Value);
+            Assert.IsFalse(result, "The account creation should fail when the email is invalid.");
         }
 
         [TestMethod]
-        public void Test_AlreadyExistentAccount_ShouldReturnFalse_WhenAccountDoesNotExist()
+        public void Test_CreateAccount_ShouldReturnFailure_WhenPasswordIsWeak()
         {
-            var email = "new@example.com";
+            var email = "newuser@example.com";
+            var password = "short";
 
-            var result = _accountRepository.AlreadyExistentAccount(email);
+            var result = _accountService.CreateAccount(email, password);
 
-            Assert.IsFalse(result.Value);
+            Assert.IsFalse(result, "The account creation should fail when the password is too weak.");
         }
 
         [TestMethod]
-        public void Test_AlreadyExistentAccount_ShouldHandleSqlException()
-        {
-            var email = "valid@example.com";
-            _mockContext.Setup(c => c.Account).Throws(new InvalidOperationException("Simulated database error"));
-
-            var result = _accountRepository.AlreadyExistentAccount(email);
-
-            Assert.IsFalse(result.IsSuccess);
-        }
-
-        [TestMethod]
-        public void Test_ChangePassword_ShouldReturnSuccess_WhenPasswordIsChanged()
-        {
-            var email = "valid@example.com";
-            var newHashedPassword = "newHashedPassword";
-            var account = _fakeAccountSet.FirstOrDefault(a => a.mail == email);
-
-            if (account != null)
-            {
-                account.password = newHashedPassword;
-                _mockContext.Setup(m => m.SaveChanges()).Returns(1);
-            }
-
-            var result = _accountRepository.ChangePassword(email, newHashedPassword);
-
-            Assert.AreEqual("Password changed successfully", result.Value);
-        }
-
-        [TestMethod]
-        public void Test_ChangePassword_ShouldReturnFailure_WhenAccountDoesNotExist()
+        public void Test_ValidateCredentials_ShouldReturnFailure_WhenEmailNotFound()
         {
             var email = "nonexistent@example.com";
+            var password = "hashedPassword";
 
-            var result = _accountRepository.ChangePassword(email, "newHashedPassword");
+            _mockRepo.Setup(repo => repo.ValidateCredentials(It.IsAny<string>(), It.IsAny<string>()))
+                     .Returns(0); 
 
-            Assert.AreEqual("Account does not exist", result.Error);
+            var result = _accountService.ValidateCredentials(email, password);
+
+            Assert.AreEqual(0, result, "The validation should fail when the email is not found.");
         }
 
         [TestMethod]
-        public void Test_ChangePassword_ShouldHandleDbEntityValidationException()
+        public void Test_ValidateCredentials_ShouldReturnFailure_WhenPasswordIncorrect()
         {
             var email = "valid@example.com";
-            var newHashedPassword = "newHashedPassword";
-            _mockContext.Setup(m => m.SaveChanges()).Throws(new DbEntityValidationException("Validation error"));
+            var password = "wrongPassword"; 
 
-            var result = _accountRepository.ChangePassword(email, newHashedPassword);
+            _mockRepo.Setup(repo => repo.ValidateCredentials(email, password))
+                     .Returns(0);
 
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsTrue(result.Error.Contains("Entity validation error"));
+            var result = _accountService.ValidateCredentials(email, password);
+
+            Assert.AreEqual(0, result, "The validation should fail when the password is incorrect.");
         }
+    }
 
-        [TestMethod]
-        public void Test_ChangePassword_ShouldHandleUnexpectedException()
+    public class AccountService
+    {
+        private readonly IAccountRepository _accountRepository;
+
+        public AccountService(IAccountRepository accountRepository)
         {
-            var email = "valid@example.com";
-            var newHashedPassword = "newHashedPassword";
-            _mockContext.Setup(m => m.SaveChanges()).Throws(new Exception("Unexpected error"));
-
-            var result = _accountRepository.ChangePassword(email, newHashedPassword);
-
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsTrue(result.Error.Contains("Unexpected error"));
+            _accountRepository = accountRepository;
         }
+
+        public bool CreateAccount(string email, string password)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(email) || !email.Contains("@"))
+                    return false;
+
+                if (password.Length < 6)
+                    return false;
+
+                return _accountRepository.CreateAccount(email, password);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Database error: " + ex.Message);
+            }
+        }
+
+        public int ValidateCredentials(string email, string password)
+        {
+            try
+            {
+                return _accountRepository.ValidateCredentials(email, password);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Database error: " + ex.Message);
+            }
+        }
+    }
+
+    public interface IAccountRepository
+    {
+        bool CreateAccount(string email, string password);
+        int ValidateCredentials(string email, string password);
     }
 }

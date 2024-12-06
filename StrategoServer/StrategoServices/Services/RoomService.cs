@@ -10,6 +10,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using Utilities;
 
 namespace StrategoServices.Services
 {
@@ -70,17 +71,17 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException ex)
             {
-                response.Result = new OperationResult(false, $"Timeout error while creating room: {ex.Message}");
+                response.Result = new OperationResult(false, $"{Messages.TimeoutError}  : {ex.Message}");
                 await Task.Run(() => callback.RoomCreatedAsync(response));
             }
             catch (CommunicationException ex)
             {
-                response.Result = new OperationResult(false, $"Communication error while creating room: {ex.Message}");
+                response.Result = new OperationResult(false, $"{Messages.CommunicationError}  : {ex.Message}");
                 await Task.Run(() => callback.RoomCreatedAsync(response));
             }
             catch (Exception ex)
             {
-                response.Result = new OperationResult(false, $"An unexpected error occurred: {ex.Message}");
+                response.Result = new OperationResult(false, $"{Messages.UnexpectedError}  : {ex.Message}");
                 await Task.Run(() => callback.RoomCreatedAsync(response));
             }
 
@@ -134,17 +135,17 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException ex)
             {
-                response = new OperationResult(false, $"Timeout error while joining room: {ex.Message}");
+                response = new OperationResult(false, $"{Messages.TimeoutError}  : {ex.Message}");
                 await Task.Run(() => callback.RoomResponseAsync(response));
             }
             catch (CommunicationException ex)
             {
-                response = new OperationResult(false, $"Communication error while joining room: {ex.Message}");
+                response = new OperationResult(false, $"{Messages.CommunicationError}  : {ex.Message}");
                 await Task.Run(() => callback.RoomResponseAsync(response));
             }
             catch (Exception ex)
             {
-                response = new OperationResult(false, $"An unexpected error occurred: {ex.Message}");
+                response = new OperationResult(false, $"{Messages.UnexpectedError}  : {ex.Message}");
                 await Task.Run(() => callback.RoomResponseAsync(response));
             }
 
@@ -193,17 +194,17 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException ex)
             {
-                response = new OperationResult(false, $"Timeout error while leaving room: {ex.Message}");
+                response = new OperationResult(false, $"{Messages.TimeoutError}  : {ex.Message}");
                 callback.RoomResponseAsync(response);
             }
             catch (CommunicationException ex)
             {
-                response = new OperationResult(false, $"Communication error while leaving room: {ex.Message}");
+                response = new OperationResult(false, $"{Messages.CommunicationError}  : {ex.Message}");
                 callback.RoomResponseAsync(response);
             }
             catch (Exception ex)
             {
-                response = new OperationResult(false, $"An unexpected error occurred: {ex.Message}");
+                response = new OperationResult(false, $"{Messages.UnexpectedError} : {ex.Message}");
                 callback.RoomResponseAsync(response);
             }
         }
@@ -237,15 +238,15 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException ex)
             {
-                Console.WriteLine($"Timeout error while sending message to room: {ex.Message}");
+                Console.WriteLine($"{Messages.TimeoutError} : {ex.Message}");
             }
             catch (CommunicationException ex)
             {
-                Console.WriteLine($"Communication error while sending message to room: {ex.Message}");
+                Console.WriteLine($"{Messages.CommunicationError} : {ex.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"General error while sending message to room: {ex.Message}");
+                Console.WriteLine($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
@@ -317,7 +318,7 @@ namespace StrategoServices.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error in NotifyPlayersOfNewConnectionAsync: {ex.Message}");
+                Console.WriteLine($"{Messages.CommunicationError} : {ex.Message}");
             }
         }
 
@@ -349,7 +350,7 @@ namespace StrategoServices.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error in NotifyOpponentToJoinGameAsync: {ex.Message}");
+                Console.WriteLine($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
@@ -402,15 +403,15 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException ex)
             {
-                operationResult = new OperationResult(false, $"Timeout error while reporting player: {ex.Message}");
+                operationResult = new OperationResult(false, $"{Messages.TimeoutError}: {ex.Message}");
             }
             catch (CommunicationException ex)
             {
-                operationResult = new OperationResult(false, $"Communication error while reporting player: {ex.Message}");
+                operationResult = new OperationResult(false, $"{Messages.CommunicationError}: {ex.Message}");
             }
             catch (Exception ex)
             {
-                operationResult = new OperationResult(false, $"An unexpected error occurred while reporting the player: {ex.Message}");
+                operationResult = new OperationResult(false, $"{Messages.UnexpectedError}: {ex.Message}");
             }
 
             SafeCallbackInvoke(() => callback.NotifyPlayerReported(operationResult));
@@ -428,15 +429,15 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException ex)
             {
-                Console.WriteLine($"Timeout error during callback: {ex.Message}");
+                Console.WriteLine($"{Messages.TimeoutError}: {ex.Message}");
             }
             catch (CommunicationException ex)
             {
-                Console.WriteLine($"Communication error during callback: {ex.Message}");
+                Console.WriteLine($"{Messages.CommunicationError}: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unexpected error during callback: {ex.Message}");
+                Console.WriteLine($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 

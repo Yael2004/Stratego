@@ -1,12 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using StrategoServices.Logic;
 using StrategoDataAccess;
 using StrategoServices.Data.DTO;
-using StrategoServices.Logic;
 using Utilities;
 using System;
 
-namespace Tests.Logic
+namespace StrategoServices.Tests
 {
     [TestClass]
     public class AccountManagerTests
@@ -18,165 +18,158 @@ namespace Tests.Logic
         private AccountManager _accountManager;
 
         [TestInitialize]
-        public void Setup()
+        public void SetUp()
         {
-            _mockAccountRepository = new Mock<AccountRepository>(new Lazy<StrategoEntities>());
-            _mockPlayerRepository = new Mock<PlayerRepository>(new Lazy<StrategoEntities>());
-            _mockPictureRepository = new Mock<PictureRepository>(new Lazy<StrategoEntities>());
-            _mockLabelRepository = new Mock<LabelRepository>(new Lazy<StrategoEntities>());
+            _mockAccountRepository = new Mock<AccountRepository>();
+            _mockPlayerRepository = new Mock<PlayerRepository>();
+            _mockPictureRepository = new Mock<PictureRepository>();
+            _mockLabelRepository = new Mock<LabelRepository>();
 
             _accountManager = new AccountManager(
                 new Lazy<AccountRepository>(() => _mockAccountRepository.Object),
                 new Lazy<PlayerRepository>(() => _mockPlayerRepository.Object),
                 new Lazy<PictureRepository>(() => _mockPictureRepository.Object),
-                new Lazy<LabelRepository>(() => _mockLabelRepository.Object));
+                new Lazy<LabelRepository>(() => _mockLabelRepository.Object)
+            );
         }
 
         [TestMethod]
-        public void Test_CreateAccount_ShouldReturnSuccess_WhenAccountIsCreated()
+        public void CreateAccount_ValidData_ReturnsSuccess()
         {
-            _mockAccountRepository.Setup(repo => repo.CreateAccount("test@example.com", "password", "TestPlayer"))
-                .Returns(Result<string>.Success("Account created"));
+            // Arrange
+            var email = "test@example.com";
+            var password = "password123";
+            var playerName = "TestPlayer";
 
-            var result = _accountManager.CreateAccount("test@example.com", "password", "TestPlayer");
+            _mockAccountRepository.Setup(x => x.CreateAccount(email, password, playerName))
+                .Returns(Result<string>.Success("Account created successfully"));
 
-            Assert.AreEqual("Account created", result.Value);
-        }
+            // Act
+            var result = _accountManager.CreateAccount(email, password, playerName);
 
-        [TestMethod]
-        public void Test_CreateAccount_ShouldReturnFailure_WhenAccountCreationFails()
-        {
-            _mockAccountRepository.Setup(repo => repo.CreateAccount("test@example.com", "password", "TestPlayer"))
-                .Returns(Result<string>.Failure("Account creation failed"));
-
-            var result = _accountManager.CreateAccount("test@example.com", "password", "TestPlayer");
-
-            Assert.AreEqual("Account creation failed", result.Error);
-        }
-
-        [TestMethod]
-        public void Test_LogInAccount_ShouldReturnSuccess_WhenCredentialsAreValid()
-        {
-            _mockAccountRepository.Setup(repo => repo.ValidateCredentials("test@example.com", "password"))
-                .Returns(Result<int>.Success(1));
-
-            var result = _accountManager.LogInAccount("test@example.com", "password");
-
-            Assert.AreEqual(1, result.Value);
-        }
-
-        [TestMethod]
-        public void Test_LogInAccount_ShouldReturnFailure_WhenCredentialsAreInvalid()
-        {
-            _mockAccountRepository.Setup(repo => repo.ValidateCredentials("test@example.com", "password"))
-                .Returns(Result<int>.Failure("Invalid credentials"));
-
-            var result = _accountManager.LogInAccount("test@example.com", "password");
-
-            Assert.AreEqual("Invalid credentials", result.Error);
-        }
-
-        [TestMethod]
-        public void Test_GetLogInAccount_ShouldReturnSuccess_WhenDataIsComplete()
-        {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 1, IdLabel = 1, AccountId = 1 };
-            var picture = new Pictures { IdPicture = 1, path = "picturePath" };
-            var label = new Label { IdLabel = 1, Path = "labelPath" };
-
-            _mockPlayerRepository.Setup(repo => repo.GetPlayerByAccountId(1)).Returns(Result<Player>.Success(player));
-            _mockPictureRepository.Setup(repo => repo.GetPictureById(1)).Returns(Result<Pictures>.Success(picture));
-            _mockLabelRepository.Setup(repo => repo.GetLabelById(1)).Returns(Result<Label>.Success(label));
-
-            var result = _accountManager.GetLogInAccount(1);
-
+            // Assert
             Assert.IsTrue(result.IsSuccess);
+            Assert.AreEqual("Account created successfully", result.Value);
         }
 
         [TestMethod]
-        public void Test_GetLogInAccount_ShouldReturnCorrectPlayerName_WhenDataIsComplete()
+        public void LogInAccount_ValidCredentials_ReturnsAccountId()
         {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 1, IdLabel = 1, AccountId = 1 };
-            var picture = new Pictures { IdPicture = 1, path = "picturePath" };
-            var label = new Label { IdLabel = 1, Path = "labelPath" };
+            // Arrange
+            var email = "test@example.com";
+            var password = "password123";
+            var accountId = 1;
+            var playerId = 2;
+            var reportCount = 1;
 
-            _mockPlayerRepository.Setup(repo => repo.GetPlayerByAccountId(1)).Returns(Result<Player>.Success(player));
-            _mockPictureRepository.Setup(repo => repo.GetPictureById(1)).Returns(Result<Pictures>.Success(picture));
-            _mockLabelRepository.Setup(repo => repo.GetLabelById(1)).Returns(Result<Label>.Success(label));
+            _mockAccountRepository.Setup(x => x.ValidateCredentials(email, password))
+                .Returns(Result<int>.Success(accountId));
 
-            var result = _accountManager.GetLogInAccount(1);
+            _mockPlayerRepository.Setup(x => x.GetPlayerByAccountId(accountId))
+                .Returns(Result<Player>.Success(new Player { Id = playerId }));
 
-            Assert.AreEqual("Player1", result.Value.Name);
+            _mockPlayerRepository.Setup(x => x.GetReportCount(playerId))
+                .Returns(Result<int>.Success(reportCount));
+
+            // Act
+            var result = _accountManager.LogInAccount(email, password);
+
+            // Assert
+            Assert.IsTrue(result.IsSuccess);
+            Assert.AreEqual(accountId, result.Value);
         }
 
         [TestMethod]
-        public void Test_GetLogInAccount_ShouldReturnCorrectPicturePath_WhenDataIsComplete()
+        public void LogInAccount_TooManyReports_ReturnsFailure()
         {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 1, IdLabel = 1, AccountId = 1 };
-            var picture = new Pictures { IdPicture = 1, path = "picturePath" };
-            var label = new Label { IdLabel = 1, Path = "labelPath" };
+            // Arrange
+            var email = "test@example.com";
+            var password = "password123";
+            var accountId = 1;
+            var playerId = 2;
+            var reportCount = 3;
 
-            _mockPlayerRepository.Setup(repo => repo.GetPlayerByAccountId(1)).Returns(Result<Player>.Success(player));
-            _mockPictureRepository.Setup(repo => repo.GetPictureById(1)).Returns(Result<Pictures>.Success(picture));
-            _mockLabelRepository.Setup(repo => repo.GetLabelById(1)).Returns(Result<Label>.Success(label));
+            _mockAccountRepository.Setup(x => x.ValidateCredentials(email, password))
+                .Returns(Result<int>.Success(accountId));
 
-            var result = _accountManager.GetLogInAccount(1);
+            _mockPlayerRepository.Setup(x => x.GetPlayerByAccountId(accountId))
+                .Returns(Result<Player>.Success(new Player { Id = playerId }));
 
+            _mockPlayerRepository.Setup(x => x.GetReportCount(playerId))
+                .Returns(Result<int>.Success(reportCount));
+
+            // Act
+            var result = _accountManager.LogInAccount(email, password);
+
+            // Assert
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual("Access denied: This account has been reported too many times.", result.Error);
+        }
+
+        [TestMethod]
+        public void GetLogInAccount_ValidAccount_ReturnsPlayerDTO()
+        {
+            // Arrange
+            var accountId = 1;
+            var player = new Player { Id = 2, Name = "TestPlayer", AccountId = accountId, PictureId = 1, IdLabel = 1 };
+            var picture = new Pictures { path = "picturePath" };
+            var label = new Label { Path = "labelPath" };
+
+            _mockPlayerRepository.Setup(x => x.GetPlayerByAccountId(accountId))
+                .Returns(Result<Player>.Success(player));
+
+            _mockPictureRepository.Setup(x => x.GetPictureById(player.PictureId))
+                .Returns(Result<Pictures>.Success(picture));
+
+            _mockLabelRepository.Setup(x => x.GetLabelById(player.IdLabel))
+                .Returns(Result<Label>.Success(label));
+
+            // Act
+            var result = _accountManager.GetLogInAccount(accountId);
+
+            // Assert
+            Assert.IsTrue(result.IsSuccess);
+            Assert.AreEqual(player.Id, result.Value.Id);
             Assert.AreEqual("picturePath", result.Value.PicturePath);
-        }
-
-        [TestMethod]
-        public void Test_GetLogInAccount_ShouldReturnCorrectLabelPath_WhenDataIsComplete()
-        {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 1, IdLabel = 1, AccountId = 1 };
-            var picture = new Pictures { IdPicture = 1, path = "picturePath" };
-            var label = new Label { IdLabel = 1, Path = "labelPath" };
-
-            _mockPlayerRepository.Setup(repo => repo.GetPlayerByAccountId(1)).Returns(Result<Player>.Success(player));
-            _mockPictureRepository.Setup(repo => repo.GetPictureById(1)).Returns(Result<Pictures>.Success(picture));
-            _mockLabelRepository.Setup(repo => repo.GetLabelById(1)).Returns(Result<Label>.Success(label));
-
-            var result = _accountManager.GetLogInAccount(1);
-
             Assert.AreEqual("labelPath", result.Value.LabelPath);
         }
 
         [TestMethod]
-        public void Test_GetLogInAccount_ShouldReturnFailure_WhenPlayerNotFound()
+        public void GetLogInAccount_PlayerNotFound_ReturnsFailure()
         {
-            _mockPlayerRepository.Setup(repo => repo.GetPlayerByAccountId(1))
+            // Arrange
+            var accountId = 1;
+
+            _mockPlayerRepository.Setup(x => x.GetPlayerByAccountId(accountId))
                 .Returns(Result<Player>.Failure("Player not found"));
 
-            var result = _accountManager.GetLogInAccount(1);
+            // Act
+            var result = _accountManager.GetLogInAccount(accountId);
 
+            // Assert
+            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Player not found", result.Error);
         }
 
         [TestMethod]
-        public void Test_GetLogInAccount_ShouldReturnFailure_WhenPictureNotFound()
+        public void GetLogInAccount_PictureNotFound_ReturnsFailure()
         {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 1, IdLabel = 1, AccountId = 1 };
+            // Arrange
+            var accountId = 1;
+            var player = new Player { Id = 2, Name = "TestPlayer", AccountId = accountId, PictureId = 1, IdLabel = 1 };
 
-            _mockPlayerRepository.Setup(repo => repo.GetPlayerByAccountId(1)).Returns(Result<Player>.Success(player));
-            _mockPictureRepository.Setup(repo => repo.GetPictureById(1)).Returns(Result<Pictures>.Failure("Picture not found"));
+            _mockPlayerRepository.Setup(x => x.GetPlayerByAccountId(accountId))
+                .Returns(Result<Player>.Success(player));
 
-            var result = _accountManager.GetLogInAccount(1);
+            _mockPictureRepository.Setup(x => x.GetPictureById(player.PictureId))
+                .Returns(Result<Pictures>.Failure("Picture not found"));
 
+            // Act
+            var result = _accountManager.GetLogInAccount(accountId);
+
+            // Assert
+            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Picture not found", result.Error);
-        }
-
-        [TestMethod]
-        public void Test_GetLogInAccount_ShouldReturnFailure_WhenLabelNotFound()
-        {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 1, IdLabel = 1, AccountId = 1 };
-            var picture = new Pictures { IdPicture = 1, path = "picturePath" };
-
-            _mockPlayerRepository.Setup(repo => repo.GetPlayerByAccountId(1)).Returns(Result<Player>.Success(player));
-            _mockPictureRepository.Setup(repo => repo.GetPictureById(1)).Returns(Result<Pictures>.Success(picture));
-            _mockLabelRepository.Setup(repo => repo.GetLabelById(1)).Returns(Result<Label>.Failure("Label not found"));
-
-            var result = _accountManager.GetLogInAccount(1);
-
-            Assert.AreEqual("Label not found", result.Error);
         }
     }
 }

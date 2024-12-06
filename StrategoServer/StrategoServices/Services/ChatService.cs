@@ -5,6 +5,7 @@ using StrategoServices.Services.Interfaces;
 using StrategoServices.Logic;
 using StrategoServices.Data;
 using log4net;
+using Utilities;
 
 namespace StrategoServices.Services
 {
@@ -16,6 +17,7 @@ namespace StrategoServices.Services
         private readonly ConcurrentDictionary<int, IChatServiceCallback> _clients = new ConcurrentDictionary<int, IChatServiceCallback>();
         private int _nextGuestId = -1;
         private readonly ConnectedPlayersManager _connectedPlayersManager;
+        private readonly object _lock = new object();
 
         public ChatService(ConnectedPlayersManager connectedPlayersManager)
         {
@@ -41,7 +43,7 @@ namespace StrategoServices.Services
 
                 if (userId == 0)
                 {
-                    lock (this)
+                    lock (_lock)
                     {
                         userId = _nextGuestId--;
                     }
@@ -69,17 +71,17 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                _log.Error("Timeout error in Connect method: " + tex.Message);
+                _log.Error(Messages.TimeoutError, tex);
                 return 0;
             }
             catch (CommunicationException cex)
             {
-                _log.Error("Communication error in Connect method: " + cex.Message);
+                _log.Error(Messages.CommunicationError, cex);
                 return 0;
             }
             catch (Exception ex)
             {
-                _log.Error("Error in Connect method: " + ex.Message);
+                _log.Fatal(Messages.UnexpectedError, ex);
                 return 0;
             }
         }
@@ -105,15 +107,15 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                _log.Error("Timeout error in Disconnect method: " + tex.Message);
+                _log.Error(Messages.TimeoutError, tex);
             }
             catch (CommunicationException cex)
             {
-                _log.Error("Communication error in Disconnect method: " + cex.Message);
+                _log.Error(Messages.CommunicationError, cex);
             }
             catch (Exception ex)
             {
-                _log.Error("Error in Disconnect method: " + ex.Message);
+                _log.Fatal(Messages.UnexpectedError, ex);
             }
         }
 
@@ -136,15 +138,15 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                _log.Error("Timeout error in SendMessage method: " + tex.Message);
+                _log.Error(Messages.CommunicationError, tex);
             }
             catch (CommunicationException cex)
             {
-                _log.Error("Communication error in SendMessage method: " + cex.Message);
+                _log.Error(Messages.CommunicationError, cex);
             }
             catch (Exception ex)
             {
-                _log.Error("Error in SendMessage method: " + ex.Message);
+                _log.Fatal(Messages.UnexpectedError, ex);
             }
         }
 
@@ -153,7 +155,7 @@ namespace StrategoServices.Services
         /// </summary>
         /// <param name="userId">Connected user id</param>
         /// <param name="username">Connected user name</param>
-        private void HandleClientConnected(int userId, string username)
+        private static void HandleClientConnected(int userId, string username)
         {
             Console.WriteLine($"Client {username} (ID: {userId}) has connected to the chat.");
         }
@@ -162,7 +164,7 @@ namespace StrategoServices.Services
         /// Shows disconnected player advice
         /// <param name="userId"/>Connected user id</param>
         /// <param name="username"/>Connected user name</param>
-        private void HandleClientDisconnected(int userId, string username)
+        private static void HandleClientDisconnected(int userId, string username)
         {
             Console.WriteLine($"Client {username} (ID: {userId}) has disconnected from the chat.");
         }
@@ -182,7 +184,7 @@ namespace StrategoServices.Services
                 }
                 catch (Exception ex)
                 {
-                    _log.Error($"Sending message error: {ex.Message}");
+                    _log.Fatal($"Sending message error: ", ex);
                 }
             }
         }
@@ -208,15 +210,15 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                _log.Error("Timeout error in OnClientDisconnected method: " + tex.Message);
+                _log.Error(Messages.TimeoutError, tex);
             }
             catch (CommunicationException cex)
             {
-                _log.Error("Communication error in OnClientDisconnected method: " + cex.Message);
+                _log.Error(Messages.CommunicationError, cex);
             }
             catch (Exception ex)
             {
-                _log.Error("Error in OnClientDisconnected method: " + ex.Message);
+                _log.Fatal(Messages.UnexpectedError, ex);
             }
         }
     }

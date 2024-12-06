@@ -74,20 +74,20 @@ namespace StrategoDataAccess
                 catch (DbEntityValidationException dbEx)
                 {
                     transaction.Rollback();
-                    log.Error("Entity validation error during account creation", dbEx);
-                    return Result<string>.Failure($"Entity validation error: {dbEx.Message}");
+                    log.Error(Messages.EntityValidationError, dbEx);
+                    return Result<string>.Failure($"{Messages.EntityValidationError}: {dbEx.Message}");
                 }
                 catch (SqlException sqlEx)
                 {
                     transaction.Rollback();
-                    log.Error("Database error during account creation", sqlEx);
-                    return Result<string>.Failure($"Database error: {sqlEx.Message}");
+                    log.Error(Messages.DataBaseError, sqlEx);
+                    return Result<string>.Failure($"{Messages.DataBaseError}   : {sqlEx.Message}");
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    log.Error("Unexpected error during account creation", ex);
-                    return Result<string>.Failure($"Unexpected error: {ex.Message}");
+                    log.Error(Messages.UnexpectedError, ex);
+                    return Result<string>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
                 }
             }
         }
@@ -110,18 +110,18 @@ namespace StrategoDataAccess
             }
             catch (DbEntityValidationException dbEx)
             {
-                log.Error("Entity validation error during credential validation", dbEx);
-                return Result<int>.Failure($"Entity validation error: {dbEx.Message}");
+                log.Error(Messages.EntityValidationError, dbEx);
+                return Result<int>.Failure($"{Messages.EntityValidationError}: {dbEx.Message}");
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error during credential validation", sqlEx);
-                return Result<int>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<int>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error during credential validation", ex);
-                return Result<int>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<int>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 
@@ -137,13 +137,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error during account existence check", sqlEx);
-                return Result<bool>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<bool>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error during account existence check", ex);
-                return Result<bool>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<bool>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 
@@ -181,20 +181,20 @@ namespace StrategoDataAccess
                 catch (DbEntityValidationException dbEx)
                 {
                     transaction.Rollback();
-                    log.Error("Entity validation error during password change", dbEx);
-                    return Result<string>.Failure($"Entity validation error: {dbEx.Message}");
+                    log.Error(Messages.EntityValidationError, dbEx);
+                    return Result<string>.Failure($"{Messages.EntityValidationError} : {dbEx.Message}");
                 }
                 catch (SqlException sqlEx)
                 {
                     transaction.Rollback();
-                    log.Error("Database error during password change", sqlEx);
-                    return Result<string>.Failure($"Database error: {sqlEx.Message}");
+                    log.Error(Messages.DataBaseError, sqlEx);
+                    return Result<string>.Failure($"{Messages.DataBaseError}   : {sqlEx.Message}");
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    log.Error("Unexpected error during password change", ex);
-                    return Result<string>.Failure($"Unexpected error: {ex.Message}");
+                    log.Error(Messages.UnexpectedError, ex);
+                    return Result<string>.Failure($"{Messages.UnexpectedError}   : {ex.Message}");
                 }
             }
         }

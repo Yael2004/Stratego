@@ -11,6 +11,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using Utilities;
 
 namespace StrategoServices.Services
 {
@@ -78,18 +79,18 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                log.Error("TimeoutException during LogInAsync", tex);
-                await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, "The operation timed out."));
+                log.Error(Messages.TimeoutError, tex);
+                await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, Messages.TimeoutError));
             }
             catch (CommunicationException cex)
             {
-                log.Error("CommunicationException during LogInAsync", cex);
-                await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, "A communication error occurred."));
+                log.Error(Messages.CommunicationError, cex);
+                await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, Messages.CommunicationError));
             }
             catch (Exception ex)
             {
-                log.Error("Exception during LogInAsync", ex);
-                await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, "An error occurred during login."));
+                log.Error(Messages.UnexpectedError, ex);
+                await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, Messages.UnexpectedError));
             }
         }
 
@@ -114,18 +115,18 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                log.Error("TimeoutException during SignUpAsync", tex);
-                await NotifyCallbackAsync(callback.SignUpResult, new OperationResult(false, "The operation timed out."));
+                log.Error(Messages.TimeoutError, tex);
+                await NotifyCallbackAsync(callback.SignUpResult, new OperationResult(false, Messages.TimeoutError));
             }
             catch (CommunicationException cex)
             {
-                log.Error("CommunicationException during SignUpAsync", cex);
-                await NotifyCallbackAsync(callback.SignUpResult, new OperationResult(false, "A communication error occurred."));
+                log.Error(Messages.CommunicationError, cex);
+                await NotifyCallbackAsync(callback.SignUpResult, new OperationResult(false, Messages.CommunicationError));
             }
             catch (Exception ex)
             {
-                log.Error("Exception during SignUpAsync", ex);
-                await NotifyCallbackAsync(callback.SignUpResult, new OperationResult(false, "An error occurred during sign up."));
+                log.Error(Messages.UnexpectedError, ex);
+                await NotifyCallbackAsync(callback.SignUpResult, new OperationResult(false, Messages.UnexpectedError));
             }
         }
 
@@ -166,18 +167,18 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                log.Error("TimeoutException during ObtainVerificationCodeAsync", tex);
-                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "The operation timed out."));
+                log.Error(Messages.TimeoutError, tex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, Messages.TimeoutError));
             }
             catch (CommunicationException cex)
             {
-                log.Error("CommunicationException during ObtainVerificationCodeAsync", cex);
-                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "A communication error occurred."));
+                log.Error(Messages.CommunicationError, cex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, Messages.CommunicationError));
             }
             catch (Exception ex)
             {
-                log.Error("Exception during ObtainVerificationCodeAsync", ex);
-                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "An error occurred while obtaining the verification code."));
+                log.Error(Messages.UnexpectedError, ex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, Messages.UnexpectedError));
             }
 
             return isSuccessResponse;
@@ -208,18 +209,18 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                log.Error("TimeoutException during SendVerificationCodeAsync", tex);
-                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "The operation timed out."));
+                log.Error(Messages.TimeoutError, tex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, Messages.TimeoutError));
             }
             catch (CommunicationException cex)
             {
-                log.Error("CommunicationException during SendVerificationCodeAsync", cex);
-                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "A communication error occurred."));
+                log.Error(Messages.CommunicationError, cex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, Messages.CommunicationError));
             }
             catch (Exception ex)
             {
-                log.Error("Exception during SendVerificationCodeAsync", ex);
-                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "An error occurred while sending the verification code."));
+                log.Error(Messages.UnexpectedError, ex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, Messages.UnexpectedError));
             }
 
             return isValid;
@@ -246,18 +247,18 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                log.Error("TimeoutException during SendNewPasswordAsync", tex);
-                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "The operation timed out."));
+                log.Error(Messages.TimeoutError, tex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, Messages.TimeoutError));
             }
             catch (CommunicationException cex)
             {
-                log.Error("CommunicationException during SendNewPasswordAsync", cex);
-                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "A communication error occurred."));
+                log.Error(Messages.CommunicationError, cex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, Messages.CommunicationError));
             }
             catch (Exception ex)
             {
-                log.Error("Exception during SendNewPasswordAsync", ex);
-                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, "An error occurred while changing the password."));
+                log.Error(Messages.UnexpectedError, ex);
+                await NotifyCallbackAsync(callback.ChangePasswordResult, new OperationResult(false, Messages.UnexpectedError));
             }
         }
 

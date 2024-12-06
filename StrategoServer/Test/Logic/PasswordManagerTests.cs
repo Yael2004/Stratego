@@ -1,105 +1,164 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using StrategoDataAccess;
 using StrategoServices.Logic;
+using StrategoDataAccess;
 using Utilities;
+using System.Collections.Generic;
 using System;
 
-namespace Tests.Logic
+namespace StrategoServices.Tests
 {
     [TestClass]
     public class PasswordManagerTests
     {
-        private Mock<AccountRepository> _mockAccountRepository;
         private PasswordManager _passwordManager;
+        private Mock<AccountRepository> _accountRepositoryMock;
 
         [TestInitialize]
-        public void Setup()
+        public void SetUp()
         {
-            _mockAccountRepository = new Mock<AccountRepository>(new Lazy<StrategoEntities>());
-            _passwordManager = new PasswordManager(new Lazy<AccountRepository>(() => _mockAccountRepository.Object));
+            // Crear el Mock para el repositorio de cuentas
+            _accountRepositoryMock = new Mock<AccountRepository>();
+
+            // Inicializar el PasswordManager con el Mock
+            _passwordManager = new PasswordManager(new Lazy<AccountRepository>(() => _accountRepositoryMock.Object));
         }
 
         [TestMethod]
-        public void Test_AlreadyExistentAccount_ShouldReturnSuccess_WhenAccountExists()
+        public void AlreadyExistentAccount_AccountExists_ReturnsTrue()
         {
-            _mockAccountRepository.Setup(repo => repo.AlreadyExistentAccount("test@example.com"))
-                .Returns(Result<bool>.Success(true));
+            // Arrange
+            string email = "test@example.com";
+            var expectedResult = Result<bool>.Success(true);
 
-            var result = _passwordManager.AlreadyExistentAccount("test@example.com");
+            // Configurar el comportamiento del Mock
+            _accountRepositoryMock.Setup(repo => repo.AlreadyExistentAccount(email))
+                .Returns(expectedResult);
 
+            // Act
+            var result = _passwordManager.AlreadyExistentAccount(email);
+
+            // Assert
+            Assert.IsTrue(result.IsSuccess);
             Assert.IsTrue(result.Value);
         }
 
         [TestMethod]
-        public void Test_AlreadyExistentAccount_ShouldReturnFailure_WhenAccountDoesNotExist()
+        public void AlreadyExistentAccount_AccountDoesNotExist_ReturnsFalse()
         {
-            _mockAccountRepository.Setup(repo => repo.AlreadyExistentAccount("test@example.com"))
-                .Returns(Result<bool>.Success(false));
+            // Arrange
+            string email = "nonexistent@example.com";
+            var expectedResult = Result<bool>.Success(false);
 
-            var result = _passwordManager.AlreadyExistentAccount("test@example.com");
+            // Configurar el comportamiento del Mock
+            _accountRepositoryMock.Setup(repo => repo.AlreadyExistentAccount(email))
+                .Returns(expectedResult);
 
+            // Act
+            var result = _passwordManager.AlreadyExistentAccount(email);
+
+            // Assert
+            Assert.IsTrue(result.IsSuccess);
             Assert.IsFalse(result.Value);
         }
 
         [TestMethod]
-        public void Test_ChangePassword_ShouldReturnSuccess_WhenPasswordIsChanged()
+        public void ChangePassword_ValidRequest_ReturnsSuccess()
         {
-            _mockAccountRepository.Setup(repo => repo.ChangePassword("test@example.com", "newHashedPassword"))
-                .Returns(Result<string>.Success("Password changed successfully"));
+            // Arrange
+            string email = "test@example.com";
+            string newPassword = "hashedPassword123";
+            var expectedResult = Result<string>.Success("Password changed successfully");
 
-            var result = _passwordManager.ChangePassword("test@example.com", "newHashedPassword");
+            // Configurar el comportamiento del Mock
+            _accountRepositoryMock.Setup(repo => repo.ChangePassword(email, newPassword))
+                .Returns(expectedResult);
 
+            // Act
+            var result = _passwordManager.ChangePassword(email, newPassword);
+
+            // Assert
+            Assert.IsTrue(result.IsSuccess);
             Assert.AreEqual("Password changed successfully", result.Value);
         }
 
         [TestMethod]
-        public void Test_ChangePassword_ShouldReturnFailure_WhenChangeFails()
+        public void ChangePassword_InvalidRequest_ReturnsFailure()
         {
-            _mockAccountRepository.Setup(repo => repo.ChangePassword("test@example.com", "newHashedPassword"))
-                .Returns(Result<string>.Failure("Change failed"));
+            // Arrange
+            string email = "test@example.com";
+            string newPassword = "hashedPassword123";
+            var expectedResult = Result<string>.Failure("Failed to change password");
 
-            var result = _passwordManager.ChangePassword("test@example.com", "newHashedPassword");
+            // Configurar el comportamiento del Mock
+            _accountRepositoryMock.Setup(repo => repo.ChangePassword(email, newPassword))
+                .Returns(expectedResult);
 
-            Assert.AreEqual("Change failed", result.Error);
+            // Act
+            var result = _passwordManager.ChangePassword(email, newPassword);
+
+            // Assert
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual("Failed to change password", result.Error);
         }
 
         [TestMethod]
-        public void Test_GenerateVerificationCode_ShouldStoreCodeForEmail()
+        public void GenerateVerificationCode_ValidEmail_ReturnsCode()
         {
-            var email = "test@example.com";
+            // Arrange
+            string email = "test@example.com";
+
+            // Act
             var code = _passwordManager.GenerateVerificationCode(email);
 
-            Assert.AreEqual(6, code.Length);
+            // Assert
+            Assert.IsNotNull(code);
+            Assert.AreEqual(6, code.Length); // Código de 6 dígitos
         }
 
         [TestMethod]
-        public void Test_ValidateVerificationCode_ShouldReturnSuccess_WhenCodeIsCorrect()
+        public void ValidateVerificationCode_ValidCode_ReturnsSuccess()
         {
-            var email = "test@example.com";
-            var code = _passwordManager.GenerateVerificationCode(email);
+            // Arrange
+            string email = "test@example.com";
+            string validCode = _passwordManager.GenerateVerificationCode(email);
 
-            var result = _passwordManager.ValidateVerificationCode(email, code);
+            // Act
+            var result = _passwordManager.ValidateVerificationCode(email, validCode);
 
+            // Assert
+            Assert.IsTrue(result.IsSuccess);
             Assert.IsTrue(result.Value);
         }
 
         [TestMethod]
-        public void Test_ValidateVerificationCode_ShouldReturnFailure_WhenCodeIsIncorrect()
+        public void ValidateVerificationCode_InvalidCode_ReturnsFailure()
         {
-            var email = "test@example.com";
-            _passwordManager.GenerateVerificationCode(email);
+            // Arrange
+            string email = "test@example.com";
+            _passwordManager.GenerateVerificationCode(email); // Generar un código válido
+            string invalidCode = "000000";
 
-            var result = _passwordManager.ValidateVerificationCode(email, "wrongCode");
+            // Act
+            var result = _passwordManager.ValidateVerificationCode(email, invalidCode);
 
+            // Assert
+            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Invalid verification code", result.Error);
         }
 
         [TestMethod]
-        public void Test_ValidateVerificationCode_ShouldReturnFailure_WhenCodeDoesNotExist()
+        public void ValidateVerificationCode_CodeNotGenerated_ReturnsFailure()
         {
-            var result = _passwordManager.ValidateVerificationCode("test@example.com", "123456");
+            // Arrange
+            string email = "test@example.com";
+            string code = "123456";
 
+            // Act
+            var result = _passwordManager.ValidateVerificationCode(email, code);
+
+            // Assert
+            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Invalid verification code", result.Error);
         }
     }

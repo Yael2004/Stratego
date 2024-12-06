@@ -36,13 +36,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<Player>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<Player>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<Player>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<Player>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 
@@ -61,13 +61,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<bool>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<bool>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<bool>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<bool>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 
@@ -99,13 +99,13 @@ namespace StrategoDataAccess
             } 
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<IEnumerable<Player>>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<IEnumerable<Player>>.Failure($"{Messages.DataBaseError} : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<IEnumerable<Player>>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<IEnumerable<Player>>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 
@@ -148,21 +148,21 @@ namespace StrategoDataAccess
                 }
                 catch (DbEntityValidationException dbEx)
                 {
-                    log.Error("Entity validation error", dbEx);
+                    log.Error(Messages.EntityValidationError, dbEx);
                     transaction.Rollback();
-                    return Result<Player>.Failure($"Entity validation error: {dbEx.Message}");
+                    return Result<Player>.Failure($"{Messages.EntityValidationError}: {dbEx.Message}");
                 }
                 catch (SqlException sqlEx)
                 {
-                    log.Error("Database error", sqlEx);
+                    log.Error(Messages.DataBaseError, sqlEx);
                     transaction.Rollback();
-                    return Result<Player>.Failure($"Database error: {sqlEx.Message}");
+                    return Result<Player>.Failure($"{Messages.DataBaseError} : {sqlEx.Message}");
                 }
                 catch (Exception ex)
                 {
-                    log.Error("Unexpected error", ex);
+                    log.Error(Messages.UnexpectedError, ex);
                     transaction.Rollback();
-                    return Result<Player>.Failure($"Unexpected error: {ex.Message}");
+                    return Result<Player>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
                 }
             }
         }
@@ -186,13 +186,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<Player>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<Player>.Failure($"{Messages.DataBaseError} : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<Player>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<Player>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
@@ -215,13 +215,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<int>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<int>.Failure($"{Messages.DataBaseError}  : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<int>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<int>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
@@ -244,13 +244,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<int>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<int>.Failure($"{Messages.DataBaseError}  : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<int>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<int>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
@@ -273,13 +273,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<string>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<string>.Failure($"{Messages.DataBaseError}  : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<string>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<string>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
@@ -302,13 +302,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<string>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<string>.Failure($"{Messages.DataBaseError}  : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<string>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<string>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
@@ -333,13 +333,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<string>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<string>.Failure($"{Messages.DataBaseError}  : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<string>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<string>.Failure($"{Messages.UnexpectedError}  : {ex.Message}");
             }
         }
 
@@ -375,13 +375,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<IEnumerable<Player>>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<IEnumerable<Player>>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<IEnumerable<Player>>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<IEnumerable<Player>>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 
@@ -412,13 +412,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<string>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<string>.Failure($"{Messages.DataBaseError}   : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<string>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<string>.Failure($"{Messages.UnexpectedError}  : {ex.Message}");
             }
         }
 
@@ -436,13 +436,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<int>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<int>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<int>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<int>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 

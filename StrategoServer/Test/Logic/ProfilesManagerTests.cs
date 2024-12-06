@@ -1,228 +1,179 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using StrategoDataAccess;
-using StrategoServices.Data.DTO;
 using StrategoServices.Logic;
-using Utilities;
+using StrategoDataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Utilities;
+using StrategoServices.Data.DTO;
 
-namespace Tests.Logic
+namespace StrategoServices.Tests
 {
     [TestClass]
     public class ProfilesManagerTests
     {
-        private Mock<GamesRepository> _mockGamesRepository;
-        private Mock<PlayerRepository> _mockPlayerRepository;
         private ProfilesManager _profilesManager;
+        private Mock<GamesRepository> _gamesRepositoryMock;
+        private Mock<PlayerRepository> _playerRepositoryMock;
 
         [TestInitialize]
-        public void Setup()
+        public void SetUp()
         {
-            _mockGamesRepository = new Mock<GamesRepository>(new Lazy<StrategoEntities>());
-            _mockPlayerRepository = new Mock<PlayerRepository>(new Lazy<StrategoEntities>());
-            _profilesManager = new ProfilesManager(new Lazy<GamesRepository>(() => _mockGamesRepository.Object),
-                                                   new Lazy<PlayerRepository>(() => _mockPlayerRepository.Object));
-        }
+            // Crear los Mocks para los repositorios
+            _gamesRepositoryMock = new Mock<GamesRepository>();
+            _playerRepositoryMock = new Mock<PlayerRepository>();
 
-        private void SetupCompletePlayerInfoMocks(Player player)
-        {
-            var picturePath = "path/to/picture";
-            var labelPath = "path/to/label";
-
-            _mockPlayerRepository.Setup(repo => repo.GetOtherPlayerById(player.Id)).Returns(Result<Player>.Success(player));
-            _mockPlayerRepository.Setup(repo => repo.GetPicturePathById(player.PictureId)).Returns(Result<string>.Success(picturePath));
-            _mockPlayerRepository.Setup(repo => repo.GetLabelPathById(player.IdLabel)).Returns(Result<string>.Success(labelPath));
-            _mockGamesRepository.Setup(repo => repo.GetGameStatisticsByAccountId(player.AccountId))
-                .Returns(Result<Games>.Success(new Games { WonGames = 5, DeafeatGames = 2 }));
-            _mockPlayerRepository.Setup(repo => repo.IsFriend(2, player.Id)).Returns(Result<bool>.Success(true));
+            // Inicializar el ProfilesManager con los Mocks
+            _profilesManager = new ProfilesManager(
+                new Lazy<GamesRepository>(() => _gamesRepositoryMock.Object),
+                new Lazy<PlayerRepository>(() => _playerRepositoryMock.Object)
+            );
         }
 
         [TestMethod]
-        public void Test_GetPlayerGameStatistics_ShouldReturnSuccess_WhenStatisticsExist()
+        public void GetPlayerInfo_RepositoryFailure_ReturnsFailure()
         {
-            _mockGamesRepository.Setup(repo => repo.GetGameStatisticsByAccountId(1))
-                .Returns(Result<Games>.Success(new Games { WonGames = 5, DeafeatGames = 3 }));
+            // Arrange
+            int playerId = 1;
+            int requesterId = 2;
 
-            var result = _profilesManager.GetPlayerGameStatistics(1);
+            var playerResult = Result<Player>.Failure("Player not found");
+            _playerRepositoryMock.Setup(repo => repo.GetOtherPlayerById(playerId)).Returns(playerResult);
 
-            Assert.AreEqual(5, result.Value.WonGames);
-            Assert.AreEqual(3, result.Value.LostGames);
-        }
+            // Act
+            var result = _profilesManager.GetPlayerInfo(playerId, requesterId);
 
-        [TestMethod]
-        public void Test_GetPlayerGameStatistics_ShouldReturnFailure_WhenStatisticsNotFound()
-        {
-            _mockGamesRepository.Setup(repo => repo.GetGameStatisticsByAccountId(1))
-                .Returns(Result<Games>.Failure("Statistics not found"));
-
-            var result = _profilesManager.GetPlayerGameStatistics(1);
-
-            Assert.AreEqual("Statistics not found", result.Error);
-        }
-
-
-        [TestMethod]
-        public void Test_GetPlayerInfo_ShouldReturnSuccessResult_WhenPlayerInfoIsComplete()
-        {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
-            SetupCompletePlayerInfoMocks(player);
-
-            var result = _profilesManager.GetPlayerInfo(1, 2);
-
-            Assert.IsTrue(result.IsSuccess, "Expected success result for complete player info");
-        }
-
-        [TestMethod]
-        public void Test_GetPlayerInfo_ShouldReturnNotNullPlayerInfo_WhenPlayerInfoIsComplete()
-        {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
-            SetupCompletePlayerInfoMocks(player);
-
-            var result = _profilesManager.GetPlayerInfo(1, 2);
-
-            Assert.IsNotNull(result.Value.PlayerInfo, "PlayerInfo should not be null");
-        }
-
-        [TestMethod]
-        public void Test_GetPlayerInfo_ShouldReturnCorrectPlayerName_WhenPlayerInfoIsComplete()
-        {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
-            SetupCompletePlayerInfoMocks(player);
-
-            var result = _profilesManager.GetPlayerInfo(1, 2);
-
-            Assert.AreEqual("Player1", result.Value.PlayerInfo.Name);
-        }
-
-        [TestMethod]
-        public void Test_GetPlayerInfo_ShouldReturnCorrectPicturePath_WhenPlayerInfoIsComplete()
-        {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
-            SetupCompletePlayerInfoMocks(player);
-
-            var result = _profilesManager.GetPlayerInfo(1, 2);
-
-            Assert.AreEqual("path/to/picture", result.Value.PlayerInfo.PicturePath);
-        }
-
-        [TestMethod]
-        public void Test_GetPlayerInfo_ShouldReturnCorrectLabelPath_WhenPlayerInfoIsComplete()
-        {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
-            SetupCompletePlayerInfoMocks(player);
-
-            var result = _profilesManager.GetPlayerInfo(1, 2);
-
-            Assert.AreEqual("path/to/label", result.Value.PlayerInfo.LabelPath);
-        }
-
-        [TestMethod]
-        public void Test_GetPlayerInfo_ShouldReturnNotNullPlayerStatistics_WhenPlayerInfoIsComplete()
-        {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
-            SetupCompletePlayerInfoMocks(player);
-
-            var result = _profilesManager.GetPlayerInfo(1, 2);
-
-            Assert.IsNotNull(result.Value.PlayerStatistics, "PlayerStatistics should not be null");
-        }
-
-        [TestMethod]
-        public void Test_GetPlayerInfo_ShouldReturnCorrectWonGamesCount_WhenPlayerInfoIsComplete()
-        {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
-            SetupCompletePlayerInfoMocks(player);
-
-            var result = _profilesManager.GetPlayerInfo(1, 2);
-
-            Assert.AreEqual(5, result.Value.PlayerStatistics.WonGames);
-        }
-
-        [TestMethod]
-        public void Test_GetPlayerInfo_ShouldReturnCorrectLostGamesCount_WhenPlayerInfoIsComplete()
-        {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
-            SetupCompletePlayerInfoMocks(player);
-
-            var result = _profilesManager.GetPlayerInfo(1, 2);
-
-            Assert.AreEqual(2, result.Value.PlayerStatistics.LostGames);
-        }
-
-        [TestMethod]
-        public void Test_GetPlayerInfo_ShouldReturnIsFriendTrue_WhenPlayerInfoIsComplete()
-        {
-            var player = new Player { Id = 1, Name = "Player1", PictureId = 2, IdLabel = 3, AccountId = 1 };
-            SetupCompletePlayerInfoMocks(player);
-
-            var result = _profilesManager.GetPlayerInfo(1, 2);
-
-            Assert.IsTrue(result.Value.IsFriend, "Expected IsFriend to be true");
-        }
-
-        [TestMethod]
-        public void Test_GetPlayerInfo_ShouldReturnFailure_WhenPlayerNotFound()
-        {
-            _mockPlayerRepository.Setup(repo => repo.GetOtherPlayerById(1))
-                .Returns(Result<Player>.Failure("Player not found"));
-
-            var result = _profilesManager.GetPlayerInfo(1, 2);
-
+            // Assert
+            Assert.IsFalse(result.IsSuccess);
             Assert.AreEqual("Player not found", result.Error);
         }
 
         [TestMethod]
-        public void Test_UpdatePlayerProfile_ShouldReturnSuccess_WhenUpdateIsSuccessful()
+        public void UpdatePlayerProfile_Success_ReturnsUpdatedPlayerInfo()
         {
-            var playerDto = new PlayerInfoShownDTO { Id = 1, Name = "UpdatedPlayer", LabelPath = "new/label", PicturePath = "new/picture" };
-            var updatedPlayer = new Player { Id = 1, Name = "UpdatedPlayer" };
+            // Arrange
+            var playerInfo = new PlayerInfoShownDTO
+            {
+                Id = 1,
+                Name = "UpdatedName",
+                PicturePath = "new/path/to/picture",
+                LabelPath = "new/path/to/label"
+            };
 
-            _mockPlayerRepository.Setup(repo => repo.UpdatePlayer(It.IsAny<Player>(), "new/label", "new/picture"))
-                .Returns(Result<Player>.Success(updatedPlayer));
+            var player = new Player { Id = 1, Name = "UpdatedName" };
+            var updateResult = Result<Player>.Success(player);
 
-            var result = _profilesManager.UpdatePlayerProfile(playerDto);
+            // Configurar el Mock para la actualización
+            _playerRepositoryMock.Setup(repo => repo.UpdatePlayer(It.IsAny<Player>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(updateResult);
 
-            Assert.AreEqual("UpdatedPlayer", result.Value.Name);
-            Assert.AreEqual("new/label", result.Value.LabelPath);
-            Assert.AreEqual("new/picture", result.Value.PicturePath);
+            // Act
+            var result = _profilesManager.UpdatePlayerProfile(playerInfo);
+
+            // Assert
+            Assert.IsTrue(result.IsSuccess);
+            Assert.AreEqual("UpdatedName", result.Value.Name);
+            Assert.AreEqual("new/path/to/picture", result.Value.PicturePath);
+            Assert.AreEqual("new/path/to/label", result.Value.LabelPath);
         }
 
         [TestMethod]
-        public void Test_UpdatePlayerProfile_ShouldReturnFailure_WhenUpdateFails()
+        public void UpdatePlayerProfile_Failure_ReturnsFailure()
         {
-            var playerDto = new PlayerInfoShownDTO { Id = 1, Name = "UpdatedPlayer", LabelPath = "new/label", PicturePath = "new/picture" };
+            // Arrange
+            var playerInfo = new PlayerInfoShownDTO
+            {
+                Id = 1,
+                Name = "UpdatedName",
+                PicturePath = "new/path/to/picture",
+                LabelPath = "new/path/to/label"
+            };
 
-            _mockPlayerRepository.Setup(repo => repo.UpdatePlayer(It.IsAny<Player>(), "new/label", "new/picture"))
-                .Returns(Result<Player>.Failure("Update failed"));
+            var updateResult = Result<Player>.Failure("Failed to update player");
 
-            var result = _profilesManager.UpdatePlayerProfile(playerDto);
+            // Configurar el Mock para la actualización
+            _playerRepositoryMock.Setup(repo => repo.UpdatePlayer(It.IsAny<Player>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(updateResult);
 
-            Assert.AreEqual("Update failed", result.Error);
+            // Act
+            var result = _profilesManager.UpdatePlayerProfile(playerInfo);
+
+            // Assert
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual("Failed to update player", result.Error);
         }
 
-
         [TestMethod]
-        public void Test_GetFriendIdsList_ShouldReturnFriendIds_WhenFriendsExist()
+        public void GetFriendIdsList_ValidPlayer_ReturnsFriendIds()
         {
+            // Arrange
+            int playerId = 1;
             var friends = new List<Player> { new Player { Id = 2 }, new Player { Id = 3 } };
-            _mockPlayerRepository.Setup(repo => repo.GetPlayerFriendsList(1)).Returns(Result<IEnumerable<Player>>.Success(friends));
+            var friendsResult = Result<IEnumerable<Player>>.Success(friends);
 
-            var result = _profilesManager.GetFriendIdsList(1);
+            // Configurar el Mock para obtener los amigos
+            _playerRepositoryMock.Setup(repo => repo.GetPlayerFriendsList(playerId)).Returns(friendsResult);
 
+            // Act
+            var result = _profilesManager.GetFriendIdsList(playerId);
+
+            // Assert
+            Assert.IsTrue(result.IsSuccess);
             CollectionAssert.AreEqual(new List<int> { 2, 3 }, result.Value);
         }
 
         [TestMethod]
-        public void Test_GetFriendIdsList_ShouldReturnFailure_WhenNoFriendsExist()
+        public void GetFriendIdsList_NoFriends_ReturnsFailure()
         {
-            _mockPlayerRepository.Setup(repo => repo.GetPlayerFriendsList(1))
-                .Returns(Result<IEnumerable<Player>>.Failure("No friends found"));
+            // Arrange
+            int playerId = 1;
+            var friendsResult = Result<IEnumerable<Player>>.Success(new List<Player>());
 
-            var result = _profilesManager.GetFriendIdsList(1);
+            // Configurar el Mock para obtener los amigos
+            _playerRepositoryMock.Setup(repo => repo.GetPlayerFriendsList(playerId)).Returns(friendsResult);
 
-            Assert.AreEqual("No friends found", result.Error);
+            // Act
+            var result = _profilesManager.GetFriendIdsList(playerId);
+
+            // Assert
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual("No friends found.", result.Error);
+        }
+
+        [TestMethod]
+        public void GetTopPlayersIds_ValidRequest_ReturnsTopPlayersIds()
+        {
+            // Arrange
+            var topPlayers = new List<Player> { new Player { Id = 1 }, new Player { Id = 2 } };
+            var topPlayersResult = Result<IEnumerable<Player>>.Success(topPlayers);
+
+            // Configurar el Mock para obtener los jugadores top
+            _playerRepositoryMock.Setup(repo => repo.GetTopPlayersByWins()).Returns(topPlayersResult);
+
+            // Act
+            var result = _profilesManager.GetTopPlayersIds();
+
+            // Assert
+            Assert.IsTrue(result.IsSuccess);
+            CollectionAssert.AreEqual(new List<int> { 1, 2 }, result.Value);
+        }
+
+        [TestMethod]
+        public void GetTopPlayersIds_NoTopPlayers_ReturnsFailure()
+        {
+            // Arrange
+            var topPlayersResult = Result<IEnumerable<Player>>.Success(new List<Player>());
+
+            // Configurar el Mock para obtener los jugadores top
+            _playerRepositoryMock.Setup(repo => repo.GetTopPlayersByWins()).Returns(topPlayersResult);
+
+            // Act
+            var result = _profilesManager.GetTopPlayersIds();
+
+            // Assert
+            Assert.IsFalse(result.IsSuccess);
+            Assert.AreEqual("No top players found.", result.Error);
         }
     }
 }

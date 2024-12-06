@@ -8,6 +8,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using Utilities;
 
 namespace StrategoServices.Services
 {
@@ -42,18 +43,18 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                log.Error("Timeout error in SendFriendRequest", tex);
-                operationResult = new OperationResult(false, "Timeout error");
+                log.Error(Messages.TimeoutError, tex);
+                operationResult = new OperationResult(false, Messages.TimeoutError);
             }
             catch (CommunicationException cex)
             {
-                log.Error("Communication error in SendFriendRequest", cex);
-                operationResult = new OperationResult(false, "Communication error");
+                log.Error(Messages.CommunicationError, cex);
+                operationResult = new OperationResult(false, Messages.CommunicationError);
             }
             catch (Exception ex)
             {
-                log.Fatal("Unexpected error in SendFriendRequest", ex);
-                operationResult = new OperationResult(false, "Unexpected error");
+                log.Fatal(Messages.UnexpectedError, ex);
+                operationResult = new OperationResult(false, Messages.UnexpectedError);
             }
 
             await Task.Run(() => callback.GetFriendOperationSend(operationResult));
@@ -77,18 +78,18 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                log.Error("Timeout error in AcceptFriendRequest", tex);
-                operationResult = new OperationResult(false, "Timeout error");
+                log.Error(Messages.TimeoutError, tex);
+                operationResult = new OperationResult(false, Messages.TimeoutError);
             }
             catch (CommunicationException cex)
             {
-                log.Error("Communication error in AcceptFriendRequest", cex);
-                operationResult = new OperationResult(false, "Communication error");
+                log.Error(Messages.CommunicationError, cex);
+                operationResult = new OperationResult(false, Messages.CommunicationError);
             }
             catch (Exception ex)
             {
-                log.Fatal("Unexpected error in AcceptFriendRequest", ex);
-                operationResult = new OperationResult(false, "Unexpected error");
+                log.Fatal(Messages.UnexpectedError, ex);
+                operationResult = new OperationResult(false, Messages.UnexpectedError);
             }
 
             await Task.Run(() => callback.GetFriendOperationAccept(operationResult));
@@ -112,18 +113,18 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                log.Error("Timeout error in DeclineFriendRequest", tex);
-                operationResult = new OperationResult(false, "Timeout error");
+                log.Error(Messages.TimeoutError, tex);
+                operationResult = new OperationResult(false, Messages.TimeoutError);
             }
             catch (CommunicationException cex)
             {
-                log.Error("Communication error in DeclineFriendRequest", cex);
-                operationResult = new OperationResult(false, "Communication error");
+                log.Error(Messages.CommunicationError, cex);
+                operationResult = new OperationResult(false, Messages.CommunicationError);
             }
             catch (Exception ex)
             {
-                log.Fatal("Unexpected error in DeclineFriendRequest", ex);
-                operationResult = new OperationResult(false, "Unexpected error");
+                log.Fatal(Messages.UnexpectedError, ex);
+                operationResult = new OperationResult(false, Messages.UnexpectedError);
             }
 
             await Task.Run(() => callback.GetFriendOperationDecline(operationResult));
@@ -147,18 +148,18 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                log.Error("Timeout error in RemoveFriend", tex);
-                operationResult = new OperationResult(false, "Timeout error");
+                log.Error(Messages.TimeoutError, tex);
+                operationResult = new OperationResult(false, Messages.TimeoutError);
             }
             catch (CommunicationException cex)
             {
-                log.Error("Communication error in RemoveFriend", cex);
-                operationResult = new OperationResult(false, "Communication error");
+                log.Error(Messages.CommunicationError, cex);
+                operationResult = new OperationResult(false, Messages.CommunicationError);
             }
             catch (Exception ex)
             {
-                log.Fatal("Unexpected error in RemoveFriend", ex);
-                operationResult = new OperationResult(false, "Unexpected error");
+                log.Fatal(Messages.UnexpectedError, ex);
+                operationResult = new OperationResult(false, Messages.UnexpectedError);
             }
 
             await Task.Run(() => callback.GetFriendOperationRemove(operationResult));
@@ -200,18 +201,18 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                log.Error("Timeout error in SendRoomInvitation", tex);
-                operationResult = new OperationResult(false, "Timeout error");
+                log.Error(Messages.TimeoutError, tex);
+                operationResult = new OperationResult(false, Messages.TimeoutError);
             }
             catch (CommunicationException cex)
             {
-                log.Error("Communication error in SendRoomInvitation", cex);
-                operationResult = new OperationResult(false, "Communication error");
+                log.Error(Messages.CommunicationError, cex);
+                operationResult = new OperationResult(false, Messages.CommunicationError);
             }
             catch (Exception ex)
             {
-                log.Fatal("Unexpected error in SendRoomInvitation", ex);
-                operationResult = new OperationResult(false, "Unexpected error");
+                log.Fatal(Messages.UnexpectedError, ex);
+                operationResult = new OperationResult(false, Messages.UnexpectedError);
             }
 
             await Task.Run(() => callback.SendRoomInvitationResponseCall(operationResult));
@@ -244,18 +245,18 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                log.Error("Timeout error in GetPlayerFriendRequestAsync", tex);
-                response.Result = new OperationResult(false, "Server error");
+                log.Error(Messages.TimeoutError, tex);
+                response.Result = new OperationResult(false, Messages.TimeoutError);
             }
             catch (CommunicationException cex)
             {
-                log.Error("Communication error in GetPlayerFriendRequestAsync", cex);
-                response.Result = new OperationResult(false, "Communication error");
+                log.Error(Messages.CommunicationError, cex);
+                response.Result = new OperationResult(false, Messages.CommunicationError);
             }
             catch (Exception ex)
             {
-                log.Fatal("Unexpected error in GetPlayerFriendRequestAsync", ex);
-                response.Result = new OperationResult(false, "Unexpected error");
+                log.Fatal(Messages.UnexpectedError, ex);
+                response.Result = new OperationResult(false, Messages.UnexpectedError);
             }
 
             await Task.Run(() => callback.ReceiveFriendRequestIds(response));

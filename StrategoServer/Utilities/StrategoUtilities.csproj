@@ -49,6 +49,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Messages.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

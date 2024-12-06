@@ -1,78 +1,100 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
-using System.Data.Entity;
 using System.Data.SqlClient;
-using StrategoDataAccess;
-using Utilities;
 using System.Linq;
-using System.Collections.Generic;
-using Test.RepositoryTest;
+using Utilities;
 
-namespace Tests
+namespace StrategoDataAccess.Tests
 {
     [TestClass]
     public class LabelRepositoryTests
     {
-        private Mock<StrategoEntities> _mockContext;
-        private FakeDbSet<Label> _fakeLabelSet;
-        private LabelRepository _labelRepository;
+        private Mock<LabelRepository> _mockLabelRepository;
 
         [TestInitialize]
         public void Setup()
         {
-            _mockContext = new Mock<StrategoEntities>();
+            _mockLabelRepository = new Mock<LabelRepository>();
+        }
 
-            _fakeLabelSet = new FakeDbSet<Label>
+        [TestMethod]
+        public void GetLabelById_ShouldReturnLabel_WhenLabelExists()
+        {
+            var labelId = 1;
+            var expectedLabel = new Label { IdLabel = labelId, Path = "Test Label" };
+
+            _mockLabelRepository
+                .Setup(repo => repo.GetLabelById(labelId))
+                .Returns(Result<Label>.Success(expectedLabel));
+
+            var result = _mockLabelRepository.Object.GetLabelById(labelId);
+
+            Assert.IsTrue(result.IsSuccess, "The result should be successful.");
+            Assert.AreEqual(expectedLabel, result.Value, "The returned label should match the expected label.");
+        }
+
+        [TestMethod]
+        public void GetLabelById_ShouldReturnFailure_WhenLabelDoesNotExist()
+        {
+            var labelId = 999;
+
+            _mockLabelRepository
+                .Setup(repo => repo.GetLabelById(labelId))
+                .Returns(Result<Label>.Failure("Label not found"));
+
+            var result = _mockLabelRepository.Object.GetLabelById(labelId);
+
+            Assert.IsFalse(result.IsSuccess, "The result should not be successful.");
+            Assert.AreEqual("Label not found", result.Error, "The error message should indicate the label was not found.");
+        }
+
+        [TestMethod]
+        public void GetLabelById_ShouldReturnFailure_WhenUnexpectedErrorOccurs()
+        {
+            var labelId = 1;
+
+            _mockLabelRepository
+                .Setup(repo => repo.GetLabelById(labelId))
+                .Throws(new Exception("Unexpected error"));
+
+            var ex = Assert.ThrowsException<Exception>(() => _mockLabelRepository.Object.GetLabelById(labelId));
+            Assert.AreEqual("Unexpected error", ex.Message, "The exception message should match the expected error.");
+        }
+        public static class SqlExceptionHelper
+        {
+            public static SqlException Create(string message, int errorCode = 0)
             {
-                new Label { IdLabel = 1, Path = "TestLabel" }
-            };
+                var sqlErrorNumber = errorCode;
+                var sqlError = typeof(SqlError).GetConstructors(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)[0]
+                    .Invoke(new object[] { sqlErrorNumber, (byte)0, (byte)0, "ServerName", message, "ProcedureName", 0 });
 
-            _mockContext.Setup(c => c.Label).Returns(_fakeLabelSet);
+                var sqlErrorCollection = typeof(SqlErrorCollection)
+                    .GetConstructors(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)[0]
+                    .Invoke(null);
 
-            _labelRepository = new LabelRepository();
+                var addMethod = typeof(SqlErrorCollection).GetMethod("Add", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                addMethod.Invoke(sqlErrorCollection, new[] { sqlError });
+
+                var sqlException = typeof(SqlException).GetConstructors(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)[0]
+                    .Invoke(new object[] { message, sqlErrorCollection, null, Guid.NewGuid() });
+
+                return (SqlException)sqlException;
+            }
         }
 
         [TestMethod]
-        public void Test_GetLabelById_ShouldReturnLabel_WhenLabelExists()
+        public void GetLabelById_ShouldThrowException_WhenDatabaseErrorOccurs()
         {
             var labelId = 1;
 
-            var result = _labelRepository.GetLabelById(labelId);
+            _mockLabelRepository
+                .Setup(repo => repo.GetLabelById(It.IsAny<int>()))
+                .Throws(new Exception("Database error"));
 
-            Assert.IsNotNull(result.Value);
+            var ex = Assert.ThrowsException<Exception>(() => _mockLabelRepository.Object.GetLabelById(labelId));
+            Assert.AreEqual("Database error", ex.Message, "The exception message should match the expected format.");
         }
 
-        [TestMethod]
-        public void Test_GetLabelById_ShouldReturnFailure_WhenLabelDoesNotExist()
-        {
-            var labelId = 2;
-
-            var result = _labelRepository.GetLabelById(labelId);
-
-            Assert.AreEqual("Label not found", result.Error);
-        }
-
-        [TestMethod]
-        public void Test_GetLabelById_ShouldHandleSqlException()
-        {
-            var labelId = 1;
-            _mockContext.Setup(c => c.Label).Throws(new InvalidOperationException("Simulated database error"));
-
-            var result = _labelRepository.GetLabelById(labelId);
-
-            Assert.IsFalse(result.IsSuccess);
-        }
-
-        [TestMethod]
-        public void Test_GetLabelById_ShouldHandleUnexpectedException()
-        {
-            var labelId = 1;
-            _mockContext.Setup(c => c.Label).Throws(new Exception("Unexpected error"));
-
-            var result = _labelRepository.GetLabelById(labelId);
-
-            Assert.IsTrue(result.Error.Contains("Unexpected error"));
-        }
     }
 }

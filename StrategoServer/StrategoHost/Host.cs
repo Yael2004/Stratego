@@ -13,7 +13,7 @@ using System.IO;
 
 namespace StrategoHost
 {
-    class Host
+    public static class Host
     {
         static void Main(string[] args)
         {
@@ -51,22 +51,22 @@ namespace StrategoHost
                     CloseService(hosts.gameHost, log, "Game", gameServiceOpened);
                 }
             }
-            catch (FileNotFoundException ex)
+            catch (FileNotFoundException fex)
             {
-                log.Fatal("File not found: " + ex.Message);
-                Console.WriteLine($"File not found: {ex.Message}");
+                log.Fatal(Messages.FileNotFound, fex);
+                Console.WriteLine($"{Messages.FileNotFound}: {fex.Message}");
                 Console.ReadLine();
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException uex)
             {
-                log.Fatal("Unauthorized access: " + ex.Message);
-                Console.WriteLine($"Unauthorized access: {ex.Message}");
+                log.Fatal(Messages.UnauthorizedAccess, uex);
+                Console.WriteLine(Messages.UnauthorizedAccess, uex);
                 Console.ReadLine();
             }
             catch (Exception ex)
             {
-                log.Fatal("Unexpected error: " + ex.Message);
-                Console.WriteLine($"Unexpected error: {ex.Message}");
+                log.Fatal(Messages.UnexpectedError, ex);
+                Console.WriteLine($"{Messages.UnexpectedError}: {ex.Message}");
                 Console.ReadLine();
             }
         }
@@ -106,19 +106,19 @@ namespace StrategoHost
             }
             catch (CommunicationException ex)
             {
-                log.Fatal($"Failed to start {serviceName} service: " + ex.Message);
+                log.Fatal($"Failed to start {serviceName} service: {ex.Message}");
                 Console.WriteLine($"Failed to start {serviceName} service: {ex.Message}");
                 return false;
             }
             catch (TimeoutException ex)
             {
-                log.Fatal($"Failed to start {serviceName} service: " + ex.Message);
+                log.Fatal($"Failed to start {serviceName} service: {ex.Message}");
                 Console.WriteLine($"Failed to start {serviceName} service: {ex.Message}");
                 return false;
             }
             catch (Exception ex)
             {
-                log.Fatal($"Failed to start {serviceName} service: " + ex.Message);
+                log.Fatal($"Failed to start {serviceName} service: {ex.Message}");
                 Console.WriteLine($"Failed to start {serviceName} service: {ex.Message}");
                 return false;
             }
@@ -135,17 +135,17 @@ namespace StrategoHost
                 }
                 catch (CommunicationException ex)
                 {
-                    log.Error($"Failed to close {serviceName} service: " + ex.Message);
+                    log.Error($"Failed to close {serviceName} service: {ex.Message}");
                     Console.WriteLine($"Failed to close {serviceName} service: {ex.Message}");
                 }
                 catch (TimeoutException ex)
                 {
-                    log.Error($"Failed to close {serviceName} service: " + ex.Message);
+                    log.Error($"Failed to close {serviceName} service: {ex.Message}");
                     Console.WriteLine($"Failed to close {serviceName} service: {ex.Message}");
                 }
                 catch (Exception ex)
                 {
-                    log.Error($"Failed to close {serviceName} service: " + ex.Message);
+                    log.Error($"Failed to close {serviceName} service: {ex.Message}");
                     Console.WriteLine($"Failed to close {serviceName} service: {ex.Message}");
                 }
             }

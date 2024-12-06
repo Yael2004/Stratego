@@ -35,13 +35,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<Games>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<Games>.Failure($"{Messages.DataBaseError} : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<Games>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<Games>.Failure($"{Messages.UnexpectedError}  : {ex.Message}");
             }
         }
 
@@ -66,13 +66,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<string>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<string>.Failure($"{Messages.DataBaseError} : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<string>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<string>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
@@ -97,13 +97,13 @@ namespace StrategoDataAccess
             }
             catch (SqlException sqlEx)
             {
-                log.Error("Database error", sqlEx);
-                return Result<string>.Failure($"Database error: {sqlEx.Message}");
+                log.Error(Messages.DataBaseError, sqlEx);
+                return Result<string>.Failure($"{Messages.DataBaseError} : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected error", ex);
-                return Result<string>.Failure($"Unexpected error: {ex.Message}");
+                log.Error(Messages.UnexpectedError, ex);
+                return Result<string>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 

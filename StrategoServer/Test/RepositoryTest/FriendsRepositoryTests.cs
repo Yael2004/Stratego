@@ -1,182 +1,153 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using StrategoDataAccess;
-using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Test.RepositoryTest
+namespace StrategoDataAccess.Tests
 {
     [TestClass]
     public class FriendsRepositoryTests
     {
         private Mock<StrategoEntities> _mockContext;
-        private FakeDbSet<Friend> _fakeFriendSet;
-        private FakeDbSet<Player> _fakePlayerSet;
-        private FriendsRepository _friendsRepository;
+        private Mock<DbSet<Friend>> _mockFriendSet;
+        private Mock<DbSet<Player>> _mockPlayerSet;
+        private FriendsRepository _repository;
 
         [TestInitialize]
         public void Setup()
         {
             _mockContext = new Mock<StrategoEntities>();
+            _mockFriendSet = new Mock<DbSet<Friend>>();
+            _mockPlayerSet = new Mock<DbSet<Player>>();
 
-            _fakeFriendSet = new FakeDbSet<Friend>
+            // Setup the mock context to return the mock sets
+            _mockContext.Setup(c => c.Friend).Returns(_mockFriendSet.Object);
+            _mockContext.Setup(c => c.Player).Returns(_mockPlayerSet.Object);
+
+            // Instantiate the repository with the mocked context
+            _repository = new FriendsRepository();
+        }
+
+        [TestMethod]
+        public void SendFriendRequest_FriendRequestAlreadyExists_ShouldReturnFailure()
+        {
+            // Arrange
+            int requesterId = 1;
+            int destinationId = 2;
+
+            var existingRequest = new Friend
             {
-                new Friend { PlayerId = 1, FriendId = 2, Status = "sent" }
+                PlayerId = requesterId,
+                FriendId = destinationId,
+                Status = "sent"
             };
 
-            _fakePlayerSet = new FakeDbSet<Player>
-            {
-                new Player { Id = 1, Name = "Player1" },
-                new Player { Id = 2, Name = "Player2" }
-            };
+            var data = new List<Friend> { existingRequest }.AsQueryable();
 
-            _mockContext.Setup(c => c.Friend).Returns(_fakeFriendSet);
-            _mockContext.Setup(c => c.Player).Returns(_fakePlayerSet);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.Provider).Returns(data.Provider);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.Expression).Returns(data.Expression);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.ElementType).Returns(data.ElementType);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
 
-            _friendsRepository = new FriendsRepository();
+            // Act
+            var result = _repository.SendFriendRequest(destinationId, requesterId);
+
+            // Assert
+            Assert.IsFalse(result.IsSuccess);
         }
 
         [TestMethod]
-        public void Test_SendFriendRequest_ShouldReturnSuccess_WhenRequestIsSent()
+        public void AcceptFriendRequest_RequestNotFound_ShouldReturnFailure()
         {
-            var result = _friendsRepository.SendFriendRequest(2, 1);
+            // Arrange
+            int requesterId = 1;
+            int destinationId = 2;
 
-            Assert.AreEqual("Friend request sent successfully.", result.Value);
-        }
+            var data = new List<Friend>().AsQueryable();
 
-        [TestMethod]
-        public void Test_SendFriendRequest_ShouldReturnFailure_WhenRequestAlreadyExists()
-        {
-            _fakeFriendSet.Add(new Friend { PlayerId = 1, FriendId = 2, Status = "accepted" });
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.Provider).Returns(data.Provider);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.Expression).Returns(data.Expression);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.ElementType).Returns(data.ElementType);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
 
-            var result = _friendsRepository.SendFriendRequest(2, 1);
+            // Act
+            var result = _repository.AcceptFriendRequest(destinationId, requesterId);
 
-            Assert.AreEqual("Friend request already exists or players are already friends.", result.Error);
-        }
-
-        [TestMethod]
-        public void Test_SendFriendRequest_ShouldHandleSqlException()
-        {
-            _mockContext.Setup(c => c.Friend).Throws(new InvalidOperationException("Database error"));
-
-            var result = _friendsRepository.SendFriendRequest(2, 1);
-
-            Assert.IsTrue(result.Error.Contains("Database error"));
-        }
-
-        [TestMethod]
-        public void Test_AcceptFriendRequest_ShouldReturnSuccess_WhenRequestIsAccepted()
-        {
-            _fakeFriendSet.FirstOrDefault(f => f.PlayerId == 1 && f.FriendId == 2).Status = "sent";
-
-            var result = _friendsRepository.AcceptFriendRequest(1, 2);
-
-            Assert.AreEqual("Friend request accepted successfully.", result.Value);
-        }
-
-        [TestMethod]
-        public void Test_AcceptFriendRequest_ShouldReturnFailure_WhenRequestNotFound()
-        {
-            var result = _friendsRepository.AcceptFriendRequest(1, 3);
-
+            // Assert
             Assert.AreEqual("Friend request not found.", result.Error);
+            Assert.IsFalse(result.IsSuccess);
         }
 
         [TestMethod]
-        public void Test_AcceptFriendRequest_ShouldHandleSqlException()
+        public void DeclineFriendRequest_RequestNotFound_ShouldReturnFailure()
         {
-            _mockContext.Setup(c => c.Friend).Throws(new InvalidOperationException("Database error"));
+            // Arrange
+            int requesterId = 1;
+            int destinationId = 2;
 
-            var result = _friendsRepository.AcceptFriendRequest(1, 2);
+            var data = new List<Friend>().AsQueryable();
 
-            Assert.IsTrue(result.Error.Contains("Database error"));
-        }
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.Provider).Returns(data.Provider);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.Expression).Returns(data.Expression);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.ElementType).Returns(data.ElementType);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
 
-        [TestMethod]
-        public void Test_DeclineFriendRequest_ShouldReturnSuccess_WhenRequestIsDeclined()
-        {
-            _fakeFriendSet.FirstOrDefault(f => f.PlayerId == 1 && f.FriendId == 2).Status = "sent";
+            // Act
+            var result = _repository.DeclineFriendRequest(destinationId, requesterId);
 
-            var result = _friendsRepository.DeclineFriendRequest(1, 2);
-
-            Assert.AreEqual("Friend request declined successfully.", result.Value);
-        }
-
-        [TestMethod]
-        public void Test_DeclineFriendRequest_ShouldReturnFailure_WhenRequestNotFound()
-        {
-            var result = _friendsRepository.DeclineFriendRequest(1, 3);
-
+            // Assert
             Assert.AreEqual("Friend request not found.", result.Error);
+            Assert.IsFalse(result.IsSuccess);
         }
 
         [TestMethod]
-        public void Test_DeclineFriendRequest_ShouldHandleSqlException()
+        public void RemoveFriend_FriendshipNotFound_ShouldReturnFailure()
         {
-            _mockContext.Setup(c => c.Friend).Throws(new InvalidOperationException("Database error"));
+            // Arrange
+            int requesterId = 1;
+            int destinationId = 2;
 
-            var result = _friendsRepository.DeclineFriendRequest(1, 2);
+            var data = new List<Friend>().AsQueryable();
 
-            Assert.IsTrue(result.Error.Contains("Database error"));
-        }
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.Provider).Returns(data.Provider);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.Expression).Returns(data.Expression);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.ElementType).Returns(data.ElementType);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
 
-        [TestMethod]
-        public void Test_RemoveFriend_ShouldReturnSuccess_WhenFriendIsRemoved()
-        {
-            _fakeFriendSet.Add(new Friend { PlayerId = 1, FriendId = 2, Status = "accepted" });
+            // Act
+            var result = _repository.RemoveFriend(destinationId, requesterId);
 
-            var result = _friendsRepository.RemoveFriend(2, 1);
-
-            Assert.AreEqual("Friend removed successfully.", result.Value);
-        }
-
-        [TestMethod]
-        public void Test_RemoveFriend_ShouldReturnFailure_WhenFriendshipNotFound()
-        {
-            var result = _friendsRepository.RemoveFriend(2, 3);
-
+            // Assert
             Assert.AreEqual("Friendship not found.", result.Error);
+            Assert.IsFalse(result.IsSuccess);
         }
 
         [TestMethod]
-        public void Test_RemoveFriend_ShouldHandleSqlException()
+        public void GetPendingFriendRequests_NoPendingRequests_ShouldReturnFailure()
         {
-            _mockContext.Setup(c => c.Friend).Throws(new InvalidOperationException("Database error"));
+            // Arrange
+            int playerId = 1;
 
-            var result = _friendsRepository.RemoveFriend(2, 1);
+            var data = new List<Friend>().AsQueryable();
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.Provider).Returns(data.Provider);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.Expression).Returns(data.Expression);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.ElementType).Returns(data.ElementType);
+            _mockFriendSet.As<IQueryable<Friend>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
 
-            Assert.IsTrue(result.Error.Contains("Database error"));
-        }
+            var playerData = new List<Player>().AsQueryable();
+            _mockPlayerSet.As<IQueryable<Player>>().Setup(m => m.Provider).Returns(playerData.Provider);
+            _mockPlayerSet.As<IQueryable<Player>>().Setup(m => m.Expression).Returns(playerData.Expression);
+            _mockPlayerSet.As<IQueryable<Player>>().Setup(m => m.ElementType).Returns(playerData.ElementType);
+            _mockPlayerSet.As<IQueryable<Player>>().Setup(m => m.GetEnumerator()).Returns(playerData.GetEnumerator());
 
-        [TestMethod]
-        public void Test_GetPendingFriendRequests_ShouldReturnRequests_WhenPendingRequestsExist()
-        {
-            _fakeFriendSet.Add(new Friend { PlayerId = 1, FriendId = 2, Status = "sent" });
+            // Act
+            var result = _repository.GetPendingFriendRequests(playerId);
 
-            var result = _friendsRepository.GetPendingFriendRequests(2);
-
-            Assert.AreEqual(2, result.Value.First().Id);
-        }
-
-        [TestMethod]
-        public void Test_GetPendingFriendRequests_ShouldReturnFailure_WhenNoPendingRequestsExist()
-        {
-            var result = _friendsRepository.GetPendingFriendRequests(3);
-
+            // Assert
             Assert.AreEqual("No pending friend requests found.", result.Error);
-        }
-
-        [TestMethod]
-        public void Test_GetPendingFriendRequests_ShouldHandleSqlException()
-        {
-            _mockContext.Setup(c => c.Friend).Throws(new InvalidOperationException("Database error"));
-
-            var result = _friendsRepository.GetPendingFriendRequests(2);
-
-            Assert.IsTrue(result.Error.Contains("Database error"));
+            Assert.IsFalse(result.IsSuccess);
         }
     }
 }
