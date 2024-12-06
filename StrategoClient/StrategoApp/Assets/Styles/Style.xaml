@@ -12,6 +12,7 @@
     <SolidColorBrush x:Key="Prueba" Color="#FFB6C1"/>
     <SolidColorBrush x:Key="DarkGray" Color="#2E2E2E"/>
     <SolidColorBrush x:Key="Gray" Color="#555555"/>
+    <SolidColorBrush x:Key="Blue" Color="#3A6EA5"/>
 
     <FontFamily x:Key="AugustaFont">pack://application:,,,/StrategoApp;component/Assets/Fonts/Augusta.ttf#Augusta</FontFamily>
 
@@ -41,6 +42,10 @@
 
     <ImageBrush x:Key="FriendsBackground" 
         ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/FriendsBackground2.png" 
+        Stretch="UniformToFill"/>
+
+    <ImageBrush x:Key="ScoreboardBackground" 
+        ImageSource="pack://application:,,,/StrategoApp;component/Assets/Images/ScoreboardBackground.png" 
         Stretch="UniformToFill"/>
 
     <Style x:Key="InputBoxStyle" TargetType="Control">
@@ -106,6 +111,25 @@
                 <Setter Property="Background" Value="Black"/>
                 <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
                 <Setter Property="BorderBrush" Value="{StaticResource DarkRed}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ButtonWhiteStyle" TargetType="Button">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Background" Value="Black"/>
+        <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
+        <Setter Property="BorderBrush" Value="White"/>
+        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="FontFamily" Value="{StaticResource AugustaFont}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="Black"/>
+                <Setter Property="Foreground" Value="{StaticResource GrayFontColor}"/>
+                <Setter Property="BorderBrush" Value="White"/>
             </Trigger>
         </Style.Triggers>
     </Style>

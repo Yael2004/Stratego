@@ -32,7 +32,6 @@ namespace StrategoApp.ViewModel
         private readonly MainWindowViewModel _mainWindowViewModel;
 
         private readonly OtherProfileDataServiceClient _otherProfileDataServiceClient;
-        private readonly PlayerFriendsListServiceClient _playerFriendsListServiceClient;
 
         public ICommand RemoveFriendCommand { get; }
         public ICommand BackToLobbyCommand { get; }
@@ -141,7 +140,6 @@ namespace StrategoApp.ViewModel
         public PlayerProfileNotOwnViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _otherProfileDataServiceClient = new OtherProfileDataServiceClient(new InstanceContext(this));
-            _playerFriendsListServiceClient = new PlayerFriendsListServiceClient(new InstanceContext(this));
             
             _mainWindowViewModel = mainWindowViewModel;
             
@@ -174,19 +172,19 @@ namespace StrategoApp.ViewModel
 
             switch (response.PlayerInfo.PlayerInfo.LabelPath)
             {
-                case "Label1":
+                case "label1":
                     PlayerTag = Properties.Resources.NovicePlayer_Label;
                     break;
 
-                case "Label2":
+                case "label2":
                     PlayerTag = Properties.Resources.ProPlayer_Label;
                     break;
 
-                case "Label3":
+                case "label3":
                     PlayerTag = Properties.Resources.Apprentice_Label;
                     break;
 
-                case "Label4":
+                case "label4":
                     PlayerTag = Properties.Resources.Competitive_Label;
                     break;
 

@@ -1,4 +1,6 @@
-﻿using StrategoApp.Model;
+﻿using log4net;
+using StrategoApp.Helpers;
+using StrategoApp.Model;
 using StrategoApp.ProfileService;
 using System;
 using System.Collections.Generic;
@@ -14,28 +16,56 @@ namespace StrategoApp.ViewModel
 {
     public class ScoreboardViewModel : ViewModelBase, ProfileService.ITopPlayersListServiceCallback, ProfileService.IOtherProfileDataServiceCallback
     {
-        private readonly MainWindowViewModel _mainWindowViewModel;
-        private OtherProfileDataServiceClient _otherProfileDataServiceClient;
-        private TopPlayersListServiceClient _topPlayersListServiceClient;
+        private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
+
         private int _userId;
-        private string _username;
-        private int _score;
+        private bool _isServiceErrorVisible;
+
+        private readonly MainWindowViewModel _mainWindowViewModel;
+        private readonly OtherProfileDataServiceClient _otherProfileDataServiceClient;
+        private readonly TopPlayersListServiceClient _topPlayersListServiceClient;
 
         public ObservableCollection<PlayerScore> PlayerScores { get; set; }
 
         public ICommand BackToLobbyCommand { get; }
         public ICommand ViewProfileCommand { get; }
+        public ICommand ExecuteCloseServiceErrorCommand { get; }
+
+        public int UserId
+        {
+            get { return _userId; }
+            set
+            {
+                _userId = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsServiceErrorVisible
+        {
+            get { return _isServiceErrorVisible; }
+            set
+            {
+                _isServiceErrorVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public ScoreboardViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _otherProfileDataServiceClient = new OtherProfileDataServiceClient(new InstanceContext(this));
             _topPlayersListServiceClient = new TopPlayersListServiceClient(new InstanceContext(this));
+
             _mainWindowViewModel = mainWindowViewModel;
 
             BackToLobbyCommand = new ViewModelCommand(BackToLobby);
             ViewProfileCommand = new ViewModelCommand(ViewProfile);
+            ExecuteCloseServiceErrorCommand = new ViewModelCommand(CloseServiceError);
+
             LoadTopPlayers();
-            _userId = PlayerSingleton.Instance.Player.Id;
+
+            UserId = PlayerSingleton.Instance.Player.Id;
         }
 
         public void BackToLobby(object obj)
@@ -51,12 +81,23 @@ namespace StrategoApp.ViewModel
                 {
                     var playerProfileNotOwnViewModel = new PlayerProfileNotOwnViewModel(_mainWindowViewModel);
 
-                    playerProfileNotOwnViewModel.LoadPlayerInfo(playerScore.PlayerId ,_userId);
+                    playerProfileNotOwnViewModel.LoadPlayerInfo(playerScore.PlayerId ,UserId);
                     _mainWindowViewModel.ChangeViewModel(playerProfileNotOwnViewModel);
+                }
+                catch (CommunicationException cex)
+                {
+                    Log.Error("Communication error with the connect service.", cex);
+                    IsServiceErrorVisible = true;
+                }
+                catch (TimeoutException tex)
+                {
+                    Log.Error("Timed out while communicating with the connect service.", tex);
+                    IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al cargar perfil de jugador: " + ex.Message);
+                    Log.Error("Unexpected error while connecting in.", ex);
+                    IsServiceErrorVisible = true;
                 }
             }
         }
@@ -72,7 +113,7 @@ namespace StrategoApp.ViewModel
 
             foreach (var playerId in topPlayersList1.TopPlayersIds)
             {
-                await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(playerId, _userId);
+                await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(playerId, UserId);
             }
 
             OnPropertyChanged(nameof(PlayerScores));
@@ -92,6 +133,12 @@ namespace StrategoApp.ViewModel
 
                 OnPropertyChanged(nameof(PlayerScores));
             }
+        }
+
+        private void CloseServiceError(object obj)
+        {
+            IsServiceErrorVisible = false;
+            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
         }
     }
 }

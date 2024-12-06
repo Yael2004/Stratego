@@ -194,9 +194,9 @@ namespace StrategoApp.ViewModel
 
             _mainWindowViewModel = mainWindowViewModel;
 
-            ShowFriendsCommand = new ViewModelCommand(ShowFriends);
+            ShowFriendsCommand = new ViewModelCommand(ShowFriends, CanShowFriends);
             SendMessageCommand = new ViewModelCommand(ClientSendMessage);
-            ShowProfileCommand = new ViewModelCommand(ClientShowProfile);
+            ShowProfileCommand = new ViewModelCommand(ClientShowProfile, CanShowProfile);
             JoinToRoomShowCommand = new ViewModelCommand(JoinToRoomShow);
             JoinToRoomCommand = new ViewModelCommand(JoinToRoom);
             CancelJoinToRoomCommand = new ViewModelCommand(CancelJoinToRoom);
@@ -347,6 +347,18 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        private bool CanShowProfile(object obj)
+        {
+            if (PlayerSingleton.Instance.Player.Id < 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public void ClientShowProfile(object obj)
         {
             try
@@ -392,6 +404,18 @@ namespace StrategoApp.ViewModel
             {
                 Log.Error("Unexpected error while showing scoreboard.", ex);
                 IsServiceErrorVisible = true;
+            }
+        }
+
+        private bool CanShowFriends(object obj)
+        {
+            if (PlayerSingleton.Instance.Player.Id < 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
 

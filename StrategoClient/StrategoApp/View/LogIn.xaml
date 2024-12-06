@@ -138,8 +138,7 @@
                 </TextBlock>
             </Grid>
 
-            <Grid x:Name="ModalContainer"
-                    Background="{StaticResource SemiTransparent}"
+            <Grid   Background="{StaticResource SemiTransparent}"
                     Visibility="{Binding IsServiceErrorVisible, Converter={StaticResource BoolToVisibilityConverter}}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
