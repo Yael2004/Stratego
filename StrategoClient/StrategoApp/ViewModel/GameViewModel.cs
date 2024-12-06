@@ -233,7 +233,7 @@ namespace StrategoApp.ViewModel
                         OccupiedPieceImage = null,
                         OccupyingPiece = null
                     };
-                
+
                     if (row >= 0 && row < 4)
                     {
                         if (cell.OccupyingPiece == null)
@@ -518,7 +518,7 @@ namespace StrategoApp.ViewModel
                     {
                         await Task.Run(() => EndGame());
                     }
-  
+
                 }
                 catch (Exception ex)
                 {
@@ -529,7 +529,7 @@ namespace StrategoApp.ViewModel
 
         public void ShowGameResult(bool isWinner)
         {
-            GameResultText = isWinner ? "Victory!" : "Defeat!"; 
+            GameResultText = isWinner ? "Victory!" : "Defeat!";
             IsGameResultPopupOpen = true;
 
             Task.Run(async () =>
