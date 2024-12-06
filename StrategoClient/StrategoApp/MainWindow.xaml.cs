@@ -25,6 +25,7 @@ namespace StrategoApp
     {
         public MainWindow()
         {
+
             CultureInfo culture = CultureInfo.CurrentCulture;
             CultureInfo.CurrentUICulture = culture;
             Thread.CurrentThread.CurrentCulture = culture;

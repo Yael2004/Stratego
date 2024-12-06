@@ -24,10 +24,6 @@
             >pack://application:,,,/StrategoApp;component/Assets/Cursors/select_cursor.cur
     </Cursor>
 
-    <Cursor x:Key="UnavavibleCursor"
-            >pack://application:,,,/StrategoApp;component/Assets/Cursors/unavavible_cursor.cur
-    </Cursor>
-
     <Cursor x:Key="BeamCursor"
         >pack://application:,,,/StrategoApp;component/Assets/Cursors/beam_cursor.cur
     </Cursor>

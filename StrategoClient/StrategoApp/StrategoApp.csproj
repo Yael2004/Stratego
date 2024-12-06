@@ -371,13 +371,7 @@
     <Resource Include="Assets\Images\Icons\ArrowBackOnOProfileSection.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\LobbyBackground2.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\Images\RoomBackground.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Images\RoomBackground2.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\Icons\Edit_Icon.png" />
@@ -386,22 +380,10 @@
     <Resource Include="Assets\Images\FriendsBackground.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\FriendsBackground2.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\Game\Staff.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\Board2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Images\Board3.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\Game\Dragon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Images\Board4.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Game\Necronomicon.png" />
@@ -538,6 +520,12 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Cursors\beam_cursor.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Cursors\select_cursor.cur" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
