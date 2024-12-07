@@ -520,6 +520,11 @@ namespace StrategoApp.ViewModel
 
         private async void EndGame()
         {
+            if (UserId < 0)
+            {
+                ShowGameResult(_isWonGame);
+            }
+
             try
             {
                 var finalStats = new FinalStatsDTO
