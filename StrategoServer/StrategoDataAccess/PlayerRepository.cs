@@ -343,45 +343,46 @@ namespace StrategoDataAccess
             }
         }
 
-        public virtual Result<IEnumerable<Player>> GetTopPlayersByWins()
+        public virtual Result<List<int>> GetTopPlayersByWins()
         {
             try
             {
                 using (var context = new StrategoEntities())
                 {
                     var result = context.Games
-                    .GroupBy(g => g.AccountId)
-                    .Select(g => new
-                    {
-                        AccountId = g.Key,
-                        WonGames = g.Sum(x => x.WonGames)
-                    })
-                    .OrderByDescending(g => g.WonGames)
-                    .Take(10)
-                    .Join(
-                        context.Player,
-                        games => games.AccountId,
-                        player => player.AccountId,
-                        (games, player) => player
-                    )
-                    .ToList();
+                        .GroupBy(g => g.AccountId)
+                        .Select(g => new
+                        {
+                            AccountId = g.Key,
+                            WonGames = g.Sum(x => x.WonGames)
+                        })
+                        .OrderByDescending(g => g.WonGames) 
+                        .Take(10) 
+                        .Join(
+                            context.Player,
+                            games => games.AccountId,
+                            player => player.AccountId,
+                            (games, player) => new { player.Id } 
+                        )
+                        .Select(x => x.Id)
+                        .ToList();
 
                     if (result.Count == 0)
                     {
-                        return Result<IEnumerable<Player>>.Failure("No players found with games won.");
+                        return Result<List<int>>.Failure("No players found with games won.");
                     }
-                    return Result<IEnumerable<Player>>.Success(result);
+                    return Result<List<int>>.Success(result);
                 }
             }
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<IEnumerable<Player>>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
+                return Result<List<int>>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<IEnumerable<Player>>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
+                return Result<List<int>>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 

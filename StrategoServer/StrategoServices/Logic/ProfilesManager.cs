@@ -165,15 +165,10 @@ namespace StrategoServices.Logic
             {
                 return Result<List<int>>.Failure(topPlayersResult.Error);
             }
-
-            var topPlayersIds = topPlayersResult.Value.Select(player => player.Id).ToList();
-
-            return topPlayersIds.Any()
-                ? Result<List<int>>.Success(topPlayersIds)
-                : Result<List<int>>.Failure("No top players found.");
+            return Result<List<int>>.Success(topPlayersResult.Value);
         }
 
-        private Result<IEnumerable<Player>> GetTopPlayersFromRepository()
+        private Result<List<int>> GetTopPlayersFromRepository()
         {
             return _playerRepository.Value.GetTopPlayersByWins();
         }
