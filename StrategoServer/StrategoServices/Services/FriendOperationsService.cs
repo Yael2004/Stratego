@@ -13,7 +13,7 @@ using Utilities;
 namespace StrategoServices.Services
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class FriendOperationsService : Interfaces.IFriendOperationsService, Interfaces.ISendRoomInvitationService, Interfaces.IPlayerFriendRequestService
+    public class FriendOperationsService : Interfaces.IFriendOperationsService, Interfaces.ISendRoomInvitationService, Interfaces.IPlayerFriendRequestService, Interfaces.IFriendRemoveService
     {
         private readonly Lazy<FriendsManager> _friendsManager;
         private readonly Lazy<InvitationManager> _invitationManager;
@@ -138,7 +138,7 @@ namespace StrategoServices.Services
         /// <returns></returns>
         public async Task RemoveFriend(int destinationId, int requesterId)
         {
-            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IFriendOperationCallback>();
+            var callback = OperationContext.Current.GetCallbackChannel<Interfaces.Callbacks.IFriendRemoveServiceCallback>();
             OperationResult operationResult;
 
             try

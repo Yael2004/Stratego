@@ -12,6 +12,18 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_IFriendRemoveService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsrm:RMAssertion xmlns:wsrm="http://schemas.xmlsoap.org/ws/2005/02/rm/policy">
+          <wsrm:InactivityTimeout Milliseconds="59000" />
+          <wsrm:AcknowledgementInterval Milliseconds="200" />
+        </wsrm:RMAssertion>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsp:Policy wsu:Id="NetTcpBinding_ISendRoomInvitationService_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -63,12 +75,6 @@
   <wsdl:message name="IFriendOperationsService_DeclineFriendRequest_OutputMessage">
     <wsdl:part name="parameters" element="tns:DeclineFriendRequestResponse" />
   </wsdl:message>
-  <wsdl:message name="IFriendOperationsService_RemoveFriend_InputMessage">
-    <wsdl:part name="parameters" element="tns:RemoveFriend" />
-  </wsdl:message>
-  <wsdl:message name="IFriendOperationsService_RemoveFriend_OutputMessage">
-    <wsdl:part name="parameters" element="tns:RemoveFriendResponse" />
-  </wsdl:message>
   <wsdl:message name="IFriendOperationsService_GetFriendOperationSend_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:GetFriendOperationSend" />
   </wsdl:message>
@@ -87,10 +93,16 @@
   <wsdl:message name="IFriendOperationsService_GetFriendOperationDecline_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:GetFriendOperationDeclineResponse" />
   </wsdl:message>
-  <wsdl:message name="IFriendOperationsService_GetFriendOperationRemove_OutputCallbackMessage">
+  <wsdl:message name="IFriendRemoveService_RemoveFriend_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveFriend" />
+  </wsdl:message>
+  <wsdl:message name="IFriendRemoveService_RemoveFriend_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveFriendResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendRemoveService_GetFriendOperationRemove_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:GetFriendOperationRemove" />
   </wsdl:message>
-  <wsdl:message name="IFriendOperationsService_GetFriendOperationRemove_InputCallbackMessage">
+  <wsdl:message name="IFriendRemoveService_GetFriendOperationRemove_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:GetFriendOperationRemoveResponse" />
   </wsdl:message>
   <wsdl:message name="ISendRoomInvitationService_SendRoomInvitation_InputMessage">
@@ -127,10 +139,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendOperationsService/DeclineFriendRequest" message="tns:IFriendOperationsService_DeclineFriendRequest_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendOperationsService/DeclineFriendRequestResponse" message="tns:IFriendOperationsService_DeclineFriendRequest_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="RemoveFriend">
-      <wsdl:input wsaw:Action="http://tempuri.org/IFriendOperationsService/RemoveFriend" message="tns:IFriendOperationsService_RemoveFriend_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IFriendOperationsService/RemoveFriendResponse" message="tns:IFriendOperationsService_RemoveFriend_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetFriendOperationSend">
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationSend" message="tns:IFriendOperationsService_GetFriendOperationSend_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationSendResponse" message="tns:IFriendOperationsService_GetFriendOperationSend_InputCallbackMessage" />
@@ -143,9 +151,15 @@
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationDecline" message="tns:IFriendOperationsService_GetFriendOperationDecline_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationDeclineResponse" message="tns:IFriendOperationsService_GetFriendOperationDecline_InputCallbackMessage" />
     </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="IFriendRemoveService">
+    <wsdl:operation name="RemoveFriend">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendRemoveService/RemoveFriend" message="tns:IFriendRemoveService_RemoveFriend_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendRemoveService/RemoveFriendResponse" message="tns:IFriendRemoveService_RemoveFriend_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetFriendOperationRemove">
-      <wsdl:output wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationRemove" message="tns:IFriendOperationsService_GetFriendOperationRemove_OutputCallbackMessage" />
-      <wsdl:input wsaw:Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationRemoveResponse" message="tns:IFriendOperationsService_GetFriendOperationRemove_InputCallbackMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendRemoveService/GetFriendOperationRemove" message="tns:IFriendRemoveService_GetFriendOperationRemove_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendRemoveService/GetFriendOperationRemoveResponse" message="tns:IFriendRemoveService_GetFriendOperationRemove_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="ISendRoomInvitationService">
@@ -197,15 +211,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="RemoveFriend">
-      <soap12:operation soapAction="http://tempuri.org/IFriendOperationsService/RemoveFriend" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="GetFriendOperationSend">
       <soap12:operation soapAction="http://tempuri.org/IFriendOperationsService/GetFriendOperationSend" style="document" />
       <wsdl:input>
@@ -233,8 +238,21 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_IFriendRemoveService" type="tns:IFriendRemoveService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IFriendRemoveService_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="RemoveFriend">
+      <soap12:operation soapAction="http://tempuri.org/IFriendRemoveService/RemoveFriend" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetFriendOperationRemove">
-      <soap12:operation soapAction="http://tempuri.org/IFriendOperationsService/GetFriendOperationRemove" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IFriendRemoveService/GetFriendOperationRemove" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -289,6 +307,12 @@
       <soap12:address location="net.tcp://192.168.137.1:1014/FriendsService/FriendsService" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://192.168.137.1:1014/FriendsService/FriendsService</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_IFriendRemoveService" binding="tns:NetTcpBinding_IFriendRemoveService">
+      <soap12:address location="net.tcp://192.168.137.1:1014/FriendsService/FriendRemoveService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://192.168.137.1:1014/FriendsService/FriendRemoveService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_ISendRoomInvitationService" binding="tns:NetTcpBinding_ISendRoomInvitationService">

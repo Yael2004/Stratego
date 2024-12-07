@@ -122,6 +122,7 @@
     <Compile Include="Services\GameService.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IChangePasswordServiceCallback.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IFriendOperationCallback.cs" />
+    <Compile Include="Services\Interfaces\Callbacks\IFriendRemoveServiceCallback.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IGameServiceCallback.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IOtherProfileDataCallback.cs" />
     <Compile Include="Services\Interfaces\Callbacks\IPlayerFriendRequestServiceCallback.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Services\Interfaces\IChangePasswordService.cs" />
     <Compile Include="Services\Interfaces\ICreateGameService.cs" />
     <Compile Include="Services\Interfaces\IFriendOperationsService.cs" />
+    <Compile Include="Services\Interfaces\IFriendRemoveService.cs" />
     <Compile Include="Services\Interfaces\IGameService.cs" />
     <Compile Include="Services\Interfaces\ILogInService.cs" />
     <Compile Include="Services\Interfaces\IChatService.cs" />

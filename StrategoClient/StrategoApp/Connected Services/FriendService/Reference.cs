@@ -23,6 +23,9 @@ namespace StrategoApp.FriendService {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsDataBaseErrorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsSuccessField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -35,6 +38,19 @@ namespace StrategoApp.FriendService {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsDataBaseError {
+            get {
+                return this.IsDataBaseErrorField;
+            }
+            set {
+                if ((this.IsDataBaseErrorField.Equals(value) != true)) {
+                    this.IsDataBaseErrorField = value;
+                    this.RaisePropertyChanged("IsDataBaseError");
+                }
             }
         }
         
@@ -156,12 +172,6 @@ namespace StrategoApp.FriendService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendOperationsService/DeclineFriendRequest", ReplyAction="http://tempuri.org/IFriendOperationsService/DeclineFriendRequestResponse")]
         System.Threading.Tasks.Task DeclineFriendRequestAsync(int destinationId, int requesterId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendOperationsService/RemoveFriend", ReplyAction="http://tempuri.org/IFriendOperationsService/RemoveFriendResponse")]
-        void RemoveFriend(int destinationId, int requesterId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendOperationsService/RemoveFriend", ReplyAction="http://tempuri.org/IFriendOperationsService/RemoveFriendResponse")]
-        System.Threading.Tasks.Task RemoveFriendAsync(int destinationId, int requesterId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -175,9 +185,6 @@ namespace StrategoApp.FriendService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationDecline", ReplyAction="http://tempuri.org/IFriendOperationsService/GetFriendOperationDeclineResponse")]
         void GetFriendOperationDecline(StrategoApp.FriendService.OperationResult result);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendOperationsService/GetFriendOperationRemove", ReplyAction="http://tempuri.org/IFriendOperationsService/GetFriendOperationRemoveResponse")]
-        void GetFriendOperationRemove(StrategoApp.FriendService.OperationResult result);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -230,6 +237,53 @@ namespace StrategoApp.FriendService {
         
         public System.Threading.Tasks.Task DeclineFriendRequestAsync(int destinationId, int requesterId) {
             return base.Channel.DeclineFriendRequestAsync(destinationId, requesterId);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="FriendService.IFriendRemoveService", CallbackContract=typeof(StrategoApp.FriendService.IFriendRemoveServiceCallback))]
+    public interface IFriendRemoveService {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendRemoveService/RemoveFriend", ReplyAction="http://tempuri.org/IFriendRemoveService/RemoveFriendResponse")]
+        void RemoveFriend(int destinationId, int requesterId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendRemoveService/RemoveFriend", ReplyAction="http://tempuri.org/IFriendRemoveService/RemoveFriendResponse")]
+        System.Threading.Tasks.Task RemoveFriendAsync(int destinationId, int requesterId);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IFriendRemoveServiceCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendRemoveService/GetFriendOperationRemove", ReplyAction="http://tempuri.org/IFriendRemoveService/GetFriendOperationRemoveResponse")]
+        void GetFriendOperationRemove(StrategoApp.FriendService.OperationResult result);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IFriendRemoveServiceChannel : StrategoApp.FriendService.IFriendRemoveService, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class FriendRemoveServiceClient : System.ServiceModel.DuplexClientBase<StrategoApp.FriendService.IFriendRemoveService>, StrategoApp.FriendService.IFriendRemoveService {
+        
+        public FriendRemoveServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
+        }
+        
+        public FriendRemoveServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
+        }
+        
+        public FriendRemoveServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public FriendRemoveServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public FriendRemoveServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
         }
         
         public void RemoveFriend(int destinationId, int requesterId) {

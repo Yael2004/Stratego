@@ -1,4 +1,5 @@
 ﻿using log4net;
+using StrategoApp.FriendService;
 using StrategoApp.Helpers;
 using StrategoApp.Model;
 using StrategoApp.ProfileService;
@@ -14,7 +15,7 @@ using System.Windows.Input;
 
 namespace StrategoApp.ViewModel
 {
-    public class PlayerProfileNotOwnViewModel : ViewModelBase, ProfileService.IOtherProfileDataServiceCallback
+    public class PlayerProfileNotOwnViewModel : ViewModelBase, ProfileService.IOtherProfileDataServiceCallback, FriendService.IFriendRemoveServiceCallback
     {
         private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
 
@@ -32,6 +33,7 @@ namespace StrategoApp.ViewModel
         private readonly MainWindowViewModel _mainWindowViewModel;
 
         private readonly OtherProfileDataServiceClient _otherProfileDataServiceClient;
+        private readonly FriendRemoveServiceClient _friendRemoveServiceClient;
 
         public ICommand RemoveFriendCommand { get; }
         public ICommand BackToLobbyCommand { get; }
@@ -140,6 +142,7 @@ namespace StrategoApp.ViewModel
         public PlayerProfileNotOwnViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _otherProfileDataServiceClient = new OtherProfileDataServiceClient(new InstanceContext(this));
+            _friendRemoveServiceClient = new FriendRemoveServiceClient(new InstanceContext(this));
             
             _mainWindowViewModel = mainWindowViewModel;
             
@@ -158,7 +161,25 @@ namespace StrategoApp.ViewModel
 
         public void RemoveFriend(object obj)
         {
-
+            try
+            {
+                _friendRemoveServiceClient.RemoveFriendAsync(PlayerId, PlayerSingleton.Instance.Player.Id);
+            }
+            catch (CommunicationException cex)
+            {
+                Log.Error("Communication error while removing friend.", cex);
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException tex)
+            {
+                Log.Error("Timed out while removing friend.", tex);
+                IsServiceErrorVisible = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unexpected error while removing friend.", ex);
+                IsServiceErrorVisible = true;
+            }
         }
 
         public void ReceiveOtherPlayerInfo(OtherPlayerInfoResponse response)
@@ -235,5 +256,18 @@ namespace StrategoApp.ViewModel
             IsServiceErrorVisible = false;
             _mainWindowViewModel.CurrentViewModel = new LobbyViewModel(_mainWindowViewModel);
         }
+
+        public void GetFriendOperationRemove(FriendService.OperationResult result)
+        {
+            if (result.IsSuccess)
+            {
+                IsFriend = false;
+            }
+            else
+            {
+                IsServiceErrorVisible = true;
+            }
+        }
+
     }
 }

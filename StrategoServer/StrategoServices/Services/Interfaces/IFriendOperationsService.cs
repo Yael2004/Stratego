@@ -19,8 +19,5 @@ namespace StrategoServices.Services.Interfaces
 
         [OperationContract]
         Task DeclineFriendRequest(int destinationId, int requesterId);
-
-        [OperationContract]
-        Task RemoveFriend(int destinationId, int requesterId);
     }
 }

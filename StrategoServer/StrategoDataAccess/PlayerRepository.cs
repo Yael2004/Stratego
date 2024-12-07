@@ -53,8 +53,8 @@ namespace StrategoDataAccess
                 using (var context = new StrategoEntities())
                 {
                     var isFriend = context.Friend.Any(f =>
-                        (f.PlayerId == playerId && f.FriendId == otherPlayerId && f.Status == "friend") ||
-                        (f.PlayerId == otherPlayerId && f.FriendId == playerId && f.Status == "friend"));
+                        (f.PlayerId == playerId && f.FriendId == otherPlayerId && f.Status == "accepted") ||
+                        (f.PlayerId == otherPlayerId && f.FriendId == playerId && f.Status == "accepted"));
 
                     return Result<bool>.Success(isFriend);
                 }

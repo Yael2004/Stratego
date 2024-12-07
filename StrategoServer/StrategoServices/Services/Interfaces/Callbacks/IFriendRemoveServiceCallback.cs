@@ -9,15 +9,9 @@ using System.Threading.Tasks;
 namespace StrategoServices.Services.Interfaces.Callbacks
 {
     [ServiceContract]
-    public interface IFriendOperationCallback
+    public interface IFriendRemoveServiceCallback
     {
         [OperationContract]
-        void GetFriendOperationSend(OperationResult result);
-
-        [OperationContract]
-        void GetFriendOperationAccept(OperationResult result);
-
-        [OperationContract]
-        void GetFriendOperationDecline(OperationResult result);
+        void GetFriendOperationRemove(OperationResult result);
     }
 }
