@@ -484,7 +484,15 @@ namespace StrategoApp.ViewModel
                     await _gameServiceClient.SendMovementInstructionsAsync(_gameId, movementInstruction);
                     if (result == "Win")
                     {
-                        await Task.Run(() => EndGame());
+                        if (UserId < 0)
+                        {
+                            ShowGameResult(_isWonGame);
+                        }
+                        else
+                        {
+                            await Task.Run(() => EndGame());
+                        }
+
                     }
 
                 }
@@ -520,11 +528,6 @@ namespace StrategoApp.ViewModel
 
         private async void EndGame()
         {
-            if (UserId < 0)
-            {
-                ShowGameResult(_isWonGame);
-            }
-
             try
             {
                 var finalStats = new FinalStatsDTO
@@ -761,7 +764,16 @@ namespace StrategoApp.ViewModel
         {
             _isWonGame = true;
             UpdateCellKillMove(destinationCell, originCell);
-            Task.Run(() => EndGame());
+
+            if (UserId < 0)
+            {
+                ShowGameResult(_isWonGame);
+            }
+            else
+            {
+                Task.Run(() => EndGame());
+            }
+
         }
 
         private void HandleKill(Cell destinationCell, Cell originCell)
