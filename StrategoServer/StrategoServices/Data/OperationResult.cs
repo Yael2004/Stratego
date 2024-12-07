@@ -16,10 +16,21 @@ namespace StrategoServices.Data
         [DataMember]
         public string Message { get; set; }
 
+        [DataMember]
+        public bool IsDataBaseError { get; set; }
+
+        public OperationResult(bool isSuccess, string message, bool isDataBaseError)
+        {
+            IsSuccess = isSuccess;
+            Message = message;
+            IsDataBaseError = isDataBaseError;
+        }
+
         public OperationResult(bool isSuccess, string message)
         {
             IsSuccess = isSuccess;
             Message = message;
+            IsDataBaseError = false;
         }
     }
 

@@ -33,7 +33,7 @@ namespace StrategoDataAccess
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<Pictures>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
+                return Result<Pictures>.DataBaseError($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {

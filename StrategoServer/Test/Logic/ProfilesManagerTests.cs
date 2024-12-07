@@ -119,7 +119,7 @@ namespace StrategoServices.Tests
             var topPlayers = new List<Player> { new Player { Id = 1 }, new Player { Id = 2 } };
             var topPlayersResult = Result<IEnumerable<Player>>.Success(topPlayers);
 
-            _playerRepositoryMock.Setup(repo => repo.GetTopPlayersByWins()).Returns(topPlayersResult);
+            //_playerRepositoryMock.Setup(repo => repo.GetTopPlayersByWins()).Returns(topPlayersResult);
 
             var result = _profilesManager.GetTopPlayersIds();
 
@@ -131,7 +131,7 @@ namespace StrategoServices.Tests
         {
             var topPlayersResult = Result<IEnumerable<Player>>.Success(new List<Player>());
 
-            _playerRepositoryMock.Setup(repo => repo.GetTopPlayersByWins()).Returns(topPlayersResult);
+            //_playerRepositoryMock.Setup(repo => repo.GetTopPlayersByWins()).Returns(topPlayersResult);
 
             var result = _profilesManager.GetTopPlayersIds();
 

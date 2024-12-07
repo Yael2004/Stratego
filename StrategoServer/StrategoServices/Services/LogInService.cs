@@ -45,7 +45,7 @@ namespace StrategoServices.Services
                 var loginResult = _accountManager.Value.LogInAccount(email, password);
                 if (!loginResult.IsSuccess)
                 {
-                    await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, loginResult.Error));
+                    await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, loginResult.Error, loginResult.IsDataBaseError));
                     return;
                 }
 
@@ -59,7 +59,7 @@ namespace StrategoServices.Services
                 var playerResult = _accountManager.Value.GetLogInAccount(playerId);
                 if (!playerResult.IsSuccess)
                 {
-                    await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, playerResult.Error));
+                    await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, playerResult.Error, playerResult.IsDataBaseError));
                     return;
                 }
 
@@ -110,8 +110,8 @@ namespace StrategoServices.Services
                 var result = _accountManager.Value.CreateAccount(email, password, playername);
 
                 await NotifyCallbackAsync(callback.SignUpResult, result.IsSuccess
-                    ? new OperationResult(true, "Account created successfully")
-                    : new OperationResult(false, result.Error));
+                    ? new OperationResult(true, "Account created successfully", result.IsDataBaseError)
+                    : new OperationResult(false, result.Error, result.IsDataBaseError));
             }
             catch (TimeoutException tex)
             {
@@ -146,7 +146,7 @@ namespace StrategoServices.Services
                 var accountExistsResult = _passwordManager.Value.AlreadyExistentAccount(email);
                 if (!accountExistsResult.IsSuccess || !accountExistsResult.Value)
                 {
-                    response = new OperationResult(false, "Account not found");
+                    response = new OperationResult(false, "Account not found", accountExistsResult.IsDataBaseError);
                 }
                 else
                 {
@@ -200,8 +200,8 @@ namespace StrategoServices.Services
             {
                 var verificationResult = _passwordManager.Value.ValidateVerificationCode(email, code);
                 response = verificationResult.IsSuccess
-                    ? new OperationResult(true, "Verification code is correct")
-                    : new OperationResult(false, "Invalid verification code");
+                    ? new OperationResult(true, "Verification code is correct", verificationResult.IsDataBaseError)
+                    : new OperationResult(false, "Invalid verification code", verificationResult.IsDataBaseError);
 
                 isValid = verificationResult.IsSuccess;
 
@@ -240,8 +240,8 @@ namespace StrategoServices.Services
             {
                 var result = _passwordManager.Value.ChangePassword(email, newHashedPassword);
                 var response = result.IsSuccess
-                    ? new OperationResult(true, "Password changed successfully")
-                    : new OperationResult(false, result.Error);
+                    ? new OperationResult(true, "Password changed successfully", result.IsDataBaseError)
+                    : new OperationResult(false, result.Error, result.IsDataBaseError);
 
                 await NotifyCallbackAsync(callback.ChangePasswordResult, response);
             }

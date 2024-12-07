@@ -44,13 +44,13 @@ namespace StrategoServices.Services
 
                 if (!result.IsSuccess)
                 {
-                    response.Result = new OperationResult(false, result.Error);
+                    response.Result = new OperationResult(false, result.Error, result.IsDataBaseError);
                     response.PlayerInfo = new OtherPlayerInfoDTO();
                 }
                 else
                 {
                     response.PlayerInfo = result.Value;
-                    response.Result = new OperationResult(true, "Player info retrieved successfully");
+                    response.Result = new OperationResult(true, "Player info retrieved successfully", result.IsDataBaseError);
                 }
             }
             catch (TimeoutException tex)
@@ -85,7 +85,7 @@ namespace StrategoServices.Services
 
                 if (!result.IsSuccess)
                 {
-                    response.Result = new OperationResult(false, result.Error);
+                    response.Result = new OperationResult(false, result.Error, result.IsDataBaseError);
                     response.Statistics = new PlayerStatisticsDTO();
                 }
                 else
@@ -95,7 +95,7 @@ namespace StrategoServices.Services
                         WonGames = result.Value.WonGames,
                         LostGames = result.Value.LostGames
                     };
-                    response.Result = new OperationResult(true, "Player statistics retrieved successfully");
+                    response.Result = new OperationResult(true, "Player statistics retrieved successfully", result.IsDataBaseError);
                 }
             }
             catch (TimeoutException tex)
@@ -130,12 +130,12 @@ namespace StrategoServices.Services
 
                 if (!updateResult.IsSuccess)
                 {
-                    response.Result = new OperationResult(false, updateResult.Error);
+                    response.Result = new OperationResult(false, updateResult.Error, updateResult.IsDataBaseError);
                     response.Profile = new PlayerInfoShownDTO();
                 }
                 else
                 {
-                    response.Result = new OperationResult(updateResult.IsSuccess, updateResult.IsSuccess ? "Profile updated successfully" : updateResult.Error);
+                    response.Result = new OperationResult(updateResult.IsSuccess, updateResult.IsSuccess ? "Profile updated successfully" : updateResult.Error, updateResult.IsDataBaseError);
                     response.Profile = new PlayerInfoShownDTO
                     {
                         Id = newProfile.Id,
@@ -177,11 +177,11 @@ namespace StrategoServices.Services
 
                 if (!getFriendsResult.IsSuccess)
                 {
-                    response.Result = new OperationResult(false, getFriendsResult.Error);
+                    response.Result = new OperationResult(false, getFriendsResult.Error, getFriendsResult.IsDataBaseError);
                 }
                 else
                 {
-                    response.Result = new OperationResult(getFriendsResult.IsSuccess, getFriendsResult.Error);
+                    response.Result = new OperationResult(getFriendsResult.IsSuccess, getFriendsResult.Error, getFriendsResult.IsDataBaseError);
                     response.FriendsIds = getFriendsResult.Value;
                 }
             }
@@ -214,11 +214,11 @@ namespace StrategoServices.Services
 
                 if (!getTopPlayersResult.IsSuccess)
                 {
-                    response.Result = new OperationResult(false, getTopPlayersResult.Error);
+                    response.Result = new OperationResult(false, getTopPlayersResult.Error, getTopPlayersResult.IsDataBaseError);
                 }
                 else
                 {
-                    response.Result = new OperationResult(getTopPlayersResult.IsSuccess, getTopPlayersResult.Error);
+                    response.Result = new OperationResult(getTopPlayersResult.IsSuccess, getTopPlayersResult.Error, getTopPlayersResult.IsDataBaseError);
                     response.TopPlayersIds = getTopPlayersResult.Value;
                 }
             } 
@@ -252,7 +252,7 @@ namespace StrategoServices.Services
 
                 if (!getFriendsResult.IsSuccess)
                 {
-                    response.Result = new OperationResult(false, getFriendsResult.Error);
+                    response.Result = new OperationResult(false, getFriendsResult.Error, getFriendsResult.IsDataBaseError);
                 }
                 else
                 {
@@ -260,7 +260,7 @@ namespace StrategoServices.Services
                         .Where(friendId => _connectedPlayersManager.IsPlayerConnected(friendId))
                         .ToList();
 
-                    response.Result = new OperationResult(true, "Connected friends retrieved successfully");
+                    response.Result = new OperationResult(true, "Connected friends retrieved successfully", getFriendsResult.IsDataBaseError);
                     response.FriendsIds = connectedFriends;
                 }
             }

@@ -39,7 +39,7 @@ namespace StrategoServices.Services
             try
             {
                 var result = _friendsManager.Value.SendFriendRequest(destinationId, requesterId);
-                operationResult = new OperationResult(result.IsSuccess, result.Error);
+                operationResult = new OperationResult(result.IsSuccess, result.Error, result.IsDataBaseError);
             }
             catch (TimeoutException tex)
             {
@@ -74,7 +74,7 @@ namespace StrategoServices.Services
             try
             {
                 var result = _friendsManager.Value.AcceptFriendRequest(destinationId, requesterId);
-                operationResult = new OperationResult(result.IsSuccess, result.Error);
+                operationResult = new OperationResult(result.IsSuccess, result.Error, result.IsDataBaseError);
             }
             catch (TimeoutException tex)
             {
@@ -109,7 +109,7 @@ namespace StrategoServices.Services
             try
             {
                 var result = _friendsManager.Value.DeclineFriendRequest(destinationId, requesterId);
-                operationResult = new OperationResult(result.IsSuccess, result.Error);
+                operationResult = new OperationResult(result.IsSuccess, result.Error, result.IsDataBaseError);
             }
             catch (TimeoutException tex)
             {
@@ -144,7 +144,7 @@ namespace StrategoServices.Services
             try
             {
                 var result = _friendsManager.Value.RemoveFriend(destinationId, requesterId);
-                operationResult = new OperationResult(result.IsSuccess, result.Error);
+                operationResult = new OperationResult(result.IsSuccess, result.Error, result.IsDataBaseError);
             }
             catch (TimeoutException tex)
             {
@@ -183,7 +183,7 @@ namespace StrategoServices.Services
 
                 if (!mailResult.IsSuccess)
                 {
-                    operationResult = new OperationResult(false, mailResult.Error);
+                    operationResult = new OperationResult(false, mailResult.Error, mailResult.IsDataBaseError);
                 }
                 else
                 {
@@ -235,7 +235,7 @@ namespace StrategoServices.Services
 
                 if (!result.IsSuccess)
                 {
-                    response.Result = new OperationResult(false, result.Error);
+                    response.Result = new OperationResult(false, result.Error, result.IsDataBaseError);
                 }
                 else
                 {

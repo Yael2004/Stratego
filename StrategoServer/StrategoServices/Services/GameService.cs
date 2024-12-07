@@ -162,12 +162,12 @@ namespace StrategoServices.Services
                 if (finalStats.HasWon)
                 {
                     var resultIncrementWins = _winsManager.Value.IncrementWins(finalStats.AccountId);
-                    statsUpdateResult = new OperationResult(resultIncrementWins.IsSuccess, resultIncrementWins.Error);
+                    statsUpdateResult = new OperationResult(resultIncrementWins.IsSuccess, resultIncrementWins.Error, resultIncrementWins.IsDataBaseError);
                 }
                 else
                 {
                     var resultIncrementWins = _winsManager.Value.IncrementDefeats(finalStats.AccountId);
-                    statsUpdateResult = new OperationResult(resultIncrementWins.IsSuccess, resultIncrementWins.Error);
+                    statsUpdateResult = new OperationResult(resultIncrementWins.IsSuccess, resultIncrementWins.Error, resultIncrementWins.IsDataBaseError);
                 }
 
                 if (!statsUpdateResult.IsSuccess)

@@ -75,13 +75,13 @@ namespace StrategoDataAccess
                 {
                     transaction.Rollback();
                     log.Error(Messages.EntityValidationError, dbEx);
-                    return Result<string>.Failure($"{Messages.EntityValidationError}: {dbEx.Message}");
+                    return Result<string>.DataBaseError($"{Messages.EntityValidationError}: {dbEx.Message}");
                 }
                 catch (SqlException sqlEx)
                 {
                     transaction.Rollback();
                     log.Error(Messages.DataBaseError, sqlEx);
-                    return Result<string>.Failure($"{Messages.DataBaseError}   : {sqlEx.Message}");
+                    return Result<string>.DataBaseError($"{Messages.DataBaseError}: {sqlEx.Message}");
                 }
                 catch (Exception ex)
                 {
@@ -111,12 +111,12 @@ namespace StrategoDataAccess
             catch (DbEntityValidationException dbEx)
             {
                 log.Error(Messages.EntityValidationError, dbEx);
-                return Result<int>.Failure($"{Messages.EntityValidationError}: {dbEx.Message}");
+                return Result<int>.DataBaseError($"{Messages.EntityValidationError}: {dbEx.Message}");
             }
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<int>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
+                return Result<int>.DataBaseError($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
@@ -138,7 +138,7 @@ namespace StrategoDataAccess
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<bool>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
+                return Result<bool>.DataBaseError($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
@@ -182,13 +182,13 @@ namespace StrategoDataAccess
                 {
                     transaction.Rollback();
                     log.Error(Messages.EntityValidationError, dbEx);
-                    return Result<string>.Failure($"{Messages.EntityValidationError} : {dbEx.Message}");
+                    return Result<string>.DataBaseError($"{Messages.EntityValidationError} : {dbEx.Message}");
                 }
                 catch (SqlException sqlEx)
                 {
                     transaction.Rollback();
                     log.Error(Messages.DataBaseError, sqlEx);
-                    return Result<string>.Failure($"{Messages.DataBaseError}   : {sqlEx.Message}");
+                    return Result<string>.DataBaseError($"{Messages.DataBaseError}   : {sqlEx.Message}");
                 }
                 catch (Exception ex)
                 {

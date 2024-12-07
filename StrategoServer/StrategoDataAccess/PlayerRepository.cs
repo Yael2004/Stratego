@@ -37,7 +37,7 @@ namespace StrategoDataAccess
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<Player>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
+                return Result<Player>.DataBaseError($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
@@ -62,7 +62,7 @@ namespace StrategoDataAccess
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<bool>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
+                return Result<bool>.DataBaseError($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
@@ -100,7 +100,7 @@ namespace StrategoDataAccess
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<IEnumerable<Player>>.Failure($"{Messages.DataBaseError} : {sqlEx.Message}");
+                return Result<IEnumerable<Player>>.DataBaseError($"{Messages.DataBaseError} : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
@@ -150,13 +150,13 @@ namespace StrategoDataAccess
                 {
                     log.Error(Messages.EntityValidationError, dbEx);
                     transaction.Rollback();
-                    return Result<Player>.Failure($"{Messages.EntityValidationError}: {dbEx.Message}");
+                    return Result<Player>.DataBaseError($"{Messages.EntityValidationError}: {dbEx.Message}");
                 }
                 catch (SqlException sqlEx)
                 {
                     log.Error(Messages.DataBaseError, sqlEx);
                     transaction.Rollback();
-                    return Result<Player>.Failure($"{Messages.DataBaseError} : {sqlEx.Message}");
+                    return Result<Player>.DataBaseError($"{Messages.DataBaseError} : {sqlEx.Message}");
                 }
                 catch (Exception ex)
                 {
@@ -187,7 +187,7 @@ namespace StrategoDataAccess
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<Player>.Failure($"{Messages.DataBaseError} : {sqlEx.Message}");
+                return Result<Player>.DataBaseError($"{Messages.DataBaseError} : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
@@ -245,7 +245,7 @@ namespace StrategoDataAccess
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<int>.Failure($"{Messages.DataBaseError}  : {sqlEx.Message}");
+                return Result<int>.DataBaseError($"{Messages.DataBaseError}  : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
@@ -274,7 +274,7 @@ namespace StrategoDataAccess
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<string>.Failure($"{Messages.DataBaseError}  : {sqlEx.Message}");
+                return Result<string>.DataBaseError($"{Messages.DataBaseError}  : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
@@ -303,7 +303,7 @@ namespace StrategoDataAccess
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<string>.Failure($"{Messages.DataBaseError}  : {sqlEx.Message}");
+                return Result<string>.DataBaseError($"{Messages.DataBaseError}  : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
@@ -334,7 +334,7 @@ namespace StrategoDataAccess
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<string>.Failure($"{Messages.DataBaseError}  : {sqlEx.Message}");
+                return Result<string>.DataBaseError($"{Messages.DataBaseError}  : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
@@ -377,7 +377,7 @@ namespace StrategoDataAccess
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<List<int>>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
+                return Result<List<int>>.DataBaseError($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
@@ -414,7 +414,7 @@ namespace StrategoDataAccess
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<string>.Failure($"{Messages.DataBaseError}   : {sqlEx.Message}");
+                return Result<string>.DataBaseError($"{Messages.DataBaseError}   : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
@@ -438,7 +438,7 @@ namespace StrategoDataAccess
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<int>.Failure($"{Messages.DataBaseError}: {sqlEx.Message}");
+                return Result<int>.DataBaseError($"{Messages.DataBaseError}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
