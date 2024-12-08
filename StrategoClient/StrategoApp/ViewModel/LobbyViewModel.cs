@@ -35,6 +35,8 @@ namespace StrategoApp.ViewModel
         private bool _isJoinRoomDialogVisible;
         private bool _isServiceErrorVisible;
 
+        private PingCheck _pingCheck;
+
         private readonly ChatServiceClient _chatClient;
         private readonly OtherProfileDataServiceClient _otherProfileDataServiceClient;
         private readonly PlayerFriendsListServiceClient _playerFriendsListServiceClient;
@@ -193,6 +195,8 @@ namespace StrategoApp.ViewModel
             ConnectPlayerToChat();
 
             _mainWindowViewModel = mainWindowViewModel;
+            _pingCheck = new PingCheck(_mainWindowViewModel);
+            Task.Run(() => _pingCheck.StartPingMonitoringAsync());
 
             ShowFriendsCommand = new ViewModelCommand(ShowFriends, CanShowFriends);
             SendMessageCommand = new ViewModelCommand(ClientSendMessage);
@@ -229,6 +233,7 @@ namespace StrategoApp.ViewModel
                     Log.Error("Communication error with the connect service.", ex);
 
                     LogInViewModel logInViewModel = new LogInViewModel(_mainWindowViewModel);
+                    _pingCheck.StopPingMonitoring();
                     _mainWindowViewModel.ChangeViewModel(logInViewModel);
                     logInViewModel.IsServiceErrorVisible = true;
                 }
@@ -237,6 +242,7 @@ namespace StrategoApp.ViewModel
                     Log.Error("Timed out while communicating with the connect service.", ex);
 
                     LogInViewModel logInViewModel = new LogInViewModel(_mainWindowViewModel);
+                    _pingCheck.StopPingMonitoring();
                     _mainWindowViewModel.ChangeViewModel(logInViewModel);
                     logInViewModel.IsServiceErrorVisible = true;
                 }
@@ -245,6 +251,7 @@ namespace StrategoApp.ViewModel
                     Log.Error("Unexpected error while connecting in.", ex);
 
                     LogInViewModel logInViewModel = new LogInViewModel(_mainWindowViewModel);
+                    _pingCheck.StopPingMonitoring();
                     _mainWindowViewModel.ChangeViewModel(logInViewModel);
                     logInViewModel.IsServiceErrorVisible = true;
                 }
@@ -297,6 +304,7 @@ namespace StrategoApp.ViewModel
                     await _friendServiceClient.SendRoomInvitationAsync(friend.AccountId, roomViewModel.RoomCode);
 
                     DisconnectPlayerFromChat();
+                    _pingCheck.StopPingMonitoring();
                     _mainWindowViewModel.ChangeViewModel(roomViewModel);
                 }
                 else
@@ -373,6 +381,7 @@ namespace StrategoApp.ViewModel
             try
             {
                 DisconnectPlayerFromChat();
+                _pingCheck.StopPingMonitoring();
                 _mainWindowViewModel.ChangeViewModel(new PlayerProfileViewModel(_mainWindowViewModel));
             }
             catch (CommunicationException ex)
@@ -397,6 +406,7 @@ namespace StrategoApp.ViewModel
             try
             {
                 DisconnectPlayerFromChat();
+                _pingCheck.StopPingMonitoring();
                 _mainWindowViewModel.ChangeViewModel(new ScoreboardViewModel(_mainWindowViewModel));
             }
             catch (CommunicationException ex)
@@ -433,6 +443,7 @@ namespace StrategoApp.ViewModel
             try
             {
                 DisconnectPlayerFromChat();
+                _pingCheck.StopPingMonitoring();
                 _mainWindowViewModel.ChangeViewModel(new FriendsViewModel(_mainWindowViewModel));
             }
             catch (CommunicationException ex)
@@ -467,6 +478,7 @@ namespace StrategoApp.ViewModel
                 if (await roomViewModel.JoinToRoomAsync(JoinRoomCode))
                 {
                     DisconnectPlayerFromChat();
+                    _pingCheck.StopPingMonitoring();
                     _mainWindowViewModel.ChangeViewModel(roomViewModel);
                 }
                 else
@@ -504,6 +516,7 @@ namespace StrategoApp.ViewModel
                 if (await roomViewModel.CreateARoomAsync())
                 {
                     DisconnectPlayerFromChat();
+                    _pingCheck.StopPingMonitoring();
                     _mainWindowViewModel.ChangeViewModel(roomViewModel);
                 }
             }
@@ -625,6 +638,7 @@ namespace StrategoApp.ViewModel
             else
             {
                 DisconnectPlayerFromChat();
+                _pingCheck.StopPingMonitoring();
                 _mainWindowViewModel.ChangeViewModel(roomViewModel);
             }
         }
@@ -632,6 +646,7 @@ namespace StrategoApp.ViewModel
         public void ExecuteCloseServiceError(object obj)
         {
             IsServiceErrorVisible = false;
+            _pingCheck.StopPingMonitoring();
             _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
         }
     }

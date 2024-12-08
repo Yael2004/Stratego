@@ -24,6 +24,7 @@ namespace StrategoServices
             builder.RegisterType<ProfileService>().As<IProfileDataService>().InstancePerLifetimeScope();
             builder.RegisterType<FriendOperationsService>().As<IFriendOperationsService>().InstancePerLifetimeScope();
             builder.RegisterType<GameService>().As<IGameService>().InstancePerLifetimeScope();
+            builder.RegisterType<PingService>().As<IPingService>().InstancePerLifetimeScope();
 
             builder.RegisterType<AccountManager>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<ProfilesManager>().AsSelf().InstancePerLifetimeScope();

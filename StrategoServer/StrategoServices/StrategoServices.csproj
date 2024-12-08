@@ -147,6 +147,7 @@
     <Compile Include="Logic\EmailSender.cs" />
     <Compile Include="Logic\Interfaces\IEmailSender.cs" />
     <Compile Include="Services\Interfaces\IOtherProfileDataService.cs" />
+    <Compile Include="Services\Interfaces\IPingService.cs" />
     <Compile Include="Services\Interfaces\IPlayerFriendRequestService.cs" />
     <Compile Include="Services\Interfaces\IPlayerFriendsListService.cs" />
     <Compile Include="Services\Interfaces\IProfileModifierService.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Services\Interfaces\ITopPlayersListService.cs" />
     <Compile Include="Services\LogInService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\PingService.cs" />
     <Compile Include="Services\ProfileService.cs" />
     <Compile Include="Services\RoomService.cs" />
   </ItemGroup>

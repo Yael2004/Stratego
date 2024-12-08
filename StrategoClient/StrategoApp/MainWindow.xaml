@@ -13,7 +13,7 @@
         <DataTemplate DataType="{x:Type viewModel:LogInViewModel}">
             <view:LogIn/>
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type viewModel:LobbyViewModel}">
             <view:Lobby/>
         </DataTemplate>
@@ -49,7 +49,7 @@
         <DataTemplate DataType="{x:Type viewModel:GameSetupViewModel}">
             <view:GameSetup/>
         </DataTemplate>
-        
+
     </Window.Resources>
 
     <Window.DataContext>

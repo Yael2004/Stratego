@@ -77,6 +77,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Connected Services\PingService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\ProfileService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -97,6 +102,7 @@
     <Compile Include="Helpers\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\NullToDefaultImageConverter.cs" />
+    <Compile Include="Helpers\PingCheck.cs" />
     <Compile Include="Helpers\Validations.cs" />
     <Compile Include="Helpers\StringToVisibilityConverter.cs" />
     <Compile Include="Model\Piece.cs" />
@@ -280,6 +286,13 @@
     <None Include="Connected Services\LogInService\LogInService3.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\PingService\PingService.wsdl" />
+    <None Include="Connected Services\PingService\PingService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\PingService\PingService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\ProfileService\ProfileService.wsdl" />
     <None Include="Connected Services\ProfileService\ProfileService.xsd">
       <SubType>Designer</SubType>
@@ -433,6 +446,7 @@
     <WCFMetadataStorage Include="Connected Services\FriendService\" />
     <WCFMetadataStorage Include="Connected Services\GameService\" />
     <WCFMetadataStorage Include="Connected Services\LogInService\" />
+    <WCFMetadataStorage Include="Connected Services\PingService\" />
     <WCFMetadataStorage Include="Connected Services\ProfileService\" />
     <WCFMetadataStorage Include="Connected Services\RoomService\" />
     <WCFMetadataStorage Include="Connected Services\Service\" />
@@ -532,6 +546,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\Icons\ArrowBackOnScoreboardSection_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\PingService\PingService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\PingService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\PingService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\PingService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

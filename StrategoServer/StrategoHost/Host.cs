@@ -32,23 +32,25 @@ namespace StrategoHost
                 using (var scope = container.BeginLifetimeScope())
                 {
                     var services = ResolveServices(scope);
-                    var hosts = CreateServiceHosts(services);
+                    var (loginHost, chatHost, profileHost, roomHost, friendHost, gameHost, pingHost) = CreateServiceHosts(services);
 
-                    bool loginServiceOpened = OpenService(hosts.loginHost, log, "Login");
-                    bool chatServiceOpened = OpenService(hosts.chatHost, log, "Chat");
-                    bool profileServiceOpened = OpenService(hosts.profileHost, log, "Profile");
-                    bool roomServiceOpened = OpenService(hosts.roomHost, log, "Room");
-                    bool friendServiceOpened = OpenService(hosts.friendHost, log, "Friend");
-                    bool gameServiceOpened = OpenService(hosts.gameHost, log, "Game");
+                    bool loginServiceOpened = OpenService(loginHost, log, "Login");
+                    bool chatServiceOpened = OpenService(chatHost, log, "Chat");
+                    bool profileServiceOpened = OpenService(profileHost, log, "Profile");
+                    bool roomServiceOpened = OpenService(roomHost, log, "Room");
+                    bool friendServiceOpened = OpenService(friendHost, log, "Friend");
+                    bool gameServiceOpened = OpenService(gameHost, log, "Game");
+                    bool pingServiceOpened = OpenService(pingHost, log, "Ping");
 
                     Console.ReadLine();
 
-                    CloseService(hosts.loginHost, log, "Login", loginServiceOpened);
-                    CloseService(hosts.chatHost, log, "Chat", chatServiceOpened);
-                    CloseService(hosts.profileHost, log, "Profile", profileServiceOpened);
-                    CloseService(hosts.roomHost, log, "Room", roomServiceOpened);
-                    CloseService(hosts.friendHost, log, "Friend", friendServiceOpened);
-                    CloseService(hosts.gameHost, log, "Game", gameServiceOpened);
+                    CloseService(loginHost, log, "Login", loginServiceOpened);
+                    CloseService(chatHost, log, "Chat", chatServiceOpened);
+                    CloseService(profileHost, log, "Profile", profileServiceOpened);
+                    CloseService(roomHost, log, "Room", roomServiceOpened);
+                    CloseService(friendHost, log, "Friend", friendServiceOpened);
+                    CloseService(gameHost, log, "Game", gameServiceOpened);
+                    CloseService(pingHost, log, "Ping", pingServiceOpened);
                 }
             }
             catch (FileNotFoundException fex)
@@ -71,7 +73,7 @@ namespace StrategoHost
             }
         }
 
-        private static (ILogInService loginService, IChatService chatService, IProfileDataService profileService, IRoomService roomService, IFriendOperationsService friendService, IGameService gameService) ResolveServices(ILifetimeScope scope)
+        private static (ILogInService loginService, IChatService chatService, IProfileDataService profileService, IRoomService roomService, IFriendOperationsService friendService, IGameService gameService, IPingService pingService) ResolveServices(ILifetimeScope scope)
         {
             var loginService = scope.Resolve<ILogInService>();
             var chatService = scope.Resolve<IChatService>();
@@ -79,11 +81,13 @@ namespace StrategoHost
             var roomService = scope.Resolve<IRoomService>();
             var friendService = scope.Resolve<IFriendOperationsService>();
             var gameService = scope.Resolve<IGameService>();
+            var pingService = scope.Resolve<IPingService>();
 
-            return (loginService, chatService, profileService, roomService, friendService, gameService);
+            return (loginService, chatService, profileService, roomService, friendService, gameService, pingService);
         }
 
-        private static (ServiceHost loginHost, ServiceHost chatHost, ServiceHost profileHost, ServiceHost roomHost, ServiceHost friendHost, ServiceHost gameHost) CreateServiceHosts((ILogInService loginService, IChatService chatService, IProfileDataService profileService, IRoomService roomService, IFriendOperationsService friendService, IGameService gameService) services)
+        private static (ServiceHost loginHost, ServiceHost chatHost, ServiceHost profileHost, ServiceHost roomHost, ServiceHost friendHost, ServiceHost gameHost, ServiceHost pingHost)
+        CreateServiceHosts((ILogInService loginService, IChatService chatService, IProfileDataService profileService, IRoomService roomService, IFriendOperationsService friendService, IGameService gameService, IPingService pingService) services)
         {
             var loginHost = new ServiceHost(services.loginService);
             var chatHost = new ServiceHost(services.chatService);
@@ -91,9 +95,11 @@ namespace StrategoHost
             var roomHost = new ServiceHost(services.roomService);
             var friendHost = new ServiceHost(services.friendService);
             var gameHost = new ServiceHost(services.gameService);
+            var pingHost = new ServiceHost(services.pingService);
 
-            return (loginHost, chatHost, profileHost, roomHost, friendHost, gameHost);
+            return (loginHost, chatHost, profileHost, roomHost, friendHost, gameHost, pingHost);
         }
+
 
         private static bool OpenService(ServiceHost host, ILog log, string serviceName)
         {
