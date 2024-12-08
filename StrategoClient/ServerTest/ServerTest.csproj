@@ -39,16 +39,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=5.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.5.1.1\lib\net462\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.2.2.10\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.2.2.10\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Moq, Version=4.20.72.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.20.72\lib\net462\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -57,12 +70,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Connected Services\ProfileService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <Compile Include="Connected Services\Service\Reference.cs">
+    <Compile Include="Connected Services\RoomService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -70,6 +78,7 @@
     <Compile Include="LogInServiceClientTests.cs" />
     <Compile Include="ProfileServiceClientTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoomServiceClientTests.cs" />
     <Compile Include="SignUpServiceClientTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -87,27 +96,17 @@
     <None Include="Connected Services\LogInService\LogInService3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ProfileService\ProfileService.wsdl" />
-    <None Include="Connected Services\ProfileService\ProfileService.xsd">
+    <None Include="Connected Services\RoomService\RoomService.wsdl" />
+    <None Include="Connected Services\RoomService\RoomService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ProfileService\ProfileService1.xsd">
+    <None Include="Connected Services\RoomService\RoomService1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ProfileService\ProfileService2.xsd">
+    <None Include="Connected Services\RoomService\RoomService2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ProfileService\ProfileService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\Service\ChatService.wsdl" />
-    <None Include="Connected Services\Service\ChatService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\Service\ChatService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\Service\ChatService2.xsd">
+    <None Include="Connected Services\RoomService\RoomService3.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
@@ -123,20 +122,19 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\LogInService\" />
-    <WCFMetadataStorage Include="Connected Services\ProfileService\" />
-    <WCFMetadataStorage Include="Connected Services\Service\" />
+    <WCFMetadataStorage Include="Connected Services\RoomService\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\Service\ChatService.disco" />
+    <None Include="Connected Services\RoomService\RoomService.disco" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\Service\configuration91.svcinfo" />
+    <None Include="Connected Services\RoomService\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\Service\configuration.svcinfo" />
+    <None Include="Connected Services\RoomService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\Service\Reference.svcmap">
+    <None Include="Connected Services\RoomService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
@@ -152,21 +150,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\LogInService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\ProfileService\ProfileService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\ProfileService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\ProfileService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\ProfileService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

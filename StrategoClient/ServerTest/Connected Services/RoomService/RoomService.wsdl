@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="RoomService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="NetTcpBinding_IRoomService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <wsrm:RMAssertion xmlns:wsrm="http://schemas.xmlsoap.org/ws/2005/02/rm/policy">
+          <wsrm:InactivityTimeout Milliseconds="59000" />
+          <wsrm:AcknowledgementInterval Milliseconds="200" />
+        </wsrm:RMAssertion>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://192.168.137.1:2023/RoomService?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://192.168.137.1:2023/RoomService?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://192.168.137.1:2023/RoomService?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" />
+      <xsd:import schemaLocation="http://192.168.137.1:2023/RoomService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IRoomService_CreateRoom_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateRoom" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_CreateRoom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateRoomResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_JoinRoom_InputMessage">
+    <wsdl:part name="parameters" element="tns:JoinRoom" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_JoinRoom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:JoinRoomResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_LeaveRoomAsync_InputMessage">
+    <wsdl:part name="parameters" element="tns:LeaveRoomAsync" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_SendMessageToRoom_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendMessageToRoom" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_SendMessageToRoom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendMessageToRoomResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_NotifyPlayersOfNewConnectionAsync_InputMessage">
+    <wsdl:part name="parameters" element="tns:NotifyPlayersOfNewConnectionAsync" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_NotifyPlayersOfNewConnectionAsync_OutputMessage">
+    <wsdl:part name="parameters" element="tns:NotifyPlayersOfNewConnectionAsyncResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_NotifyOpponentToJoinGameAsync_InputMessage">
+    <wsdl:part name="parameters" element="tns:NotifyOpponentToJoinGameAsync" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_NotifyOpponentToJoinGameAsync_OutputMessage">
+    <wsdl:part name="parameters" element="tns:NotifyOpponentToJoinGameAsyncResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_ReportPlayerAccountAsync_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReportPlayerAccountAsync" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_ReportPlayerAccountAsync_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReportPlayerAccountAsyncResponse" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_RoomCreatedAsync_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:RoomCreatedAsync" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_RoomResponseAsync_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:RoomResponseAsync" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_ReceiveMessageAsync_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveMessageAsync" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_GetConnectedPlayerId_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GetConnectedPlayerId" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_NotifyToJoinGame_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:NotifyToJoinGame" />
+  </wsdl:message>
+  <wsdl:message name="IRoomService_NotifyPlayerReported_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:NotifyPlayerReported" />
+  </wsdl:message>
+  <wsdl:portType name="IRoomService">
+    <wsdl:operation name="CreateRoom">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRoomService/CreateRoom" message="tns:IRoomService_CreateRoom_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/CreateRoomResponse" message="tns:IRoomService_CreateRoom_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="JoinRoom">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRoomService/JoinRoom" message="tns:IRoomService_JoinRoom_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/JoinRoomResponse" message="tns:IRoomService_JoinRoom_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LeaveRoomAsync">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRoomService/LeaveRoomAsync" message="tns:IRoomService_LeaveRoomAsync_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendMessageToRoom">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRoomService/SendMessageToRoom" message="tns:IRoomService_SendMessageToRoom_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/SendMessageToRoomResponse" message="tns:IRoomService_SendMessageToRoom_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NotifyPlayersOfNewConnectionAsync">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnectionAsync" message="tns:IRoomService_NotifyPlayersOfNewConnectionAsync_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnectionAsyncResponse" message="tns:IRoomService_NotifyPlayersOfNewConnectionAsync_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NotifyOpponentToJoinGameAsync">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRoomService/NotifyOpponentToJoinGameAsync" message="tns:IRoomService_NotifyOpponentToJoinGameAsync_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/NotifyOpponentToJoinGameAsyncResponse" message="tns:IRoomService_NotifyOpponentToJoinGameAsync_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReportPlayerAccountAsync">
+      <wsdl:input wsaw:Action="http://tempuri.org/IRoomService/ReportPlayerAccountAsync" message="tns:IRoomService_ReportPlayerAccountAsync_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/ReportPlayerAccountAsyncResponse" message="tns:IRoomService_ReportPlayerAccountAsync_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RoomCreatedAsync">
+      <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/RoomCreatedAsync" message="tns:IRoomService_RoomCreatedAsync_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RoomResponseAsync">
+      <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/RoomResponseAsync" message="tns:IRoomService_RoomResponseAsync_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveMessageAsync">
+      <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/ReceiveMessageAsync" message="tns:IRoomService_ReceiveMessageAsync_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetConnectedPlayerId">
+      <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/GetConnectedPlayerId" message="tns:IRoomService_GetConnectedPlayerId_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NotifyToJoinGame">
+      <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/NotifyToJoinGame" message="tns:IRoomService_NotifyToJoinGame_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NotifyPlayerReported">
+      <wsdl:output wsaw:Action="http://tempuri.org/IRoomService/NotifyPlayerReported" message="tns:IRoomService_NotifyPlayerReported_OutputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetTcpBinding_IRoomService" type="tns:IRoomService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IRoomService_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="CreateRoom">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/CreateRoom" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="JoinRoom">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/JoinRoom" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LeaveRoomAsync">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/LeaveRoomAsync" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="SendMessageToRoom">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/SendMessageToRoom" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NotifyPlayersOfNewConnectionAsync">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/NotifyPlayersOfNewConnectionAsync" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NotifyOpponentToJoinGameAsync">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/NotifyOpponentToJoinGameAsync" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReportPlayerAccountAsync">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/ReportPlayerAccountAsync" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RoomCreatedAsync">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/RoomCreatedAsync" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RoomResponseAsync">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/RoomResponseAsync" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveMessageAsync">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/ReceiveMessageAsync" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetConnectedPlayerId">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/GetConnectedPlayerId" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NotifyToJoinGame">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/NotifyToJoinGame" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NotifyPlayerReported">
+      <soap12:operation soapAction="http://tempuri.org/IRoomService/NotifyPlayerReported" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RoomService">
+    <wsdl:port name="NetTcpBinding_IRoomService" binding="tns:NetTcpBinding_IRoomService">
+      <soap12:address location="net.tcp://192.168.137.1:1013/RoomService/RoomService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://192.168.137.1:1013/RoomService/RoomService</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

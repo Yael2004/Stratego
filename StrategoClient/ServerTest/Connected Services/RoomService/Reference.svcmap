@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="053c9086-81b0-44b5-a9d2-e24523f4bc94" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://192.168.137.1:2023/RoomService" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="RoomService.xsd" MetadataType="Schema" ID="102284a8-b2d8-4de3-953a-fa54922c66da" SourceId="1" SourceUrl="http://192.168.137.1:2023/RoomService?xsd=xsd2" />
+    <MetadataFile FileName="RoomService1.xsd" MetadataType="Schema" ID="a824c8cb-ba88-4e1c-a566-e1923373d22a" SourceId="1" SourceUrl="http://192.168.137.1:2023/RoomService?xsd=xsd3" />
+    <MetadataFile FileName="RoomService.disco" MetadataType="Disco" ID="fbceb668-088f-4af1-acdd-3384f9722c7e" SourceId="1" SourceUrl="http://192.168.137.1:2023/RoomService?disco" />
+    <MetadataFile FileName="RoomService2.xsd" MetadataType="Schema" ID="832e240b-c0b4-421f-aca3-8852d7d62b09" SourceId="1" SourceUrl="http://192.168.137.1:2023/RoomService?xsd=xsd0" />
+    <MetadataFile FileName="RoomService3.xsd" MetadataType="Schema" ID="287565a5-715a-45ab-9c9c-7c66d0a338c4" SourceId="1" SourceUrl="http://192.168.137.1:2023/RoomService?xsd=xsd1" />
+    <MetadataFile FileName="RoomService.wsdl" MetadataType="Wsdl" ID="c0433eb9-3f85-4595-ad2a-78b795410614" SourceId="1" SourceUrl="http://192.168.137.1:2023/RoomService?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

@@ -17,7 +17,7 @@ namespace StrategoServices.Services
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class RoomService : IRoomService
     {
-        private readonly ConcurrentDictionary<string, Room> _rooms = new ConcurrentDictionary<string, Room>();
+        public readonly ConcurrentDictionary<string, Room> _rooms = new ConcurrentDictionary<string, Room>();
 
         private readonly Lazy<ReportPlayerManager> _reportPlayerManager;
 
