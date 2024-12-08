@@ -38,7 +38,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<Label>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
+                return Result<Label>.DataBaseError($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
     }

@@ -87,7 +87,7 @@ namespace StrategoDataAccess
                 {
                     transaction.Rollback();
                     log.Error(Messages.UnexpectedError, ex);
-                    return Result<string>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
+                    return Result<string>.DataBaseError($"{Messages.UnexpectedError}: {ex.Message}");
                 }
             }
         }
@@ -121,7 +121,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<int>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
+                return Result<int>.DataBaseError($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 
@@ -143,7 +143,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<bool>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
+                return Result<bool>.DataBaseError($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 

@@ -42,7 +42,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<Player>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
+                return Result<Player>.DataBaseError($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 
@@ -67,7 +67,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<bool>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
+                return Result<bool>.DataBaseError($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 
@@ -105,7 +105,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<IEnumerable<Player>>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
+                return Result<IEnumerable<Player>>.DataBaseError($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 
@@ -162,7 +162,7 @@ namespace StrategoDataAccess
                 {
                     log.Error(Messages.UnexpectedError, ex);
                     transaction.Rollback();
-                    return Result<Player>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
+                    return Result<Player>.DataBaseError($"{Messages.UnexpectedError} : {ex.Message}");
                 }
             }
         }
@@ -192,7 +192,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<Player>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
+                return Result<Player>.DataBaseError($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
@@ -216,12 +216,12 @@ namespace StrategoDataAccess
             catch (SqlException sqlEx)
             {
                 log.Error(Messages.DataBaseError, sqlEx);
-                return Result<int>.Failure($"{Messages.DataBaseError}  : {sqlEx.Message}");
+                return Result<int>.DataBaseError($"{Messages.DataBaseError}  : {sqlEx.Message}");
             }
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<int>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
+                return Result<int>.DataBaseError($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
@@ -250,7 +250,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<int>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
+                return Result<int>.DataBaseError($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
@@ -279,7 +279,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<string>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
+                return Result<string>.DataBaseError($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
@@ -308,7 +308,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<string>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
+                return Result<string>.DataBaseError($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
@@ -339,7 +339,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<string>.Failure($"{Messages.UnexpectedError}  : {ex.Message}");
+                return Result<string>.DataBaseError($"{Messages.UnexpectedError}  : {ex.Message}");
             }
         }
 
@@ -382,7 +382,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<List<int>>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
+                return Result<List<int>>.DataBaseError($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 
@@ -419,7 +419,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<string>.Failure($"{Messages.UnexpectedError}  : {ex.Message}");
+                return Result<string>.DataBaseError($"{Messages.UnexpectedError}  : {ex.Message}");
             }
         }
 
@@ -443,7 +443,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<int>.Failure($"{Messages.UnexpectedError}: {ex.Message}");
+                return Result<int>.DataBaseError($"{Messages.UnexpectedError}: {ex.Message}");
             }
         }
 

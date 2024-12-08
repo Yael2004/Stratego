@@ -41,7 +41,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<Games>.Failure($"{Messages.UnexpectedError}  : {ex.Message}");
+                return Result<Games>.DataBaseError($"{Messages.UnexpectedError}  : {ex.Message}");
             }
         }
 
@@ -72,7 +72,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<string>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
+                return Result<string>.DataBaseError($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
@@ -103,7 +103,7 @@ namespace StrategoDataAccess
             catch (Exception ex)
             {
                 log.Error(Messages.UnexpectedError, ex);
-                return Result<string>.Failure($"{Messages.UnexpectedError} : {ex.Message}");
+                return Result<string>.DataBaseError($"{Messages.UnexpectedError} : {ex.Message}");
             }
         }
 
