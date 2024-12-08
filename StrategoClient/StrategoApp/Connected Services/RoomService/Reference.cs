@@ -84,6 +84,9 @@ namespace StrategoApp.RoomService {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsDataBaseErrorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsSuccessField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -96,6 +99,19 @@ namespace StrategoApp.RoomService {
             }
             set {
                 this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsDataBaseError {
+            get {
+                return this.IsDataBaseErrorField;
+            }
+            set {
+                if ((this.IsDataBaseErrorField.Equals(value) != true)) {
+                    this.IsDataBaseErrorField = value;
+                    this.RaisePropertyChanged("IsDataBaseError");
+                }
             }
         }
         

@@ -28,6 +28,10 @@ namespace StrategoServices.Logic
 
             if (!result.IsSuccess)
             {
+                if (result.IsDataBaseError)
+                {
+                    return Result<PlayerStatisticsDTO>.DataBaseError(result.Error);
+                }
                 return Result<PlayerStatisticsDTO>.Failure(result.Error);
             }
 
@@ -47,6 +51,10 @@ namespace StrategoServices.Logic
                 var playerResult = _playerRepository.Value.GetOtherPlayerById(playerId);
                 if (!playerResult.IsSuccess)
                 {
+                    if (playerResult.IsDataBaseError)
+                    {
+                        return Result<OtherPlayerInfoDTO>.DataBaseError(playerResult.Error);
+                    }
                     return Result<OtherPlayerInfoDTO>.Failure(playerResult.Error);
                 }
 
@@ -64,12 +72,20 @@ namespace StrategoServices.Logic
                 var playerStatisticsResult = _gamesRepository.Value.GetGameStatisticsByAccountId(playerResult.Value.AccountId);
                 if (!playerStatisticsResult.IsSuccess)
                 {
+                    if (playerStatisticsResult.IsDataBaseError)
+                    {
+                        return Result<OtherPlayerInfoDTO>.DataBaseError(playerStatisticsResult.Error);
+                    }
                     return Result<OtherPlayerInfoDTO>.Failure(playerStatisticsResult.Error);
                 }
 
                 var isFriendResult = _playerRepository.Value.IsFriend(requesterId, playerId);
                 if (!isFriendResult.IsSuccess)
                 {
+                    if (isFriendResult.IsDataBaseError)
+                    {
+                        return Result<OtherPlayerInfoDTO>.DataBaseError(isFriendResult.Error);
+                    }
                     return Result<OtherPlayerInfoDTO>.Failure(isFriendResult.Error);
                 }
 
@@ -90,7 +106,7 @@ namespace StrategoServices.Logic
             }
             catch (SqlException sqlEx)
             {
-                return Result<OtherPlayerInfoDTO>.Failure($"Database error: {sqlEx.Message}");
+                return Result<OtherPlayerInfoDTO>.DataBaseError($"Database error: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
@@ -106,6 +122,10 @@ namespace StrategoServices.Logic
 
             if (!result.IsSuccess)
             {
+                if (result.IsDataBaseError)
+                {
+                    return Result<PlayerInfoShownDTO>.DataBaseError(result.Error);
+                }
                 return Result<PlayerInfoShownDTO>.Failure(result.Error);
             }
 
@@ -142,6 +162,10 @@ namespace StrategoServices.Logic
 
             if (!friendsResult.IsSuccess)
             {
+                if (friendsResult.IsDataBaseError)
+                {
+                    return Result<List<int>>.DataBaseError(friendsResult.Error);
+                }
                 return Result<List<int>>.Failure(friendsResult.Error);
             }
 
@@ -163,6 +187,10 @@ namespace StrategoServices.Logic
 
             if (!topPlayersResult.IsSuccess)
             {
+                if (topPlayersResult.IsDataBaseError)
+                {
+                    return Result<List<int>>.DataBaseError(topPlayersResult.Error);
+                }
                 return Result<List<int>>.Failure(topPlayersResult.Error);
             }
             return Result<List<int>>.Success(topPlayersResult.Value);

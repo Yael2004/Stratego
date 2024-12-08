@@ -53,6 +53,10 @@ namespace StrategoServices.Logic
 
             if (!friendRequestsResult.IsSuccess)
             {
+                if (friendRequestsResult.IsDataBaseError)
+                {
+                    return Result<List<int>>.DataBaseError(friendRequestsResult.Error);
+                }
                 return Result<List<int>>.Failure(friendRequestsResult.Error);
             }
 

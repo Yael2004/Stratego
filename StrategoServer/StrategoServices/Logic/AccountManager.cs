@@ -37,7 +37,7 @@ namespace StrategoServices.Logic
 
             if (!result.IsSuccess)
             {
-                return Result<int>.Failure(result.Error);
+                return result;
             }
 
             var accountId = result.Value;
@@ -46,6 +46,10 @@ namespace StrategoServices.Logic
 
             if (!playerResult.IsSuccess)
             {
+                if (playerResult.IsDataBaseError)
+                {
+                    return Result<int>.DataBaseError(playerResult.Error);
+                }
                 return Result<int>.Failure("Player not found for the provided account.");
             }
 
@@ -55,7 +59,7 @@ namespace StrategoServices.Logic
 
             if (!reportCountResult.IsSuccess)
             {
-                return Result<int>.Failure("Failed to retrieve report count: " + reportCountResult.Error);
+                return reportCountResult;
             }
 
             if (reportCountResult.Value >= 3)
@@ -73,6 +77,10 @@ namespace StrategoServices.Logic
 
             if (!result.IsSuccess)
             {
+                if (result.IsDataBaseError)
+                {
+                    return Result<PlayerDTO>.DataBaseError(result.Error);
+                }
                 return Result<PlayerDTO>.Failure(result.Error);
             }
 
@@ -81,13 +89,22 @@ namespace StrategoServices.Logic
             var pictureResult = _picturesRepository.Value.GetPictureById((int)player.PictureId);
             var labelResult = _labelRepository.Value.GetLabelById(player.IdLabel);
 
+
             if (!pictureResult.IsSuccess)
             {
+                if (pictureResult.IsDataBaseError)
+                {
+                   return Result<PlayerDTO>.DataBaseError(pictureResult.Error);
+                }
                 return Result<PlayerDTO>.Failure(pictureResult.Error);
             }
 
             if (!labelResult.IsSuccess)
             {
+                if (labelResult.IsDataBaseError)
+                {
+                    return Result<PlayerDTO>.DataBaseError(labelResult.Error);
+                }
                 return Result<PlayerDTO>.Failure(labelResult.Error);
             }
 
