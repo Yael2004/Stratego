@@ -27,6 +27,7 @@ namespace StrategoApp.ViewModel
         private string _password;
         private string _editedPassword;
         private string _errorMessage;
+        private string _exceptionMessage;
         private string _codeErrorMessage;
         private string _emailErrorMessage;
         private string _passwordErrorMessage;
@@ -144,6 +145,16 @@ namespace StrategoApp.ViewModel
             set
             {
                 _isServiceErrorVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ExceptionMessage
+        {
+            get { return _exceptionMessage; }
+            set
+            {
+                _exceptionMessage = value;
                 OnPropertyChanged();
             }
         }
@@ -268,16 +279,6 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public bool IsDatabaseError
-        {
-            get { return _isDatabaseError; }
-            set
-            {
-                _isDatabaseError = value;
-                OnPropertyChanged();
-            }
-        }
-
         public LogInViewModel(MainWindowViewModel mainWindowViewModel)
         {
             _logInServiceClient = new LogInServiceClient(new InstanceContext(this));
@@ -391,16 +392,19 @@ namespace StrategoApp.ViewModel
             {
                 Log.Error("Communication error with the login service.", cex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while communicating with the login service.", tex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while logging in.", ex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
         }
 
@@ -440,6 +444,11 @@ namespace StrategoApp.ViewModel
                 else if (result.Message == "Access denied: This account has been reported too many times.")
                 {
                     ErrorMessage = Properties.Resources.BannedAccount_Label;
+                }
+                else if (result.IsDataBaseError)
+                {
+                    ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                    IsServiceErrorVisible= true;
                 }
                 else
                 {
@@ -506,6 +515,11 @@ namespace StrategoApp.ViewModel
             {
                 Password = EditedPassword;
             }
+            else if (result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
+            }
             else
             {
                 EmailErrorMessage = Properties.Resources.NonexistentAccount_Label;
@@ -533,16 +547,19 @@ namespace StrategoApp.ViewModel
             {
                 Log.Error("Communication error while obtaining verification code.", cex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while getting verification code.", tex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while getting verification code.", ex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
         }
 
@@ -567,16 +584,19 @@ namespace StrategoApp.ViewModel
             {
                 Log.Error("Communication error while changing password.", cex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while changing password.", tex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while changing password.", ex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
         }
 

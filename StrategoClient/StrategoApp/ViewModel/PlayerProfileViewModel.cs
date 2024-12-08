@@ -29,6 +29,7 @@ namespace StrategoApp.ViewModel
         private string _selectedProfilePicture;
         private string _usernameError;
         private string _updateProfileResult;
+        private string _exceptionMessage;
         private bool _isServiceErrorVisible;
         private bool _isProileSelectorVisible;
         private bool _isEditUsernameVisible;
@@ -182,6 +183,16 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public string ExceptionMessage
+        {
+            get { return _exceptionMessage; }
+            set
+            {
+                _exceptionMessage = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool IsUpdateResultVisible
         {
             get { return _isUpdateResultVisible; }
@@ -274,16 +285,19 @@ namespace StrategoApp.ViewModel
             {
                 Log.Error("Communication error while updating tag.", cex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while communicating with the update tag.", tex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while updating tag.", ex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
         }
 
@@ -355,16 +369,19 @@ namespace StrategoApp.ViewModel
                 {
                     Log.Error("Communication error while updating username.", cex);
                     IsServiceErrorVisible = true;
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while communicating with the update username.", tex);
                     IsServiceErrorVisible = true;
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while updating username.", ex);
                     IsServiceErrorVisible = true;
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 }
             }
             else
@@ -399,24 +416,47 @@ namespace StrategoApp.ViewModel
             {
                 Log.Error("Communication error while updating profile picture.", cex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while communicating with the profile picture update.", tex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while updating profile picture.", ex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
         }
 
         private void Logout(Object obj)
         {
-
-            _playerDataServiceClient.LogOut(PlayerId);
-            _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+            try
+            {
+                _playerDataServiceClient.LogOut(PlayerId);
+                _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+            }
+            catch (CommunicationException cex)
+            {
+                Log.Error("Communication error on logut.", cex);
+                IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+            }
+            catch (TimeoutException tex)
+            {
+                Log.Error("Timed out on logut.", tex);
+                IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unexpected error on logut", ex);
+                IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+            }
         }
 
         private void LoadPlayerInfoFromSingleton()
@@ -451,6 +491,11 @@ namespace StrategoApp.ViewModel
                 
                 PlayerTag = tag;
             }
+            else if (playerInfo1.Result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible= true;
+            }
         }
 
         private async void LoadPlayerStatisticsAsync()
@@ -463,16 +508,19 @@ namespace StrategoApp.ViewModel
             {
                 Log.Error("Communication error while getting player statistics.", cex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while communicating with the get player statistics.", tex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while getting player statistics.", ex);
                 IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
             }
         }
 
@@ -483,6 +531,11 @@ namespace StrategoApp.ViewModel
                 GamesWon = playerStatistics1.Statistics.WonGames;
                 GamesLost = playerStatistics1.Statistics.LostGames;
                 GamesPlayed = playerStatistics1.Statistics.TotalGames;
+            }
+            else if (playerStatistics1.Result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -501,6 +554,11 @@ namespace StrategoApp.ViewModel
                 {
                     IsProfileSelectorVisible = false;
                 }
+            }
+            else if (result.Result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
             }
             else
             {

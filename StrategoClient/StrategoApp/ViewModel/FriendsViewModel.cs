@@ -18,6 +18,7 @@ namespace StrategoApp.ViewModel
         private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
 
         private string _searchResult;
+        private string _exceptionMessage;
         private int _playerId;
         private int _friendIdRequested;
         private bool _isRequestsPopupOpen;
@@ -58,6 +59,16 @@ namespace StrategoApp.ViewModel
             set
             {
                 _searchResult = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ExceptionMessage
+        {
+            get { return _exceptionMessage; }
+            set
+            {
+                _exceptionMessage = value;
                 OnPropertyChanged();
             }
         }
@@ -180,16 +191,19 @@ namespace StrategoApp.ViewModel
                 catch (CommunicationException cex)
                 {
                     Log.Error("Communication error while loading player info: ", cex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while loading player info: ", tex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while loading player info: ", ex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
             }
@@ -213,16 +227,19 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException cex)
             {
                 Log.Error("Communication error while getting player friends list: ", cex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while getting player friends list: ", tex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while getting player friends list: ", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
         }
@@ -254,16 +271,19 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException cex)
             {
                 Log.Error("Communication error while getting friend requsts: ", cex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while getting friend requsts: ", tex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while getting friend requsts: ", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
         }
@@ -284,18 +304,26 @@ namespace StrategoApp.ViewModel
                 catch (CommunicationException cex)
                 {
                     Log.Error("Communication error while getting other player info: ", cex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while getting other player info: ", tex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while getting other player info: ", ex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
+            }
+            else if (response.Result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
             }
             else
             {
@@ -312,16 +340,19 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException cex)
             {
                 Log.Error("Communication error while seinding friend request: ", cex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while seinding friend request: ", tex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while seinding friend request: ", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
         }
@@ -338,16 +369,19 @@ namespace StrategoApp.ViewModel
                 catch (CommunicationException cex)
                 {
                     Log.Error("Communication error while accepting friend request: ", cex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while accepting friend request: ", tex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while accepting friend request: ", ex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
             }
@@ -369,16 +403,19 @@ namespace StrategoApp.ViewModel
                 catch (CommunicationException cex)
                 {
                     Log.Error("Communication error while declining friend request: ", cex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while declining friend request: ", tex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while declining friend request: ", ex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
             }
@@ -410,6 +447,11 @@ namespace StrategoApp.ViewModel
                     Friends.Add(player);
                 }
             }
+            else if (response.Result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
+            } 
             else
             {
                 Log.Warn($"Failed to load player information: {response.Result.Message}");
@@ -442,18 +484,26 @@ namespace StrategoApp.ViewModel
                 catch (CommunicationException cex)
                 {
                     Log.Error("Communication error while getting friend request ids: ", cex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while getting friend request ids: ", tex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while getting friend request ids: ", ex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
+            }
+            else if (response.Result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
             }
             else
             {
@@ -469,6 +519,11 @@ namespace StrategoApp.ViewModel
                 IsSearchPlayerPopupOpen = false;
                 IsRequestSent = true;
             }
+            else if (result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
+            }
             else
             {
                 SearchResult = Properties.Resources.InvalidPlayerId;
@@ -480,6 +535,11 @@ namespace StrategoApp.ViewModel
             if (result.IsSuccess)
             {
                 Log.Info("Request accepted");
+            }
+            else if (result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
             }
             else
             {
@@ -493,6 +553,11 @@ namespace StrategoApp.ViewModel
             {
                 Log.Info("Request declined");
             }
+            else if (result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
+            }
             else
             {
                 Log.Warn($"Failed to decline request: {result.Message}");
@@ -505,6 +570,11 @@ namespace StrategoApp.ViewModel
             {
                 Log.Info("Friend removed");
             }
+            else if (result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
+            }
             else
             {
                 Log.Warn($"Failed to remove friend: {result.Message}");
@@ -514,7 +584,6 @@ namespace StrategoApp.ViewModel
         private void CloseServiceError(object obj)
         {
             IsServiceErrorVisible = false;
-            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
         }
 
         private void CloseRequestSend(object obj)

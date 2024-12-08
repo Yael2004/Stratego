@@ -29,13 +29,14 @@ namespace StrategoApp.ViewModel
         private string _username;
         private string _profilePicture;
         private string _joinRoomCode;
+        private string _exceptionMessage;
         private int _userId;
         private bool _isViewEnabled;
         private bool _isConnected;
         private bool _isJoinRoomDialogVisible;
         private bool _isServiceErrorVisible;
 
-        private PingCheck _pingCheck;
+        private readonly PingCheck _pingCheck;
 
         private readonly ChatServiceClient _chatClient;
         private readonly OtherProfileDataServiceClient _otherProfileDataServiceClient;
@@ -144,6 +145,16 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public string ExceptionMessage
+        {
+            get { return _exceptionMessage; }
+            set
+            {
+                _exceptionMessage = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool IsViewEnabled
         {
             get { return _isViewEnabled; }
@@ -231,29 +242,31 @@ namespace StrategoApp.ViewModel
                 catch (CommunicationException ex)
                 {
                     Log.Error("Communication error with the connect service.", ex);
+                    
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                    IsServiceErrorVisible = true;
 
-                    LogInViewModel logInViewModel = new LogInViewModel(_mainWindowViewModel);
                     _pingCheck.StopPingMonitoring();
-                    _mainWindowViewModel.ChangeViewModel(logInViewModel);
-                    logInViewModel.IsServiceErrorVisible = true;
+
                 }
                 catch (TimeoutException ex)
                 {
                     Log.Error("Timed out while communicating with the connect service.", ex);
+                    
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                    IsServiceErrorVisible = true;
 
-                    LogInViewModel logInViewModel = new LogInViewModel(_mainWindowViewModel);
                     _pingCheck.StopPingMonitoring();
-                    _mainWindowViewModel.ChangeViewModel(logInViewModel);
-                    logInViewModel.IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while connecting in.", ex);
+                    
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                    IsServiceErrorVisible = true;
 
-                    LogInViewModel logInViewModel = new LogInViewModel(_mainWindowViewModel);
                     _pingCheck.StopPingMonitoring();
-                    _mainWindowViewModel.ChangeViewModel(logInViewModel);
-                    logInViewModel.IsServiceErrorVisible = true;
+
                 }
             }
         }
@@ -270,17 +283,26 @@ namespace StrategoApp.ViewModel
                 catch (CommunicationException ex)
                 {
                     Log.Error("Communication error while disconnecting player from chat password.", ex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (TimeoutException ex)
                 {
                     Log.Error("Timed out while disconnecting player from chat password.", ex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while disconnecting player from chat password.", ex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+
+                    _pingCheck.StopPingMonitoring();
                 }
             }
         }
@@ -315,17 +337,26 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException ex)
             {
                 Log.Error("Communication error while sending invitation.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException ex)
             {
                 Log.Error("Timed out while communicating with sending invitation.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while sending invitation.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -350,17 +381,26 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException ex)
             {
                 Log.Error("Communication error while sending message.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException ex)
             {
                 Log.Error("Timed out while communicating with sending message.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while sending message.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -387,17 +427,26 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException ex)
             {
                 Log.Error("Communication error while showing profile.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException ex)
             {
                 Log.Error("Timed out while communicating with showing profile.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while while showing profile.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -412,17 +461,26 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException ex)
             {
                 Log.Error("Communication error while showing scoreboard.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException ex)
             {
                 Log.Error("Timed out while communicating with showing scoreboard.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while showing scoreboard.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -449,17 +507,26 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException ex)
             {
                 Log.Error("Communication error while showing friends.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException ex)
             {
                 Log.Error("Timed out while communicating with showing friends.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while showing friends.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -489,17 +556,26 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException ex)
             {
                 Log.Error("Communication error while joining to room.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException ex)
             {
                 Log.Error("Timed out while communicating with join to room.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while joining to room.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -523,17 +599,26 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException ex)
             {
                 Log.Error("Communication error while creating room.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException ex)
             {
                 Log.Error("Timed out while communicating with create room.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while creating room.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -546,17 +631,26 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException ex)
             {
                 Log.Error("Communication error while getting connected friends.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException ex)
             {
                 Log.Error("Timed out while communicating getting connected friends.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error getting connected friends.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -571,6 +665,11 @@ namespace StrategoApp.ViewModel
             if (!result.IsSuccess)
             {
                 Log.Warn("An error was ocurred on lobby chat response");
+            }
+            else if (result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -587,6 +686,11 @@ namespace StrategoApp.ViewModel
                         await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendId, UserId);
                     }
                 }
+                else if (plalyerFriends.Result.IsDataBaseError)
+                {
+                    ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                    IsServiceErrorVisible = true;
+                }
                 else
                 {
                     Log.Warn($"Error to load friends list: {plalyerFriends.Result.Message}");
@@ -595,17 +699,26 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException ex)
             {
                 Log.Error("Communication error while getting friends list.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException ex)
             {
                 Log.Error("Timed out while communicating getting friends list.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error getting friends list.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -623,6 +736,11 @@ namespace StrategoApp.ViewModel
 
                 Friends.Add(friend);
             }
+            else if (response.Result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
+            }
             else
             {
                 Log.Warn("Error to load player information: " + response.Result.Message);
@@ -634,6 +752,11 @@ namespace StrategoApp.ViewModel
             if (!result.IsSuccess)
             {
                 Log.Warn("An error was ocurred on lobby send room invitation response");
+            }
+            else if (result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
             }
             else
             {

@@ -175,7 +175,7 @@
     <value>Darkwraith</value>
   </data>
   <data name="DatabaseConnectionErrorMessage_Label" xml:space="preserve">
-    <value>Connection error has ocurred, try again later</value>
+    <value>Database connection has ocurred, try again later</value>
   </data>
   <data name="DatabaseConnectionError_Title" xml:space="preserve">
     <value>Connection error</value>

@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Media3D;
 
 namespace StrategoApp.ViewModel
 {
@@ -20,10 +21,11 @@ namespace StrategoApp.ViewModel
         private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
 
         private string _username;
-        private int _accountId;
-        private int _playerId;
         private string _profilePicture;
         private string _playerTag;
+        private string _exceptionMessage;
+        private int _accountId;
+        private int _playerId;
         private int _gamesWon;
         private int _gamesLost;
         private int _gamesPlayed;
@@ -75,6 +77,16 @@ namespace StrategoApp.ViewModel
             set
             {
                 _playerTag = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ExceptionMessage
+        {
+            get { return _exceptionMessage; }
+            set
+            {
+                _exceptionMessage = value;
                 OnPropertyChanged();
             }
         }
@@ -168,16 +180,19 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException cex)
             {
                 Log.Error("Communication error while removing friend.", cex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while removing friend.", tex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while removing friend.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
         }
@@ -186,6 +201,13 @@ namespace StrategoApp.ViewModel
         {
             if (!response.Result.IsSuccess)
             {
+                return;
+            }
+            else if (response.Result.IsDataBaseError)
+            {
+                Log.Error($"Database error ocurred on GerFriendOperationRemove {response.Result.Message}");
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
                 return;
             }
 
@@ -237,16 +259,19 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException cex)
             {
                 Log.Error("Communication error while getting other player info.", cex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while getting other player info.", tex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while getting other player info.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
         }
@@ -254,7 +279,6 @@ namespace StrategoApp.ViewModel
         private void CloseServiceError(object obj)
         {
             IsServiceErrorVisible = false;
-            _mainWindowViewModel.CurrentViewModel = new LobbyViewModel(_mainWindowViewModel);
         }
 
         public void GetFriendOperationRemove(FriendService.OperationResult result)
@@ -263,9 +287,15 @@ namespace StrategoApp.ViewModel
             {
                 IsFriend = false;
             }
+            else if (result.IsDataBaseError)
+            {
+                Log.Error($"Database error ocurred on GerFriendOperationRemove {result.Message}");
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
+            }
             else
             {
-                IsServiceErrorVisible = true;
+                Log.Warn("Error on getFriendOperationRemove, result was false");
             }
         }
 

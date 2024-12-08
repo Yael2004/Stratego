@@ -277,7 +277,7 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Connection error has ocurred, try again later.
+        ///   Busca una cadena traducida similar a Database connection has ocurred, try again later.
         /// </summary>
         public static string DatabaseConnectionErrorMessage_Label {
             get {

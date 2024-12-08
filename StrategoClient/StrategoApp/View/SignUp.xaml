@@ -155,7 +155,7 @@
 
                 <Border Background="Black" BorderBrush="{StaticResource DarkRed}" BorderThickness="2" CornerRadius="10" Padding="15">
                     <StackPanel>
-                        <TextBlock Text="{x:Static res:Resources.ServerConnectionLostMessage_Label}"
+                        <TextBlock Text="{Binding ExceptionMessage}"
                                    TextAlignment="Center"
                                    TextWrapping="Wrap"
                                    FontSize="16"

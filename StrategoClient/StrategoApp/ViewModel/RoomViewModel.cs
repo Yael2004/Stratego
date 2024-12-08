@@ -29,6 +29,7 @@ namespace StrategoApp.ViewModel
         private string _messageToSend;
         private string _reportedResultMessage;
         private string _reportMessage;
+        private string _exceptionMessage;
         private int _userId;
         private int _userIdOponent;
         private int _gameId;
@@ -94,6 +95,16 @@ namespace StrategoApp.ViewModel
             set
             {
                 _usernameOponent = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ExceptionMessage
+        {
+            get { return _exceptionMessage; }
+            set
+            {
+                _exceptionMessage = value;
                 OnPropertyChanged();
             }
         }
@@ -258,6 +269,7 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException cex)
             {
                 Log.Error("Communication error while creating room.", cex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
 
                 return false;
@@ -265,6 +277,7 @@ namespace StrategoApp.ViewModel
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while creating room.", tex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
 
                 return false;
@@ -272,6 +285,7 @@ namespace StrategoApp.ViewModel
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while creating room.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
 
                 return false;
@@ -297,16 +311,19 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException cex)
             {
                 Log.Error("Communication error while joining to room.", cex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while joining to room.", tex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while joining to room.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
 
@@ -333,16 +350,19 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException cex)
             {
                 Log.Error("Communication error while sending message.", cex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while sending message.", tex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while sending message.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
         }
@@ -371,16 +391,19 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException cex)
             {
                 Log.Error("Communication error while reporting player.", cex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while reporting player.", tex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while reporting player.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
         }
@@ -407,6 +430,11 @@ namespace StrategoApp.ViewModel
 
                     NotifyOpponentToJoinGame();
                 }
+                else if (response.OperationResult.IsDataBaseError)
+                {
+                    ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                    IsServiceErrorVisible = true;
+                }
                 else
                 {
                     Log.Warn($"Failed to create game session: {response.OperationResult.Message}");
@@ -416,16 +444,19 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException cex)
             {
                 Log.Error("Communication error while obtaining verification code.", cex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while getting verification code.", tex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while getting verification code.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
         }
@@ -439,16 +470,19 @@ namespace StrategoApp.ViewModel
             catch (CommunicationException cex)
             {
                 Log.Error("Communication error while notifying opponent to join game.", cex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while notifying opponent to join game.", tex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while notifying opponent to join game.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
             }
         }
@@ -476,6 +510,11 @@ namespace StrategoApp.ViewModel
             {
                 RoomCode = response.RoomCode;
             }
+            else if (response.Result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
+            }
             else
             {
                 Log.Warn($"Failed to create a room {response.Result.Message}");            
@@ -487,6 +526,11 @@ namespace StrategoApp.ViewModel
             if (response.IsSuccess)
             {
                 Log.Info($"Room response: {response.Message}");
+            }
+            if (response.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
             }
             else
             {
@@ -516,6 +560,11 @@ namespace StrategoApp.ViewModel
                 {
                     IsReportButtonVisible = false;
                 }
+            }
+            else if (response.Result.IsSuccess)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
             }
             else
             {
@@ -551,6 +600,11 @@ namespace StrategoApp.ViewModel
                 _gameViewModel.SuscribeToGame(gameId);
                 _gameViewModel.GetOtherPlayerInfo(UserIdOponent);
             }
+            else if (result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
+            }
             else
             {
                 Log.Warn($"Failed to notify to join game: {result.Message}");
@@ -563,6 +617,11 @@ namespace StrategoApp.ViewModel
             {
                 IsReportedMessageVisible = true;
                 ReportsNumber = 1;
+            }
+            else if (result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
             }
             else
             {

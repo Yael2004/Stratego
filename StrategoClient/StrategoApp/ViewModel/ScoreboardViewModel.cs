@@ -18,6 +18,7 @@ namespace StrategoApp.ViewModel
     {
         private static readonly ILog Log = Log<LobbyViewModel>.GetLogger();
 
+        private string _exceptionMessage;
         private int _userId;
         private bool _isServiceErrorVisible;
 
@@ -30,6 +31,16 @@ namespace StrategoApp.ViewModel
         public ICommand BackToLobbyCommand { get; }
         public ICommand ViewProfileCommand { get; }
         public ICommand ExecuteCloseServiceErrorCommand { get; }
+
+        public string ExceptionMessage
+        {
+            get { return _exceptionMessage; }
+            set
+            {
+                _exceptionMessage = value;
+                OnPropertyChanged();
+            }
+        }
 
         public int UserId
         {
@@ -99,16 +110,19 @@ namespace StrategoApp.ViewModel
                 catch (CommunicationException cex)
                 {
                     Log.Error("Communication error with the connect service.", cex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while communicating with the connect service.", tex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while connecting in.", ex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
             }
@@ -116,14 +130,43 @@ namespace StrategoApp.ViewModel
 
         private void LoadTopPlayers()
         {
-            _topPlayersListServiceClient.GetTopPlayersListAsync();
+            try
+            {
+                _topPlayersListServiceClient.GetTopPlayersListAsync();
+            }
+            catch (CommunicationException cex)
+            {
+                Log.Error("Communication error while getting top players list.", cex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                IsServiceErrorVisible = true;
+            }
+            catch (TimeoutException tex)
+            {
+                Log.Error("Timed out while getting top players list.", tex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                IsServiceErrorVisible = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unexpected error while getting top players list.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                IsServiceErrorVisible = true;
+            }
         }
 
         public void TopPlayersList([MessageParameter(Name = "topPlayersList")] TopPlayersResponse topPlayersList1)
         {
-            foreach (var playerId in topPlayersList1.TopPlayersIds)
+            if (topPlayersList1.Result.IsSuccess)
             {
-               LoadPlayerInfo(playerId);
+                foreach (var playerId in topPlayersList1.TopPlayersIds)
+                {
+                   LoadPlayerInfo(playerId);
+                }
+            }
+            else if (topPlayersList1.Result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
             }
         }
 
@@ -152,12 +195,16 @@ namespace StrategoApp.ViewModel
                     PlayerScores.Add(player);
                 }
             }
+            else if (response.Result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
+            }
         }
 
         private void CloseServiceError(object obj)
         {
             IsServiceErrorVisible = false;
-            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
         }
     }
 }

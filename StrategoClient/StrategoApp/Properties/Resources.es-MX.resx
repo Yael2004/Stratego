@@ -175,7 +175,7 @@
     <value>Espectro oscuro</value>
   </data>
   <data name="DatabaseConnectionErrorMessage_Label" xml:space="preserve">
-    <value>Se ha producido un error de conexión, inténtalo de nuevo más tarde</value>
+    <value>Ocurrió un error con la base de datos, inténtalo de nuevo más tarde</value>
   </data>
   <data name="DatabaseConnectionError_Title" xml:space="preserve">
     <value>Error de conexión</value>

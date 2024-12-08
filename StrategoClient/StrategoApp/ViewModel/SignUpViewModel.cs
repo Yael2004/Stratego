@@ -24,6 +24,7 @@ namespace StrategoApp.ViewModel
         private string _emailError;
         private string _passwordError;
         private string _signUpResultMessage;
+        private string _exceptionMessage;
         private bool _isServiceErrorVisible;
         private bool _isPasswordVisible;
         private bool _isSignUpResultVisible;
@@ -108,6 +109,16 @@ namespace StrategoApp.ViewModel
             }
         }
 
+        public string ExceptionMessage
+        {
+            get { return _exceptionMessage; }
+            set
+            {
+                _exceptionMessage = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool IsPasswordVisible
         {
             get { return _isPasswordVisible; }
@@ -183,16 +194,19 @@ namespace StrategoApp.ViewModel
                 catch (CommunicationException cex)
                 {
                     Log.Error("Communication error with the signup service.", cex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while communicating with the signup service.", tex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while signing up.", ex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
                 }
             }
@@ -213,6 +227,11 @@ namespace StrategoApp.ViewModel
             if (result.IsSuccess)
             {
                 SignUpResultMessage = Properties.Resources.SignUpMessage_Label;
+            }
+            else if (result.IsDataBaseError)
+            {
+                ExceptionMessage = Properties.Resources.DatabaseConnectionErrorMessage_Label;
+                IsServiceErrorVisible = true;
             }
             else
             {
