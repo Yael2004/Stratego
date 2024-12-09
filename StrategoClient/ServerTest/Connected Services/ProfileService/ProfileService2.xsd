@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data.DTO" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://192.168.137.1:2022/ProfileService?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/StrategoServices.Data" />
+  <xs:import schemaLocation="http://192.168.137.1:2022/ProfileService?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="PlayerInfoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Profile" nillable="true" type="tns:PlayerInfoShownDTO" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="Result" nillable="true" type="q1:OperationResult" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerInfoResponse" nillable="true" type="tns:PlayerInfoResponse" />
+  <xs:complexType name="PlayerInfoShownDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="LabelPath" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PicturePath" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerInfoShownDTO" nillable="true" type="tns:PlayerInfoShownDTO" />
+  <xs:complexType name="PlayerStatisticsResponse">
+    <xs:sequence>
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="Result" nillable="true" type="q2:OperationResult" />
+      <xs:element minOccurs="0" name="Statistics" nillable="true" type="tns:PlayerStatisticsDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerStatisticsResponse" nillable="true" type="tns:PlayerStatisticsResponse" />
+  <xs:complexType name="PlayerStatisticsDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="LostGames" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalGames" type="xs:int" />
+      <xs:element minOccurs="0" name="WonGames" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerStatisticsDTO" nillable="true" type="tns:PlayerStatisticsDTO" />
+  <xs:complexType name="PlayerFriendsResponse">
+    <xs:sequence>
+      <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="FriendsIds" nillable="true" type="q3:ArrayOfint" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="Result" nillable="true" type="q4:OperationResult" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerFriendsResponse" nillable="true" type="tns:PlayerFriendsResponse" />
+  <xs:complexType name="OtherPlayerInfoResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerInfo" nillable="true" type="tns:OtherPlayerInfoDTO" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="Result" nillable="true" type="q5:OperationResult" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="OtherPlayerInfoResponse" nillable="true" type="tns:OtherPlayerInfoResponse" />
+  <xs:complexType name="OtherPlayerInfoDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsFriend" type="xs:boolean" />
+      <xs:element minOccurs="0" name="PlayerInfo" nillable="true" type="tns:PlayerInfoShownDTO" />
+      <xs:element minOccurs="0" name="PlayerStatistics" nillable="true" type="tns:PlayerStatisticsDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="OtherPlayerInfoDTO" nillable="true" type="tns:OtherPlayerInfoDTO" />
+  <xs:complexType name="TopPlayersResponse">
+    <xs:sequence>
+      <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/StrategoServices.Data" minOccurs="0" name="Result" nillable="true" type="q6:OperationResult" />
+      <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="TopPlayersIds" nillable="true" type="q7:ArrayOfint" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TopPlayersResponse" nillable="true" type="tns:TopPlayersResponse" />
+</xs:schema>

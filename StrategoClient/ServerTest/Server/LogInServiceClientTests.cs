@@ -30,7 +30,7 @@ namespace ServerTest
         }
 
         [TestMethod]
-        public async Task TestLogIn_VerifyAccountInfo()
+        public async Task Test_LogIn_VerifyAccountInfo()
         {
             await _client.LogInAsync("armasgabriel29@gmail.com", "13df55fc30b4d971389218a808dc666538319bade3a99c10f6eb9aa8027c0552");
             
@@ -38,7 +38,7 @@ namespace ServerTest
         }
 
         [TestMethod]
-        public async Task TestLogIn_Success()
+        public async Task Test_LogIn_Success()
         {
             await _client.LogInAsync("armasgabo01@gmail.com", "407d8a1148a12157d5c1509f328461f6488a405bd4d361363b22be741fe1b1ee");
 
@@ -46,7 +46,7 @@ namespace ServerTest
         }
 
         [TestMethod]
-        public async Task TestLogIn_InvalidCredentials()
+        public async Task Test_LogIn_InvalidCredentials()
         {
             await _client.LogInAsync("logInTest@gmail.com", "hashed_password");
 
@@ -54,7 +54,7 @@ namespace ServerTest
         }
 
         [TestMethod]
-        public async Task TestLogIn_InBlankCredentials()
+        public async Task Test_LogIn_InBlankCredentials()
         {
             await _client.LogInAsync("", "");
 
@@ -62,7 +62,7 @@ namespace ServerTest
         }
 
         [TestMethod]
-        public async Task TestLogIn_InBlankEmail()
+        public async Task Test_LogIn_InBlankEmail()
         {
             await _client.LogInAsync("", "hashed_password");
 
@@ -70,7 +70,7 @@ namespace ServerTest
         }
 
         [TestMethod]
-        public async Task TestLogIn_InBlankPassword()
+        public async Task Test_LogIn_InBlankPassword()
         {
             await _client.LogInAsync("armasgabriel29@gmail.com", "");
             Assert.AreEqual("Invalid credentials", _lastOperationResult.Message);
@@ -121,7 +121,7 @@ namespace ServerTest
         [TestMethod]
         public async Task Test_CreateAccount_Success()
         {
-            await _signUpClient.SignUpAsync("examplemail@gmail.com", "1f4775c7476dd2c8675584e816d14fe217d4d9ff1f2b18c211938eb5379634a6", "example2000");
+            await _signUpClient.SignUpAsync("examplemail2@gmail.com", "1f4775c7476dd2c8675584e816d14fe217d4d9ff1f2b18c211938eb5379634a6", "example3000");
             Assert.AreEqual("Account created successfully", _signUpOperationResult.Message);
         }
 

@@ -65,7 +65,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connected Services\ChatService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\FriendService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\GameService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\LogInService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\PingService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\ProfileService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -75,14 +100,55 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="LogInServiceClientTests.cs" />
-    <Compile Include="ProfileServiceClientTest.cs" />
+    <Compile Include="Server\ChatServiceClientTests.cs" />
+    <Compile Include="Server\FriendOperationsServiceClientTests.cs" />
+    <Compile Include="Server\LogInServiceClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoomServiceClientTests.cs" />
-    <Compile Include="SignUpServiceClientTests.cs" />
+    <Compile Include="Server\PingServiceClientTests.cs" />
+    <Compile Include="Server\ProfileServiceClientTests.cs" />
+    <Compile Include="Server\RoomServiceClientTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Connected Services\ChatService\ChatService.wsdl" />
+    <None Include="Connected Services\ChatService\ChatService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ChatService\ChatService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ChatService\ChatService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendService\FriendOperationsService.wsdl" />
+    <None Include="Connected Services\FriendService\FriendsService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendService\FriendsService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendService\FriendsService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendService\FriendsService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\FriendService\FriendsService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\GameService\GameService.wsdl" />
+    <None Include="Connected Services\GameService\GameService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\GameService\GameService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\GameService\GameService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\GameService\GameService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\LogInService\LogInService.wsdl" />
     <None Include="Connected Services\LogInService\LogInService.xsd">
       <SubType>Designer</SubType>
@@ -94,6 +160,29 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\LogInService\LogInService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\PingService\PingService.wsdl" />
+    <None Include="Connected Services\PingService\PingService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\PingService\PingService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ProfileService\ProfileService.wsdl" />
+    <None Include="Connected Services\ProfileService\ProfileService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ProfileService\ProfileService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ProfileService\ProfileService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ProfileService\ProfileService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ProfileService\ProfileService4.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\RoomService\RoomService.wsdl" />
@@ -121,7 +210,12 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\ChatService\" />
+    <WCFMetadataStorage Include="Connected Services\FriendService\" />
+    <WCFMetadataStorage Include="Connected Services\GameService\" />
     <WCFMetadataStorage Include="Connected Services\LogInService\" />
+    <WCFMetadataStorage Include="Connected Services\PingService\" />
+    <WCFMetadataStorage Include="Connected Services\ProfileService\" />
     <WCFMetadataStorage Include="Connected Services\RoomService\" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +244,81 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\LogInService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ChatService\ChatService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ChatService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ChatService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ChatService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\PingService\PingService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\PingService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\PingService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\PingService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\FriendService\FriendsService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\FriendService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\FriendService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\FriendService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ProfileService\ProfileService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ProfileService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ProfileService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ProfileService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\GameService\GameService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\GameService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\GameService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\GameService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
