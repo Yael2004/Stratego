@@ -118,8 +118,9 @@ namespace StrategoServices.Tests
         {
             var topPlayers = new List<Player> { new Player { Id = 1 }, new Player { Id = 2 } };
             var topPlayersResult = Result<IEnumerable<Player>>.Success(topPlayers);
-
-            //_playerRepositoryMock.Setup(repo => repo.GetTopPlayersByWins()).Returns(topPlayersResult);
+            var playerIds = topPlayersResult.Value.Select(player => player.Id).ToList();
+            var resultWrapper = Result<List<int>>.Success(playerIds);
+            _playerRepositoryMock.Setup(repo => repo.GetTopPlayersByWins()).Returns(resultWrapper);
 
             var result = _profilesManager.GetTopPlayersIds();
 
@@ -127,15 +128,13 @@ namespace StrategoServices.Tests
         }
 
         [TestMethod]
-        public void Test_GetTopPlayersIds_NoTopPlayers_ReturnsFailure()
+        public void Test_GetTopPlayersIds_DatabaseError_ReturnsFailure()
         {
-            var topPlayersResult = Result<IEnumerable<Player>>.Success(new List<Player>());
-
-            //_playerRepositoryMock.Setup(repo => repo.GetTopPlayersByWins()).Returns(topPlayersResult);
+            var resultWrapper = Result<List<int>>.DataBaseError("Database error");
+            _playerRepositoryMock.Setup(repo => repo.GetTopPlayersByWins()).Returns(resultWrapper);
 
             var result = _profilesManager.GetTopPlayersIds();
-
-            Assert.AreEqual("No top players found.", result.Error);
+            Assert.AreEqual("Database error", result.Error);
         }
     }
 }

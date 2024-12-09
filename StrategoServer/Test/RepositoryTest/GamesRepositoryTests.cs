@@ -48,7 +48,7 @@ namespace StrategoDataAccess.Tests
         [TestMethod]
         public void Test_GetGameStatisticsByAccountId_ShouldReturnFailure_WhenGameNotFound()
         {
-            int accountId = 1;
+            int accountId = 188;
             var gameList = new List<Games>().AsQueryable();
 
             _mockGamesDbSet.As<IQueryable<Games>>().Setup(m => m.Provider).Returns(gameList.Provider);
@@ -64,7 +64,7 @@ namespace StrategoDataAccess.Tests
         [TestMethod]
         public void Test_IncrementWonGames_ShouldReturnFailure_WhenGameNotFound()
         {
-            int accountId = 1;
+            int accountId = 188;
             var gameList = new List<Games>().AsQueryable();
 
             _mockGamesDbSet.As<IQueryable<Games>>().Setup(m => m.Provider).Returns(gameList.Provider);
@@ -80,7 +80,7 @@ namespace StrategoDataAccess.Tests
         [TestMethod]
         public void Test_IncrementDeafeatGames_ShouldReturnFailure_WhenGameNotFound()
         {
-            int accountId = 1;
+            int accountId = 188;
             var gameList = new List<Games>().AsQueryable();
 
             _mockGamesDbSet.As<IQueryable<Games>>().Setup(m => m.Provider).Returns(gameList.Provider);
