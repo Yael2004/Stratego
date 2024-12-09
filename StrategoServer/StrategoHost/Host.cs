@@ -110,21 +110,21 @@ namespace StrategoHost
                 Console.WriteLine($"{serviceName} service is running...");
                 return true;
             }
-            catch (CommunicationException ex)
+            catch (CommunicationException cex)
             {
-                log.Fatal($"Failed to start {serviceName} service: {ex.Message}");
-                Console.WriteLine($"Failed to start {serviceName} service: {ex.Message}");
+                log.Fatal($"Failed to start {serviceName} service: ", cex);
+                Console.WriteLine($"Failed to start {serviceName} service: {cex.Message}");
                 return false;
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException tex)
             {
-                log.Fatal($"Failed to start {serviceName} service: {ex.Message}");
-                Console.WriteLine($"Failed to start {serviceName} service: {ex.Message}");
+                log.Fatal($"Failed to start {serviceName} service: ", tex);
+                Console.WriteLine($"Failed to start {serviceName} service: {tex.Message}");
                 return false;
             }
             catch (Exception ex)
             {
-                log.Fatal($"Failed to start {serviceName} service: {ex.Message}");
+                log.Fatal($"Failed to start {serviceName} service: ", ex);
                 Console.WriteLine($"Failed to start {serviceName} service: {ex.Message}");
                 return false;
             }
@@ -139,19 +139,19 @@ namespace StrategoHost
                     host.Close();
                     log.Info($"{serviceName} service closed.");
                 }
-                catch (CommunicationException ex)
+                catch (CommunicationException cex)
                 {
-                    log.Error($"Failed to close {serviceName} service: {ex.Message}");
-                    Console.WriteLine($"Failed to close {serviceName} service: {ex.Message}");
+                    log.Error($"Failed to close {serviceName} service: ", cex);
+                    Console.WriteLine($"Failed to close {serviceName} service: {cex.Message}");
                 }
-                catch (TimeoutException ex)
+                catch (TimeoutException tex)
                 {
-                    log.Error($"Failed to close {serviceName} service: {ex.Message}");
-                    Console.WriteLine($"Failed to close {serviceName} service: {ex.Message}");
+                    log.Error($"Failed to close {serviceName} service: ", tex);
+                    Console.WriteLine($"Failed to close {serviceName} service: {tex.Message}");
                 }
                 catch (Exception ex)
                 {
-                    log.Error($"Failed to close {serviceName} service: {ex.Message}");
+                    log.Error($"Failed to close {serviceName} service: ", ex);
                     Console.WriteLine($"Failed to close {serviceName} service: {ex.Message}");
                 }
             }

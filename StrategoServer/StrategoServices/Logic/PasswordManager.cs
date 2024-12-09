@@ -42,7 +42,7 @@ namespace StrategoServices.Logic
             return Result<bool>.Failure("Invalid verification code");
         }
 
-        private string GenerateRandomCode()
+        private static string GenerateRandomCode()
         {
             var random = new Random();
             return random.Next(100000, 999999).ToString();

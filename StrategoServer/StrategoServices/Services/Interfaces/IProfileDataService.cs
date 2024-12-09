@@ -15,7 +15,7 @@ namespace StrategoServices.Services.Interfaces
     public interface IProfileDataService
     {
         [OperationContract]
-        Task GetPlayerStatisticsAsync(int playerId);
+        Task GetPlayerStatisticsAsync(int playerAccountId);
 
         [OperationContract]
         void LogOut(int playerId);

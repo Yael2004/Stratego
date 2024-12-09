@@ -86,7 +86,7 @@ namespace StrategoServices.Logic
 
             var player = result.Value;
 
-            var pictureResult = _picturesRepository.Value.GetPictureById((int)player.PictureId);
+            var pictureResult = _picturesRepository.Value.GetPictureById(player.PictureId);
             var labelResult = _labelRepository.Value.GetLabelById(player.IdLabel);
 
 
@@ -117,7 +117,7 @@ namespace StrategoServices.Logic
                 Name = player.Name ?? string.Empty,
                 PicturePath = picturePath,
                 LabelPath = labelPath,
-                AccountId = (int)player.AccountId
+                AccountId = player.AccountId
             };
 
             return Result<PlayerDTO>.Success(playerDTO);

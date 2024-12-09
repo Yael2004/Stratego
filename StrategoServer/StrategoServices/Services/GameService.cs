@@ -66,7 +66,7 @@ namespace StrategoServices.Services
         /// <param name="gameId"></param>
         /// <param name="playerId"></param>
         /// <returns>Task</returns>
-        public async Task JoinGameSessionAsync(int gameId, int playerId)
+        public async Task JoinGameSessionAsync(int gameId, int player2Id)
         {
             var playerCallback = OperationContext.Current.GetCallbackChannel<IGameServiceCallback>();
 
@@ -77,7 +77,7 @@ namespace StrategoServices.Services
                 return;
             }
 
-            var joinResult = await AddPlayerToSessionAsync(gameSession, playerId, playerCallback);
+            await AddPlayerToSessionAsync(gameSession, player2Id, playerCallback);
         }
 
         /// <summary>
@@ -264,7 +264,7 @@ namespace StrategoServices.Services
         /// <param name="gameId"></param>
         /// <param name="instruction"></param>
         /// <returns>Task</returns>
-        public async Task SendMovementInstructionsAsync(int gameId, MovementInstructionDTO instruction)
+        public async Task SendMovementInstructionsAsync(int gameId, MovementInstructionDTO movementInstruction)
         {
             var result = GetGameSession(gameId, out var gameSession);
 
@@ -274,7 +274,7 @@ namespace StrategoServices.Services
                 return;
             }
 
-            var opponentId = gameSession.GetOpponentId(instruction.DefenderId);
+            var opponentId = gameSession.GetOpponentId(movementInstruction.DefenderId);
 
             var attackerCallback = gameSession.GetCallbackForPlayer(opponentId);
             if (attackerCallback == null)
@@ -285,7 +285,7 @@ namespace StrategoServices.Services
 
             var response = new MovementInstructionResponse
             {
-                MovementInstructionDTO = instruction,
+                MovementInstructionDTO = movementInstruction,
                 OperationResult = new OperationResult(true, "Movement processed successfully")
             };
 
@@ -295,16 +295,15 @@ namespace StrategoServices.Services
             }
             catch (TimeoutException tex)
             {
-                log.Error($"Timeout error while sending movement instructions to OpponentId: {opponentId}. Exception: {tex.Message}");
+                log.Error($"Timeout error while sending movement instructions to Opponent. Exception: ", tex);
             }
             catch (CommunicationException cex)
             {
-                log.Fatal($"Communication error while sending movement instructions to OpponentId: {opponentId}. Exception: {cex.Message}");
-
+                log.Fatal($"Communication error while sending movement instructions to Opponent. Exception: ", cex);
             }
             catch (Exception ex)
             {
-                log.Fatal($"Error while sending movement instructions to OpponentId: {opponentId}. Exception: {ex.Message}");
+                log.Fatal($"Error while sending movement instructions to Opponent. Exception: ", ex);
             }
         }
 

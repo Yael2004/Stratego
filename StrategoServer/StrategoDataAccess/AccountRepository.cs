@@ -21,7 +21,6 @@ namespace StrategoDataAccess
 
             if (!existenceCheckResult.IsSuccess)
             {
-                log.Warn($"Account creation failed: {existenceCheckResult.Error}");
                 return Result<string>.Failure(existenceCheckResult.Error);
             }
 
@@ -157,7 +156,6 @@ namespace StrategoDataAccess
                     var existenceCheckResult = AlreadyExistentAccount(email);
                     if (!existenceCheckResult.IsSuccess)
                     {
-                        log.Warn($"Password change failed: {existenceCheckResult.Error}");
                         return Result<string>.Failure(existenceCheckResult.Error);
                     }
 

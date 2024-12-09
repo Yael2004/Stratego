@@ -268,7 +268,7 @@ namespace StrategoServices.Services
         /// <param name="callbackAction"></param>
         /// <param name="result"></param>
         /// <returns>Task</returns>
-        private async Task NotifyCallbackAsync(Action<OperationResult> callbackAction, OperationResult result)
+        private static async Task NotifyCallbackAsync(Action<OperationResult> callbackAction, OperationResult result)
         {
             await Task.Run(() => callbackAction(result));
         }
@@ -278,7 +278,7 @@ namespace StrategoServices.Services
         /// </summary>
         /// <param name="callbackAction"></param>
         /// <returns>Task</returns>
-        private async Task NotifyCallbackAsync(Action callbackAction)
+        private static async Task NotifyCallbackAsync(Action callbackAction)
         {
             await Task.Run(callbackAction);
         }

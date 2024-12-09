@@ -8,7 +8,7 @@ namespace StrategoServices.Logic.Interfaces
 {
     internal interface IEmailSender
     {
-        bool SendVerificationEmail(string destinationAddress, string message);
-        bool SendInvitationEmail(string destinationAddress, string message);
+        bool SendVerificationEmail(string destinationAddress, string code);
+        bool SendInvitationEmail(string destinationAddress, string code);
     }
 }

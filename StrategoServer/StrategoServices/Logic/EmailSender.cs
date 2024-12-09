@@ -19,6 +19,8 @@ namespace StrategoServices.Logic
         private readonly string _password;
         private SmtpClient _smtpClient;
         private static readonly ILog log = LogManager.GetLogger(typeof(EmailSender));
+        private static readonly string _logMessage = "Sending email error: ";
+        private static readonly string _gameName = "Stratego";
 
         private EmailSender()
         {
@@ -30,12 +32,12 @@ namespace StrategoServices.Logic
 
         public static EmailSender Instance => _instance.Value;
 
-        public bool SendVerificationEmail(string destinationAddress, string verificationCode)
+        public bool SendVerificationEmail(string destinationAddress, string code)
         {
             bool result = false;
             try
             {
-                var message = MakeVerificationMessage(destinationAddress, verificationCode);
+                var message = MakeVerificationMessage(destinationAddress, code);
                 _smtpClient = ConfigureMailClient();
                 AuthenticateSmtpClient(_smtpClient);
                 _smtpClient.Send(message);
@@ -43,11 +45,11 @@ namespace StrategoServices.Logic
             }
             catch (ProtocolException pex)
             {
-                log.Error("Sending email error: ", pex);
+                log.Error(_logMessage, pex);
             }
             catch (Exception ex)
             {
-                log.Error("Sending email error: ", ex);
+                log.Error(_logMessage, ex);
             }
             finally
             {
@@ -56,12 +58,12 @@ namespace StrategoServices.Logic
             return result;
         }
 
-        public bool SendInvitationEmail(string destinationAddress, string message)
+        public bool SendInvitationEmail(string destinationAddress, string code)
         {
             bool result = false;
             try
             {
-                var mailMessage = MakeInvitationMessage(destinationAddress, message);
+                var mailMessage = MakeInvitationMessage(destinationAddress, code);
                 _smtpClient = ConfigureMailClient();
                 AuthenticateSmtpClient(_smtpClient);
                 _smtpClient.Send(mailMessage);
@@ -69,11 +71,11 @@ namespace StrategoServices.Logic
             }
             catch (ProtocolException pex)
             {
-                log.Error("Sending email error: ", pex);
+                log.Error(_logMessage, pex);
             }
             catch (Exception ex)
             {
-                log.Error("Sending email error: ", ex);
+                log.Error(_logMessage, ex);
             }
             finally
             {
@@ -85,9 +87,9 @@ namespace StrategoServices.Logic
         private MimeMessage MakeVerificationMessage(string destinationAddress, string verificationCode)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Stratego", _userMail));
-            message.To.Add(new MailboxAddress("Stratego", destinationAddress));
-            message.Subject = "Stratego";
+            message.From.Add(new MailboxAddress(_gameName, _userMail));
+            message.To.Add(new MailboxAddress(_gameName, destinationAddress));
+            message.Subject = _gameName;
             message.Body = new TextPart("plain")
             {
                 Text = $"Verification code: {verificationCode}"
@@ -98,9 +100,9 @@ namespace StrategoServices.Logic
         private MimeMessage MakeInvitationMessage(string destinationAddress, string roomCode)
         {
             var mailMessage = new MimeMessage();
-            mailMessage.From.Add(new MailboxAddress("Stratego", _userMail));
-            mailMessage.To.Add(new MailboxAddress("Stratego", destinationAddress));
-            mailMessage.Subject = "Stratego";
+            mailMessage.From.Add(new MailboxAddress(_gameName, _userMail));
+            mailMessage.To.Add(new MailboxAddress(_gameName, destinationAddress));
+            mailMessage.Subject = _gameName;
             mailMessage.Body = new TextPart("plain")
             {
                 Text = $"Let's play, join to room: {roomCode}"

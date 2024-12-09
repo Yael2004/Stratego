@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Utilities
 {
-    public class Messages
+    public static class Messages
     {
         public static readonly string DataBaseError = "Database error";
         public static readonly string UnexpectedError = "Unexpected error";

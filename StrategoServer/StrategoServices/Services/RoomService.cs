@@ -250,7 +250,7 @@ namespace StrategoServices.Services
             }
         }
 
-        private string GenerateRoomCode()
+        private static string GenerateRoomCode()
         {
             return Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
         }
@@ -287,7 +287,7 @@ namespace StrategoServices.Services
         /// </summary>
         /// <param name="roomCode"></param>
         /// <param name="connectedPlayerId"></param>
-        public void NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId)
+        public static void NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId)
         {
             try
             {
@@ -421,7 +421,7 @@ namespace StrategoServices.Services
         /// Helper method to safely invoke a callback
         /// </summary>
         /// <param name="callbackAction"></param>
-        private void SafeCallbackInvoke(Action callbackAction)
+        private static void SafeCallbackInvoke(Action callbackAction)
         {
             try
             {

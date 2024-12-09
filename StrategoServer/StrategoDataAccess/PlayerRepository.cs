@@ -196,7 +196,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<int> GetLabelId(string labelPath)
+        public static Result<int> GetLabelId(string labelPath)
         {
             try
             {
@@ -225,7 +225,7 @@ namespace StrategoDataAccess
             }
         }
 
-        public Result<int> GetPictureId(string picturePath)
+        public static Result<int> GetPictureId(string picturePath)
         {
             try
             {
