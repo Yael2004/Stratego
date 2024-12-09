@@ -287,7 +287,7 @@ namespace StrategoServices.Services
         /// </summary>
         /// <param name="roomCode"></param>
         /// <param name="connectedPlayerId"></param>
-        public static void NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId)
+        public void NotifyPlayersOfNewConnectionAsync(string roomCode, int connectedPlayerId)
         {
             try
             {

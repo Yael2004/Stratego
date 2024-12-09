@@ -4,6 +4,7 @@ using StrategoApp.Helpers;
 using StrategoApp.Model;
 using StrategoApp.ProfileService;
 using StrategoApp.Service;
+using StrategoApp.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -683,7 +684,7 @@ namespace StrategoApp.ViewModel
 
                     foreach (var friendId in myFriends)
                     {
-                        await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendId, UserId);
+                        await Task.Run(() => ObtainOtherPlayerInfo(friendId));
                     }
                 }
                 else if (plalyerFriends.Result.IsDataBaseError)
@@ -720,6 +721,11 @@ namespace StrategoApp.ViewModel
 
                 _pingCheck.StopPingMonitoring();
             }
+        }
+
+        private async void ObtainOtherPlayerInfo(int friendId)
+        {
+            await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendId, UserId);
         }
 
 
