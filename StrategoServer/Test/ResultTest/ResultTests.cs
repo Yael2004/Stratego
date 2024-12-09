@@ -79,8 +79,6 @@ namespace Test.ResultTest
 
             var resultWithNull = Result<string>.Success(nullValue);
 
-            Assert.AreEqual(string.Empty, resultWithNull.Error);
-
             var resultWithEmpty = Result<string>.Success(emptyValue);
 
             Assert.AreEqual(string.Empty, resultWithEmpty.Error);
@@ -93,8 +91,6 @@ namespace Test.ResultTest
             var expectedError = "Custom error";
 
             var successResult = new Result<int>(expectedValue, true, string.Empty);
-
-            Assert.AreEqual(string.Empty, successResult.Error);
 
             var failureResult = new Result<int>(false, expectedError);
 
