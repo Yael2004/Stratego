@@ -650,8 +650,14 @@ namespace StrategoApp.ViewModel
             {
                 ShowGameResult(_isWonGame);
             }
+            else if (operationResult.IsDataBaseError)
+            {
+                ShowGameResult(_isWonGame);
+                Log.Warn($"Database error, failed to end game: {operationResult.Message}");
+            }
             else
             {
+                ShowGameResult(_isWonGame);
                 Log.Warn($"Failed to end game: {operationResult.Message}");
             }
         }
