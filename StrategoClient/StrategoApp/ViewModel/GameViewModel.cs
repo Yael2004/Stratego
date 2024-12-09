@@ -278,8 +278,8 @@ namespace StrategoApp.ViewModel
         private void CloseServiceError(object obj)
         {
             IsServiceErrorVisible = false;
-            _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel, false));
             _pingCheck.StopPingMonitoring();
+            _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel, false));
         }
 
         public bool IsValidMove(Cell originCell, Cell destinationCell, Piece movingPiece)
@@ -525,14 +525,6 @@ namespace StrategoApp.ViewModel
             GameResultText = isWinner ? Properties.Resources.Victory_Label : Properties.Resources.Defeat_Label;
             IsGameResultPopupOpen = true;
 
-            /*
-            Task.Run(async () =>
-            {
-                await Task.Delay(5000);
-                Application.Current.Dispatcher.Invoke(GoToLobby);
-            });
-            */
-
             Task.Run(() => InvokeLobbyAsync());
         }
 
@@ -575,8 +567,8 @@ namespace StrategoApp.ViewModel
 
         private void GoToLobby()
         {
-            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
             _pingCheck.StopPingMonitoring();
+            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
         }
 
         private string ProcessMove(Cell originCell, Cell destinationCell, int oponnentPowerLevel)

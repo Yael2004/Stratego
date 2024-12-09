@@ -220,7 +220,7 @@ namespace StrategoApp.ViewModel
 
         public void ConnectPlayerToChat()
         {
-            if (!IsConnected)
+            if (!_isConnected)
             {
                 try
                 {
@@ -255,14 +255,14 @@ namespace StrategoApp.ViewModel
                     IsServiceErrorVisible = true;
 
                     _pingCheck.StopPingMonitoring();
-                    _pingCheck.StopPingMonitoring();
+
                 }
             }
         }
 
         public void DisconnectPlayerFromChat()
         {
-            if (IsConnected)
+            if (_chatClient != null)
             {
                 try
                 {
@@ -680,7 +680,7 @@ namespace StrategoApp.ViewModel
 
                     foreach (var friendId in myFriends)
                     {
-                        await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendId, UserId);
+                        await Task.Run(() => _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendId, UserId));
                     }
                 }
                 else if (plalyerFriends.Result.IsDataBaseError)
