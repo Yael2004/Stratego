@@ -64,12 +64,6 @@ namespace StrategoServices.Services
                 }
 
                 var playerInfo = playerResult.Value;
-                var playerAdded = _connectedPlayersManager.AddPlayer(playerInfo.Id, playerInfo.Name);
-                if (!playerAdded)
-                {
-                    await NotifyCallbackAsync(callback.LogInResult, new OperationResult(false, "Failed to add player to connected players list."));
-                    return;
-                }
 
                 await NotifyCallbackAsync(() =>
                 {

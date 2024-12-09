@@ -678,7 +678,7 @@ namespace StrategoApp.ViewModel
 
                     foreach (var friendId in myFriends)
                     {
-                        await Task.Run(() => ObtainOtherPlayerInfo(friendId));
+                        await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendId, UserId);
                     }
                 }
                 else if (plalyerFriends.Result.IsDataBaseError)
@@ -716,12 +716,6 @@ namespace StrategoApp.ViewModel
                 _pingCheck.StopPingMonitoring();
             }
         }
-
-        private async void ObtainOtherPlayerInfo(int friendId)
-        {
-            await _otherProfileDataServiceClient.GetOtherPlayerInfoAsync(friendId, UserId);
-        }
-
 
         public void ReceiveOtherPlayerInfo(OtherPlayerInfoResponse response)
         {

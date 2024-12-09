@@ -62,6 +62,13 @@ namespace StrategoServices.Services
                         callback.ChatResponse(new OperationResult(false, "Failed to connect user."));
                     }
 
+                    var playerAdded = _connectedPlayersManager.AddPlayer(userId, username);
+
+                    if (!playerAdded)
+                    {
+                        callback.ChatResponse(new OperationResult(false, "Failed to add player to connected players list."));
+                    }
+
                     var communicationObject = (ICommunicationObject)callback;
                     communicationObject.Closed += (s, e) => OnClientDisconnected(userId);
                     communicationObject.Faulted += (s, e) => OnClientDisconnected(userId);

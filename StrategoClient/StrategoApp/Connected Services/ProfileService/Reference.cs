@@ -647,10 +647,10 @@ namespace StrategoApp.ProfileService {
     public interface IProfileDataService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileDataService/GetPlayerStatistics", ReplyAction="http://tempuri.org/IProfileDataService/GetPlayerStatisticsResponse")]
-        void GetPlayerStatistics(int playerId);
+        void GetPlayerStatistics(int playerAccountId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileDataService/GetPlayerStatistics", ReplyAction="http://tempuri.org/IProfileDataService/GetPlayerStatisticsResponse")]
-        System.Threading.Tasks.Task GetPlayerStatisticsAsync(int playerId);
+        System.Threading.Tasks.Task GetPlayerStatisticsAsync(int playerAccountId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileDataService/LogOut", ReplyAction="http://tempuri.org/IProfileDataService/LogOutResponse")]
         void LogOut(int playerId);
@@ -697,12 +697,12 @@ namespace StrategoApp.ProfileService {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void GetPlayerStatistics(int playerId) {
-            base.Channel.GetPlayerStatistics(playerId);
+        public void GetPlayerStatistics(int playerAccountId) {
+            base.Channel.GetPlayerStatistics(playerAccountId);
         }
         
-        public System.Threading.Tasks.Task GetPlayerStatisticsAsync(int playerId) {
-            return base.Channel.GetPlayerStatisticsAsync(playerId);
+        public System.Threading.Tasks.Task GetPlayerStatisticsAsync(int playerAccountId) {
+            return base.Channel.GetPlayerStatisticsAsync(playerAccountId);
         }
         
         public void LogOut(int playerId) {
