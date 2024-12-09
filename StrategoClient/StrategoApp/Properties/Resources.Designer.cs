@@ -304,6 +304,15 @@ namespace StrategoApp.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Enter player id.
+        /// </summary>
+        public static string EnterPlayerId_Label {
+            get {
+                return ResourceManager.GetString("EnterPlayerId_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Some fields are in blank.
         /// </summary>
         public static string FieldsInBlank_Label {
@@ -768,6 +777,15 @@ namespace StrategoApp.Properties {
         public static string Report_Title {
             get {
                 return ResourceManager.GetString("Report_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Request.
+        /// </summary>
+        public static string Requests_Button {
+            get {
+                return ResourceManager.GetString("Requests_Button", resourceCulture);
             }
         }
         

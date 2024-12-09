@@ -426,4 +426,10 @@
   <data name="WaitingTurn_Label" xml:space="preserve">
     <value>Esperando turno...</value>
   </data>
+  <data name="Requests_Button" xml:space="preserve">
+    <value>Solicitudes</value>
+  </data>
+  <data name="EnterPlayerId_Label" xml:space="preserve">
+    <value>Ingresa el id del jugador</value>
+  </data>
 </root>

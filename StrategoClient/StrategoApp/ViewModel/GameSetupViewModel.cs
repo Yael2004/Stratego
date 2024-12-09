@@ -1,4 +1,5 @@
 ﻿using StrategoApp.GameService;
+using StrategoApp.Helpers;
 using StrategoApp.Model;
 using System;
 using System.Collections.ObjectModel;
@@ -19,10 +20,15 @@ namespace StrategoApp.ViewModel
         public ObservableCollection<Piece> AvailablePieces { get; set; }
         public ObservableCollection<Cell> PlayerBoard { get; set; }
         private readonly GameViewModel _gameViewModel;
+        private readonly PingCheck _pingCheck;
+
 
         public GameSetupViewModel(MainWindowViewModel mainWindowViewModel, GameViewModel gameViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
+
+            _pingCheck = new PingCheck(_mainWindowViewModel);
+            Task.Run(() => _pingCheck.StartPingMonitoringAsync());
 
             _gameViewModel = gameViewModel;
 
@@ -94,8 +100,10 @@ namespace StrategoApp.ViewModel
                 .ToList();
 
             _gameViewModel.AvailablePices = AvailablePieces;
+
             _gameViewModel.LoadInitialPositions(initialPositions);
             _mainWindowViewModel.ChangeViewModel(_gameViewModel);
+            _pingCheck.StopPingMonitoring();
         }
     }
 }

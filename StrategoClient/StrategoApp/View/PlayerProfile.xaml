@@ -309,7 +309,8 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Width="340"
-                    Height="148" Canvas.Left="230" Canvas.Top="146">
+                    Height="148" Canvas.Left="230" Canvas.Top="146"
+                    Panel.ZIndex="2">
 
                 <Border Background="Black" BorderBrush="{StaticResource Beige}" BorderThickness="2" CornerRadius="10" Padding="15">
                     <StackPanel>
@@ -322,7 +323,7 @@
 
                         <Button Content="{x:Static res:Resources.Accept_Button}"
                                 Command="{Binding ExecuteCloseServiceErrorCommand}"
-                                Style="{StaticResource ButtonStyle}"
+                                Style="{StaticResource ButtonGoldenStyle}"
                                 Width="100"
                                 HorizontalAlignment="Center"/>
                     </StackPanel>
