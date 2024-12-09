@@ -45,7 +45,7 @@ namespace Tests
         [TestMethod]
         public void Test_GetOtherPlayerById_ShouldReturnFailure_WhenPlayerDoesNotExist()
         {
-            var playerId = 3;
+            var playerId = 180;
 
             var result = _playerRepository.GetOtherPlayerById(playerId);
 
@@ -66,7 +66,7 @@ namespace Tests
         [TestMethod]
         public void Test_GetPlayerFriendsList_ShouldReturnFailure_WhenNoFriendsExist()
         {
-            var playerId = 3;
+            var playerId = 155;
 
             var result = _playerRepository.GetPlayerFriendsList(playerId);
 
