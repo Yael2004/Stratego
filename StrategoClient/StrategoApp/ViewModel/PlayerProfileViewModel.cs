@@ -450,7 +450,7 @@ namespace StrategoApp.ViewModel
             try
             {
                 _playerDataServiceClient.LogOut(PlayerId);
-                _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+                _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel, false));
                 _pingCheck.StopPingMonitoring();
             }
             catch (CommunicationException cex)

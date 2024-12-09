@@ -221,80 +221,75 @@ namespace StrategoApp.ViewModel
 
         public void ConnectPlayerToChat()
         {
-            if (!_isConnected)
+            try
             {
-                try
-                {
-                    _userId = _chatClient.ConnectAsync(_userId, _username).Result;
+                _userId = _chatClient.ConnectAsync(_userId, _username).Result;
 
-                    PlayerSingleton.Instance.Player.Id = _userId;
-                }
-                catch (CommunicationException ex)
-                {
-                    Log.Error("Communication error with the connect service.", ex);
+                PlayerSingleton.Instance.Player.Id = _userId;
+            }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error with the connect service.", ex);
                     
-                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
-                    IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                IsServiceErrorVisible = true;
 
-                    _pingCheck.StopPingMonitoring();
+                _pingCheck.StopPingMonitoring();
 
-                }
-                catch (TimeoutException ex)
-                {
-                    Log.Error("Timed out while communicating with the connect service.", ex);
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while communicating with the connect service.", ex);
                     
-                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
-                    IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                IsServiceErrorVisible = true;
 
-                    _pingCheck.StopPingMonitoring();
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("Unexpected error while connecting in.", ex);
+                _pingCheck.StopPingMonitoring();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unexpected error while connecting in.", ex);
                     
-                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
-                    IsServiceErrorVisible = true;
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                IsServiceErrorVisible = true;
 
-                    _pingCheck.StopPingMonitoring();
+                _pingCheck.StopPingMonitoring();
 
-                }
             }
         }
 
         public void DisconnectPlayerFromChat()
         {
-            if (_chatClient != null)
+            try
             {
-                try
-                {
-                    _chatClient.Disconnect(_userId);
-                    _chatClient.Close();
-                }
-                catch (CommunicationException ex)
-                {
-                    Log.Error("Communication error while disconnecting player from chat password.", ex);
-                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
-                    IsServiceErrorVisible = true;
-
-                    _pingCheck.StopPingMonitoring();
-                }
-                catch (TimeoutException ex)
-                {
-                    Log.Error("Timed out while disconnecting player from chat password.", ex);
-                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
-                    IsServiceErrorVisible = true;
-
-                    _pingCheck.StopPingMonitoring();
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("Unexpected error while disconnecting player from chat password.", ex);
-                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
-                    IsServiceErrorVisible = true;
-
-                    _pingCheck.StopPingMonitoring();
-                }
+                _chatClient.Disconnect(_userId);
+                _chatClient.Close();
             }
+            catch (CommunicationException ex)
+            {
+                Log.Error("Communication error while disconnecting player from chat password.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
+            }
+            catch (TimeoutException ex)
+            {
+                Log.Error("Timed out while disconnecting player from chat password.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Unexpected error while disconnecting player from chat password.", ex);
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                IsServiceErrorVisible = true;
+
+                _pingCheck.StopPingMonitoring();
+            }
+            
         }
 
         private void InviteFriend(object parameter)

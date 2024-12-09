@@ -279,7 +279,7 @@ namespace StrategoApp.ViewModel
             }
         }
 
-        public LogInViewModel(MainWindowViewModel mainWindowViewModel)
+        public LogInViewModel(MainWindowViewModel mainWindowViewModel, bool isServiceError)
         {
             _logInServiceClient = new LogInServiceClient(new InstanceContext(this));
             _changePasswordServiceClient = new ChangePasswordServiceClient(new InstanceContext(this));
@@ -300,11 +300,21 @@ namespace StrategoApp.ViewModel
             CloseChangedPasswordMessageCommand = new ViewModelCommand(CloseChangedPasswordMessage);
 
             IsForgotPasswordVisible = false;
-            IsServiceErrorVisible = false;
             IsPasswordVisible = false;
             IsPasswordChangedVisible = false;
             IsCodeVerificationVisible = false;
             IsChangePasswordVisible = false;
+
+            ShowServiceError(isServiceError);
+        }
+
+        private void ShowServiceError(bool isServiceError)
+        {
+            if (isServiceError)
+            {
+                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                IsServiceErrorVisible = true;
+            }
         }
 
         private void ForgotPassword(object obj)

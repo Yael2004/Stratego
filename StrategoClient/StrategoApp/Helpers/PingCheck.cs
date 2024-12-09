@@ -40,13 +40,13 @@ namespace StrategoApp.Helpers
                     if (!isServerAlive)
                     {
                         Log.Warn("Ping failed. Server might be down.");
-                        _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+                        _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel, true));
                     }
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Error during ping check", ex);
-                    _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+                    _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel, true));
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(30));

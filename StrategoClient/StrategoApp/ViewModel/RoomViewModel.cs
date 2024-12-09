@@ -621,6 +621,9 @@ namespace StrategoApp.ViewModel
             {
                 _gameId = gameId;
                 _gameViewModel.SuscribeToGame(gameId);
+
+                _pingCheck.StopPingMonitoring();
+
                 _gameViewModel.GetOtherPlayerInfo(UserIdOponent);
             }
             else if (result.IsDataBaseError)

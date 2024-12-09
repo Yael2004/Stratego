@@ -49,7 +49,7 @@ namespace StrategoApp.ViewModel
         private readonly List<(int Row, int Column)> invalidPositions = new List<(int Row, int Column)> { };
 
         public ObservableCollection<Piece> AvailablePices { get; set; }
-        private readonly PingCheck _pingCheck;
+        private PingCheck _pingCheck;
 
 
         public ICommand CellClickedCommand { get; }
@@ -185,9 +185,6 @@ namespace StrategoApp.ViewModel
 
             _mainWindowViewModel = mainWindowViewModel;
 
-            _pingCheck = new PingCheck(_mainWindowViewModel);
-            Task.Run(() => _pingCheck.StartPingMonitoringAsync());
-
             CellClickedCommand = new ViewModelCommandGeneric<Cell>(OnCellClicked);
             ExecuteCloseServiceErrorCommand = new ViewModelCommand(CloseServiceError);
 
@@ -281,7 +278,7 @@ namespace StrategoApp.ViewModel
         private void CloseServiceError(object obj)
         {
             IsServiceErrorVisible = false;
-            _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+            _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel, false));
             _pingCheck.StopPingMonitoring();
         }
 
@@ -411,19 +408,16 @@ namespace StrategoApp.ViewModel
             {
                 Log.Error("Communication error while sending position to server.", cex);
                 IsServiceErrorVisible = true;
-                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while sending position to server.", tex);
                 IsServiceErrorVisible = true;
-                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while sending position to server.", ex);
                 IsServiceErrorVisible = true;
-                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -445,8 +439,10 @@ namespace StrategoApp.ViewModel
             {
                 IsMyTurn = gameStartedResponse.IsStarter;
 
+                _pingCheck = new PingCheck(_mainWindowViewModel);
+                Task.Run(() => _pingCheck.StartPingMonitoringAsync());
+
                 _mainWindowViewModel.ChangeViewModel(new GameSetupViewModel(_mainWindowViewModel, this));
-                _pingCheck.StopPingMonitoring();
             }
             else
             {
@@ -503,27 +499,22 @@ namespace StrategoApp.ViewModel
                         {
                             await Task.Run(() => EndGame());
                         }
-
                     }
-
                 }
                 catch (CommunicationException cex)
                 {
                     Log.Error("Communication error while sending movment instructions.", cex);
                     IsServiceErrorVisible = true;
-                    _pingCheck.StopPingMonitoring();
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while sending movment instructions.", tex);
                     IsServiceErrorVisible = true;
-                    _pingCheck.StopPingMonitoring();
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while sending movment instructions.", ex);
                     IsServiceErrorVisible = true;
-                    _pingCheck.StopPingMonitoring();
                 }
             });
         }
@@ -558,19 +549,16 @@ namespace StrategoApp.ViewModel
             {
                 Log.Error("Communication error while ending game.", cex);
                 IsServiceErrorVisible = true;
-                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while ending game.", tex);
                 IsServiceErrorVisible = true;
-                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while ending game.", ex);
                 IsServiceErrorVisible = true;
-                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -686,19 +674,16 @@ namespace StrategoApp.ViewModel
                 {
                     Log.Error("Communication error with the connect service.", cex);
                     IsServiceErrorVisible = true;
-                    _pingCheck.StopPingMonitoring();
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while communicating with the connect service.", tex);
                     IsServiceErrorVisible = true;
-                    _pingCheck.StopPingMonitoring();
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while connecting in.", ex);
                     IsServiceErrorVisible = true;
-                    _pingCheck.StopPingMonitoring();
                 }
             }
             else

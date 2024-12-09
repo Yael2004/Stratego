@@ -23,7 +23,7 @@ namespace StrategoApp.ViewModel
 
         public MainWindowViewModel()
         {
-            CurrentViewModel = new LogInViewModel(this);
+            CurrentViewModel = new LogInViewModel(this, false);
         }
 
         public void ChangeViewModel(ViewModelBase newViewModel)

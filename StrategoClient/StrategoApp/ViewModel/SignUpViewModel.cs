@@ -222,7 +222,7 @@ namespace StrategoApp.ViewModel
 
         private void ExecuteCancelCommand(object obj)
         {
-            _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+            _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel, false));
             _pingCheck.StopPingMonitoring();
         }
 
@@ -313,7 +313,7 @@ namespace StrategoApp.ViewModel
 
             if (SignUpResultMessage == Properties.Resources.SignUpMessage_Label)
             {
-                _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+                _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel, false));
             }
         }
 
