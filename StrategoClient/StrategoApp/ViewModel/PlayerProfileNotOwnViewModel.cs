@@ -36,6 +36,7 @@ namespace StrategoApp.ViewModel
 
         private readonly OtherProfileDataServiceClient _otherProfileDataServiceClient;
         private readonly FriendRemoveServiceClient _friendRemoveServiceClient;
+        private readonly PingCheck _pingCheck;
 
         public ICommand RemoveFriendCommand { get; }
         public ICommand BackToLobbyCommand { get; }
@@ -157,6 +158,9 @@ namespace StrategoApp.ViewModel
             _friendRemoveServiceClient = new FriendRemoveServiceClient(new InstanceContext(this));
             
             _mainWindowViewModel = mainWindowViewModel;
+
+            _pingCheck = new PingCheck(_mainWindowViewModel);
+            Task.Run(() => _pingCheck.StartPingMonitoringAsync());
             
             RemoveFriendCommand = new ViewModelCommand(RemoveFriend);
             BackToLobbyCommand = new ViewModelCommand(BackToLobby);
@@ -169,6 +173,7 @@ namespace StrategoApp.ViewModel
         private void BackToLobby(object obj)
         {
             _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+            _pingCheck.StopPingMonitoring();
         }
 
         public void RemoveFriend(object obj)
@@ -182,18 +187,21 @@ namespace StrategoApp.ViewModel
                 Log.Error("Communication error while removing friend.", cex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+            _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while removing friend.", tex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while removing friend.", ex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -261,18 +269,21 @@ namespace StrategoApp.ViewModel
                 Log.Error("Communication error while getting other player info.", cex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while getting other player info.", tex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while getting other player info.", ex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
         }
 

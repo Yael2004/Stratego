@@ -33,6 +33,8 @@ namespace StrategoApp.ViewModel
 
         private readonly MainWindowViewModel _mainWindowViewModel;
 
+        private readonly PingCheck _pingCheck;
+
         public ICommand SignUpCommand { get; }
         public ICommand CancelCommand { get; }
         public ICommand TogglePasswordVisibilityCommand { get; }
@@ -155,6 +157,9 @@ namespace StrategoApp.ViewModel
 
             _mainWindowViewModel = mainWindowViewModel;
 
+            _pingCheck = new PingCheck(_mainWindowViewModel);
+            Task.Run(() => _pingCheck.StartPingMonitoringAsync());
+
             SignUpCommand = new ViewModelCommand(ExecuteSignUpCommand, CanExecuteSignUpCommand);
             CancelCommand = new ViewModelCommand(ExecuteCancelCommand);
             TogglePasswordVisibilityCommand = new ViewModelCommand(ExecuteTogglePasswordVisibilityCommand);
@@ -196,18 +201,21 @@ namespace StrategoApp.ViewModel
                     Log.Error("Communication error with the signup service.", cex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while communicating with the signup service.", tex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while signing up.", ex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
             }
         }
@@ -215,6 +223,7 @@ namespace StrategoApp.ViewModel
         private void ExecuteCancelCommand(object obj)
         {
             _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+            _pingCheck.StopPingMonitoring();
         }
 
         private void ExecuteCloseServiceError(object obj)

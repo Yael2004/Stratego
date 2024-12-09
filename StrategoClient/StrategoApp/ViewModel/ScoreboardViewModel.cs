@@ -27,6 +27,7 @@ namespace StrategoApp.ViewModel
         private readonly TopPlayersListServiceClient _topPlayersListServiceClient;
 
         public ObservableCollection<PlayerScore> _playerScores;
+        private readonly PingCheck _pingCheck;
 
         public ICommand BackToLobbyCommand { get; }
         public ICommand ViewProfileCommand { get; }
@@ -80,6 +81,9 @@ namespace StrategoApp.ViewModel
 
             _mainWindowViewModel = mainWindowViewModel;
 
+            _pingCheck = new PingCheck(_mainWindowViewModel);
+            Task.Run(() => _pingCheck.StartPingMonitoringAsync());
+
             BackToLobbyCommand = new ViewModelCommand(BackToLobby);
             ViewProfileCommand = new ViewModelCommand(ViewProfile);
             ExecuteCloseServiceErrorCommand = new ViewModelCommand(CloseServiceError);
@@ -94,6 +98,7 @@ namespace StrategoApp.ViewModel
         public void BackToLobby(object obj)
         {
             _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+            _pingCheck.StopPingMonitoring();
         }
 
         public void ViewProfile(object obj)
@@ -106,24 +111,28 @@ namespace StrategoApp.ViewModel
 
                     playerProfileNotOwnViewModel.LoadPlayerInfo(playerScore.PlayerId , UserId);
                     _mainWindowViewModel.ChangeViewModel(playerProfileNotOwnViewModel);
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (CommunicationException cex)
                 {
                     Log.Error("Communication error with the connect service.", cex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while communicating with the connect service.", tex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while connecting in.", ex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
             }
         }
@@ -139,18 +148,21 @@ namespace StrategoApp.ViewModel
                 Log.Error("Communication error while getting top players list.", cex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while getting top players list.", tex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while getting top players list.", ex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
         }
 

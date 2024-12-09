@@ -27,7 +27,6 @@ namespace StrategoApp.ViewModel
         private bool _isRequestSent;
         private Player _selectedFriend;
 
-
         private readonly PlayerFriendsListServiceClient _playerFriendsListServiceClient;
         private readonly OtherProfileDataServiceClient _otherProfileDataServiceClient;
         private readonly PlayerFriendRequestServiceClient _playerFriendRequestServiceClient;
@@ -37,9 +36,10 @@ namespace StrategoApp.ViewModel
 
         private readonly HashSet<int> pendingFriendRequests = new HashSet<int>();
 
-
         public ObservableCollection<Player> Friends { get; set; }
         public ObservableCollection<Player> FriendRequests { get; set; }
+        private readonly PingCheck _pingCheck;
+
 
         public ICommand ViewProfileCommand { get; }
         public ICommand BackToLobbyCommand { get; }
@@ -148,6 +148,9 @@ namespace StrategoApp.ViewModel
         {
             _mainWindowViewModel = mainWindowViewModel;
 
+            _pingCheck = new PingCheck(_mainWindowViewModel);
+            Task.Run(() => _pingCheck.StartPingMonitoringAsync());
+
             AssignValuesToUser();
 
             Friends = new ObservableCollection<Player>();
@@ -187,24 +190,28 @@ namespace StrategoApp.ViewModel
 
                     playerProfileNotOwnViewModel.LoadPlayerInfo(friend.AccountId, PlayerId);
                     _mainWindowViewModel.ChangeViewModel(playerProfileNotOwnViewModel);
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (CommunicationException cex)
                 {
                     Log.Error("Communication error while loading player info: ", cex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while loading player info: ", tex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while loading player info: ", ex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
             }
             else
@@ -216,6 +223,7 @@ namespace StrategoApp.ViewModel
         private void BackToLobby(object obj)
         {
             _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+            _pingCheck.StopPingMonitoring();
         }
 
         public async void LoadFriendsListAsync()
@@ -229,18 +237,21 @@ namespace StrategoApp.ViewModel
                 Log.Error("Communication error while getting player friends list: ", cex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while getting player friends list: ", tex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while getting player friends list: ", ex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -273,18 +284,21 @@ namespace StrategoApp.ViewModel
                 Log.Error("Communication error while getting friend requsts: ", cex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while getting friend requsts: ", tex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while getting friend requsts: ", ex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -306,18 +320,21 @@ namespace StrategoApp.ViewModel
                     Log.Error("Communication error while getting other player info: ", cex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while getting other player info: ", tex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while getting other player info: ", ex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
             }
             else if (response.Result.IsDataBaseError)
@@ -342,18 +359,21 @@ namespace StrategoApp.ViewModel
                 Log.Error("Communication error while seinding friend request: ", cex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while seinding friend request: ", tex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while seinding friend request: ", ex);
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                 IsServiceErrorVisible = true;
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -371,18 +391,21 @@ namespace StrategoApp.ViewModel
                     Log.Error("Communication error while accepting friend request: ", cex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while accepting friend request: ", tex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while accepting friend request: ", ex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
             }
             else
@@ -405,18 +428,21 @@ namespace StrategoApp.ViewModel
                     Log.Error("Communication error while declining friend request: ", cex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while declining friend request: ", tex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while declining friend request: ", ex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
             }
             else
@@ -486,18 +512,21 @@ namespace StrategoApp.ViewModel
                     Log.Error("Communication error while getting friend request ids: ", cex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while getting friend request ids: ", tex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while getting friend request ids: ", ex);
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
                     IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
                 }
             }
             else if (response.Result.IsDataBaseError)

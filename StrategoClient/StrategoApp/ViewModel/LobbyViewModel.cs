@@ -32,7 +32,6 @@ namespace StrategoApp.ViewModel
         private string _joinRoomCode;
         private string _exceptionMessage;
         private int _userId;
-        private bool _isViewEnabled;
         private bool _isConnected;
         private bool _isJoinRoomDialogVisible;
         private bool _isServiceErrorVisible;
@@ -152,16 +151,6 @@ namespace StrategoApp.ViewModel
             set
             {
                 _exceptionMessage = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsViewEnabled
-        {
-            get { return _isViewEnabled; }
-            set
-            {
-                _isViewEnabled = value;
                 OnPropertyChanged();
             }
         }
@@ -374,34 +363,39 @@ namespace StrategoApp.ViewModel
 
         public void ClientSendMessage(object obj)
         {
-            try
+            if (MessageToSend != string.Empty && MessageToSend != null)
             {
-                _chatClient.SendMessage(_userId, _username, MessageToSend);
-                MessageToSend = string.Empty;
-            }
-            catch (CommunicationException ex)
-            {
-                Log.Error("Communication error while sending message.", ex);
-                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
-                IsServiceErrorVisible = true;
+                MessageToSend = MessageToSend.Trim();
 
-                _pingCheck.StopPingMonitoring();
-            }
-            catch (TimeoutException ex)
-            {
-                Log.Error("Timed out while communicating with sending message.", ex);
-                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
-                IsServiceErrorVisible = true;
+                try
+                {
+                    _chatClient.SendMessage(_userId, _username, MessageToSend);
+                    MessageToSend = string.Empty;
+                }
+                catch (CommunicationException ex)
+                {
+                    Log.Error("Communication error while sending message.", ex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                    IsServiceErrorVisible = true;
 
-                _pingCheck.StopPingMonitoring();
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Unexpected error while sending message.", ex);
-                ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
-                IsServiceErrorVisible = true;
+                    _pingCheck.StopPingMonitoring();
+                }
+                catch (TimeoutException ex)
+                {
+                    Log.Error("Timed out while communicating with sending message.", ex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                    IsServiceErrorVisible = true;
 
-                _pingCheck.StopPingMonitoring();
+                    _pingCheck.StopPingMonitoring();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Unexpected error while sending message.", ex);
+                    ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                    IsServiceErrorVisible = true;
+
+                    _pingCheck.StopPingMonitoring();
+                }
             }
         }
 
@@ -775,8 +769,6 @@ namespace StrategoApp.ViewModel
         public void ExecuteCloseServiceError(object obj)
         {
             IsServiceErrorVisible = false;
-            _pingCheck.StopPingMonitoring();
-            _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
         }
     }
 }

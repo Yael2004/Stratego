@@ -41,6 +41,7 @@ namespace StrategoApp.ViewModel
 
         private readonly ProfileModifierServiceClient _playerModifierServiceClient;
         private readonly ProfileDataServiceClient _playerDataServiceClient;
+        private readonly PingCheck _pingCheck;
 
         private readonly MainWindowViewModel _mainWindowViewModel;
 
@@ -220,6 +221,8 @@ namespace StrategoApp.ViewModel
 
             _mainWindowViewModel = mainWindowViewModel;
 
+            _pingCheck = new PingCheck(_mainWindowViewModel);
+            Task.Run(() => _pingCheck.StartPingMonitoringAsync());
 
             BackToLobbyCommand = new ViewModelCommand(ExecuteBackToLobby);
             SelectProfilePictureCommand = new ViewModelCommand(SelectProfilePicture);
@@ -261,6 +264,7 @@ namespace StrategoApp.ViewModel
             EditProfileTag();
 
             _mainWindowViewModel.ChangeViewModel(new LobbyViewModel(_mainWindowViewModel));
+            _pingCheck.StopPingMonitoring();
         }
 
         private void EditProfileTag()
@@ -286,18 +290,21 @@ namespace StrategoApp.ViewModel
                 Log.Error("Communication error while updating tag.", cex);
                 IsServiceErrorVisible = true;
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while communicating with the update tag.", tex);
                 IsServiceErrorVisible = true;
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while updating tag.", ex);
                 IsServiceErrorVisible = true;
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -370,18 +377,21 @@ namespace StrategoApp.ViewModel
                     Log.Error("Communication error while updating username.", cex);
                     IsServiceErrorVisible = true;
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (TimeoutException tex)
                 {
                     Log.Error("Timed out while communicating with the update username.", tex);
                     IsServiceErrorVisible = true;
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                    _pingCheck.StopPingMonitoring();
                 }
                 catch (Exception ex)
                 {
                     Log.Error("Unexpected error while updating username.", ex);
                     IsServiceErrorVisible = true;
                     ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                    _pingCheck.StopPingMonitoring();
                 }
             }
             else
@@ -417,18 +427,21 @@ namespace StrategoApp.ViewModel
                 Log.Error("Communication error while updating profile picture.", cex);
                 IsServiceErrorVisible = true;
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while communicating with the profile picture update.", tex);
                 IsServiceErrorVisible = true;
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while updating profile picture.", ex);
                 IsServiceErrorVisible = true;
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -438,24 +451,28 @@ namespace StrategoApp.ViewModel
             {
                 _playerDataServiceClient.LogOut(PlayerId);
                 _mainWindowViewModel.ChangeViewModel(new LogInViewModel(_mainWindowViewModel));
+                _pingCheck.StopPingMonitoring();
             }
             catch (CommunicationException cex)
             {
                 Log.Error("Communication error on logut.", cex);
                 IsServiceErrorVisible = true;
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out on logut.", tex);
                 IsServiceErrorVisible = true;
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error on logut", ex);
                 IsServiceErrorVisible = true;
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                _pingCheck.StopPingMonitoring();
             }
         }
 
@@ -509,18 +526,21 @@ namespace StrategoApp.ViewModel
                 Log.Error("Communication error while getting player statistics.", cex);
                 IsServiceErrorVisible = true;
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                _pingCheck.StopPingMonitoring();
             }
             catch (TimeoutException tex)
             {
                 Log.Error("Timed out while communicating with the get player statistics.", tex);
                 IsServiceErrorVisible = true;
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                _pingCheck.StopPingMonitoring();
             }
             catch (Exception ex)
             {
                 Log.Error("Unexpected error while getting player statistics.", ex);
                 IsServiceErrorVisible = true;
                 ExceptionMessage = Properties.Resources.ServerConnectionLostMessage_Label;
+                _pingCheck.StopPingMonitoring();
             }
         }
 
