@@ -42,7 +42,6 @@ namespace StrategoApp.ViewModel
         private bool _isServiceErrorVisible;
         private bool _isPasswordVisible;
         private bool _isPasswordChangedVisible;
-        private bool _isDatabaseError;
         private bool _isForgotPasswordVisible;
         private bool _isCodeVerificationVisible;
         private bool _isChangePasswordVisible;

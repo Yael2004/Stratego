@@ -491,6 +491,7 @@ namespace StrategoApp.ViewModel
                     await _gameServiceClient.SendMovementInstructionsAsync(_gameId, movementInstruction);
                     if (result == "Win")
                     {
+                        IsMyTurn = true;
                         if (UserId < 0)
                         {
                             ShowGameResult(_isWonGame);
@@ -524,11 +525,21 @@ namespace StrategoApp.ViewModel
             GameResultText = isWinner ? Properties.Resources.Victory_Label : Properties.Resources.Defeat_Label;
             IsGameResultPopupOpen = true;
 
+            /*
             Task.Run(async () =>
             {
                 await Task.Delay(5000);
                 Application.Current.Dispatcher.Invoke(GoToLobby);
             });
+            */
+
+            Task.Run(() => InvokeLobbyAsync());
+        }
+
+        private async Task InvokeLobbyAsync()
+        {
+            await Task.Delay(5000);
+            GoToLobby();
         }
 
         private async void EndGame()
@@ -730,6 +741,7 @@ namespace StrategoApp.ViewModel
             switch (instruction.Result)
             {
                 case "Win":
+                    IsMyTurn = true;
                     HandleWin(destinationCell, originCell);
                     break;
 
